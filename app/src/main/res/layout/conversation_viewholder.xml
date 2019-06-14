@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent"
+        android:layout_height="100dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/profile_image"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:src="@drawable/dwight"
+            android:padding="5dp"/>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="8dp">
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <TextView
+                    android:text="@string/username_sample"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/name_chat"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_medium"/>
+            <TextView
+                    android:text="@string/time_sample"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/last_message_time_chat"
+                    android:textStyle="italic"
+                    android:gravity="right"/>
+        </LinearLayout>
+        <TextView
+                android:text="@string/text_sample"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/last_message_chat"
+                android:ellipsize="end"
+                android:maxLines="2"/>
+    </LinearLayout>
+</LinearLayout>

@@ -6,4 +6,9 @@
     <string name="title_notifications">Notifications</string>
     <string name="chat">Chat</string>
     <string name="group">Groups</string>
+    <string name="username_sample">Dwight Schrute</string>
+    <string name="time_sample">17:58</string>
+    <string name="text_sample">I am fast. To give you a reference point I am somewhere between a snake and a mongoose…
+        And a panther.
+    </string>
 </resources>
