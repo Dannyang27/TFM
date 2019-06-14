@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">TFM</string>
+    <string name="title_activity_bottom_navigation">BottomNavigationActivity</string>
+    <string name="title_chat">Chat</string>
+    <string name="title_groupchat">Group Chat</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="chat">Chat</string>
+    <string name="group">Groups</string>
 </resources>
