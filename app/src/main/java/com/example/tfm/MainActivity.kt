@@ -4,15 +4,14 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
-import android.support.v7.widget.Toolbar
 import com.example.tfm.fragments.ChatFragment
 import com.example.tfm.fragments.GroupChatFragment
 
 class MainActivity : AppCompatActivity() {
 
-    val chatFragment = ChatFragment.newInstance()
-    val groupChatFragment = GroupChatFragment.newInstance()
-    var activeFragment: Fragment = chatFragment
+    private val chatFragment = ChatFragment.newInstance()
+    private val groupChatFragment = GroupChatFragment.newInstance()
+    private var activeFragment: Fragment = chatFragment
 
 
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->

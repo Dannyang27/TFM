@@ -1,10 +1,11 @@
-package com.example.tfm.Adapters
+package com.example.tfm.adapter
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.tfm.R
-import com.example.tfm.ViewHolders.ConversationViewHolder
+import com.example.tfm.viewHolder.ConversationViewHolder
+import org.jetbrains.anko.toast
 
 class ChatAdapter(private val conversations: MutableList<String>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
@@ -14,6 +15,9 @@ class ChatAdapter(private val conversations: MutableList<String>): RecyclerView.
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        holder.itemView.setOnClickListener {
+            it.context.toast("Working")
+        }
     }
 
     override fun getItemCount() = conversations.size

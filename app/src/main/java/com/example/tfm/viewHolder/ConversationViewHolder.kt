@@ -1,4 +1,4 @@
-package com.example.tfm.ViewHolders
+package com.example.tfm.viewHolder
 
 import android.support.v7.widget.RecyclerView
 import android.view.View

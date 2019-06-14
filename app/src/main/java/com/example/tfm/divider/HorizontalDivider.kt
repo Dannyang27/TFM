@@ -1,4 +1,4 @@
-package com.example.tfm.Divider
+package com.example.tfm.divider
 
 import android.content.Context
 import android.graphics.Canvas

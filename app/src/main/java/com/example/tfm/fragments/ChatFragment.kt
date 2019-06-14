@@ -7,8 +7,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.tfm.Adapters.ChatAdapter
-import com.example.tfm.Divider.HorizontalDivider
+import com.example.tfm.adapter.ChatAdapter
+import com.example.tfm.divider.HorizontalDivider
 import com.example.tfm.R
 
 class ChatFragment : Fragment(){
