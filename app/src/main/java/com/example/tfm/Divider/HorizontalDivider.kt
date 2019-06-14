@@ -10,7 +10,7 @@ class HorizontalDivider(context: Context): RecyclerView.ItemDecoration(){
     private var mDivider = ContextCompat.getDrawable(context, R.drawable.line_divider)
 
     override fun onDrawOver(c : Canvas, parent: RecyclerView, state : RecyclerView.State){
-        val left = parent.paddingLeft + 20
+        val left = parent.paddingLeft + 240
         val right = parent.width - (parent.paddingRight + 20)
 
         val childCount = parent.childCount
