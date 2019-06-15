@@ -12,13 +12,13 @@
             android:orientation="vertical">
         <android.support.design.widget.AppBarLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:elevation="4dp">
             <android.support.v7.widget.Toolbar
                     android:id="@+id/my_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:background="@color/colorPrimary"
-                    android:elevation="4dp">
+                    android:background="@color/colorPrimary">
                 <TextView
                         android:text="TextView"
                         android:layout_width="match_parent"
@@ -29,6 +29,18 @@
                         android:gravity="center_horizontal"
                         android:paddingLeft="20dp"/>
             </android.support.v7.widget.Toolbar>
+            <SearchView
+                    android:id="@+id/search_chat"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    app:queryBackground="@drawable/bg_white_rounded"
+                    app:submitBackground="@drawable/bg_white_rounded"
+                    android:background="@drawable/bg_white_rounded"
+                    android:layout_margin="5dp"
+                    android:queryHint="@string/hint"
+                    android:iconifiedByDefault="false"
+                    app:iconifiedByDefault="false"
+                    android:queryBackground="@android:color/transparent"/>
 
         </android.support.design.widget.AppBarLayout>
 
