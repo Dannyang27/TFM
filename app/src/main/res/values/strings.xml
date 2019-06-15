@@ -18,4 +18,8 @@
     <string name="videocall">Videocall</string>
     <string name="call">call</string>
     <string name="chat_hint">Type a message</string>
+    <string name="long_text_sample">How are you doing? This is a long message that should probably wrap.</string>
+    <string name="dwight_quote">I grew up on a farm. I have seen animals having sex in every position imaginable. Goat
+        on chicken. Chicken on goat. Couple of chickens doing a goat, couple of pigs watching.
+    </string>
 </resources>

@@ -53,8 +53,10 @@
             <android.support.v7.widget.RecyclerView
                     android:id="@+id/chat_recyclerview"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    android:layout_above="@+id/field"/>
             <LinearLayout
+                    android:id="@+id/field"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:orientation="horizontal"
@@ -69,7 +71,7 @@
                         android:id="@+id/chat_edittext"
                         android:background="@drawable/roundcorner"
                         android:paddingLeft="10dp"
-                        android:layout_weight="14"/>
+                        android:layout_weight="16"/>
                 <ImageButton
                         android:layout_width="20dp"
                         android:layout_height="40dp"
