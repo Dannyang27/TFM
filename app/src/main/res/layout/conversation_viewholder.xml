@@ -6,8 +6,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profile_image"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
+            android:layout_width="76dp"
+            android:layout_height="76dp"
             android:src="@drawable/dwight"
             android:padding="10dp"/>
     <LinearLayout
