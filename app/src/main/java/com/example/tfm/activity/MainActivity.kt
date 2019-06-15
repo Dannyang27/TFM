@@ -1,4 +1,4 @@
-package com.example.tfm
+package com.example.tfm.activity
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -12,6 +12,7 @@ import com.example.tfm.fragments.ChatFragment
 import com.example.tfm.fragments.GroupChatFragment
 import org.jetbrains.anko.toast
 import android.view.*
+import com.example.tfm.R
 
 
 class MainActivity : AppCompatActivity() {
