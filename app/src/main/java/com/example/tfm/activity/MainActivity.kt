@@ -8,7 +8,7 @@ import android.support.v4.app.Fragment
 import android.support.v7.widget.Toolbar
 import android.widget.SearchView
 import android.widget.TextView
-import com.example.tfm.fragments.ChatFragment
+import com.example.tfm.fragments.PrivateFragment
 import com.example.tfm.fragments.GroupChatFragment
 import org.jetbrains.anko.toast
 import android.view.*
@@ -17,16 +17,16 @@ import com.example.tfm.R
 
 class MainActivity : AppCompatActivity() {
 
-    private val chatFragment = ChatFragment.newInstance()
+    private val privateFragment = PrivateFragment.newInstance()
     private val groupChatFragment = GroupChatFragment.newInstance()
-    private var activeFragment: Fragment = chatFragment
+    private var activeFragment: Fragment = privateFragment
     private lateinit var toolbar: Toolbar
     private lateinit var searchView: SearchView
 
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_chat -> {
-                openFragment(chatFragment)
+                openFragment(privateFragment)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_groupchat -> {
@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
 
         supportFragmentManager.beginTransaction().add(R.id.container, groupChatFragment, "2").hide(groupChatFragment).commit()
-        supportFragmentManager.beginTransaction().add(R.id.container, chatFragment, "1").commit()
+        supportFragmentManager.beginTransaction().add(R.id.container, privateFragment, "1").commit()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
