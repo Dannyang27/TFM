@@ -3,14 +3,16 @@ package com.example.tfm
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
+import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.support.v7.widget.Toolbar
-import android.view.Menu
-import android.view.MenuItem
+import android.widget.SearchView
 import android.widget.TextView
 import com.example.tfm.fragments.ChatFragment
 import com.example.tfm.fragments.GroupChatFragment
 import org.jetbrains.anko.toast
+import android.view.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     private val groupChatFragment = GroupChatFragment.newInstance()
     private var activeFragment: Fragment = chatFragment
     private lateinit var toolbar: Toolbar
+    private lateinit var searchView: SearchView
 
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -46,6 +49,15 @@ class MainActivity : AppCompatActivity() {
         val toolbarTitle = findViewById<TextView>(R.id.toolbar_title)
         toolbarTitle.text = getString(R.string.messages)
         setSupportActionBar(toolbar)
+
+        val fab = findViewById<FloatingActionButton>(R.id.fab)
+        fab.setOnClickListener {
+            toast("Fab button clicked...")
+        }
+
+        searchView = findViewById(R.id.search_chat)
+
+
 
         val navView: BottomNavigationView = findViewById(R.id.navigation)
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
