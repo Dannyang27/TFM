@@ -27,7 +27,8 @@ class ChatFragment : Fragment(){
         val view = inflater.inflate(R.layout.chat_fragment, container, false)
 
         viewManager = LinearLayoutManager(activity)
-        viewAdapter = ChatAdapter(mutableListOf("test","test","test","test","test","test","test","test"))
+        viewAdapter = ChatAdapter(mutableListOf("test","test","test","test","test","test",
+            "test","test","test","test","test","test","test"))
 
         conversationList = view.findViewById<RecyclerView>(R.id.chat_recyclerview).apply {
             setHasFixedSize(true)
