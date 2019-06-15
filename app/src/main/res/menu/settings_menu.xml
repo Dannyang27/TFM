@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/search"
-          android:title="@android:string/search_go"
-          app:showAsAction="always"
-          android:icon="@drawable/search"/>
     <item android:id="@+id/new_group"
           android:title="@string/newgroup"
           app:showAsAction="collapseActionView"/>

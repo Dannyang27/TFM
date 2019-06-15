@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
 import com.example.tfm.fragments.ChatFragment
 import com.example.tfm.fragments.GroupChatFragment
 import org.jetbrains.anko.toast
@@ -42,7 +43,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         toolbar = findViewById(R.id.my_toolbar)
-        toolbar.title = getString(R.string.title_chat)
+        val toolbarTitle = findViewById<TextView>(R.id.toolbar_title)
+        toolbarTitle.text = getString(R.string.messages)
         setSupportActionBar(toolbar)
 
         val navView: BottomNavigationView = findViewById(R.id.navigation)
@@ -58,10 +60,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?) = when(item?.itemId) {
-        R.id.search -> {
-            toast("Searchs Clicked")
-            true
-        }
 
         R.id.new_group -> {
             toast("New groups Clicked")
