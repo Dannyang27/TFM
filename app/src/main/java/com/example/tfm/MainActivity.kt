@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
+import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import com.example.tfm.fragments.ChatFragment
@@ -15,6 +16,7 @@ class MainActivity : AppCompatActivity() {
     private val chatFragment = ChatFragment.newInstance()
     private val groupChatFragment = GroupChatFragment.newInstance()
     private var activeFragment: Fragment = chatFragment
+    private lateinit var toolbar: Toolbar
 
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -38,6 +40,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        toolbar = findViewById(R.id.my_toolbar)
+        toolbar.title = getString(R.string.title_chat)
+        setSupportActionBar(toolbar)
 
         val navView: BottomNavigationView = findViewById(R.id.navigation)
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
