@@ -55,7 +55,7 @@ class ChatActivity : AppCompatActivity() {
             layoutManager = viewManager
             adapter = viewAdapter
 
-            addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+            addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
                 if(bottom < oldBottom){
                     postDelayed({ scrollToPosition(viewAdapter.itemCount - 1) }, 0)
                 }
