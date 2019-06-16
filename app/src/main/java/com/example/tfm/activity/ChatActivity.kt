@@ -13,7 +13,6 @@ import com.example.tfm.enum.Sender
 import com.example.tfm.model.Message
 import kotlinx.android.synthetic.main.activity_chat.*
 
-
 class ChatActivity : AppCompatActivity() {
 
     private lateinit var viewManager: RecyclerView.LayoutManager
@@ -37,15 +36,16 @@ class ChatActivity : AppCompatActivity() {
         sendButton.setOnClickListener {
             val fieldText = messageField.text.toString()
             if(fieldText.isNotEmpty()){
-                messages.add(Message(Sender.OWN, MessageType.MESSAGE, fieldText, 0 ))
+                messages.add(Message(Sender.OWN, MessageType.MESSAGE, fieldText, 1, "EN" ))
+                messagesRecyclerView.scrollToPosition(viewAdapter.itemCount - 1)
                 viewAdapter.notifyDataSetChanged()
                 messageField.text.clear()
             }
         }
 
         //sample messages
-        messages.add(Message(Sender.OWN, MessageType.MESSAGE, "Hello World", 1212 ))
-        messages.add(Message(Sender.OTHER, MessageType.MESSAGE, getString(R.string.dwight_quote), 1212 ))
+        messages.add(Message(Sender.OWN, MessageType.MESSAGE, "Hello World",  1212, "EN" ))
+        messages.add(Message(Sender.OTHER, MessageType.MESSAGE, getString(R.string.dwight_quote), 1213 , "EN"))
 
         viewManager = LinearLayoutManager(this)
         viewAdapter = ChatAdapter(messages)
@@ -54,7 +54,18 @@ class ChatActivity : AppCompatActivity() {
             setHasFixedSize(true)
             layoutManager = viewManager
             adapter = viewAdapter
+
+            addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+                if(bottom < oldBottom){
+                    postDelayed({ scrollToPosition(viewAdapter.itemCount - 1) }, 0)
+                }
+            }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        messagesRecyclerView.scrollToPosition(viewAdapter.itemCount - 1)
     }
 
     private fun displayBackArrow(){
