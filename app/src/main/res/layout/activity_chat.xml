@@ -97,7 +97,7 @@
                         android:layout_height="40dp"
                         app:srcCompat="@drawable/emoji"
                         android:scaleType="fitXY"
-                        android:id="@+id/imageButton4"
+                        android:id="@+id/emojiButton"
                         android:padding="@dimen/shorcutPadding"
                         android:layout_marginRight="@dimen/shorcutMargin"
                         android:background="?android:attr/selectableItemBackground"/>
@@ -107,7 +107,7 @@
                         android:layout_height="40dp"
                         app:srcCompat="@drawable/picture"
                         android:scaleType="fitXY"
-                        android:id="@+id/imageButton6"
+                        android:id="@+id/pictureButton"
                         android:padding="@dimen/shorcutPadding"
                         android:layout_marginRight="@dimen/shorcutMargin"
                         android:background="?android:attr/selectableItemBackground"/>
@@ -116,7 +116,7 @@
                         android:layout_height="40dp"
                         app:srcCompat="@drawable/gif"
                         android:scaleType="fitXY"
-                        android:id="@+id/imageButton7"
+                        android:id="@+id/gifButton"
                         android:padding="@dimen/shorcutPadding"
                         android:layout_marginRight="@dimen/shorcutMargin"
                         android:background="?android:attr/selectableItemBackground"/>
@@ -126,7 +126,7 @@
                         android:layout_height="40dp"
                         app:srcCompat="@drawable/camera"
                         android:scaleType="fitXY"
-                        android:id="@+id/imageButton3"
+                        android:id="@+id/cameraButton"
                         android:padding="@dimen/shorcutPadding"
                         android:layout_marginRight="@dimen/shorcutMargin"
                         android:background="?android:attr/selectableItemBackground"/>
@@ -136,7 +136,7 @@
                         android:layout_height="40dp"
                         app:srcCompat="@drawable/microphone"
                         android:scaleType="fitXY"
-                        android:id="@+id/imageButton5"
+                        android:id="@+id/micButton"
                         android:padding="@dimen/shorcutPadding"
                         android:layout_marginRight="@dimen/shorcutMargin"
                         android:background="?android:attr/selectableItemBackground"/>
@@ -146,7 +146,7 @@
                         android:layout_height="40dp"
                         app:srcCompat="@drawable/location"
                         android:scaleType="fitXY"
-                        android:id="@+id/imageButton8"
+                        android:id="@+id/locationButton"
                         android:padding="@dimen/shorcutPadding"
                         android:layout_marginRight="@dimen/shorcutMargin"
                         android:background="?android:attr/selectableItemBackground"/>
@@ -155,7 +155,7 @@
                         android:layout_height="40dp"
                         app:srcCompat="@drawable/attachment"
                         android:scaleType="fitXY"
-                        android:id="@+id/imageButton2"
+                        android:id="@+id/attachmentButton"
                         android:padding="@dimen/shorcutPadding"
                         android:layout_marginRight="@dimen/shorcutMargin"
                         android:background="?android:attr/selectableItemBackground"/>
@@ -164,7 +164,7 @@
                         android:layout_height="40dp"
                         app:srcCompat="@drawable/code"
                         android:scaleType="fitXY"
-                        android:id="@+id/imageButton9"
+                        android:id="@+id/codeButton"
                         android:padding="@dimen/shorcutPadding"
                         android:layout_marginRight="@dimen/shorcutMargin"
                         android:background="?android:attr/selectableItemBackground"/>

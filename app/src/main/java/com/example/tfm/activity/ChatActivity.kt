@@ -4,15 +4,15 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.Toolbar
 import android.view.Menu
-import android.widget.EditText
+import android.view.MenuItem
 import com.example.tfm.R
 import com.example.tfm.adapter.ChatAdapter
 import com.example.tfm.enum.MessageType
 import com.example.tfm.enum.Sender
 import com.example.tfm.model.Message
 import kotlinx.android.synthetic.main.activity_chat.*
+import org.jetbrains.anko.toast
 
 class ChatActivity : AppCompatActivity() {
 
@@ -27,22 +27,9 @@ class ChatActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
-
-        val toolbar = findViewById<Toolbar>(R.id.chat_toolbar)
-        setSupportActionBar(toolbar)
+        setSupportActionBar(chat_toolbar)
         displayBackArrow()
-
-        val messageField = findViewById<EditText>(R.id.chat_edittext)
-
-        sendButton.setOnClickListener {
-            val fieldText = messageField.text.toString()
-            if(fieldText.isNotEmpty()){
-                messages.add(Message(Sender.OWN, MessageType.MESSAGE, fieldText, 1, "EN" ))
-                messagesRecyclerView.scrollToPosition(viewAdapter.itemCount - 1)
-                viewAdapter.notifyDataSetChanged()
-                messageField.text.clear()
-            }
-        }
+        initListeners()
 
         //sample messages
         messages.add(Message(Sender.OWN, MessageType.MESSAGE, "Hello World",  1212, "EN" ))
@@ -73,6 +60,22 @@ class ChatActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.chat_menu, menu)
         return true
     }
+
+    override fun onOptionsItemSelected(item: MenuItem?) = when(item?.itemId) {
+
+        R.id.call -> {
+            toast("Phonecalling...")
+            true
+        }
+
+        R.id.videocall -> {
+            toast("Videocalling...")
+            true
+        }
+
+        else -> super.onOptionsItemSelected(item)
+    }
+
     private fun displayBackArrow(){
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
@@ -81,5 +84,42 @@ class ChatActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    private fun initListeners(){
+        emojiButton.setOnClickListener {
+            toast("Emoji")
+        }
+        pictureButton.setOnClickListener {
+            toast("Photo")
+        }
+        gifButton.setOnClickListener {
+            toast("GIF")
+        }
+        cameraButton.setOnClickListener {
+            toast("Camera")
+        }
+        micButton.setOnClickListener {
+            toast("Microphone")
+        }
+        locationButton.setOnClickListener {
+            toast("Location")
+        }
+        attachmentButton.setOnClickListener {
+            toast("Attachment")
+        }
+        codeButton.setOnClickListener {
+            toast("Code")
+        }
+
+        sendButton.setOnClickListener {
+            val fieldText = chat_edittext.text.toString()
+            if(fieldText.isNotEmpty()){
+                messages.add(Message(Sender.OWN, MessageType.MESSAGE, fieldText, 1, "EN" ))
+                messagesRecyclerView.scrollToPosition(viewAdapter.itemCount - 1)
+                viewAdapter.notifyDataSetChanged()
+                chat_edittext.text.clear()
+            }
+        }
     }
 }
