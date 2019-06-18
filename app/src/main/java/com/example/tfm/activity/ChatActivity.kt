@@ -1,11 +1,17 @@
 package com.example.tfm.activity
 
+import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.support.text.emoji.EmojiCompat
 import android.support.text.emoji.bundled.BundledEmojiCompatConfig
 import android.support.text.emoji.widget.EmojiEditText
+import android.support.v4.app.ActivityCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
@@ -24,6 +30,11 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var emojiEditText: EmojiEditText
 
     private val GALLERY_CODE = 0
+    private val CAMERA_MODE = 1
+
+    val PERMISSION_ALL = 1
+    val PERMISSIONS = arrayOf(
+        Manifest.permission.CAMERA)
 
     companion object{
         var messages = mutableListOf<Message>()
@@ -109,7 +120,7 @@ class ChatActivity : AppCompatActivity() {
         }
         pictureButton.setOnClickListener {
             toast("Photo")
-            val galleryIntent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             startActivityForResult(galleryIntent, GALLERY_CODE)
         }
         gifButton.setOnClickListener {
@@ -117,6 +128,11 @@ class ChatActivity : AppCompatActivity() {
         }
         cameraButton.setOnClickListener {
             toast("Camera")
+//            val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+//            val photo = File(Environment.getExternalStorageDirectory(), "Pic.jpg")
+//            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo))
+//            startActivityForResult(cameraIntent, CAMERA_MODE)
+            openCamera()
         }
         micButton.setOnClickListener {
             toast("Microphone")
@@ -149,11 +165,35 @@ class ChatActivity : AppCompatActivity() {
                 if(data != null){
                     toast("Gallery photo ${data.data}")
                 }else{
-                    toast("Could not get image data")
+                    toast("No image loaded")
+                }
+            }
+
+            CAMERA_MODE -> {
+                if(data != null && data.extras != null){
+                    val imageBitmap = data.extras.get("data") as Bitmap
+                    toast("Camera photo ${imageBitmap.byteCount}")
+                }else{
+                    toast("Could not get any shot")
                 }
             }
 
             else -> toast("Other")
         }
+    }
+
+    private fun openCamera(){
+        if(hasPermissions(this, PERMISSIONS)){
+            val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            if(cameraIntent.resolveActivity(packageManager) != null){
+                startActivityForResult(cameraIntent, CAMERA_MODE)
+            }
+        }else{
+            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL)
+        }
+    }
+
+    private fun hasPermissions(context: Context, permissions: Array<String>): Boolean = permissions.all {
+        ActivityCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
     }
 }
