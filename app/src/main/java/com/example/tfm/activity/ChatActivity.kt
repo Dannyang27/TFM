@@ -1,5 +1,6 @@
 package com.example.tfm.activity
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.text.emoji.EmojiCompat
@@ -21,6 +22,8 @@ class ChatActivity : AppCompatActivity() {
 
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var emojiEditText: EmojiEditText
+
+    private val GALLERY_CODE = 0
 
     companion object{
         var messages = mutableListOf<Message>()
@@ -106,6 +109,8 @@ class ChatActivity : AppCompatActivity() {
         }
         pictureButton.setOnClickListener {
             toast("Photo")
+            val galleryIntent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            startActivityForResult(galleryIntent, GALLERY_CODE)
         }
         gifButton.setOnClickListener {
             toast("GIF")
@@ -134,6 +139,21 @@ class ChatActivity : AppCompatActivity() {
                 viewAdapter.notifyDataSetChanged()
                 chat_edittext.text.clear()
             }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when(requestCode){
+            GALLERY_CODE ->{
+                if(data != null){
+                    toast("Gallery photo ${data.data}")
+                }else{
+                    toast("Could not get image data")
+                }
+            }
+
+            else -> toast("Other")
         }
     }
 }
