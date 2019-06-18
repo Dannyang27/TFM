@@ -1,10 +1,12 @@
 package com.example.tfm.activity
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
@@ -14,6 +16,7 @@ import android.support.text.emoji.widget.EmojiEditText
 import android.support.v4.app.ActivityCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.example.tfm.R
@@ -29,12 +32,13 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var emojiEditText: EmojiEditText
 
-    private val GALLERY_CODE = 0
-    private val CAMERA_MODE = 1
+    private val GALLERY_CODE = 100
+    private val CAMERA_MODE = 101
 
     val PERMISSION_ALL = 1
     val PERMISSIONS = arrayOf(
-        Manifest.permission.CAMERA)
+        Manifest.permission.CAMERA,
+        Manifest.permission.READ_EXTERNAL_STORAGE)
 
     companion object{
         var messages = mutableListOf<Message>()
@@ -120,18 +124,13 @@ class ChatActivity : AppCompatActivity() {
         }
         pictureButton.setOnClickListener {
             toast("Photo")
-            val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            startActivityForResult(galleryIntent, GALLERY_CODE)
+            openGallery()
         }
         gifButton.setOnClickListener {
             toast("GIF")
         }
         cameraButton.setOnClickListener {
             toast("Camera")
-//            val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-//            val photo = File(Environment.getExternalStorageDirectory(), "Pic.jpg")
-//            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo))
-//            startActivityForResult(cameraIntent, CAMERA_MODE)
             openCamera()
         }
         micButton.setOnClickListener {
@@ -160,10 +159,21 @@ class ChatActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
         when(requestCode){
             GALLERY_CODE ->{
                 if(data != null){
-                    toast("Gallery photo ${data.data}")
+                    val uri = data.data
+                    val filePath : Array<String> = arrayOf(MediaStore.Images.Media.DATA)
+                    val cursor = contentResolver.query(uri, filePath, null, null, null)
+                    if(cursor.moveToFirst()){
+                        val columnIndex = cursor.getColumnIndex(filePath[0])
+                        val fileP = cursor.getString(columnIndex)
+                        val imageBitmap = BitmapFactory.decodeFile(fileP)
+                        toast("Gallery photo ${imageBitmap.byteCount}")
+                        Log.d("PHOTO", imageBitmap.byteCount.toString())
+                    }
+                    cursor.close()
                 }else{
                     toast("No image loaded")
                 }
@@ -179,6 +189,16 @@ class ChatActivity : AppCompatActivity() {
             }
 
             else -> toast("Other")
+        }
+    }
+
+    private fun openGallery(){
+        if(!hasPermissions(this, PERMISSIONS)){
+            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL)
+        }else{
+            val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            galleryIntent.type = "image/*"
+            startActivityForResult(galleryIntent, GALLERY_CODE)
         }
     }
 
