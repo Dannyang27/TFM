@@ -62,7 +62,7 @@
                     android:orientation="horizontal"
                     android:layout_margin="8dp"
                     android:layout_above="@+id/shortcuts">
-                <EditText
+                <android.support.text.emoji.widget.EmojiEditText
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:inputType="textPersonName"

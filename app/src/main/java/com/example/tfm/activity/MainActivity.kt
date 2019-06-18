@@ -4,6 +4,8 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.design.widget.FloatingActionButton
+import android.support.text.emoji.EmojiCompat
+import android.support.text.emoji.bundled.BundledEmojiCompatConfig
 import android.support.v4.app.Fragment
 import android.support.v7.widget.Toolbar
 import android.widget.SearchView
@@ -44,6 +46,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initEmoji()
         setContentView(R.layout.activity_main)
 
         toolbar = findViewById(R.id.my_toolbar)
@@ -85,5 +88,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         else -> super.onOptionsItemSelected(item)
+    }
+
+    private fun initEmoji(){
+        val config = BundledEmojiCompatConfig(this)
+        EmojiCompat.init(config)
     }
 }

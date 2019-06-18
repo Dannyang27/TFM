@@ -2,6 +2,9 @@ package com.example.tfm.activity
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.text.emoji.EmojiCompat
+import android.support.text.emoji.bundled.BundledEmojiCompatConfig
+import android.support.text.emoji.widget.EmojiEditText
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
@@ -17,6 +20,7 @@ import org.jetbrains.anko.toast
 class ChatActivity : AppCompatActivity() {
 
     private lateinit var viewManager: RecyclerView.LayoutManager
+    private lateinit var emojiEditText: EmojiEditText
 
     companion object{
         var messages = mutableListOf<Message>()
@@ -26,9 +30,14 @@ class ChatActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initEmoji()
         setContentView(R.layout.activity_chat)
         setSupportActionBar(chat_toolbar)
         displayBackArrow()
+
+        emojiEditText = findViewById(R.id.chat_edittext)
+
+
         initListeners()
 
         //sample messages
@@ -84,6 +93,11 @@ class ChatActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    private fun initEmoji(){
+        val config = BundledEmojiCompatConfig(this)
+        EmojiCompat.init(config)
     }
 
     private fun initListeners(){
