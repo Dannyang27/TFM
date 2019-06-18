@@ -24,7 +24,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:gravity="center_horizontal"
-                        android:layout_marginRight="80dp">
+                        android:layout_marginLeft="50dp">
 
                     <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/chat_profile_image"
@@ -60,9 +60,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:orientation="horizontal"
-                    android:layout_alignParentBottom="true"
                     android:layout_margin="8dp"
-                    android:layout_marginBottom="10dp">
+                    android:layout_above="@+id/shortcuts">
                 <EditText
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -83,6 +82,92 @@
                         android:padding="12dp"
                         android:layout_marginLeft="5dp"
                         android:background="@drawable/round_button"/>
+            </LinearLayout>
+            <LinearLayout
+                    android:id="@+id/shortcuts"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_alignParentBottom="true"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_marginBottom="8dp">
+
+                <ImageButton
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        app:srcCompat="@drawable/emoji"
+                        android:scaleType="fitXY"
+                        android:id="@+id/imageButton4"
+                        android:padding="@dimen/shorcutPadding"
+                        android:layout_marginRight="@dimen/shorcutMargin"
+                        android:background="?android:attr/selectableItemBackground"/>
+
+                <ImageButton
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        app:srcCompat="@drawable/picture"
+                        android:scaleType="fitXY"
+                        android:id="@+id/imageButton6"
+                        android:padding="@dimen/shorcutPadding"
+                        android:layout_marginRight="@dimen/shorcutMargin"
+                        android:background="?android:attr/selectableItemBackground"/>
+                <ImageButton
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        app:srcCompat="@drawable/gif"
+                        android:scaleType="fitXY"
+                        android:id="@+id/imageButton7"
+                        android:padding="@dimen/shorcutPadding"
+                        android:layout_marginRight="@dimen/shorcutMargin"
+                        android:background="?android:attr/selectableItemBackground"/>
+
+                <ImageButton
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        app:srcCompat="@drawable/camera"
+                        android:scaleType="fitXY"
+                        android:id="@+id/imageButton3"
+                        android:padding="@dimen/shorcutPadding"
+                        android:layout_marginRight="@dimen/shorcutMargin"
+                        android:background="?android:attr/selectableItemBackground"/>
+
+                <ImageButton
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        app:srcCompat="@drawable/microphone"
+                        android:scaleType="fitXY"
+                        android:id="@+id/imageButton5"
+                        android:padding="@dimen/shorcutPadding"
+                        android:layout_marginRight="@dimen/shorcutMargin"
+                        android:background="?android:attr/selectableItemBackground"/>
+
+                <ImageButton
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        app:srcCompat="@drawable/location"
+                        android:scaleType="fitXY"
+                        android:id="@+id/imageButton8"
+                        android:padding="@dimen/shorcutPadding"
+                        android:layout_marginRight="@dimen/shorcutMargin"
+                        android:background="?android:attr/selectableItemBackground"/>
+                <ImageButton
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        app:srcCompat="@drawable/attachment"
+                        android:scaleType="fitXY"
+                        android:id="@+id/imageButton2"
+                        android:padding="@dimen/shorcutPadding"
+                        android:layout_marginRight="@dimen/shorcutMargin"
+                        android:background="?android:attr/selectableItemBackground"/>
+                <ImageButton
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        app:srcCompat="@drawable/code"
+                        android:scaleType="fitXY"
+                        android:id="@+id/imageButton9"
+                        android:padding="@dimen/shorcutPadding"
+                        android:layout_marginRight="@dimen/shorcutMargin"
+                        android:background="?android:attr/selectableItemBackground"/>
             </LinearLayout>
         </RelativeLayout>
 </LinearLayout>

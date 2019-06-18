@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
+import android.view.Menu
 import android.widget.EditText
 import com.example.tfm.R
 import com.example.tfm.adapter.ChatAdapter
@@ -68,6 +69,10 @@ class ChatActivity : AppCompatActivity() {
         messagesRecyclerView.scrollToPosition(viewAdapter.itemCount - 1)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.chat_menu, menu)
+        return true
+    }
     private fun displayBackArrow(){
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)

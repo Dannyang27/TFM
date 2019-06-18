@@ -5,5 +5,6 @@
     <dimen name="text_small">12sp</dimen>
     <dimen name="text_medium">16sp</dimen>
     <dimen name="text_large">20sp</dimen>
-
+    <dimen name="shorcutMargin">6dp</dimen>
+    <dimen name="shorcutPadding">8dp</dimen>
 </resources>
