@@ -1,19 +1,21 @@
 package com.example.tfm.activity
 
 import android.Manifest
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.support.text.emoji.EmojiCompat
 import android.support.text.emoji.bundled.BundledEmojiCompatConfig
 import android.support.text.emoji.widget.EmojiEditText
 import android.support.v4.app.ActivityCompat
+import android.support.v4.content.FileProvider
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -26,11 +28,17 @@ import com.example.tfm.enum.Sender
 import com.example.tfm.model.Message
 import kotlinx.android.synthetic.main.activity_chat.*
 import org.jetbrains.anko.toast
+import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ChatActivity : AppCompatActivity() {
 
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var emojiEditText: EmojiEditText
+
+    var currentPhotoPath: String = ""
 
     private val GALLERY_CODE = 100
     private val CAMERA_MODE = 101
@@ -38,7 +46,7 @@ class ChatActivity : AppCompatActivity() {
     val PERMISSION_ALL = 1
     val PERMISSIONS = arrayOf(
         Manifest.permission.CAMERA,
-        Manifest.permission.READ_EXTERNAL_STORAGE)
+        Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
     companion object{
         var messages = mutableListOf<Message>()
@@ -132,7 +140,11 @@ class ChatActivity : AppCompatActivity() {
         }
         cameraButton.setOnClickListener {
             toast("Camera")
-            openCamera()
+            if(!hasPermissions(this, PERMISSIONS)){
+                ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL)
+            }else{
+                openCamera()
+            }
         }
         micButton.setOnClickListener {
             toast("Microphone")
@@ -184,13 +196,16 @@ class ChatActivity : AppCompatActivity() {
             }
 
             CAMERA_MODE -> {
-                if(data != null && data.extras != null){
+                if(data != null){
                     val imageBitmap = data.extras.get("data") as Bitmap
-                    toast("Camera photo ${imageBitmap.byteCount}")
+
+//                    val file = File(currentPhotoPath)
+//                    val imageBitmap = MediaStore.Images.Media.getBitmap(contentResolver, Uri.fromFile(file))
+//
+//
                     messages.add(Message(Sender.OWN, MessageType.PHOTO, imageBitmap, 1 , "EN"))
                     messagesRecyclerView.scrollToPosition(viewAdapter.itemCount - 1)
                     viewAdapter.notifyDataSetChanged()
-
                 }else{
                     toast("Could not get any shot")
                 }
@@ -210,18 +225,50 @@ class ChatActivity : AppCompatActivity() {
         }
     }
 
-    private fun openCamera(){
-        if(hasPermissions(this, PERMISSIONS)){
-            val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            if(cameraIntent.resolveActivity(packageManager) != null){
-                startActivityForResult(cameraIntent, CAMERA_MODE)
+    private fun openCamera() {
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            // Ensure that there's a camera activity to handle the intent
+            takePictureIntent.resolveActivity(packageManager)?.also {
+                // Create the File where the photo should go
+                val photoFile: File? = try {
+                    createImageFile()
+                } catch (ex: IOException) {
+                    // Error occurred while creating the File
+                    ex.printStackTrace()
+                    null
+                }
+                // Continue only if the File was successfully created
+                photoFile?.also {
+                    val photoURI: Uri = FileProvider.getUriForFile(
+                        this,
+                        "com.example.tfm.fileprovider",
+                        it
+                    )
+
+                    Log.d("PHOTO", photoURI.path)
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                    startActivityForResult(takePictureIntent, CAMERA_MODE)
+                }
             }
-        }else{
-            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL)
         }
     }
 
     private fun hasPermissions(context: Context, permissions: Array<String>): Boolean = permissions.all {
         ActivityCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
+    }
+
+
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        // Create an image file name
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir: File = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(
+            "JPEG_${timeStamp}_",
+            ".jpg",
+            storageDir
+        ).apply {
+            currentPhotoPath = absolutePath
+        }
     }
 }
