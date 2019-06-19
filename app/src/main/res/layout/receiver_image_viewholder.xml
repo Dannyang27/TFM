@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:paddingVertical="10dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="60dp"
+                android:clipToPadding="false">
+
+    <ImageView
+            android:layout_width="250dp"
+            android:layout_height="200dp"
+            app:srcCompat="@drawable/angela_sample"
+            android:scaleType="fitXY"
+            android:id="@+id/receiver_image_viewholder"
+            android:padding="5dp"
+            android:background="@drawable/receiver_message"
+            android:elevation="4dp"/>
+</RelativeLayout>

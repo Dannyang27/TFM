@@ -8,6 +8,7 @@ import com.example.tfm.R
 import com.example.tfm.enum.MessageType
 import com.example.tfm.enum.Sender
 import com.example.tfm.model.Message
+import com.example.tfm.viewHolder.ReceiverImageViewHolder
 import com.example.tfm.viewHolder.ReceiverMessageViewHolder
 import com.example.tfm.viewHolder.SenderImageViewHolder
 import com.example.tfm.viewHolder.SenderMessageViewHolder
@@ -31,7 +32,17 @@ class ChatAdapter(private val messages : MutableList<Message>) : RecyclerView.Ad
                 else -> viewType = -1
             }
         }else{
-            viewType = 1
+            when(message.messageType){
+                MessageType.MESSAGE -> {
+                    viewType = 1
+                }
+
+                MessageType.PHOTO -> {
+                    viewType = 3
+                }
+
+                else -> viewType = -1
+            }
         }
         return viewType
     }
@@ -54,6 +65,11 @@ class ChatAdapter(private val messages : MutableList<Message>) : RecyclerView.Ad
                 view = LayoutInflater.from(parent.context).inflate(R.layout.sender_image_viewholder, parent, false)
                 return SenderImageViewHolder(view)
             }
+
+            3 -> {
+                view = LayoutInflater.from(parent.context).inflate(R.layout.receiver_image_viewholder, parent, false)
+                return ReceiverImageViewHolder(view)
+            }
         }
 
         // TODO never happen I think
@@ -65,15 +81,19 @@ class ChatAdapter(private val messages : MutableList<Message>) : RecyclerView.Ad
 
         when(holder){
             is SenderMessageViewHolder -> {
-                holder.text.text = message.body
+                holder.text.text = message.body as String
             }
 
             is ReceiverMessageViewHolder ->{
-                holder.text.text = message.body
+                holder.text.text = message.body as String
             }
 
             is SenderImageViewHolder ->  {
                 //holder.image.setImageBitmap()
+            }
+
+            is ReceiverImageViewHolder -> {
+                // TODO
             }
         }
     }
