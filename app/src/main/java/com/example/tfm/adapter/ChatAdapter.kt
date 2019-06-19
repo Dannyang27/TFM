@@ -1,5 +1,6 @@
 package com.example.tfm.adapter
 
+import android.graphics.Bitmap
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import com.example.tfm.viewHolder.ReceiverImageViewHolder
 import com.example.tfm.viewHolder.ReceiverMessageViewHolder
 import com.example.tfm.viewHolder.SenderImageViewHolder
 import com.example.tfm.viewHolder.SenderMessageViewHolder
+import com.squareup.picasso.Picasso
 
 class ChatAdapter(private val messages : MutableList<Message>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
@@ -89,7 +91,7 @@ class ChatAdapter(private val messages : MutableList<Message>) : RecyclerView.Ad
             }
 
             is SenderImageViewHolder ->  {
-                //holder.image.setImageBitmap()
+                holder.image.setImageBitmap(message.body as Bitmap)
             }
 
             is ReceiverImageViewHolder -> {

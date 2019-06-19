@@ -7,13 +7,17 @@
                 android:paddingRight="60dp"
                 android:clipToPadding="false">
 
-    <ImageView
+    <LinearLayout
             android:layout_width="250dp"
-            android:layout_height="200dp"
-            app:srcCompat="@drawable/angela_sample"
-            android:scaleType="fitXY"
-            android:id="@+id/receiver_image_viewholder"
-            android:padding="5dp"
-            android:background="@drawable/receiver_message"
-            android:elevation="4dp"/>
+            android:layout_height="200dp">
+
+        <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:srcCompat="@drawable/angela_sample"
+                android:scaleType="centerCrop"
+                android:id="@+id/receiver_image_viewholder"
+                android:background="@drawable/sender_message" />
+
+    </LinearLayout>
 </RelativeLayout>

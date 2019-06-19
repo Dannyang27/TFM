@@ -8,13 +8,19 @@
                 android:paddingRight="15dp"
                 android:paddingLeft="60dp"
                 android:clipToPadding="false">
-
-    <ImageView
+    <LinearLayout
             android:layout_width="250dp"
-            android:layout_height="200dp"
-            app:srcCompat="@drawable/angela_sample"
-            android:scaleType="fitXY"
-            android:id="@+id/sender_image_viewholder"
-            android:padding="5dp"
-            android:background="@drawable/sender_message" />
+            android:layout_height="200dp">
+
+        <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:srcCompat="@drawable/angela_sample"
+                android:scaleType="centerCrop"
+                android:id="@+id/sender_image_viewholder"
+                android:background="@drawable/sender_message" />
+
+    </LinearLayout>
+
+
 </RelativeLayout>

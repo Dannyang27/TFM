@@ -61,7 +61,7 @@ class ChatActivity : AppCompatActivity() {
         //sample messages
         messages.add(Message(Sender.OWN, MessageType.MESSAGE, "Hello World",  1212, "EN" ))
         messages.add(Message(Sender.OTHER, MessageType.MESSAGE, getString(R.string.dwight_quote), 1213 , "EN"))
-        messages.add(Message(Sender.OTHER, MessageType.PHOTO, "", 1214 , "EN"))
+        //messages.add(Message(Sender.OTHER, MessageType.PHOTO, "", 1214 , "EN"))
 
         viewManager = LinearLayoutManager(this)
         viewAdapter = ChatAdapter(messages)
@@ -173,6 +173,9 @@ class ChatActivity : AppCompatActivity() {
                         val imageBitmap = BitmapFactory.decodeFile(fileP)
                         toast("Gallery photo ${imageBitmap.byteCount}")
                         Log.d("PHOTO", imageBitmap.byteCount.toString())
+                        messages.add(Message(Sender.OWN, MessageType.PHOTO, imageBitmap, 1 , "EN"))
+                        messagesRecyclerView.scrollToPosition(viewAdapter.itemCount - 1)
+                        viewAdapter.notifyDataSetChanged()
                     }
                     cursor.close()
                 }else{
@@ -184,7 +187,7 @@ class ChatActivity : AppCompatActivity() {
                 if(data != null && data.extras != null){
                     val imageBitmap = data.extras.get("data") as Bitmap
                     toast("Camera photo ${imageBitmap.byteCount}")
-                    messages.add(Message(Sender.OWN, MessageType.PHOTO, "", 1 , "EN"))
+                    messages.add(Message(Sender.OWN, MessageType.PHOTO, imageBitmap, 1 , "EN"))
                     messagesRecyclerView.scrollToPosition(viewAdapter.itemCount - 1)
                     viewAdapter.notifyDataSetChanged()
 
