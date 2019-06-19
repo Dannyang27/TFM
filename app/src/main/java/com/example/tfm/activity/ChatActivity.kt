@@ -183,6 +183,10 @@ class ChatActivity : AppCompatActivity() {
                 if(data != null && data.extras != null){
                     val imageBitmap = data.extras.get("data") as Bitmap
                     toast("Camera photo ${imageBitmap.byteCount}")
+                    messages.add(Message(Sender.OWN, MessageType.PHOTO, "", 1 , "EN"))
+                    messagesRecyclerView.scrollToPosition(viewAdapter.itemCount - 1)
+                    viewAdapter.notifyDataSetChanged()
+
                 }else{
                     toast("Could not get any shot")
                 }
