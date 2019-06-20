@@ -20,6 +20,8 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.*
+import android.widget.FrameLayout
+import android.widget.GridView
 import com.example.tfm.R
 import com.example.tfm.adapter.ChatAdapter
 import com.example.tfm.enum.MessageType
@@ -38,7 +40,7 @@ class ChatActivity : AppCompatActivity() {
 
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var emojiEditText: EmojiEditText
-    private lateinit var specialKeyboard: View
+    private lateinit var specialKeyboard: FrameLayout
 
     var currentPhotoPath: String = ""
 
