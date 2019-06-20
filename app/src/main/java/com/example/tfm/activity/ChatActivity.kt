@@ -183,8 +183,7 @@ class ChatActivity : AppCompatActivity() {
                         val columnIndex = cursor.getColumnIndex(filePath[0])
                         val fileP = cursor.getString(columnIndex)
                         val imageBitmap = BitmapFactory.decodeFile(fileP)
-                        toast("Gallery photo ${imageBitmap.byteCount}")
-                        Log.d("PHOTO", imageBitmap.byteCount.toString())
+
                         messages.add(Message(Sender.OWN, MessageType.PHOTO, imageBitmap, 1 , "EN"))
                         messagesRecyclerView.scrollToPosition(viewAdapter.itemCount - 1)
                         viewAdapter.notifyDataSetChanged()
