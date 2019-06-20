@@ -89,8 +89,7 @@
                     android:layout_height="30dp"
                     android:orientation="horizontal"
                     android:gravity="center"
-                    android:layout_marginBottom="8dp"
-                    android:layout_alignParentBottom="true">
+                    android:layout_above="@+id/viewContainer">
 
                 <ImageButton
                         android:layout_width="40dp"
@@ -168,6 +167,19 @@
                         android:padding="@dimen/shorcutPadding"
                         android:layout_marginRight="@dimen/shorcutMargin"
                         android:background="?android:attr/selectableItemBackground"/>
+            </LinearLayout>
+            <LinearLayout
+                    android:id="@+id/viewContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_alignParentBottom="true">
+
+                <View
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp"
+                        android:id="@+id/specialKeyboard"
+                        android:visibility="gone"/>
             </LinearLayout>
         </RelativeLayout>
 </LinearLayout>

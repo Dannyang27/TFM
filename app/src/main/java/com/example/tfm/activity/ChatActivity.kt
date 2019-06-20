@@ -19,13 +19,15 @@ import android.support.v4.content.FileProvider
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
+import android.view.*
+import android.widget.TextView
 import com.example.tfm.R
 import com.example.tfm.adapter.ChatAdapter
 import com.example.tfm.enum.MessageType
+import com.example.tfm.enum.Mode
 import com.example.tfm.enum.Sender
 import com.example.tfm.model.Message
+import com.example.tfm.util.KeyboardUtil
 import kotlinx.android.synthetic.main.activity_chat.*
 import org.jetbrains.anko.toast
 import java.io.File
@@ -37,6 +39,7 @@ class ChatActivity : AppCompatActivity() {
 
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var emojiEditText: EmojiEditText
+    private lateinit var specialKeyboard: View
 
     var currentPhotoPath: String = ""
 
@@ -62,14 +65,13 @@ class ChatActivity : AppCompatActivity() {
         displayBackArrow()
 
         emojiEditText = findViewById(R.id.chat_edittext)
-
+        specialKeyboard = findViewById(R.id.specialKeyboard)
 
         initListeners()
 
         //sample messages
         messages.add(Message(Sender.OWN, MessageType.MESSAGE, "Hello World",  1212, "EN" ))
         messages.add(Message(Sender.OTHER, MessageType.MESSAGE, getString(R.string.dwight_quote), 1213 , "EN"))
-        //messages.add(Message(Sender.OTHER, MessageType.PHOTO, "", 1214 , "EN"))
 
         viewManager = LinearLayoutManager(this)
         viewAdapter = ChatAdapter(messages)
@@ -128,18 +130,30 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun initListeners(){
+        emojiEditText.setOnTouchListener(object : View.OnTouchListener {
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                when (event?.action) {
+                    MotionEvent.ACTION_UP -> {
+                        closeSpecialKeyboard()
+                        KeyboardUtil.showKeyboard(this@ChatActivity)
+                    }
+
+                }
+                return v?.onTouchEvent(event) ?: true
+            }
+        })
+
         emojiButton.setOnClickListener {
-            toast("Emoji")
+            KeyboardUtil.hideKeyboard(this)
+            showSpecialKeyboard(Mode.EMOJI)
         }
         pictureButton.setOnClickListener {
-            toast("Photo")
             openGallery()
         }
         gifButton.setOnClickListener {
-            toast("GIF")
+            showSpecialKeyboard(Mode.GIF)
         }
         cameraButton.setOnClickListener {
-            toast("Camera")
             if(!hasPermissions(this, PERMISSIONS)){
                 ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL)
             }else{
@@ -198,10 +212,7 @@ class ChatActivity : AppCompatActivity() {
                 if(data != null){
                     val imageBitmap = data.extras.get("data") as Bitmap
 
-//                    val file = File(currentPhotoPath)
-//                    val imageBitmap = MediaStore.Images.Media.getBitmap(contentResolver, Uri.fromFile(file))
-//
-//
+
                     messages.add(Message(Sender.OWN, MessageType.PHOTO, imageBitmap, 1 , "EN"))
                     messagesRecyclerView.scrollToPosition(viewAdapter.itemCount - 1)
                     viewAdapter.notifyDataSetChanged()
@@ -226,23 +237,18 @@ class ChatActivity : AppCompatActivity() {
 
     private fun openCamera() {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-            // Ensure that there's a camera activity to handle the intent
             takePictureIntent.resolveActivity(packageManager)?.also {
-                // Create the File where the photo should go
                 val photoFile: File? = try {
                     createImageFile()
                 } catch (ex: IOException) {
-                    // Error occurred while creating the File
                     ex.printStackTrace()
                     null
                 }
-                // Continue only if the File was successfully created
                 photoFile?.also {
                     val photoURI: Uri = FileProvider.getUriForFile(
                         this,
                         "com.example.tfm.fileprovider",
-                        it
-                    )
+                        it)
 
                     Log.d("PHOTO", photoURI.path)
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
@@ -259,7 +265,6 @@ class ChatActivity : AppCompatActivity() {
 
     @Throws(IOException::class)
     private fun createImageFile(): File {
-        // Create an image file name
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val storageDir: File = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return File.createTempFile(
@@ -269,5 +274,29 @@ class ChatActivity : AppCompatActivity() {
         ).apply {
             currentPhotoPath = absolutePath
         }
+    }
+
+    override fun onBackPressed() {
+        if(specialKeyboard.visibility == View.VISIBLE){
+            closeSpecialKeyboard()
+        }else{
+            super.onBackPressed()
+        }
+    }
+
+    fun closeSpecialKeyboard(){
+        specialKeyboard.visibility = View.GONE
+    }
+
+    fun showSpecialKeyboard(mode : Mode){
+        when(mode){
+            Mode.EMOJI -> {
+                toast("Emoji")
+            }
+            Mode.GIF -> {
+                toast("GIF")
+            }
+        }
+        specialKeyboard.visibility = View.VISIBLE
     }
 }
