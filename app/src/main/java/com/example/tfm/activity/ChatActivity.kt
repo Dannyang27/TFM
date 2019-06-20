@@ -20,7 +20,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.*
-import android.widget.TextView
 import com.example.tfm.R
 import com.example.tfm.adapter.ChatAdapter
 import com.example.tfm.enum.MessageType
@@ -45,6 +44,7 @@ class ChatActivity : AppCompatActivity() {
 
     private val GALLERY_CODE = 100
     private val CAMERA_MODE = 101
+    private val ATTACHMENT_MODE = 102
 
     val PERMISSION_ALL = 1
     val PERMISSIONS = arrayOf(
@@ -148,8 +148,8 @@ class ChatActivity : AppCompatActivity() {
             showSpecialKeyboard(Mode.EMOJI)
         }
         pictureButton.setOnClickListener {
-            openGallery()
             closeSpecialKeyboard()
+            openGallery()
         }
         gifButton.setOnClickListener {
             showSpecialKeyboard(Mode.GIF)
@@ -158,8 +158,8 @@ class ChatActivity : AppCompatActivity() {
             if(!hasPermissions(this, PERMISSIONS)){
                 ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL)
             }else{
-                openCamera()
                 closeSpecialKeyboard()
+                openCamera()
             }
         }
         micButton.setOnClickListener {
@@ -171,8 +171,8 @@ class ChatActivity : AppCompatActivity() {
             closeSpecialKeyboard()
         }
         attachmentButton.setOnClickListener {
-            toast("Attachment")
             closeSpecialKeyboard()
+            openAttachment()
         }
         codeButton.setOnClickListener {
             toast("Code")
@@ -218,12 +218,22 @@ class ChatActivity : AppCompatActivity() {
                 if(data != null){
                     val imageBitmap = data.extras.get("data") as Bitmap
 
-
                     messages.add(Message(Sender.OWN, MessageType.PHOTO, imageBitmap, 1 , "EN"))
                     messagesRecyclerView.scrollToPosition(viewAdapter.itemCount - 1)
                     viewAdapter.notifyDataSetChanged()
                 }else{
                     toast("Could not get any shot")
+                }
+            }
+
+            ATTACHMENT_MODE -> {
+                if(data != null){
+                    val uploadFileUri = data.data
+                    val file = File(uploadFileUri.path)
+                    toast(file.absolutePath)
+                }
+                else{
+                    toast("Didnt chose any file")
                 }
             }
 
@@ -238,6 +248,16 @@ class ChatActivity : AppCompatActivity() {
             val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             galleryIntent.type = "image/*"
             startActivityForResult(galleryIntent, GALLERY_CODE)
+        }
+    }
+
+    private fun openAttachment(){
+        if(!hasPermissions(this, PERMISSIONS)){
+            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL)
+        }else{
+            val attachIntent = Intent(Intent.ACTION_GET_CONTENT)
+            attachIntent.type = "*/*"
+            startActivityForResult(Intent.createChooser(attachIntent, "Select file"), ATTACHMENT_MODE)
         }
     }
 
