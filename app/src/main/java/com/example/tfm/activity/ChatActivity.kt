@@ -149,6 +149,7 @@ class ChatActivity : AppCompatActivity() {
         }
         pictureButton.setOnClickListener {
             openGallery()
+            closeSpecialKeyboard()
         }
         gifButton.setOnClickListener {
             showSpecialKeyboard(Mode.GIF)
@@ -158,19 +159,24 @@ class ChatActivity : AppCompatActivity() {
                 ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL)
             }else{
                 openCamera()
+                closeSpecialKeyboard()
             }
         }
         micButton.setOnClickListener {
             toast("Microphone")
+            closeSpecialKeyboard()
         }
         locationButton.setOnClickListener {
             toast("Location")
+            closeSpecialKeyboard()
         }
         attachmentButton.setOnClickListener {
             toast("Attachment")
+            closeSpecialKeyboard()
         }
         codeButton.setOnClickListener {
             toast("Code")
+            closeSpecialKeyboard()
         }
 
         sendButton.setOnClickListener {
