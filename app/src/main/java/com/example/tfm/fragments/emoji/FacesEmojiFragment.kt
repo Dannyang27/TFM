@@ -10,6 +10,7 @@ import android.widget.GridView
 import com.example.tfm.R
 import com.example.tfm.adapter.EmojiGridViewAdapter
 import com.example.tfm.model.Emoji
+import com.example.tfm.util.EmojiUtil
 
 class FacesEmojiFragment : Fragment() {
 
@@ -21,8 +22,9 @@ class FacesEmojiFragment : Fragment() {
         val view = inflater.inflate(R.layout.emoji_faces, container, false)
 
         val gridview = view.findViewById(R.id.face_gridview) as GridView
+        val emojiUtil = EmojiUtil(activity?.applicationContext!!)
 
-        gridview.adapter = EmojiGridViewAdapter(activity?.applicationContext!!, setSampleData())
+        gridview.adapter = EmojiGridViewAdapter(activity?.applicationContext!!, emojiUtil.getEmojiFace())
 
         return view
     }
