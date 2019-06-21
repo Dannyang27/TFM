@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.support.design.widget.TabLayout
 import android.support.text.emoji.EmojiCompat
 import android.support.text.emoji.bundled.BundledEmojiCompatConfig
 import android.support.text.emoji.widget.EmojiEditText
@@ -24,6 +25,7 @@ import android.view.*
 import com.example.tfm.R
 import com.example.tfm.adapter.ChatAdapter
 import com.example.tfm.adapter.CustomPagerAdapter
+import com.example.tfm.adapter.EmojiPagerAdapter
 import com.example.tfm.enum.MessageType
 import com.example.tfm.enum.Mode
 import com.example.tfm.enum.Sender
@@ -40,6 +42,7 @@ class ChatActivity : AppCompatActivity() {
 
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var emojiEditText: EmojiEditText
+    private lateinit var emojiTabs: TabLayout
     private lateinit var specialKeyboard: ViewPager
 
     var currentPhotoPath: String = ""
@@ -67,9 +70,15 @@ class ChatActivity : AppCompatActivity() {
         displayBackArrow()
 
         emojiEditText = findViewById(R.id.chat_edittext)
+        emojiTabs = findViewById(R.id.emoji_tab)
         specialKeyboard = findViewById(R.id.specialKeyboard)
 
-        specialKeyboard.adapter = CustomPagerAdapter(this)
+        val fragmentAdapter = EmojiPagerAdapter(supportFragmentManager)
+        specialKeyboard.adapter = fragmentAdapter
+
+        emojiTabs.setupWithViewPager(specialKeyboard)
+
+
 
         initListeners()
 
@@ -175,8 +184,8 @@ class ChatActivity : AppCompatActivity() {
             closeSpecialKeyboard()
         }
         attachmentButton.setOnClickListener {
-            closeSpecialKeyboard()
             openAttachment()
+            closeSpecialKeyboard()
         }
         codeButton.setOnClickListener {
             toast("Code")
@@ -315,6 +324,7 @@ class ChatActivity : AppCompatActivity() {
     }
 
     fun closeSpecialKeyboard(){
+        emojiTabs.visibility = View.GONE
         specialKeyboard.visibility = View.GONE
     }
 
@@ -327,6 +337,7 @@ class ChatActivity : AppCompatActivity() {
                 toast("GIF")
             }
         }
+        emojiTabs.visibility = View.VISIBLE
         specialKeyboard.visibility = View.VISIBLE
     }
 }
