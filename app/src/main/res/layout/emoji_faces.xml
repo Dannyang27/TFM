@@ -3,9 +3,13 @@
         android:layout_width="match_parent"
         android:layout_height="268dp">
 
-    <TextView
+    <GridView
+            android:id="@+id/face_gridview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/faces"/>
-
+            android:gravity="center"
+            android:numColumns="8"
+            android:horizontalSpacing="0dp"
+            android:verticalSpacing="0dp"
+            android:stretchMode="columnWidth"/>
 </android.support.constraint.ConstraintLayout>
