@@ -5,24 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import android.widget.ImageButton
+import android.widget.Button
 import com.example.tfm.R
-import com.example.tfm.model.Emoji
 import org.jetbrains.anko.toast
 
 class EmojiGridViewAdapter : BaseAdapter{
 
-    var emojis = arrayListOf<Emoji>()
+    var emojiUnicodes = arrayListOf<String>()
     var context : Context? = null
 
-    constructor(context: Context, emojis: ArrayList<Emoji>){
+    constructor(context: Context, emojiUnicodes: ArrayList<String>){
         this.context = context
-        this.emojis = emojis
+        this.emojiUnicodes = emojiUnicodes
     }
 
-    override fun getCount() = emojis.size
+    override fun getCount() = emojiUnicodes.size
 
-    override fun getItem(position: Int) = emojis[position]
+    override fun getItem(position: Int) = emojiUnicodes[position]
 
     override fun getItemId(position: Int) = position.toLong()
 
@@ -37,11 +36,10 @@ class EmojiGridViewAdapter : BaseAdapter{
             emojiView.layoutParams = ViewGroup.LayoutParams(value, value)
         }
 
-        val emoji = emojis[position]
-        val imgBtn = emojiView.findViewById(R.id.emoji_button) as ImageButton
-        imgBtn.setImageDrawable(emoji.drawable)
+        val unicode = emojiUnicodes[position]
+        val imgBtn = emojiView.findViewById(R.id.emoji_button) as Button
         imgBtn.setOnClickListener {
-            context?.toast("EmojiTab: " + emoji.unicodeChar)
+            context?.toast("EmojiTab: " + unicode)
         }
 
         return emojiView
