@@ -16,14 +16,14 @@ import android.support.text.emoji.bundled.BundledEmojiCompatConfig
 import android.support.text.emoji.widget.EmojiEditText
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.FileProvider
+import android.support.v4.view.ViewPager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.*
-import android.widget.FrameLayout
-import android.widget.GridView
 import com.example.tfm.R
 import com.example.tfm.adapter.ChatAdapter
+import com.example.tfm.adapter.CustomPagerAdapter
 import com.example.tfm.enum.MessageType
 import com.example.tfm.enum.Mode
 import com.example.tfm.enum.Sender
@@ -40,7 +40,7 @@ class ChatActivity : AppCompatActivity() {
 
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var emojiEditText: EmojiEditText
-    private lateinit var specialKeyboard: FrameLayout
+    private lateinit var specialKeyboard: ViewPager
 
     var currentPhotoPath: String = ""
 
@@ -68,6 +68,8 @@ class ChatActivity : AppCompatActivity() {
 
         emojiEditText = findViewById(R.id.chat_edittext)
         specialKeyboard = findViewById(R.id.specialKeyboard)
+
+        specialKeyboard.adapter = CustomPagerAdapter(this)
 
         initListeners()
 

@@ -22,4 +22,13 @@
     <string name="dwight_quote">I grew up on a farm. I have seen animals having sex in every position imaginable. Goat
         on chicken. Chicken on goat. Couple of chickens doing a goat, couple of pigs watching.
     </string>
+    <string name="faces">emoji_faces</string>
+    <string name="most_used">Most Used</string>
+    <string name="animal">Animal</string>
+    <string name="food">Food</string>
+    <string name="sport">Food</string>
+    <string name="vehicle">Vehicle</string>
+    <string name="idea">Idea</string>
+    <string name="character">Character</string>
+    <string name="flag">Flag</string>
 </resources>
