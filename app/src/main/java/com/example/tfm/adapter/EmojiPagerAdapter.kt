@@ -3,7 +3,7 @@ package com.example.tfm.adapter
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import com.example.tfm.enum.Emoji
+import com.example.tfm.enum.EmojiTab
 import com.example.tfm.fragments.emoji.*
 
 class EmojiPagerAdapter (fm: FragmentManager) : FragmentPagerAdapter(fm){
@@ -40,7 +40,7 @@ class EmojiPagerAdapter (fm: FragmentManager) : FragmentPagerAdapter(fm){
         }
     }
 
-    override fun getCount() = Emoji.values().size
+    override fun getCount() = EmojiTab.values().size
 
     override fun getPageTitle(position: Int): CharSequence? {
         return null

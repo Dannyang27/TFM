@@ -5,15 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.ImageButton
 import com.example.tfm.R
-import kotlinx.android.synthetic.main.emoji_viewholder.view.*
+import com.example.tfm.model.Emoji
+import org.jetbrains.anko.toast
 
 class EmojiGridViewAdapter : BaseAdapter{
 
-    var emojis = arrayListOf<String>()
+    var emojis = arrayListOf<Emoji>()
     var context : Context? = null
 
-    constructor(context: Context, emojis: ArrayList<String>){
+    constructor(context: Context, emojis: ArrayList<Emoji>){
         this.context = context
         this.emojis = emojis
     }
@@ -25,7 +27,7 @@ class EmojiGridViewAdapter : BaseAdapter{
     override fun getItemId(position: Int) = position.toLong()
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val columns = 8
+        val columns = 9
         val inflater = context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val emojiView = inflater.inflate(R.layout.emoji_viewholder, null)
         val width = parent?.width
@@ -35,10 +37,13 @@ class EmojiGridViewAdapter : BaseAdapter{
             emojiView.layoutParams = ViewGroup.LayoutParams(value, value)
         }
 
-        emojiView.emoji_gridview.setImageDrawable(context!!.getDrawable(R.drawable.victory))
+        val emoji = emojis[position]
+        val imgBtn = emojiView.findViewById(R.id.emoji_button) as ImageButton
+        imgBtn.setImageDrawable(emoji.drawable)
+        imgBtn.setOnClickListener {
+            context?.toast("EmojiTab: " + emoji.unicodeChar)
+        }
 
         return emojiView
     }
-
-
 }

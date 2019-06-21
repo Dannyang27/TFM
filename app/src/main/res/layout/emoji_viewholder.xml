@@ -10,7 +10,7 @@
             android:layout_height="match_parent"
             app:srcCompat="@drawable/victory"
             android:scaleType="fitCenter"
-            android:id="@+id/emoji_gridview"
+            android:id="@+id/emoji_button"
             android:padding="10dp"
             android:background="@android:color/transparent"/>
 </LinearLayout>

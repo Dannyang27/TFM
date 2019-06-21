@@ -330,7 +330,7 @@ class ChatActivity : AppCompatActivity() {
     fun showSpecialKeyboard(mode : Mode){
         when(mode){
             Mode.EMOJI -> {
-                toast("Emoji")
+                toast("EmojiTab")
             }
             Mode.GIF -> {
                 toast("GIF")
