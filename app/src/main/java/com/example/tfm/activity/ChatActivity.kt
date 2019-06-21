@@ -24,11 +24,11 @@ import android.util.Log
 import android.view.*
 import com.example.tfm.R
 import com.example.tfm.adapter.ChatAdapter
-import com.example.tfm.adapter.CustomPagerAdapter
 import com.example.tfm.adapter.EmojiPagerAdapter
 import com.example.tfm.enum.MessageType
 import com.example.tfm.enum.Mode
 import com.example.tfm.enum.Sender
+import com.example.tfm.enum.TabIcon
 import com.example.tfm.model.Message
 import com.example.tfm.util.KeyboardUtil
 import kotlinx.android.synthetic.main.activity_chat.*
@@ -77,8 +77,7 @@ class ChatActivity : AppCompatActivity() {
         specialKeyboard.adapter = fragmentAdapter
 
         emojiTabs.setupWithViewPager(specialKeyboard)
-
-
+        setupTabIcons()
 
         initListeners()
 
@@ -339,5 +338,17 @@ class ChatActivity : AppCompatActivity() {
         }
         emojiTabs.visibility = View.VISIBLE
         specialKeyboard.visibility = View.VISIBLE
+    }
+
+    fun setupTabIcons(){
+        emojiTabs.getTabAt(0)?.icon = getDrawable(TabIcon.MOST_USED.icon)
+        emojiTabs.getTabAt(1)?.icon = getDrawable(TabIcon.FACES.icon)
+        emojiTabs.getTabAt(2)?.icon = getDrawable(TabIcon.ANIMAL.icon)
+        emojiTabs.getTabAt(3)?.icon = getDrawable(TabIcon.FOOD.icon)
+        emojiTabs.getTabAt(4)?.icon = getDrawable(TabIcon.SPORT.icon)
+        emojiTabs.getTabAt(5)?.icon = getDrawable(TabIcon.VEHICLE.icon)
+        emojiTabs.getTabAt(6)?.icon = getDrawable(TabIcon.IDEA.icon)
+        emojiTabs.getTabAt(7)?.icon = getDrawable(TabIcon.CHARACTER.icon)
+        emojiTabs.getTabAt(8)?.icon = getDrawable(TabIcon.FLAG.icon)
     }
 }

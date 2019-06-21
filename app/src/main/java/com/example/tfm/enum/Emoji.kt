@@ -2,7 +2,7 @@ package com.example.tfm.enum
 
 import com.example.tfm.R
 
-enum class Emoji private constructor(val titleResId: Int, val layoutResId: Int) {
+enum class Emoji constructor(val titleResId: Int, val layoutResId: Int) {
     MOST_USED(R.string.most_used, R.layout.emoji_most_used),
     FACE(R.string.faces, R.layout.emoji_faces),
     ANIMAL(R.string.animal, R.layout.emoji_animal),
