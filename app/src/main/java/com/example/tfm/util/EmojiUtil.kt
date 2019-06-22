@@ -1,5 +1,7 @@
 package com.example.tfm.util
 
+import com.example.tfm.enum.AlphabetEmojiUnicode
+
 object EmojiUtil {
 
     private val emojiFaces = arrayListOf(
@@ -67,6 +69,356 @@ object EmojiUtil {
         0x1F5FE, 0x1F5FF
     )
 
+    private val ideas = arrayListOf(
+        0x1F4AF, 0x1F4B0, 0x1F4B1, 0x1F4B2, 0x1F4B3, 0x1F4B4, 0x1F4B5, 0x1F4B6, 0x1F4B7, 0x1F4B8, 0x1F4B9,
+        0x1F4BA, 0x1F4BB, 0x1F4BC, 0x1F4BD, 0x1F4BE, 0x1F4BF, 0x1F4C0, 0x1F4C1, 0x1F4C2, 0x1F4C3, 0x1F4C4,
+        0x1F4C5, 0x1F4C6, 0x1F4C7, 0x1F4C8, 0x1F4C9, 0x1F4CA, 0x1F4CB, 0x1F4CC, 0x1F4CD, 0x1F4CE, 0x1F4CF,
+        0x1F4D0, 0x1F4D1, 0x1F4D2, 0x1F4D3, 0x1F4D4, 0x1F4D5, 0x1F4D6, 0x1F4D7, 0x1F4D8, 0x1F4D9, 0x1F4DA,
+        0x1F4DB, 0x1F4DC, 0x1F4DD, 0x1F4DE, 0x1F4DF, 0x1F4E0, 0x1F4E1, 0x1F4E2, 0x1F4E3, 0x1F4E4, 0x1F4E5,
+        0x1F4E6, 0x1F4E7, 0x1F4E8, 0x1F4E9, 0x1F4EA, 0x1F4EB, 0x1F4EC, 0x1F4ED, 0x1F4EE, 0x1F4EF, 0x1F4F0,
+        0x1F4F1, 0x1F4F2, 0x1F4F3, 0x1F4F4, 0x1F4F5, 0x1F4F6, 0x1F4F7, 0x1F4F8, 0x1F4F9, 0x1F4FA, 0x1F4FB,
+        0x1F4FC, 0x1F4FD, 0x1F4FE, 0x1F4FF, 0x1F503, 0x1F504, 0x1F505, 0x1F506, 0x1F507, 0x1F508, 0x1F509,
+        0x1F50A, 0x1F50B, 0x1F50C, 0x1F50D, 0x1F50E, 0x1F50F, 0x1F510, 0x1F511, 0x1F512, 0x1F513, 0x1F514,
+        0x1F516, 0x1F517, 0x1F525, 0x1F526, 0x1F527, 0x1F528, 0x1F529, 0x1F52A, 0x1F52B
+    )
+
+    private val characters = arrayListOf(
+        0x1F493,
+        0x1F494,
+        0x1F495,
+        0x1F496,
+        0x1F497,
+        0x1F498,
+        0x1F499,
+        0x1F49A,
+        0x1F49B,
+        0x1F49C,
+        0x1F49D,
+        0x1F49E,
+        0x1F49F,
+
+        0x1F3E7,
+        0x1F6AE,
+        0x1F6B0,
+        0x1267F,
+        0x1F6B9,
+        0x1F6BA,
+        0x1F6BB,
+        0x1F6BC,
+        0x1F6BE,
+        0x1F6C2,
+        0x1F6C4,
+        0x1F6C5,
+        0x26A0,
+        0x1F6B8,
+        0x1F6AB,
+        0x1F6B3,
+        0x1F6AD,
+        0x1F6AF,
+        0x1F6B1,
+        0x1F6B7,
+        0x1F4F5,
+        0x1F51E,
+        0x1F503,
+        0x1F504,
+        0x1F519,
+        0x1F51A,
+        0x1F51B,
+        0x1F51C,
+        0x1F51D,
+
+        0x1F6D0,
+        0x269B,
+        0x1F549,
+        0x2721,
+        0x2638,
+        0x262F,
+        0x271D,
+        0x2626,
+        0x262A,
+        0x262E,
+        0x1F54E,
+        0x1F52F,
+        0x2648,
+        0x2649,
+        0x264A,
+        0x264B,
+        0x264C,
+        0x264D,
+        0x264E,
+        0x264F,
+        0x2650,
+        0x2651,
+        0x2652,
+        0x26CE,
+        0x1F51F
+
+
+
+    )
+
+    private val flags = arrayListOf(
+        AlphabetEmojiUnicode.A.letter.plus(AlphabetEmojiUnicode.C.letter),
+        AlphabetEmojiUnicode.A.letter.plus(AlphabetEmojiUnicode.D.letter),
+        AlphabetEmojiUnicode.A.letter.plus(AlphabetEmojiUnicode.E.letter),
+        AlphabetEmojiUnicode.A.letter.plus(AlphabetEmojiUnicode.F.letter),
+        AlphabetEmojiUnicode.A.letter.plus(AlphabetEmojiUnicode.G.letter),
+        AlphabetEmojiUnicode.A.letter.plus(AlphabetEmojiUnicode.I.letter),
+        AlphabetEmojiUnicode.A.letter.plus(AlphabetEmojiUnicode.L.letter),
+        AlphabetEmojiUnicode.A.letter.plus(AlphabetEmojiUnicode.M.letter),
+        AlphabetEmojiUnicode.A.letter.plus(AlphabetEmojiUnicode.O.letter),
+        AlphabetEmojiUnicode.A.letter.plus(AlphabetEmojiUnicode.Q.letter),
+        AlphabetEmojiUnicode.A.letter.plus(AlphabetEmojiUnicode.R.letter),
+        AlphabetEmojiUnicode.A.letter.plus(AlphabetEmojiUnicode.S.letter),
+        AlphabetEmojiUnicode.A.letter.plus(AlphabetEmojiUnicode.T.letter),
+        AlphabetEmojiUnicode.A.letter.plus(AlphabetEmojiUnicode.U.letter),
+        AlphabetEmojiUnicode.A.letter.plus(AlphabetEmojiUnicode.W.letter),
+        AlphabetEmojiUnicode.A.letter.plus(AlphabetEmojiUnicode.X.letter),
+        AlphabetEmojiUnicode.A.letter.plus(AlphabetEmojiUnicode.Z.letter),
+
+        AlphabetEmojiUnicode.B.letter.plus(AlphabetEmojiUnicode.A.letter),
+        AlphabetEmojiUnicode.B.letter.plus(AlphabetEmojiUnicode.B.letter),
+        AlphabetEmojiUnicode.B.letter.plus(AlphabetEmojiUnicode.D.letter),
+        AlphabetEmojiUnicode.B.letter.plus(AlphabetEmojiUnicode.E.letter),
+        AlphabetEmojiUnicode.B.letter.plus(AlphabetEmojiUnicode.F.letter),
+        AlphabetEmojiUnicode.B.letter.plus(AlphabetEmojiUnicode.G.letter),
+        AlphabetEmojiUnicode.B.letter.plus(AlphabetEmojiUnicode.H.letter),
+        AlphabetEmojiUnicode.B.letter.plus(AlphabetEmojiUnicode.I.letter),
+        AlphabetEmojiUnicode.B.letter.plus(AlphabetEmojiUnicode.J.letter),
+        AlphabetEmojiUnicode.B.letter.plus(AlphabetEmojiUnicode.M.letter),
+        AlphabetEmojiUnicode.B.letter.plus(AlphabetEmojiUnicode.N.letter),
+        AlphabetEmojiUnicode.B.letter.plus(AlphabetEmojiUnicode.O.letter),
+        AlphabetEmojiUnicode.B.letter.plus(AlphabetEmojiUnicode.R.letter),
+        AlphabetEmojiUnicode.B.letter.plus(AlphabetEmojiUnicode.S.letter),
+        AlphabetEmojiUnicode.B.letter.plus(AlphabetEmojiUnicode.T.letter),
+        AlphabetEmojiUnicode.B.letter.plus(AlphabetEmojiUnicode.V.letter),
+        AlphabetEmojiUnicode.B.letter.plus(AlphabetEmojiUnicode.W.letter),
+        AlphabetEmojiUnicode.B.letter.plus(AlphabetEmojiUnicode.Y.letter),
+        AlphabetEmojiUnicode.B.letter.plus(AlphabetEmojiUnicode.Z.letter),
+
+        AlphabetEmojiUnicode.C.letter.plus(AlphabetEmojiUnicode.A.letter),
+        AlphabetEmojiUnicode.C.letter.plus(AlphabetEmojiUnicode.C.letter),
+        AlphabetEmojiUnicode.C.letter.plus(AlphabetEmojiUnicode.D.letter),
+        AlphabetEmojiUnicode.C.letter.plus(AlphabetEmojiUnicode.F.letter),
+        AlphabetEmojiUnicode.C.letter.plus(AlphabetEmojiUnicode.G.letter),
+        AlphabetEmojiUnicode.C.letter.plus(AlphabetEmojiUnicode.H.letter),
+        AlphabetEmojiUnicode.C.letter.plus(AlphabetEmojiUnicode.I.letter),
+        AlphabetEmojiUnicode.C.letter.plus(AlphabetEmojiUnicode.K.letter),
+        AlphabetEmojiUnicode.C.letter.plus(AlphabetEmojiUnicode.L.letter),
+        AlphabetEmojiUnicode.C.letter.plus(AlphabetEmojiUnicode.M.letter),
+        AlphabetEmojiUnicode.C.letter.plus(AlphabetEmojiUnicode.N.letter),
+        AlphabetEmojiUnicode.C.letter.plus(AlphabetEmojiUnicode.O.letter),
+        AlphabetEmojiUnicode.C.letter.plus(AlphabetEmojiUnicode.P.letter),
+        AlphabetEmojiUnicode.C.letter.plus(AlphabetEmojiUnicode.R.letter),
+        AlphabetEmojiUnicode.C.letter.plus(AlphabetEmojiUnicode.U.letter),
+        AlphabetEmojiUnicode.C.letter.plus(AlphabetEmojiUnicode.V.letter),
+        AlphabetEmojiUnicode.C.letter.plus(AlphabetEmojiUnicode.W.letter),
+        AlphabetEmojiUnicode.C.letter.plus(AlphabetEmojiUnicode.X.letter),
+        AlphabetEmojiUnicode.C.letter.plus(AlphabetEmojiUnicode.Y.letter),
+        AlphabetEmojiUnicode.C.letter.plus(AlphabetEmojiUnicode.Z.letter),
+
+        AlphabetEmojiUnicode.D.letter.plus(AlphabetEmojiUnicode.E.letter),
+        AlphabetEmojiUnicode.D.letter.plus(AlphabetEmojiUnicode.G.letter),
+        AlphabetEmojiUnicode.D.letter.plus(AlphabetEmojiUnicode.J.letter),
+        AlphabetEmojiUnicode.D.letter.plus(AlphabetEmojiUnicode.K.letter),
+        AlphabetEmojiUnicode.D.letter.plus(AlphabetEmojiUnicode.M.letter),
+        AlphabetEmojiUnicode.D.letter.plus(AlphabetEmojiUnicode.O.letter),
+        AlphabetEmojiUnicode.D.letter.plus(AlphabetEmojiUnicode.Z.letter),
+
+        AlphabetEmojiUnicode.E.letter.plus(AlphabetEmojiUnicode.C.letter),
+        AlphabetEmojiUnicode.E.letter.plus(AlphabetEmojiUnicode.E.letter),
+        AlphabetEmojiUnicode.E.letter.plus(AlphabetEmojiUnicode.G.letter),
+        AlphabetEmojiUnicode.E.letter.plus(AlphabetEmojiUnicode.H.letter),
+        AlphabetEmojiUnicode.E.letter.plus(AlphabetEmojiUnicode.R.letter),
+        AlphabetEmojiUnicode.E.letter.plus(AlphabetEmojiUnicode.S.letter),
+        AlphabetEmojiUnicode.E.letter.plus(AlphabetEmojiUnicode.T.letter),
+        AlphabetEmojiUnicode.E.letter.plus(AlphabetEmojiUnicode.U.letter),
+
+        AlphabetEmojiUnicode.F.letter.plus(AlphabetEmojiUnicode.I.letter),
+        AlphabetEmojiUnicode.F.letter.plus(AlphabetEmojiUnicode.J.letter),
+        AlphabetEmojiUnicode.F.letter.plus(AlphabetEmojiUnicode.K.letter),
+        AlphabetEmojiUnicode.F.letter.plus(AlphabetEmojiUnicode.M.letter),
+        AlphabetEmojiUnicode.F.letter.plus(AlphabetEmojiUnicode.O.letter),
+        AlphabetEmojiUnicode.F.letter.plus(AlphabetEmojiUnicode.R.letter),
+
+        AlphabetEmojiUnicode.G.letter.plus(AlphabetEmojiUnicode.A.letter),
+        AlphabetEmojiUnicode.G.letter.plus(AlphabetEmojiUnicode.B.letter),
+        AlphabetEmojiUnicode.G.letter.plus(AlphabetEmojiUnicode.D.letter),
+        AlphabetEmojiUnicode.G.letter.plus(AlphabetEmojiUnicode.E.letter),
+        AlphabetEmojiUnicode.G.letter.plus(AlphabetEmojiUnicode.F.letter),
+        AlphabetEmojiUnicode.G.letter.plus(AlphabetEmojiUnicode.G.letter),
+        AlphabetEmojiUnicode.G.letter.plus(AlphabetEmojiUnicode.H.letter),
+        AlphabetEmojiUnicode.G.letter.plus(AlphabetEmojiUnicode.I.letter),
+        AlphabetEmojiUnicode.G.letter.plus(AlphabetEmojiUnicode.L.letter),
+        AlphabetEmojiUnicode.G.letter.plus(AlphabetEmojiUnicode.M.letter),
+        AlphabetEmojiUnicode.G.letter.plus(AlphabetEmojiUnicode.N.letter),
+        AlphabetEmojiUnicode.G.letter.plus(AlphabetEmojiUnicode.P.letter),
+        AlphabetEmojiUnicode.G.letter.plus(AlphabetEmojiUnicode.Q.letter),
+        AlphabetEmojiUnicode.G.letter.plus(AlphabetEmojiUnicode.R.letter),
+        AlphabetEmojiUnicode.G.letter.plus(AlphabetEmojiUnicode.S.letter),
+        AlphabetEmojiUnicode.G.letter.plus(AlphabetEmojiUnicode.T.letter),
+        AlphabetEmojiUnicode.G.letter.plus(AlphabetEmojiUnicode.U.letter),
+        AlphabetEmojiUnicode.G.letter.plus(AlphabetEmojiUnicode.W.letter),
+        AlphabetEmojiUnicode.G.letter.plus(AlphabetEmojiUnicode.Y.letter),
+
+        AlphabetEmojiUnicode.H.letter.plus(AlphabetEmojiUnicode.K.letter),
+        AlphabetEmojiUnicode.H.letter.plus(AlphabetEmojiUnicode.M.letter),
+        AlphabetEmojiUnicode.H.letter.plus(AlphabetEmojiUnicode.N.letter),
+        AlphabetEmojiUnicode.H.letter.plus(AlphabetEmojiUnicode.R.letter),
+        AlphabetEmojiUnicode.H.letter.plus(AlphabetEmojiUnicode.T.letter),
+        AlphabetEmojiUnicode.H.letter.plus(AlphabetEmojiUnicode.U.letter),
+
+        AlphabetEmojiUnicode.I.letter.plus(AlphabetEmojiUnicode.C.letter),
+        AlphabetEmojiUnicode.I.letter.plus(AlphabetEmojiUnicode.D.letter),
+        AlphabetEmojiUnicode.I.letter.plus(AlphabetEmojiUnicode.E.letter),
+        AlphabetEmojiUnicode.I.letter.plus(AlphabetEmojiUnicode.L.letter),
+        AlphabetEmojiUnicode.I.letter.plus(AlphabetEmojiUnicode.M.letter),
+        AlphabetEmojiUnicode.I.letter.plus(AlphabetEmojiUnicode.N.letter),
+        AlphabetEmojiUnicode.I.letter.plus(AlphabetEmojiUnicode.O.letter),
+        AlphabetEmojiUnicode.I.letter.plus(AlphabetEmojiUnicode.Q.letter),
+        AlphabetEmojiUnicode.I.letter.plus(AlphabetEmojiUnicode.R.letter),
+        AlphabetEmojiUnicode.I.letter.plus(AlphabetEmojiUnicode.S.letter),
+        AlphabetEmojiUnicode.I.letter.plus(AlphabetEmojiUnicode.T.letter),
+
+        AlphabetEmojiUnicode.J.letter.plus(AlphabetEmojiUnicode.E.letter),
+        AlphabetEmojiUnicode.J.letter.plus(AlphabetEmojiUnicode.M.letter),
+        AlphabetEmojiUnicode.J.letter.plus(AlphabetEmojiUnicode.O.letter),
+        AlphabetEmojiUnicode.J.letter.plus(AlphabetEmojiUnicode.P.letter),
+
+        AlphabetEmojiUnicode.K.letter.plus(AlphabetEmojiUnicode.E.letter),
+        AlphabetEmojiUnicode.K.letter.plus(AlphabetEmojiUnicode.H.letter),
+        AlphabetEmojiUnicode.K.letter.plus(AlphabetEmojiUnicode.I.letter),
+        AlphabetEmojiUnicode.K.letter.plus(AlphabetEmojiUnicode.M.letter),
+        AlphabetEmojiUnicode.K.letter.plus(AlphabetEmojiUnicode.N.letter),
+        AlphabetEmojiUnicode.K.letter.plus(AlphabetEmojiUnicode.P.letter),
+        AlphabetEmojiUnicode.K.letter.plus(AlphabetEmojiUnicode.R.letter),
+        AlphabetEmojiUnicode.K.letter.plus(AlphabetEmojiUnicode.W.letter),
+        AlphabetEmojiUnicode.K.letter.plus(AlphabetEmojiUnicode.Y.letter),
+        AlphabetEmojiUnicode.K.letter.plus(AlphabetEmojiUnicode.Z.letter),
+
+        AlphabetEmojiUnicode.L.letter.plus(AlphabetEmojiUnicode.A.letter),
+        AlphabetEmojiUnicode.L.letter.plus(AlphabetEmojiUnicode.B.letter),
+        AlphabetEmojiUnicode.L.letter.plus(AlphabetEmojiUnicode.C.letter),
+        AlphabetEmojiUnicode.L.letter.plus(AlphabetEmojiUnicode.I.letter),
+        AlphabetEmojiUnicode.L.letter.plus(AlphabetEmojiUnicode.K.letter),
+        AlphabetEmojiUnicode.L.letter.plus(AlphabetEmojiUnicode.R.letter),
+        AlphabetEmojiUnicode.L.letter.plus(AlphabetEmojiUnicode.S.letter),
+        AlphabetEmojiUnicode.L.letter.plus(AlphabetEmojiUnicode.T.letter),
+        AlphabetEmojiUnicode.L.letter.plus(AlphabetEmojiUnicode.U.letter),
+        AlphabetEmojiUnicode.L.letter.plus(AlphabetEmojiUnicode.V.letter),
+        AlphabetEmojiUnicode.L.letter.plus(AlphabetEmojiUnicode.Y.letter),
+
+        AlphabetEmojiUnicode.M.letter.plus(AlphabetEmojiUnicode.A.letter),
+        AlphabetEmojiUnicode.M.letter.plus(AlphabetEmojiUnicode.C.letter),
+        AlphabetEmojiUnicode.M.letter.plus(AlphabetEmojiUnicode.D.letter),
+        AlphabetEmojiUnicode.M.letter.plus(AlphabetEmojiUnicode.E.letter),
+        AlphabetEmojiUnicode.M.letter.plus(AlphabetEmojiUnicode.F.letter),
+        AlphabetEmojiUnicode.M.letter.plus(AlphabetEmojiUnicode.G.letter),
+        AlphabetEmojiUnicode.M.letter.plus(AlphabetEmojiUnicode.H.letter),
+        AlphabetEmojiUnicode.M.letter.plus(AlphabetEmojiUnicode.K.letter),
+        AlphabetEmojiUnicode.M.letter.plus(AlphabetEmojiUnicode.L.letter),
+        AlphabetEmojiUnicode.M.letter.plus(AlphabetEmojiUnicode.M.letter),
+        AlphabetEmojiUnicode.M.letter.plus(AlphabetEmojiUnicode.N.letter),
+        AlphabetEmojiUnicode.M.letter.plus(AlphabetEmojiUnicode.O.letter),
+        AlphabetEmojiUnicode.M.letter.plus(AlphabetEmojiUnicode.P.letter),
+        AlphabetEmojiUnicode.M.letter.plus(AlphabetEmojiUnicode.R.letter),
+        AlphabetEmojiUnicode.M.letter.plus(AlphabetEmojiUnicode.S.letter),
+        AlphabetEmojiUnicode.M.letter.plus(AlphabetEmojiUnicode.T.letter),
+        AlphabetEmojiUnicode.M.letter.plus(AlphabetEmojiUnicode.U.letter),
+        AlphabetEmojiUnicode.M.letter.plus(AlphabetEmojiUnicode.V.letter),
+        AlphabetEmojiUnicode.M.letter.plus(AlphabetEmojiUnicode.W.letter),
+        AlphabetEmojiUnicode.M.letter.plus(AlphabetEmojiUnicode.X.letter),
+        AlphabetEmojiUnicode.M.letter.plus(AlphabetEmojiUnicode.Y.letter),
+        AlphabetEmojiUnicode.M.letter.plus(AlphabetEmojiUnicode.Z.letter),
+
+        AlphabetEmojiUnicode.N.letter.plus(AlphabetEmojiUnicode.A.letter),
+        AlphabetEmojiUnicode.N.letter.plus(AlphabetEmojiUnicode.C.letter),
+        AlphabetEmojiUnicode.N.letter.plus(AlphabetEmojiUnicode.E.letter),
+        AlphabetEmojiUnicode.N.letter.plus(AlphabetEmojiUnicode.F.letter),
+        AlphabetEmojiUnicode.N.letter.plus(AlphabetEmojiUnicode.G.letter),
+        AlphabetEmojiUnicode.N.letter.plus(AlphabetEmojiUnicode.I.letter),
+        AlphabetEmojiUnicode.N.letter.plus(AlphabetEmojiUnicode.L.letter),
+        AlphabetEmojiUnicode.N.letter.plus(AlphabetEmojiUnicode.O.letter),
+        AlphabetEmojiUnicode.N.letter.plus(AlphabetEmojiUnicode.P.letter),
+        AlphabetEmojiUnicode.N.letter.plus(AlphabetEmojiUnicode.R.letter),
+        AlphabetEmojiUnicode.N.letter.plus(AlphabetEmojiUnicode.U.letter),
+        AlphabetEmojiUnicode.N.letter.plus(AlphabetEmojiUnicode.Z.letter),
+
+        AlphabetEmojiUnicode.O.letter.plus(AlphabetEmojiUnicode.M.letter),
+
+        AlphabetEmojiUnicode.P.letter.plus(AlphabetEmojiUnicode.A.letter),
+        AlphabetEmojiUnicode.P.letter.plus(AlphabetEmojiUnicode.E.letter),
+        AlphabetEmojiUnicode.P.letter.plus(AlphabetEmojiUnicode.F.letter),
+        AlphabetEmojiUnicode.P.letter.plus(AlphabetEmojiUnicode.G.letter),
+        AlphabetEmojiUnicode.P.letter.plus(AlphabetEmojiUnicode.H.letter),
+        AlphabetEmojiUnicode.P.letter.plus(AlphabetEmojiUnicode.K.letter),
+        AlphabetEmojiUnicode.P.letter.plus(AlphabetEmojiUnicode.L.letter),
+        AlphabetEmojiUnicode.P.letter.plus(AlphabetEmojiUnicode.M.letter),
+        AlphabetEmojiUnicode.P.letter.plus(AlphabetEmojiUnicode.R.letter),
+        AlphabetEmojiUnicode.P.letter.plus(AlphabetEmojiUnicode.S.letter),
+        AlphabetEmojiUnicode.P.letter.plus(AlphabetEmojiUnicode.T.letter),
+        AlphabetEmojiUnicode.P.letter.plus(AlphabetEmojiUnicode.W.letter),
+        AlphabetEmojiUnicode.P.letter.plus(AlphabetEmojiUnicode.Y.letter),
+
+        AlphabetEmojiUnicode.Q.letter.plus(AlphabetEmojiUnicode.A.letter),
+
+        AlphabetEmojiUnicode.R.letter.plus(AlphabetEmojiUnicode.O.letter),
+        AlphabetEmojiUnicode.R.letter.plus(AlphabetEmojiUnicode.S.letter),
+        AlphabetEmojiUnicode.R.letter.plus(AlphabetEmojiUnicode.U.letter),
+        AlphabetEmojiUnicode.R.letter.plus(AlphabetEmojiUnicode.W.letter),
+
+        AlphabetEmojiUnicode.S.letter.plus(AlphabetEmojiUnicode.A.letter),
+        AlphabetEmojiUnicode.S.letter.plus(AlphabetEmojiUnicode.B.letter),
+        AlphabetEmojiUnicode.S.letter.plus(AlphabetEmojiUnicode.C.letter),
+        AlphabetEmojiUnicode.S.letter.plus(AlphabetEmojiUnicode.D.letter),
+        AlphabetEmojiUnicode.S.letter.plus(AlphabetEmojiUnicode.E.letter),
+        AlphabetEmojiUnicode.S.letter.plus(AlphabetEmojiUnicode.G.letter),
+        AlphabetEmojiUnicode.S.letter.plus(AlphabetEmojiUnicode.H.letter),
+        AlphabetEmojiUnicode.S.letter.plus(AlphabetEmojiUnicode.I.letter),
+        AlphabetEmojiUnicode.S.letter.plus(AlphabetEmojiUnicode.J.letter),
+        AlphabetEmojiUnicode.S.letter.plus(AlphabetEmojiUnicode.K.letter),
+        AlphabetEmojiUnicode.S.letter.plus(AlphabetEmojiUnicode.L.letter),
+        AlphabetEmojiUnicode.S.letter.plus(AlphabetEmojiUnicode.M.letter),
+        AlphabetEmojiUnicode.S.letter.plus(AlphabetEmojiUnicode.N.letter),
+        AlphabetEmojiUnicode.S.letter.plus(AlphabetEmojiUnicode.O.letter),
+        AlphabetEmojiUnicode.S.letter.plus(AlphabetEmojiUnicode.R.letter),
+        AlphabetEmojiUnicode.S.letter.plus(AlphabetEmojiUnicode.S.letter),
+        AlphabetEmojiUnicode.S.letter.plus(AlphabetEmojiUnicode.T.letter),
+        AlphabetEmojiUnicode.S.letter.plus(AlphabetEmojiUnicode.V.letter),
+        AlphabetEmojiUnicode.S.letter.plus(AlphabetEmojiUnicode.X.letter),
+        AlphabetEmojiUnicode.S.letter.plus(AlphabetEmojiUnicode.Y.letter),
+        AlphabetEmojiUnicode.S.letter.plus(AlphabetEmojiUnicode.Z.letter),
+
+        AlphabetEmojiUnicode.T.letter.plus(AlphabetEmojiUnicode.A.letter),
+        AlphabetEmojiUnicode.T.letter.plus(AlphabetEmojiUnicode.C.letter),
+        AlphabetEmojiUnicode.T.letter.plus(AlphabetEmojiUnicode.D.letter),
+        AlphabetEmojiUnicode.T.letter.plus(AlphabetEmojiUnicode.G.letter),
+        AlphabetEmojiUnicode.T.letter.plus(AlphabetEmojiUnicode.H.letter),
+        AlphabetEmojiUnicode.T.letter.plus(AlphabetEmojiUnicode.J.letter),
+        AlphabetEmojiUnicode.T.letter.plus(AlphabetEmojiUnicode.K.letter),
+        AlphabetEmojiUnicode.T.letter.plus(AlphabetEmojiUnicode.L.letter),
+        AlphabetEmojiUnicode.T.letter.plus(AlphabetEmojiUnicode.M.letter),
+        AlphabetEmojiUnicode.T.letter.plus(AlphabetEmojiUnicode.N.letter),
+        AlphabetEmojiUnicode.T.letter.plus(AlphabetEmojiUnicode.O.letter),
+        AlphabetEmojiUnicode.T.letter.plus(AlphabetEmojiUnicode.R.letter),
+        AlphabetEmojiUnicode.T.letter.plus(AlphabetEmojiUnicode.T.letter),
+        AlphabetEmojiUnicode.T.letter.plus(AlphabetEmojiUnicode.V.letter),
+        AlphabetEmojiUnicode.T.letter.plus(AlphabetEmojiUnicode.W.letter),
+        AlphabetEmojiUnicode.T.letter.plus(AlphabetEmojiUnicode.Z.letter),
+
+        AlphabetEmojiUnicode.U.letter.plus(AlphabetEmojiUnicode.A.letter),
+        AlphabetEmojiUnicode.U.letter.plus(AlphabetEmojiUnicode.G.letter),
+        AlphabetEmojiUnicode.U.letter.plus(AlphabetEmojiUnicode.M.letter),
+        AlphabetEmojiUnicode.U.letter.plus(AlphabetEmojiUnicode.N.letter),
+        AlphabetEmojiUnicode.U.letter.plus(AlphabetEmojiUnicode.S.letter),
+        AlphabetEmojiUnicode.U.letter.plus(AlphabetEmojiUnicode.Y.letter),
+        AlphabetEmojiUnicode.U.letter.plus(AlphabetEmojiUnicode.Z.letter)
+
+
+
+
+    )
+
     fun getEmojiFaces(): ArrayList<Int>{
         val list = arrayListOf<Int>()
         list.addAll(emojiFaces)
@@ -75,34 +427,19 @@ object EmojiUtil {
         return list
     }
 
-    fun getEmojiAnimals(): ArrayList<Int>{
-        val list = arrayListOf<Int>()
-        list.addAll(animals)
+    fun getEmojiAnimals() = animals
 
-        return list
-    }
+    fun getFoodEmoji() = foods
 
-    fun getFoodEmoji(): ArrayList<Int>{
-        val list = arrayListOf<Int>()
-        list.addAll(foods)
+    fun getSportEmoji() = sports
 
-        return list
-    }
+    fun getVehicleEmoji() = vehicles
 
-    fun getSportEmoji(): ArrayList<Int>{
-        val list = arrayListOf<Int>()
-        list.addAll(sports)
+    fun getIdeaEmoji() = ideas
 
-        return list
-    }
+    fun getCharacterEmoji() = characters
 
-    fun getVehicleEmoji(): ArrayList<Int>{
-        val list = arrayListOf<Int>()
-        list.addAll(vehicles)
-
-        return list
-    }
-
+    fun getFlagEmoji() = flags
 
     fun getEmojiUnicode(unicode: Int): String{
         return String(Character.toChars(unicode))
