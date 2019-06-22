@@ -25,14 +25,4 @@ class FacesEmojiFragment : Fragment() {
 
         return view
     }
-
-    private fun setSampleData(): ArrayList<String>{
-        val list = arrayListOf<String>()
-        repeat(100){
-            list.add(EmojiUtil.getEmojiUnicode(0x1F4A2))
-        }
-
-        return list
-    }
-
 }

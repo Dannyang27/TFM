@@ -13,8 +13,8 @@ class EmojiPagerAdapter (fm: FragmentManager) : FragmentPagerAdapter(fm){
     private val animalFragment = AnimalEmojiFragment.newInstance()
     private val foodFragment = FoodEmojiFragment.newInstance()
     private val sportFragment = SportEmojiFragment.newInstance()
-    private val ideaFragment = IdeaEmojiFragment.newInstance()
     private val vehicleFragment = VehicleEmojiFragment.newInstance()
+    private val ideaFragment = IdeaEmojiFragment.newInstance()
     private val characterEmojiFragment = CharacterEmojiFragment.newInstance()
     private val flagFragment = FlagEmojiFragment.newInstance()
 
@@ -30,9 +30,9 @@ class EmojiPagerAdapter (fm: FragmentManager) : FragmentPagerAdapter(fm){
 
             4 -> sportFragment
 
-            5 -> ideaFragment
+            5 -> vehicleFragment
 
-            6 -> vehicleFragment
+            6 -> ideaFragment
 
             7 -> characterEmojiFragment
 
