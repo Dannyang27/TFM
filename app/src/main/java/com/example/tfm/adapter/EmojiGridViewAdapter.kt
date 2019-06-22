@@ -7,14 +7,15 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Button
 import com.example.tfm.R
+import com.example.tfm.util.EmojiUtil
 import org.jetbrains.anko.toast
 
 class EmojiGridViewAdapter : BaseAdapter{
 
-    var emojiUnicodes = arrayListOf<String>()
+    var emojiUnicodes = arrayListOf<Int>()
     var context : Context? = null
 
-    constructor(context: Context, emojiUnicodes: ArrayList<String>){
+    constructor(context: Context, emojiUnicodes: ArrayList<Int>){
         this.context = context
         this.emojiUnicodes = emojiUnicodes
     }
@@ -38,8 +39,12 @@ class EmojiGridViewAdapter : BaseAdapter{
 
         val unicode = emojiUnicodes[position]
         val imgBtn = emojiView.findViewById(R.id.emoji_button) as Button
+
+        val unicodeStr = EmojiUtil.getEmojiUnicode(unicode)
+        imgBtn.text = unicodeStr
+
         imgBtn.setOnClickListener {
-            context?.toast("EmojiTab: " + unicode)
+            context?.toast("EmojiTab: $unicodeStr")
         }
 
         return emojiView
