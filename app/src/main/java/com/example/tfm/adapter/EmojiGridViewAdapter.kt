@@ -45,7 +45,7 @@ class EmojiGridViewAdapter : BaseAdapter{
         imgBtn.text = unicodeStr
 
         imgBtn.setOnClickListener {
-            context?.toast("EmojiTab: ${AlphabetEmojiUnicode.E.letter + AlphabetEmojiUnicode.S.letter}")
+            context?.toast("EmojiTab: ${unicodeStr}")
         }
 
         return emojiView
