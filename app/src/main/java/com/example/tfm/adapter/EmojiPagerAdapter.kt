@@ -43,28 +43,6 @@ class EmojiPagerAdapter (fm: FragmentManager) : FragmentPagerAdapter(fm){
 
     override fun getCount() = EmojiTab.values().size
 
-//    override fun getPageTitle(position: Int): CharSequence? {
-//        return when(position){
-//            0 -> EmojiUtil.getEmojiUnicode(0x1F600)
-//
-//            1 -> EmojiUtil.getEmojiUnicode(0x1F600)
-//
-//            2 -> EmojiUtil.getEmojiUnicode(0x1F600)
-//
-//            3 -> EmojiUtil.getEmojiUnicode(0x1F600)
-//
-//            4 -> EmojiUtil.getEmojiUnicode(0x1F600)
-//
-//            5 -> EmojiUtil.getEmojiUnicode(0x1F600)
-//
-//            6 -> EmojiUtil.getEmojiUnicode(0x1F600)
-//
-//            7 -> EmojiUtil.getEmojiUnicode(0x1F600)
-//
-//            else -> EmojiUtil.getEmojiUnicode(0x1F600)
-//        }
-//    }
-
     override fun getPageTitle(position: Int): CharSequence? {
         return null
     }

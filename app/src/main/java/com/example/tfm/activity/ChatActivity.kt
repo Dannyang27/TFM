@@ -79,7 +79,7 @@ class ChatActivity : AppCompatActivity() {
 
         emojiTabs.setupWithViewPager(specialKeyboard)
         setupTabIcons()
-
+        
         initListeners()
 
         //sample messages
