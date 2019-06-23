@@ -16,7 +16,6 @@ import org.jetbrains.anko.toast
 import android.view.*
 import com.example.tfm.R
 
-
 class MainActivity : AppCompatActivity() {
 
     private val privateFragment = PrivateFragment.newInstance()
@@ -60,8 +59,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         searchView = findViewById(R.id.search_chat)
-
-
 
         val navView: BottomNavigationView = findViewById(R.id.navigation)
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
