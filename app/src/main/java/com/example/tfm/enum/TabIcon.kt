@@ -3,13 +3,13 @@ package com.example.tfm.enum
 import com.example.tfm.R
 
 enum class TabIcon constructor(val icon: Int) {
-    MOST_USED(R.drawable.phone),
-    FACES(R.drawable.phone),
-    ANIMAL(R.drawable.phone),
-    FOOD(R.drawable.phone),
-    SPORT(R.drawable.phone),
-    VEHICLE(R.drawable.phone),
-    IDEA(R.drawable.phone),
-    CHARACTER(R.drawable.phone),
-    FLAG(R.drawable.phone)
+    MOST_USED(R.drawable.clock),
+    FACES(R.drawable.smileyface),
+    ANIMAL(R.drawable.monkeyface),
+    FOOD(R.drawable.coffee),
+    SPORT(R.drawable.football_ball),
+    VEHICLE(R.drawable.bike),
+    IDEA(R.drawable.bulbidea),
+    CHARACTER(R.drawable.hashtag),
+    FLAG(R.drawable.flag)
 }
