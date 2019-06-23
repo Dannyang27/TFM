@@ -43,7 +43,6 @@ import java.util.*
 class ChatActivity : AppCompatActivity() {
 
     private lateinit var viewManager: RecyclerView.LayoutManager
-    private lateinit var emojiEditText: EmojiEditText
     private lateinit var emojiTabs: TabLayout
     private lateinit var specialKeyboard: ViewPager
 
@@ -61,6 +60,7 @@ class ChatActivity : AppCompatActivity() {
     companion object{
         var messages = mutableListOf<Message>()
         lateinit var messagesRecyclerView: RecyclerView
+        lateinit var emojiEditText: EmojiEditText
         lateinit var viewAdapter : RecyclerView.Adapter<*>
     }
 

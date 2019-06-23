@@ -7,9 +7,8 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Button
 import com.example.tfm.R
-import com.example.tfm.enum.AlphabetEmojiUnicode
+import com.example.tfm.activity.ChatActivity
 import com.example.tfm.util.EmojiUtil
-import org.jetbrains.anko.toast
 
 class EmojiGridViewAdapter : BaseAdapter{
 
@@ -45,7 +44,7 @@ class EmojiGridViewAdapter : BaseAdapter{
         imgBtn.text = unicodeStr
 
         imgBtn.setOnClickListener {
-            context?.toast("EmojiTab: ${unicodeStr}")
+            ChatActivity.emojiEditText.append(unicodeStr)
         }
 
         return emojiView
