@@ -44,6 +44,7 @@ class EmojiFlagAdapter : BaseAdapter {
         imgBtn.text = unicode
 
         imgBtn.setOnClickListener {
+            ChatActivity.emojiEditText.requestFocus()
             ChatActivity.emojiEditText.append(unicode)
         }
 

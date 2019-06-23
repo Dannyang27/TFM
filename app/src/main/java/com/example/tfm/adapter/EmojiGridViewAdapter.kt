@@ -44,6 +44,7 @@ class EmojiGridViewAdapter : BaseAdapter{
         imgBtn.text = unicodeStr
 
         imgBtn.setOnClickListener {
+            ChatActivity.emojiEditText.requestFocus()
             ChatActivity.emojiEditText.append(unicodeStr)
         }
 
