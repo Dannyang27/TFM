@@ -32,6 +32,8 @@ import com.example.tfm.enum.TabIcon
 import com.example.tfm.model.Message
 import com.example.tfm.util.KeyboardUtil
 import kotlinx.android.synthetic.main.activity_chat.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.jetbrains.anko.toast
 import java.io.File
 import java.io.IOException
