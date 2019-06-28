@@ -11,7 +11,7 @@ import com.example.tfm.adapter.EmojiGridViewAdapter
 import com.example.tfm.util.EmojiUtil
 
 
-class FoodEmojiFragment : androidx.fragment.app.Fragment() {
+class FoodEmojiFragment : Fragment() {
 
     companion object {
         fun newInstance(): FoodEmojiFragment = FoodEmojiFragment()

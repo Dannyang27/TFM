@@ -328,10 +328,8 @@ class ChatActivity : AppCompatActivity() {
     fun showSpecialKeyboard(mode : Mode){
         when(mode){
             Mode.EMOJI -> {
-                toast("EmojiTab")
             }
             Mode.GIF -> {
-                toast("GIF")
             }
         }
         emojiTabs.visibility = View.VISIBLE

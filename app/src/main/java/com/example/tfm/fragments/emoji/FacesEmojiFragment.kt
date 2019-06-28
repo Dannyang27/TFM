@@ -10,7 +10,7 @@ import com.example.tfm.R
 import com.example.tfm.adapter.EmojiGridViewAdapter
 import com.example.tfm.util.EmojiUtil
 
-class FacesEmojiFragment : androidx.fragment.app.Fragment() {
+class FacesEmojiFragment : Fragment() {
 
     companion object {
         fun newInstance(): FacesEmojiFragment = FacesEmojiFragment()

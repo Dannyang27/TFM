@@ -10,7 +10,7 @@ import com.example.tfm.R
 import com.example.tfm.adapter.EmojiGridViewAdapter
 import com.example.tfm.util.EmojiUtil
 
-class SportEmojiFragment : androidx.fragment.app.Fragment() {
+class SportEmojiFragment : Fragment() {
 
     companion object {
         fun newInstance(): SportEmojiFragment = SportEmojiFragment()

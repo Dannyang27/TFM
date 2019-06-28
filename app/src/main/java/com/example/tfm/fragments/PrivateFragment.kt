@@ -11,24 +11,24 @@ import com.example.tfm.adapter.ConversationAdapter
 import com.example.tfm.divider.HorizontalDivider
 import com.example.tfm.R
 
-class PrivateFragment : androidx.fragment.app.Fragment(){
+class PrivateFragment : Fragment(){
 
-    private lateinit var viewManager: androidx.recyclerview.widget.RecyclerView.LayoutManager
+    private lateinit var viewManager: RecyclerView.LayoutManager
 
     companion object{
         fun newInstance(): PrivateFragment = PrivateFragment()
-        lateinit var conversationList: androidx.recyclerview.widget.RecyclerView
-        lateinit var viewAdapter : androidx.recyclerview.widget.RecyclerView.Adapter<*>
+        lateinit var conversationList: RecyclerView
+        lateinit var viewAdapter : RecyclerView.Adapter<*>
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.private_chat_fragment, container, false)
 
-        viewManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
+        viewManager = LinearLayoutManager(activity)
         viewAdapter = ConversationAdapter(mutableListOf("test","test","test","test","test","test",
             "test","test","test","test","test","test","test"))
 
-        conversationList = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.private_recyclerview).apply {
+        conversationList = view.findViewById<RecyclerView>(R.id.private_recyclerview).apply {
             setHasFixedSize(true)
             addItemDecoration(HorizontalDivider(this.context))
             layoutManager = viewManager

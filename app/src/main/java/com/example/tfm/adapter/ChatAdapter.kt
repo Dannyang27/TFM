@@ -15,7 +15,7 @@ import com.example.tfm.viewHolder.SenderImageViewHolder
 import com.example.tfm.viewHolder.SenderMessageViewHolder
 import com.squareup.picasso.Picasso
 
-class ChatAdapter(private val messages : MutableList<Message>) : androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder>(){
+class ChatAdapter(private val messages : MutableList<Message>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     override fun getItemViewType(position: Int): Int {
         var viewType: Int
@@ -49,7 +49,7 @@ class ChatAdapter(private val messages : MutableList<Message>) : androidx.recycl
         return viewType
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): androidx.recyclerview.widget.RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         var view: View? = null
 
         when(viewType){
@@ -78,7 +78,7 @@ class ChatAdapter(private val messages : MutableList<Message>) : androidx.recycl
         return ReceiverMessageViewHolder(view!!)
     }
 
-    override fun onBindViewHolder(holder: androidx.recyclerview.widget.RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val message = messages[position]
 
         when(holder){

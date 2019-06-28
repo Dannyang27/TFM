@@ -5,6 +5,6 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import com.example.tfm.R
 
-class SenderMessageViewHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view){
+class SenderMessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
     val text: EmojiTextView = view.findViewById(R.id.senderMessage)
 }

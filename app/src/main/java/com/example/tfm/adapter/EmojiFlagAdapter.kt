@@ -8,8 +8,6 @@ import android.widget.BaseAdapter
 import android.widget.Button
 import com.example.tfm.R
 import com.example.tfm.activity.ChatActivity
-import com.example.tfm.util.EmojiUtil
-import org.jetbrains.anko.toast
 
 class EmojiFlagAdapter : BaseAdapter {
 

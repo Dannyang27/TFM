@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
 
     private val privateFragment = PrivateFragment.newInstance()
     private val groupChatFragment = GroupChatFragment.newInstance()
-    private var activeFragment: androidx.fragment.app.Fragment = privateFragment
+    private var activeFragment: Fragment = privateFragment
     private lateinit var toolbar: Toolbar
     private lateinit var searchView: SearchView
 
@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         false
     }
 
-    private fun openFragment(fragment: androidx.fragment.app.Fragment) {
+    private fun openFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction().hide(activeFragment).show(fragment).commit()
         activeFragment = fragment
     }
@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initEmoji(){
-        val config = androidx.emoji.bundled.BundledEmojiCompatConfig(this)
+        val config = BundledEmojiCompatConfig(this)
         EmojiCompat.init(config)
     }
 }

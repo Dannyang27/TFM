@@ -11,7 +11,7 @@ import com.example.tfm.adapter.EmojiFlagAdapter
 import com.example.tfm.adapter.EmojiGridViewAdapter
 import com.example.tfm.util.EmojiUtil
 
-class FlagEmojiFragment : androidx.fragment.app.Fragment() {
+class FlagEmojiFragment : Fragment() {
 
     companion object {
         fun newInstance(): FlagEmojiFragment = FlagEmojiFragment()
