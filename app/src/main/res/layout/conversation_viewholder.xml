@@ -20,7 +20,7 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-            <android.support.text.emoji.widget.EmojiTextView
+            <androidx.emoji.widget.EmojiTextView
                     android:text="@string/username_sample"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
                     android:textStyle="italic"
                     android:gravity="right"/>
         </LinearLayout>
-        <android.support.text.emoji.widget.EmojiTextView
+        <androidx.emoji.widget.EmojiTextView
                 android:text="@string/text_sample"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"

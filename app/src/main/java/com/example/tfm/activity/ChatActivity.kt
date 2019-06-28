@@ -7,21 +7,19 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.support.design.widget.TabLayout
-import android.support.text.emoji.EmojiCompat
-import android.support.text.emoji.bundled.BundledEmojiCompatConfig
-import android.support.text.emoji.widget.EmojiEditText
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.FileProvider
-import android.support.v4.view.ViewPager
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import com.google.android.material.tabs.TabLayout
+import androidx.emoji.text.EmojiCompat
+import androidx.emoji.widget.EmojiEditText
+import androidx.core.app.ActivityCompat
+import androidx.core.content.FileProvider
 import android.util.Log
 import android.view.*
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.ViewPager
 import com.example.tfm.R
 import com.example.tfm.adapter.ChatAdapter
 import com.example.tfm.adapter.EmojiPagerAdapter
@@ -32,8 +30,6 @@ import com.example.tfm.enum.TabIcon
 import com.example.tfm.model.Message
 import com.example.tfm.util.KeyboardUtil
 import kotlinx.android.synthetic.main.activity_chat.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import org.jetbrains.anko.toast
 import java.io.File
 import java.io.IOException
@@ -87,10 +83,10 @@ class ChatActivity : AppCompatActivity() {
         messages.add(Message(Sender.OWN, MessageType.MESSAGE, "Hello World",  1212, "EN" ))
         messages.add(Message(Sender.OTHER, MessageType.MESSAGE, getString(R.string.dwight_quote), 1213 , "EN"))
 
-        viewManager = LinearLayoutManager(this)
+        viewManager = androidx.recyclerview.widget.LinearLayoutManager(this)
         viewAdapter = ChatAdapter(messages)
 
-        messagesRecyclerView = findViewById<RecyclerView>(R.id.chat_recyclerview).apply {
+        messagesRecyclerView = findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.chat_recyclerview).apply {
             setHasFixedSize(true)
             layoutManager = viewManager
             adapter = viewAdapter
@@ -139,7 +135,7 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun initEmoji(){
-        val config = BundledEmojiCompatConfig(this)
+        val config = androidx.emoji.bundled.BundledEmojiCompatConfig(this)
         EmojiCompat.init(config)
     }
 

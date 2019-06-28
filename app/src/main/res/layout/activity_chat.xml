@@ -7,11 +7,11 @@
         android:orientation="vertical"
         tools:context=".activity.ChatActivity">
 
-        <android.support.design.widget.AppBarLayout
+        <com.google.android.material.appbar.AppBarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:elevation="4dp">
-            <android.support.v7.widget.Toolbar
+            <androidx.appcompat.widget.Toolbar
                     android:id="@+id/chat_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -44,13 +44,13 @@
 
                 </LinearLayout>
 
-            </android.support.v7.widget.Toolbar>
-        </android.support.design.widget.AppBarLayout>
+            </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.AppBarLayout>
 
         <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/chat_recyclerview"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -62,7 +62,7 @@
                     android:orientation="horizontal"
                     android:layout_margin="8dp"
                     android:layout_above="@+id/shortcuts">
-                <android.support.text.emoji.widget.EmojiEditText
+                <androidx.emoji.widget.EmojiEditText
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:inputType="textMultiLine|textShortMessage"
@@ -168,14 +168,14 @@
                         android:layout_marginRight="@dimen/shorcutMargin"
                         android:background="?android:attr/selectableItemBackground"/>
             </LinearLayout>
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/viewContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:layout_alignParentBottom="true">
 
-                <android.support.design.widget.TabLayout
+                <com.google.android.material.tabs.TabLayout
                         android:id="@+id/emoji_tab"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -183,12 +183,12 @@
                         app:layout_constraintTop_toTopOf="parent"
                         android:visibility="gone"/>
 
-                <android.support.v4.view.ViewPager
+                <androidx.viewpager.widget.ViewPager
                         android:layout_width="match_parent"
                         android:layout_height="240dp"
                         android:id="@+id/specialKeyboard"
                         app:layout_constraintTop_toBottomOf="@id/emoji_tab"
                         android:visibility="gone"/>
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </RelativeLayout>
 </LinearLayout>

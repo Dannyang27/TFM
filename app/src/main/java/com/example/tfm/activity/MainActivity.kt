@@ -1,13 +1,13 @@
 package com.example.tfm.activity
 
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
-import android.support.design.widget.FloatingActionButton
-import android.support.text.emoji.EmojiCompat
-import android.support.text.emoji.bundled.BundledEmojiCompatConfig
-import android.support.v4.app.Fragment
-import android.support.v7.widget.Toolbar
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import androidx.emoji.text.EmojiCompat
+import androidx.emoji.bundled.BundledEmojiCompatConfig
+import androidx.fragment.app.Fragment
+import androidx.appcompat.widget.Toolbar
 import android.widget.SearchView
 import android.widget.TextView
 import com.example.tfm.fragments.PrivateFragment
@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
 
     private val privateFragment = PrivateFragment.newInstance()
     private val groupChatFragment = GroupChatFragment.newInstance()
-    private var activeFragment: Fragment = privateFragment
+    private var activeFragment: androidx.fragment.app.Fragment = privateFragment
     private lateinit var toolbar: Toolbar
     private lateinit var searchView: SearchView
 
@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         false
     }
 
-    private fun openFragment(fragment: Fragment) {
+    private fun openFragment(fragment: androidx.fragment.app.Fragment) {
         supportFragmentManager.beginTransaction().hide(activeFragment).show(fragment).commit()
         activeFragment = fragment
     }
@@ -65,6 +65,8 @@ class MainActivity : AppCompatActivity() {
 
         supportFragmentManager.beginTransaction().add(R.id.container, groupChatFragment, "2").hide(groupChatFragment).commit()
         supportFragmentManager.beginTransaction().add(R.id.container, privateFragment, "1").commit()
+
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -88,7 +90,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initEmoji(){
-        val config = BundledEmojiCompatConfig(this)
+        val config = androidx.emoji.bundled.BundledEmojiCompatConfig(this)
         EmojiCompat.init(config)
     }
 }
