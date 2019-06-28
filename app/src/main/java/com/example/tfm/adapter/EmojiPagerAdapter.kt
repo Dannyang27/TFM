@@ -1,13 +1,13 @@
 package com.example.tfm.adapter
 
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
 import com.example.tfm.enum.EmojiTab
 import com.example.tfm.fragments.emoji.*
 import com.example.tfm.util.EmojiUtil
 
-class EmojiPagerAdapter (fm: FragmentManager) : FragmentPagerAdapter(fm){
+class EmojiPagerAdapter (fm: androidx.fragment.app.FragmentManager) : androidx.fragment.app.FragmentPagerAdapter(fm){
 
     private val mostUsedFragment = MostUsedEmojiFragment.newInstance()
     private val facesFragment = FacesEmojiFragment.newInstance()
@@ -19,7 +19,7 @@ class EmojiPagerAdapter (fm: FragmentManager) : FragmentPagerAdapter(fm){
     private val characterEmojiFragment = CharacterEmojiFragment.newInstance()
     private val flagFragment = FlagEmojiFragment.newInstance()
 
-    override fun getItem(position: Int): Fragment {
+    override fun getItem(position: Int): androidx.fragment.app.Fragment {
         return when(position){
             0 -> mostUsedFragment
 

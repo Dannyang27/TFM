@@ -1,7 +1,7 @@
 package com.example.tfm.fragments.emoji
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +11,7 @@ import com.example.tfm.adapter.EmojiGridViewAdapter
 import com.example.tfm.util.EmojiUtil
 
 
-class FoodEmojiFragment : Fragment() {
+class FoodEmojiFragment : androidx.fragment.app.Fragment() {
 
     companion object {
         fun newInstance(): FoodEmojiFragment = FoodEmojiFragment()
