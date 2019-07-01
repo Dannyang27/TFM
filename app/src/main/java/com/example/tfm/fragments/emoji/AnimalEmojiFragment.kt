@@ -9,8 +9,11 @@ import android.widget.GridView
 import com.example.tfm.R
 import com.example.tfm.adapter.EmojiGridViewAdapter
 import com.example.tfm.util.EmojiUtil
+import kotlinx.coroutines.*
 
-class AnimalEmojiFragment : Fragment() {
+class AnimalEmojiFragment : Fragment(), CoroutineScope {
+
+    override val coroutineContext get() = Dispatchers.Default
 
     companion object {
         fun newInstance(): AnimalEmojiFragment = AnimalEmojiFragment()
@@ -18,10 +21,25 @@ class AnimalEmojiFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.emoji_animal, container, false)
-
         val gridview = view.findViewById(R.id.animal_gridview) as GridView
 
-        gridview.adapter = EmojiGridViewAdapter(activity?.applicationContext!!, EmojiUtil.getEmojiAnimals())
+        launch {
+            loadGridview(gridview)
+        }
+
         return view
+    }
+
+    private suspend fun loadGridview( gridview : GridView){
+        coroutineScope {
+            async {
+                withContext(Dispatchers.IO){
+                    val adapter = EmojiGridViewAdapter(activity?.applicationContext!!, EmojiUtil.getEmojiAnimals())
+                    withContext(Dispatchers.Main){
+                        gridview.adapter = adapter
+                    }
+                }
+            }
+        }
     }
 }

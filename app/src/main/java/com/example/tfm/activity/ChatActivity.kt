@@ -75,8 +75,8 @@ class ChatActivity : AppCompatActivity() {
         specialKeyboard.adapter = fragmentAdapter
 
         emojiTabs.setupWithViewPager(specialKeyboard)
-        setupTabIcons()
 
+        setupTabIcons()
         initListeners()
 
         //sample messages
@@ -86,7 +86,8 @@ class ChatActivity : AppCompatActivity() {
         viewManager = androidx.recyclerview.widget.LinearLayoutManager(this)
         viewAdapter = ChatAdapter(messages)
 
-        messagesRecyclerView = findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.chat_recyclerview).apply {
+
+        messagesRecyclerView = findViewById<RecyclerView>(R.id.chat_recyclerview).apply {
             setHasFixedSize(true)
             layoutManager = viewManager
             adapter = viewAdapter
@@ -320,12 +321,12 @@ class ChatActivity : AppCompatActivity() {
         }
     }
 
-    fun closeSpecialKeyboard(){
+    private fun closeSpecialKeyboard(){
         emojiTabs.visibility = View.GONE
         specialKeyboard.visibility = View.GONE
     }
 
-    fun showSpecialKeyboard(mode : Mode){
+    private fun showSpecialKeyboard(mode : Mode){
         when(mode){
             Mode.EMOJI -> {
             }
@@ -336,7 +337,7 @@ class ChatActivity : AppCompatActivity() {
         specialKeyboard.visibility = View.VISIBLE
     }
 
-    fun setupTabIcons(){
+    private fun setupTabIcons(){
         emojiTabs.getTabAt(0)?.icon = getDrawable(TabIcon.MOST_USED.icon)
         emojiTabs.getTabAt(1)?.icon = getDrawable(TabIcon.FACES.icon)
         emojiTabs.getTabAt(2)?.icon = getDrawable(TabIcon.ANIMAL.icon)

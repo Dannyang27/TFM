@@ -8,8 +8,12 @@ import android.widget.BaseAdapter
 import android.widget.Button
 import com.example.tfm.R
 import com.example.tfm.activity.ChatActivity
+import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 
-class EmojiFlagAdapter : BaseAdapter {
+class EmojiFlagAdapter : BaseAdapter, CoroutineScope {
+
+    override val coroutineContext get() = Dispatchers.Default
 
     var flags = arrayListOf<String>()
     var context : Context? = null
@@ -36,14 +40,25 @@ class EmojiFlagAdapter : BaseAdapter {
             emojiView.layoutParams = ViewGroup.LayoutParams(value, value)
         }
 
-        val unicode = flags[position]
         val imgBtn = emojiView.findViewById(R.id.emoji_button) as Button
 
-        imgBtn.text = unicode
+        launch {
+            val job = async {
+                withContext(Dispatchers.IO) {
+                    val unicode = flags[position]
 
-        imgBtn.setOnClickListener {
-            ChatActivity.emojiEditText.requestFocus()
-            ChatActivity.emojiEditText.append(unicode)
+                    withContext(Dispatchers.Main){
+                        imgBtn.text = unicode
+
+                        imgBtn.setOnClickListener {
+                            ChatActivity.emojiEditText.requestFocus()
+                            ChatActivity.emojiEditText.append(unicode)
+                        }
+                    }
+                }
+                emojiView
+            }
+            job.await()
         }
 
         return emojiView

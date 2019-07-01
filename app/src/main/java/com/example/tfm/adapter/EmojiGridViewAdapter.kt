@@ -9,8 +9,11 @@ import android.widget.Button
 import com.example.tfm.R
 import com.example.tfm.activity.ChatActivity
 import com.example.tfm.util.EmojiUtil
+import kotlinx.coroutines.*
 
-class EmojiGridViewAdapter : BaseAdapter{
+class EmojiGridViewAdapter : BaseAdapter, CoroutineScope{
+
+    override val coroutineContext get() = Dispatchers.Default
 
     var emojiUnicodes = arrayListOf<Int>()
     var context : Context? = null
@@ -37,15 +40,25 @@ class EmojiGridViewAdapter : BaseAdapter{
             emojiView.layoutParams = ViewGroup.LayoutParams(value, value)
         }
 
-        val unicode = emojiUnicodes[position]
         val imgBtn = emojiView.findViewById(R.id.emoji_button) as Button
 
-        val unicodeStr = EmojiUtil.getEmojiUnicode(unicode)
-        imgBtn.text = unicodeStr
+        launch {
+            async {
+                withContext(Dispatchers.IO) {
+                    val unicode = emojiUnicodes[position]
+                    val unicodeStr = EmojiUtil.getEmojiUnicode(unicode)
 
-        imgBtn.setOnClickListener {
-            ChatActivity.emojiEditText.requestFocus()
-            ChatActivity.emojiEditText.append(unicodeStr)
+                    withContext(Dispatchers.Main) {
+                        imgBtn.text = unicodeStr
+
+                        imgBtn.setOnClickListener {
+                            ChatActivity.emojiEditText.requestFocus()
+                            ChatActivity.emojiEditText.append(unicodeStr)
+                        }
+                    }
+                }
+                emojiView
+            }
         }
 
         return emojiView
