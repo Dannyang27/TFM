@@ -18,6 +18,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import android.util.Log
 import android.view.*
+import android.widget.FrameLayout
+import androidx.emoji.bundled.BundledEmojiCompatConfig
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.example.tfm.R
@@ -27,22 +30,29 @@ import com.example.tfm.enum.MessageType
 import com.example.tfm.enum.Mode
 import com.example.tfm.enum.Sender
 import com.example.tfm.enum.TabIcon
+import com.example.tfm.fragments.EmojiFragment
+import com.example.tfm.fragments.GifFragment
 import com.example.tfm.model.Message
 import com.example.tfm.util.KeyboardUtil
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_chat.*
+import kotlinx.coroutines.*
 import org.jetbrains.anko.toast
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.coroutines.CoroutineContext
 
-class ChatActivity : AppCompatActivity() {
+class ChatActivity : AppCompatActivity(), CoroutineScope {
+
+    private val job = Job()
+    override val coroutineContext get() = Dispatchers.Default + job
 
     private lateinit var viewManager: RecyclerView.LayoutManager
-    private lateinit var emojiTabs: TabLayout
-    private lateinit var specialKeyboard: ViewPager
 
-    var currentPhotoPath: String = ""
+    private lateinit var container: FrameLayout
+    private lateinit var bottomNavBar: BottomNavigationView
 
     private val GALLERY_CODE = 100
     private val CAMERA_MODE = 101
@@ -58,7 +68,32 @@ class ChatActivity : AppCompatActivity() {
         lateinit var messagesRecyclerView: RecyclerView
         lateinit var emojiEditText: EmojiEditText
         lateinit var viewAdapter : RecyclerView.Adapter<*>
+
+        val emojiFragment = EmojiFragment.newInstance()
+        val gifFragment = GifFragment.newInstance()
+        var activeFragment: Fragment = emojiFragment
     }
+
+    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+        when (item.itemId) {
+            R.id.emoji_navbar -> {
+                openFragment(emojiFragment)
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.gif_navbar -> {
+                openFragment(gifFragment)
+                return@OnNavigationItemSelectedListener true
+            }
+        }
+        false
+    }
+
+    private fun openFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction().hide(activeFragment).show(fragment).commit()
+        activeFragment = fragment
+    }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,15 +103,14 @@ class ChatActivity : AppCompatActivity() {
         displayBackArrow()
 
         emojiEditText = findViewById(R.id.chat_edittext)
-        emojiTabs = findViewById(R.id.emoji_tab)
-        specialKeyboard = findViewById(R.id.specialKeyboard)
 
-        val fragmentAdapter = EmojiPagerAdapter(supportFragmentManager)
-        specialKeyboard.adapter = fragmentAdapter
+        container = findViewById(R.id.emoji_container)
+        bottomNavBar = findViewById(R.id.emoji_navbar)
 
-        emojiTabs.setupWithViewPager(specialKeyboard)
+        bottomNavBar.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        supportFragmentManager.beginTransaction().add(R.id.emoji_container, gifFragment, "2").hide(gifFragment).commit()
+        supportFragmentManager.beginTransaction().add(R.id.emoji_container, emojiFragment, "1").commit()
 
-        setupTabIcons()
         initListeners()
 
         //sample messages
@@ -136,7 +170,7 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun initEmoji(){
-        val config = androidx.emoji.bundled.BundledEmojiCompatConfig(this)
+        val config = BundledEmojiCompatConfig(this)
         EmojiCompat.init(config)
     }
 
@@ -155,15 +189,11 @@ class ChatActivity : AppCompatActivity() {
         })
 
         emojiButton.setOnClickListener {
-            KeyboardUtil.hideKeyboard(this)
             showSpecialKeyboard(Mode.EMOJI)
         }
         pictureButton.setOnClickListener {
             closeSpecialKeyboard()
             openGallery()
-        }
-        gifButton.setOnClickListener {
-            showSpecialKeyboard(Mode.GIF)
         }
         cameraButton.setOnClickListener {
             if(!hasPermissions(this, PERMISSIONS)){
@@ -273,48 +303,15 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun openCamera() {
-        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-            takePictureIntent.resolveActivity(packageManager)?.also {
-                val photoFile: File? = try {
-                    createImageFile()
-                } catch (ex: IOException) {
-                    ex.printStackTrace()
-                    null
-                }
-                photoFile?.also {
-                    val photoURI: Uri = FileProvider.getUriForFile(
-                        this,
-                        "com.example.tfm.fileprovider",
-                        it)
 
-                    Log.d("PHOTO", photoURI.path)
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                    startActivityForResult(takePictureIntent, CAMERA_MODE)
-                }
-            }
-        }
     }
 
     private fun hasPermissions(context: Context, permissions: Array<String>): Boolean = permissions.all {
         ActivityCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
     }
 
-
-    @Throws(IOException::class)
-    private fun createImageFile(): File {
-        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val storageDir: File = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        return File.createTempFile(
-            "JPEG_${timeStamp}_",
-            ".jpg",
-            storageDir
-        ).apply {
-            currentPhotoPath = absolutePath
-        }
-    }
-
     override fun onBackPressed() {
-        if(specialKeyboard.visibility == View.VISIBLE){
+        if(container.visibility == View.VISIBLE){
             closeSpecialKeyboard()
         }else{
             super.onBackPressed()
@@ -322,8 +319,8 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun closeSpecialKeyboard(){
-        emojiTabs.visibility = View.GONE
-        specialKeyboard.visibility = View.GONE
+        container.visibility = View.GONE
+        bottomNavBar.visibility = View.GONE
     }
 
     private fun showSpecialKeyboard(mode : Mode){
@@ -333,19 +330,16 @@ class ChatActivity : AppCompatActivity() {
             Mode.GIF -> {
             }
         }
-        emojiTabs.visibility = View.VISIBLE
-        specialKeyboard.visibility = View.VISIBLE
-    }
 
-    private fun setupTabIcons(){
-        emojiTabs.getTabAt(0)?.icon = getDrawable(TabIcon.MOST_USED.icon)
-        emojiTabs.getTabAt(1)?.icon = getDrawable(TabIcon.FACES.icon)
-        emojiTabs.getTabAt(2)?.icon = getDrawable(TabIcon.ANIMAL.icon)
-        emojiTabs.getTabAt(3)?.icon = getDrawable(TabIcon.FOOD.icon)
-        emojiTabs.getTabAt(4)?.icon = getDrawable(TabIcon.SPORT.icon)
-        emojiTabs.getTabAt(5)?.icon = getDrawable(TabIcon.VEHICLE.icon)
-        emojiTabs.getTabAt(6)?.icon = getDrawable(TabIcon.IDEA.icon)
-        emojiTabs.getTabAt(7)?.icon = getDrawable(TabIcon.CHARACTER.icon)
-        emojiTabs.getTabAt(8)?.icon = getDrawable(TabIcon.FLAG.icon)
+        KeyboardUtil.hideKeyboard(this)
+
+        launch {
+            delay(50L)
+            withContext(Dispatchers.Main) {
+                container.visibility = View.VISIBLE
+                bottomNavBar.visibility = View.VISIBLE
+
+            }
+        }
     }
 }

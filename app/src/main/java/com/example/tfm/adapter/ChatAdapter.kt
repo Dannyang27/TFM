@@ -13,7 +13,6 @@ import com.example.tfm.viewHolder.ReceiverImageViewHolder
 import com.example.tfm.viewHolder.ReceiverMessageViewHolder
 import com.example.tfm.viewHolder.SenderImageViewHolder
 import com.example.tfm.viewHolder.SenderMessageViewHolder
-import com.squareup.picasso.Picasso
 
 class ChatAdapter(private val messages : MutableList<Message>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
@@ -54,22 +53,22 @@ class ChatAdapter(private val messages : MutableList<Message>) : RecyclerView.Ad
 
         when(viewType){
             0 -> {
-                view = LayoutInflater.from(parent.context).inflate(R.layout.sender_message_viewholder, parent, false)
+                view = LayoutInflater.from(parent.context).inflate(R.layout.viewholder_sender_message, parent, false)
                 return SenderMessageViewHolder(view)
             }
 
             1 ->{
-                view = LayoutInflater.from(parent.context).inflate(R.layout.receiver_message_viewholder, parent, false)
+                view = LayoutInflater.from(parent.context).inflate(R.layout.viewholder_receiver_message, parent, false)
                 return ReceiverMessageViewHolder(view)
             }
 
             2 -> {
-                view = LayoutInflater.from(parent.context).inflate(R.layout.sender_image_viewholder, parent, false)
+                view = LayoutInflater.from(parent.context).inflate(R.layout.viewholder_sender_image, parent, false)
                 return SenderImageViewHolder(view)
             }
 
             3 -> {
-                view = LayoutInflater.from(parent.context).inflate(R.layout.receiver_image_viewholder, parent, false)
+                view = LayoutInflater.from(parent.context).inflate(R.layout.viewholder_receiver_image, parent, false)
                 return ReceiverImageViewHolder(view)
             }
         }

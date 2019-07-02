@@ -7,12 +7,11 @@ import android.view.ViewGroup
 import com.example.tfm.R
 import com.example.tfm.activity.ChatActivity
 import com.example.tfm.viewHolder.ConversationViewHolder
-import org.jetbrains.anko.toast
 
 class ConversationAdapter(private val conversations: MutableList<String>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.conversation_viewholder, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.viewholder_conversation, parent, false)
         return ConversationViewHolder(view)
     }
 

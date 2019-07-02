@@ -13,7 +13,8 @@ import kotlin.coroutines.CoroutineContext
 
 class EmojiFlagAdapter : BaseAdapter, CoroutineScope {
 
-    override val coroutineContext get() = Dispatchers.Default
+    private val job = Job()
+    override val coroutineContext get() = Dispatchers.Default + job
 
     var flags = arrayListOf<String>()
     var context : Context? = null

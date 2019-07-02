@@ -13,7 +13,8 @@ import kotlinx.coroutines.*
 
 class IdeaEmojiFragment : Fragment(), CoroutineScope {
 
-    override val coroutineContext get() = Dispatchers.Default
+    private val job = Job()
+    override val coroutineContext get() = Dispatchers.Default + job
 
     companion object {
         fun newInstance(): IdeaEmojiFragment = IdeaEmojiFragment()
