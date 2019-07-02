@@ -13,7 +13,8 @@ import kotlinx.coroutines.*
 
 class EmojiGridViewAdapter : BaseAdapter, CoroutineScope{
 
-    override val coroutineContext get() = Dispatchers.Default
+    private val job = Job()
+    override val coroutineContext get() = Dispatchers.Default + job
 
     var emojiUnicodes = arrayListOf<Int>()
     var context : Context? = null

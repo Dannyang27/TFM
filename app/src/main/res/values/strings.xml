@@ -31,4 +31,6 @@
     <string name="idea">Idea</string>
     <string name="character">Character</string>
     <string name="flag">Flag</string>
+    <string name="emoji">Emoji</string>
+    <string name="gif">Gif</string>
 </resources>
