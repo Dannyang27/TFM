@@ -35,7 +35,7 @@ object RetrofitClient {
             }
 
             override fun onFailure(call: Call<GiphyPojo>, t: Throwable) {
-                Log.d("DEBUG", "onfailure")
+                Log.d("DEBUG", "Could not get gifs")
             }
         })
     }
