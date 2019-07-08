@@ -5,9 +5,5 @@ import com.google.gson.annotations.SerializedName
 
 data class GiphyPojo(
     @SerializedName("data")
-    val `data`: List<Data>,
-    @SerializedName("meta")
-    val meta: Meta,
-    @SerializedName("pagination")
-    val pagination: Pagination
+    val `data`: List<Data>
 )

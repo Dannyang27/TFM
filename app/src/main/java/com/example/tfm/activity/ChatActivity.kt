@@ -27,6 +27,7 @@ import com.example.tfm.fragments.GifFragment
 import com.example.tfm.model.Message
 import com.example.tfm.util.KeyboardUtil
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.coroutines.*
 import org.jetbrains.anko.toast
