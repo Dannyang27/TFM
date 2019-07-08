@@ -1,6 +1,7 @@
 package com.example.tfm.retrofit
 
 import android.util.Log
+import com.example.tfm.fragments.GifFragment
 import com.example.tfm.model.giphy.GiphyPojo
 import retrofit2.Call
 import retrofit2.Callback
@@ -11,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitClient {
     private const val token = "1ILTocSRwQgQXWluqsVMTjkpfSGBm2zD"
     private const val baseUrl = "https://api.giphy.com/v1/gifs/"
-    private const val limit = 25
+    private const val limit = 26
     private const val rating = "G"
 
     val retrofit = Retrofit.Builder()
@@ -29,7 +30,7 @@ object RetrofitClient {
             override fun onResponse(call: Call<GiphyPojo>, response: Response<GiphyPojo>) {
                 val gifs = response.body()
                 gifs?.data?.forEach {
-                    Log.d("DEBUG", it.images.previewGif.url)
+                    GifFragment.gifImages.add(it.images.previewGif.url)
                 }
             }
 
