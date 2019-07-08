@@ -8,14 +8,16 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.example.tfm.R
+import com.example.tfm.model.giphy.Gifs
+import com.example.tfm.model.giphy.GiphyPojo
 import org.jetbrains.anko.toast
 
 class GifAdapter : BaseAdapter{
 
     var context: Context
-    var gifs: MutableList<String>
+    var gifs: MutableList<Gifs>
 
-    constructor( context: Context, gifs : MutableList<String>){
+    constructor( context: Context, gifs : MutableList<Gifs>){
         this.context = context
         this.gifs = gifs
     }
@@ -31,12 +33,13 @@ class GifAdapter : BaseAdapter{
             gifView.layoutParams = ViewGroup.LayoutParams(value, value / 2)
         }
 
-        val gif = gifView.findViewById(R.id.gif_image) as ImageView
-        gif.setOnClickListener {
-            context.toast("clicked")
-        }
+        val gifImage = gifView.findViewById(R.id.gif_image) as ImageView
+        val gif = gifs[position]
+        Glide.with(context).asGif().load(gif.previewGif.url).centerCrop().into(gifImage)
 
-        Glide.with(context).asGif().load(gifs[position]).centerCrop().into(gif)
+        gifImage.setOnClickListener {
+            context.toast("Original: ${gif.original.url}")
+        }
 
         return gifView
     }

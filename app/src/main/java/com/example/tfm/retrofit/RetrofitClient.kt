@@ -30,7 +30,7 @@ object RetrofitClient {
             override fun onResponse(call: Call<GiphyPojo>, response: Response<GiphyPojo>) {
                 val gifs = response.body()
                 gifs?.data?.forEach {
-                    GifFragment.gifImages.add(it.images.previewGif.url)
+                    GifFragment.gifImages.add(it.gifs)
                 }
             }
 
@@ -47,7 +47,7 @@ object RetrofitClient {
             override fun onResponse(call: Call<GiphyPojo>, response: Response<GiphyPojo>) {
                 val gifs = response.body()
                 gifs?.data?.forEach {
-                    GifFragment.gifImages.add(it.images.previewGif.url)
+                    GifFragment.gifImages.add(it.gifs)
                 }
             }
 
