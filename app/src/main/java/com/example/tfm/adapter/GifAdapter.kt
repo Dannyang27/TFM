@@ -38,7 +38,7 @@ class GifAdapter : BaseAdapter{
         Glide.with(context).asGif().load(gif.previewGif.url).centerCrop().into(gifImage)
 
         gifImage.setOnClickListener {
-            context.toast("Original: ${gif.original.url}")
+            context.toast( gif.original.url)
         }
 
         return gifView
