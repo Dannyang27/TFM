@@ -8,6 +8,15 @@ import retrofit2.http.Query
 interface GithubService {
     @GET("trending?")
     fun getGifFromGiphy(@Query("api_key") token: String,
-                       @Query("limit") language: Int,
+                       @Query("limit") limit: Int,
                        @Query("rating") rating: String) : Call<GiphyPojo>
+
+
+    @GET("search?")
+    fun getSearchGifFromGiphy(@Query("api_key") token: String,
+                        @Query("q") search: String,
+                        @Query("limit") limit: Int,
+                        @Query("offset") offset: Int,
+                        @Query("rating") rating: String,
+                        @Query("lang") language: String) : Call<GiphyPojo>
 }

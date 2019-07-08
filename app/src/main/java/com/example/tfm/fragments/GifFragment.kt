@@ -15,7 +15,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlin.coroutines.CoroutineContext
 
 class GifFragment : Fragment(), CoroutineScope{
 
@@ -36,7 +35,7 @@ class GifFragment : Fragment(), CoroutineScope{
         gridview.adapter = adapter
 
         launch {
-            RetrofitClient.getGifsFromGiphy()
+            RetrofitClient.getSearchGifFromGiphy("pugs")
         }
 
         return view

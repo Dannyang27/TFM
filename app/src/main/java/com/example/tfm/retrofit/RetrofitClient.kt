@@ -39,4 +39,21 @@ object RetrofitClient {
             }
         })
     }
+
+    fun getSearchGifFromGiphy(searchQuery: String, limit: Int = this.limit, rating: String = this.rating){
+        val call = service.getSearchGifFromGiphy(token, searchQuery, limit, 0, rating, "en")
+        call.enqueue(object: Callback<GiphyPojo> {
+
+            override fun onResponse(call: Call<GiphyPojo>, response: Response<GiphyPojo>) {
+                val gifs = response.body()
+                gifs?.data?.forEach {
+                    GifFragment.gifImages.add(it.images.previewGif.url)
+                }
+            }
+
+            override fun onFailure(call: Call<GiphyPojo>, t: Throwable) {
+                Log.d("DEBUG", "Could not get gifs")
+            }
+        })
+    }
 }
