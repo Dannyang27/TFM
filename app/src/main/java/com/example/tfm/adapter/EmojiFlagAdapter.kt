@@ -9,7 +9,6 @@ import android.widget.Button
 import com.example.tfm.R
 import com.example.tfm.activity.ChatActivity
 import kotlinx.coroutines.*
-import kotlin.coroutines.CoroutineContext
 
 class EmojiFlagAdapter : BaseAdapter, CoroutineScope {
 
@@ -33,7 +32,7 @@ class EmojiFlagAdapter : BaseAdapter, CoroutineScope {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val columns = 9
         val inflater = context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val emojiView = inflater.inflate(R.layout.emoji_viewholder, null)
+        val emojiView = inflater.inflate(R.layout.viewholder_emoji, null)
         val width = parent?.width
 
         if(width?.compareTo(0)!! > 0){

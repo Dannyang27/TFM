@@ -1,5 +1,6 @@
 package com.example.tfm.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -29,23 +30,21 @@ class EmojiFragment : Fragment(){
             val fragmentAdapter = EmojiPagerAdapter(it.supportFragmentManager)
             specialKeyboard.adapter = fragmentAdapter
             emojiTabs.setupWithViewPager(specialKeyboard)
-            setupTabIcons()
+            setupTabIcons(it)
         }
 
         return view
     }
 
-    private fun setupTabIcons(){
-        activity?.let {
-            emojiTabs.getTabAt(0)?.icon = it.getDrawable(TabIcon.MOST_USED.icon)
-            emojiTabs.getTabAt(1)?.icon = it.getDrawable(TabIcon.FACES.icon)
-            emojiTabs.getTabAt(2)?.icon = it.getDrawable(TabIcon.ANIMAL.icon)
-            emojiTabs.getTabAt(3)?.icon = it.getDrawable(TabIcon.FOOD.icon)
-            emojiTabs.getTabAt(4)?.icon = it.getDrawable(TabIcon.SPORT.icon)
-            emojiTabs.getTabAt(5)?.icon = it.getDrawable(TabIcon.VEHICLE.icon)
-            emojiTabs.getTabAt(6)?.icon = it.getDrawable(TabIcon.IDEA.icon)
-            emojiTabs.getTabAt(7)?.icon = it.getDrawable(TabIcon.CHARACTER.icon)
-            emojiTabs.getTabAt(8)?.icon = it.getDrawable(TabIcon.FLAG.icon)
-        }
+    private fun setupTabIcons(ctx : Context){
+        emojiTabs.getTabAt(0)?.icon = ctx.getDrawable(TabIcon.MOST_USED.icon)
+        emojiTabs.getTabAt(1)?.icon = ctx.getDrawable(TabIcon.FACES.icon)
+        emojiTabs.getTabAt(2)?.icon = ctx.getDrawable(TabIcon.ANIMAL.icon)
+        emojiTabs.getTabAt(3)?.icon = ctx.getDrawable(TabIcon.FOOD.icon)
+        emojiTabs.getTabAt(4)?.icon = ctx.getDrawable(TabIcon.SPORT.icon)
+        emojiTabs.getTabAt(5)?.icon = ctx.getDrawable(TabIcon.VEHICLE.icon)
+        emojiTabs.getTabAt(6)?.icon = ctx.getDrawable(TabIcon.IDEA.icon)
+        emojiTabs.getTabAt(7)?.icon = ctx.getDrawable(TabIcon.CHARACTER.icon)
+        emojiTabs.getTabAt(8)?.icon = ctx.getDrawable(TabIcon.FLAG.icon)
     }
 }

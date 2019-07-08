@@ -33,7 +33,7 @@ class EmojiGridViewAdapter : BaseAdapter, CoroutineScope{
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val columns = 9
         val inflater = context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val emojiView = inflater.inflate(R.layout.emoji_viewholder, null)
+        val emojiView = inflater.inflate(R.layout.viewholder_emoji, null)
         val width = parent?.width
 
         if(width?.compareTo(0)!! > 0){

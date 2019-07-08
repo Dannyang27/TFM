@@ -6,30 +6,22 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
-import com.google.android.material.tabs.TabLayout
 import androidx.emoji.text.EmojiCompat
 import androidx.emoji.widget.EmojiEditText
 import androidx.core.app.ActivityCompat
-import androidx.core.content.FileProvider
-import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
 import androidx.emoji.bundled.BundledEmojiCompatConfig
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager.widget.ViewPager
 import com.example.tfm.R
 import com.example.tfm.adapter.ChatAdapter
-import com.example.tfm.adapter.EmojiPagerAdapter
 import com.example.tfm.enum.MessageType
 import com.example.tfm.enum.Mode
 import com.example.tfm.enum.Sender
-import com.example.tfm.enum.TabIcon
 import com.example.tfm.fragments.EmojiFragment
 import com.example.tfm.fragments.GifFragment
 import com.example.tfm.model.Message
@@ -39,10 +31,6 @@ import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.coroutines.*
 import org.jetbrains.anko.toast
 import java.io.File
-import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.coroutines.CoroutineContext
 
 class ChatActivity : AppCompatActivity(), CoroutineScope {
 
@@ -50,7 +38,6 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
     override val coroutineContext get() = Dispatchers.Default + job
 
     private lateinit var viewManager: RecyclerView.LayoutManager
-
     private lateinit var container: FrameLayout
     private lateinit var bottomNavBar: BottomNavigationView
 
@@ -93,8 +80,6 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         activeFragment = fragment
     }
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initEmoji()
@@ -119,7 +104,6 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
 
         viewManager = androidx.recyclerview.widget.LinearLayoutManager(this)
         viewAdapter = ChatAdapter(messages)
-
 
         messagesRecyclerView = findViewById<RecyclerView>(R.id.chat_recyclerview).apply {
             setHasFixedSize(true)
@@ -338,7 +322,6 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
             withContext(Dispatchers.Main) {
                 container.visibility = View.VISIBLE
                 bottomNavBar.visibility = View.VISIBLE
-
             }
         }
     }
