@@ -1,6 +1,7 @@
 package com.example.tfm.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.example.tfm.R
+import com.example.tfm.activity.ImageSenderActivity
 import com.example.tfm.model.giphy.Gifs
 import com.example.tfm.model.giphy.GiphyPojo
 import org.jetbrains.anko.toast
@@ -35,10 +37,12 @@ class GifAdapter : BaseAdapter{
 
         val gifImage = gifView.findViewById(R.id.gif_image) as ImageView
         val gif = gifs[position]
-        Glide.with(context).asGif().load(gif.previewGif.url).centerCrop().into(gifImage)
+        val gifUrl = gif.previewGif.url
+        Glide.with(context).asGif().load(gifUrl).centerCrop().into(gifImage)
 
         gifImage.setOnClickListener {
             context.toast( gif.original.url)
+            ImageSenderActivity.launchActivity(context, gifUrl)
         }
 
         return gifView

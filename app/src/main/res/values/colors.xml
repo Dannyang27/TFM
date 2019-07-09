@@ -8,4 +8,5 @@
     <color name="colorDivider">#EDEDED</color>
     <color name="colorBackground">#F5F5F5</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="imageSenderBackground">#444444</color>
 </resources>

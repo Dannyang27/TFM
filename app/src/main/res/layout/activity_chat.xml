@@ -41,7 +41,6 @@
                             android:textSize="@dimen/text_large"
                             android:textStyle="bold"
                             android:paddingBottom="20dp"/>
-
                 </LinearLayout>
 
             </androidx.appcompat.widget.Toolbar>
@@ -75,7 +74,7 @@
                 <ImageButton
                         android:layout_width="20dp"
                         android:layout_height="40dp"
-                        app:srcCompat="@drawable/send_message"
+                        app:srcCompat="@android:drawable/ic_menu_send"
                         android:id="@+id/sendButton"
                         android:layout_weight="1"
                         android:scaleType="fitXY"
