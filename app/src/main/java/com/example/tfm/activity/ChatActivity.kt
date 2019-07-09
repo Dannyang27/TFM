@@ -5,11 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import androidx.emoji.text.EmojiCompat
 import androidx.emoji.widget.EmojiEditText
 import androidx.core.app.ActivityCompat
@@ -26,7 +24,6 @@ import com.example.tfm.enum.Mode
 import com.example.tfm.enum.Sender
 import com.example.tfm.fragments.EmojiFragment
 import com.example.tfm.fragments.GifFragment
-import com.example.tfm.model.MediaContent
 import com.example.tfm.model.Message
 import com.example.tfm.util.KeyboardUtil
 import com.google.android.material.bottomnavigation.BottomNavigationView

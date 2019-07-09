@@ -1,7 +1,6 @@
 package com.example.tfm.adapter
 
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +11,6 @@ import com.example.tfm.R
 import com.example.tfm.activity.ImageSenderActivity
 import com.example.tfm.enum.MediaSource
 import com.example.tfm.model.giphy.Gifs
-import com.example.tfm.model.giphy.GiphyPojo
-import org.jetbrains.anko.toast
 
 class GifAdapter : BaseAdapter{
 
