@@ -20,7 +20,6 @@ import com.example.tfm.R
 import com.example.tfm.adapter.ChatAdapter
 import com.example.tfm.enum.MediaSource
 import com.example.tfm.enum.MessageType
-import com.example.tfm.enum.Mode
 import com.example.tfm.enum.Sender
 import com.example.tfm.fragments.EmojiFragment
 import com.example.tfm.fragments.GifFragment
@@ -179,7 +178,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         })
 
         emojiButton.setOnClickListener {
-            showSpecialKeyboard(Mode.EMOJI)
+            showSpecialKeyboard()
         }
         pictureButton.setOnClickListener {
             closeSpecialKeyboard()
@@ -292,14 +291,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         bottomNavBar.visibility = View.GONE
     }
 
-    private fun showSpecialKeyboard(mode : Mode){
-        when(mode){
-            Mode.EMOJI -> {
-            }
-            Mode.GIF -> {
-            }
-        }
-
+    private fun showSpecialKeyboard(){
         KeyboardUtil.hideKeyboard(this)
 
         launch {
