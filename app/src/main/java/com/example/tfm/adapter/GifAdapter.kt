@@ -10,6 +10,7 @@ import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.example.tfm.R
 import com.example.tfm.activity.ImageSenderActivity
+import com.example.tfm.enum.MediaSource
 import com.example.tfm.model.giphy.Gifs
 import com.example.tfm.model.giphy.GiphyPojo
 import org.jetbrains.anko.toast
@@ -40,7 +41,7 @@ class GifAdapter : BaseAdapter{
         Glide.with(context).asGif().load(gif.previewGif.url).centerCrop().into(gifImage)
 
         gifImage.setOnClickListener {
-            ImageSenderActivity.launchActivity(context, gif.original.url)
+            ImageSenderActivity.launchActivityWithGif(context, gif.original.url, MediaSource.GIF)
         }
 
         return gifView

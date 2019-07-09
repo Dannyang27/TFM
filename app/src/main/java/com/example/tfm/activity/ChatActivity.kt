@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import androidx.emoji.text.EmojiCompat
 import androidx.emoji.widget.EmojiEditText
 import androidx.core.app.ActivityCompat
@@ -19,6 +20,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
 import com.example.tfm.adapter.ChatAdapter
+import com.example.tfm.enum.MediaSource
 import com.example.tfm.enum.MessageType
 import com.example.tfm.enum.Mode
 import com.example.tfm.enum.Sender
@@ -227,46 +229,25 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
 
         when(requestCode){
             GALLERY_CODE ->{
-                if(data != null){
-                    val uri = data.data
-                    val filePath : Array<String> = arrayOf(MediaStore.Images.Media.DATA)
-                    val cursor = contentResolver.query(uri, filePath, null, null, null)
-                    if(cursor.moveToFirst()){
-                        val columnIndex = cursor.getColumnIndex(filePath[0])
-                        val fileP = cursor.getString(columnIndex)
-                        val imageBitmap = BitmapFactory.decodeFile(fileP)
-
-                        messages.add(Message(Sender.OWN, MessageType.PHOTO, MediaContent(imageBitmap, "captionTest"), 1 , "EN"))
-                        messagesRecyclerView.scrollToPosition(viewAdapter.itemCount - 1)
-                        viewAdapter.notifyDataSetChanged()
-                    }
-                    cursor.close()
-                }else{
-                    toast("No image loaded")
-                }
+                data?.let{ ImageSenderActivity.launchActivityWithImage(this, it.data, MediaSource.GALLERY) } ?: toast("No image loaded")
             }
 
             CAMERA_MODE -> {
-                if(data != null){
-                    val imageBitmap = data.extras.get("data") as Bitmap
+                data?.let{
+                    val imageBitmap = it.extras?.get("data") as Bitmap
 
                     messages.add(Message(Sender.OWN, MessageType.PHOTO, imageBitmap, 1 , "EN"))
                     messagesRecyclerView.scrollToPosition(viewAdapter.itemCount - 1)
                     viewAdapter.notifyDataSetChanged()
-                }else{
-                    toast("Could not get any shot")
-                }
+                } ?: toast("Could not get any shot")
             }
 
             ATTACHMENT_MODE -> {
-                if(data != null){
-                    val uploadFileUri = data.data
-                    val file = File(uploadFileUri.path)
+                data?.let{
+                    val uploadFileUri = it.data
+                    val file = File(uploadFileUri?.path)
                     toast(file.absolutePath)
-                }
-                else{
-                    toast("Didnt chose any file")
-                }
+                }?: toast("Didnt chose any file")
             }
 
             else -> toast("Other")
