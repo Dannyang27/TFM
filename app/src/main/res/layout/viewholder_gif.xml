@@ -3,12 +3,13 @@
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="200dp">
+              android:layout_height="200dp"
+              android:elevation="4dp">
 
     <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:srcCompat="@drawable/dwight"
+            app:srcCompat="@drawable/white_placeholder"
             android:id="@+id/gif_image"
             android:padding="2dp"/>
 </LinearLayout>

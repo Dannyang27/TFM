@@ -110,7 +110,7 @@ class ImageSenderActivity : AppCompatActivity() {
                     .into(media)
 
                 sendBtn.setOnClickListener {
-                    ChatActivity.sendMessage(Message(Sender.OWN, MessageType.PHOTO, MediaContent(imageBitmap, "captionTest"), 1 , "EN"))
+                    ChatActivity.sendMessage(Message(Sender.OWN, MessageType.PHOTO, MediaContent(imageBitmap, ""), 1 , "EN"))
                     onBackPressed()
                 }
             }

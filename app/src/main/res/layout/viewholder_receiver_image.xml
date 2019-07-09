@@ -5,7 +5,8 @@
                 android:paddingVertical="10dp"
                 android:paddingLeft="15dp"
                 android:paddingRight="60dp"
-                android:clipToPadding="false">
+                android:clipToPadding="false"
+                android:elevation="4dp">
 
     <LinearLayout
             android:layout_width="250dp"
@@ -14,7 +15,7 @@
         <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:srcCompat="@drawable/angela_sample"
+                app:srcCompat="@drawable/white_placeholder"
                 android:scaleType="centerCrop"
                 android:id="@+id/receiver_image_viewholder"
                 android:background="@drawable/sender_message" />
