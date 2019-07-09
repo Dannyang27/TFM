@@ -10,18 +10,22 @@
                 android:clipToPadding="false">
     <LinearLayout
             android:layout_width="250dp"
-            android:layout_height="200dp"
-            android:background="@drawable/roundcorner">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/colorAccent">
 
         <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:srcCompat="@drawable/angela_sample"
+                android:layout_height="200dp"
+                app:srcCompat="@drawable/white_placeholder"
                 android:scaleType="centerCrop"
-                android:id="@+id/sender_image_viewholder"
-                android:background="@drawable/sender_message" />
-
+                android:id="@+id/sender_image_viewholder"/>
+        <androidx.emoji.widget.EmojiTextView
+                android:id="@+id/sender_caption_viewholder"
+                android:padding="5dp"
+                android:textSize="@dimen/text_large"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
     </LinearLayout>
-
-
 </RelativeLayout>

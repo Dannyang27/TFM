@@ -24,6 +24,7 @@ import com.example.tfm.enum.Mode
 import com.example.tfm.enum.Sender
 import com.example.tfm.fragments.EmojiFragment
 import com.example.tfm.fragments.GifFragment
+import com.example.tfm.model.MediaContent
 import com.example.tfm.model.Message
 import com.example.tfm.util.KeyboardUtil
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -59,6 +60,11 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         val emojiFragment = EmojiFragment.newInstance()
         val gifFragment = GifFragment.newInstance()
         var activeFragment: Fragment = emojiFragment
+
+        fun sendMessage(message: Message){
+            messages.add(message)
+            viewAdapter.notifyDataSetChanged()
+        }
     }
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -229,7 +235,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
                         val fileP = cursor.getString(columnIndex)
                         val imageBitmap = BitmapFactory.decodeFile(fileP)
 
-                        messages.add(Message(Sender.OWN, MessageType.PHOTO, imageBitmap, 1 , "EN"))
+                        messages.add(Message(Sender.OWN, MessageType.PHOTO, MediaContent(imageBitmap, "captionTest"), 1 , "EN"))
                         messagesRecyclerView.scrollToPosition(viewAdapter.itemCount - 1)
                         viewAdapter.notifyDataSetChanged()
                     }

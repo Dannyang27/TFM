@@ -5,9 +5,11 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
 import com.example.tfm.R
 import com.example.tfm.enum.MessageType
 import com.example.tfm.enum.Sender
+import com.example.tfm.model.MediaContent
 import com.example.tfm.model.Message
 import com.example.tfm.viewHolder.ReceiverImageViewHolder
 import com.example.tfm.viewHolder.ReceiverMessageViewHolder
@@ -26,7 +28,7 @@ class ChatAdapter(private val messages : MutableList<Message>) : RecyclerView.Ad
                     viewType = 0
                 }
 
-                MessageType.PHOTO -> {
+                MessageType.PHOTO, MessageType.GIF -> {
                     viewType = 2
                 }
 
@@ -90,7 +92,21 @@ class ChatAdapter(private val messages : MutableList<Message>) : RecyclerView.Ad
             }
 
             is SenderImageViewHolder ->  {
-                holder.image.setImageBitmap(message.body as Bitmap)
+                val mediaContent = message.body as MediaContent
+                if(message.messageType == MessageType.PHOTO){
+                    holder.image.setImageBitmap(mediaContent.content as Bitmap)
+                }else{
+                    Glide.with(holder.image.context)
+                        .asGif()
+                        .centerCrop()
+                        .load(mediaContent.content as String)
+                        .into(holder.image)
+                }
+
+                if(mediaContent.caption.isNotEmpty()){
+                    holder.caption.text = mediaContent.caption
+                    holder.caption.visibility = View.VISIBLE
+                }
             }
 
             is ReceiverImageViewHolder -> {

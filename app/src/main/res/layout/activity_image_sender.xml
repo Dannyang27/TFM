@@ -30,6 +30,14 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="8">
+
+        <ImageView
+                android:id="@+id/image_sender_media"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                app:srcCompat="@drawable/white_placeholder"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"/>
     </LinearLayout>
 
     <LinearLayout
@@ -39,6 +47,7 @@
             android:orientation="horizontal">
 
         <androidx.emoji.widget.EmojiEditText
+                android:id="@+id/image_sender_caption"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:inputType="textMultiLine|textShortMessage"
@@ -49,10 +58,10 @@
                 android:layout_marginRight="5dp"
                 android:layout_weight="8"/>
         <ImageButton
+                android:id="@+id/image_sender_button"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 app:srcCompat="@android:drawable/ic_menu_send"
-                android:id="@+id/image_sender_button"
                 android:background="@drawable/round_button"
                 android:scaleType="centerCrop"
                 android:padding="10dp"

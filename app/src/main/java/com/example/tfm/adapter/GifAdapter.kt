@@ -37,12 +37,10 @@ class GifAdapter : BaseAdapter{
 
         val gifImage = gifView.findViewById(R.id.gif_image) as ImageView
         val gif = gifs[position]
-        val gifUrl = gif.previewGif.url
-        Glide.with(context).asGif().load(gifUrl).centerCrop().into(gifImage)
+        Glide.with(context).asGif().load(gif.previewGif.url).centerCrop().into(gifImage)
 
         gifImage.setOnClickListener {
-            context.toast( gif.original.url)
-            ImageSenderActivity.launchActivity(context, gifUrl)
+            ImageSenderActivity.launchActivity(context, gif.original.url)
         }
 
         return gifView
