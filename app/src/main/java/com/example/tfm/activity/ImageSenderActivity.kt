@@ -59,7 +59,6 @@ class ImageSenderActivity : AppCompatActivity() {
         }
 
         sendBtn.setOnClickListener {
-            toast("Sending Gif...")
             ChatActivity.sendMessage(Message(Sender.OWN, MessageType.GIF, MediaContent(url, captionEt.text.toString()), 10, "EN" ))
             onBackPressed()
         }

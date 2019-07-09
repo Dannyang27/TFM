@@ -127,6 +127,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
     override fun onResume() {
         super.onResume()
         messagesRecyclerView.scrollToPosition(viewAdapter.itemCount - 1)
+        KeyboardUtil.hideKeyboard(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
