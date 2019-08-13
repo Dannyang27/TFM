@@ -24,7 +24,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:gravity="center_horizontal"
-                        android:layout_marginLeft="50dp">
+                        android:layout_marginLeft="?android:attr/actionBarSize" >
 
                     <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/chat_profile_image"

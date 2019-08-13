@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".activity.LocationSenderActivity">
+
+    <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:theme="?attr/actionBarTheme"
+            android:minHeight="?attr/actionBarSize"
+            tools:layout_editor_absoluteY="-1dp"
+            tools:layout_editor_absoluteX="8dp"
+            android:id="@+id/location_sender_toolbar">
+        <TextView
+                android:text="@string/current_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/location_toolbar_title"
+                android:textSize="@dimen/text_large"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_marginEnd="?android:attr/actionBarSize" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <com.google.android.gms.maps.MapView
+                android:id="@+id/location_mapview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+    </RelativeLayout>
+</LinearLayout>

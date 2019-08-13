@@ -199,6 +199,9 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         locationButton.setOnClickListener {
             toast("Location")
             closeSpecialKeyboard()
+
+            val locationIntent = Intent(this, LocationSenderActivity::class.java)
+            startActivity(locationIntent)
         }
         attachmentButton.setOnClickListener {
             openAttachment()
@@ -295,6 +298,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         KeyboardUtil.hideKeyboard(this)
 
         launch {
+            // avoids overslapping from soft keyboard and emoji keyboard
             delay(50L)
             withContext(Dispatchers.Main) {
                 container.visibility = View.VISIBLE

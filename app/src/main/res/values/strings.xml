@@ -34,4 +34,6 @@
     <string name="emoji">Emoji</string>
     <string name="gif">Gif</string>
     <string name="caption_hint">Add a caption</string>
+    <string name="search_title">Search</string>
+    <string name="current_location">Dénia</string>
 </resources>
