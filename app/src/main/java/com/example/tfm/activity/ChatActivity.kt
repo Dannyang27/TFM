@@ -197,7 +197,6 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
             closeSpecialKeyboard()
         }
         locationButton.setOnClickListener {
-            toast("Location")
             closeSpecialKeyboard()
 
             val locationIntent = Intent(this, LocationSenderActivity::class.java)

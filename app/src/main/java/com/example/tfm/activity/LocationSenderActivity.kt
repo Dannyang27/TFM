@@ -11,10 +11,11 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 
-class LocationSenderActivity : AppCompatActivity(), OnMapReadyCallback {
+class LocationSenderActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapLongClickListener {
 
     private lateinit var mapview: MapView
     private var googleMap: GoogleMap? = null
@@ -88,7 +89,15 @@ class LocationSenderActivity : AppCompatActivity(), OnMapReadyCallback {
             val latlng = LatLng(38.8407800, 0.1057400)
             moveCamera(CameraUpdateFactory.newLatLng(latlng))
             addMarker(MarkerOptions().position(latlng))
+            setOnMapLongClickListener(this@LocationSenderActivity)
         }
+    }
 
+    override fun onMapLongClick(newPoint: LatLng) {
+        //remove all markers
+        googleMap?.clear()
+        googleMap?.addMarker(MarkerOptions()
+            .position(newPoint)
+            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)))
     }
 }
