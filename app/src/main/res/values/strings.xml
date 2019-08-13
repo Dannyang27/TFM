@@ -36,4 +36,7 @@
     <string name="caption_hint">Add a caption</string>
     <string name="search_title">Search</string>
     <string name="current_location">Dénia</string>
+    <string name="send_location_text">Send location</string>
+    <string name="place">Current location</string>
+    <string name="pinned_location_sample">Avenida Miguel Hernandez, 10B</string>
 </resources>
