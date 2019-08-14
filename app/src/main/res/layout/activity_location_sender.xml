@@ -71,6 +71,7 @@
                     android:layout_height="1dp"
                     android:background="?android:attr/listDivider"/>
                 <TextView
+                        android:id="@+id/location_sender_address"
                         android:text="@string/pinned_location_sample"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -81,6 +82,7 @@
                         android:paddingRight="20dp"
                         android:paddingBottom="15dp"/>
                 <Button
+                        android:id="@+id/location_sender_button"
                         android:text="@string/send_location_text"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
