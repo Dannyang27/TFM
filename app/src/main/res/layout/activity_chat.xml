@@ -181,7 +181,8 @@
                         app:menu="@menu/emoji_gif_menu"
                         app:labelVisibilityMode="unlabeled"
                         app:layout_constraintTop_toBottomOf="@id/emoji_container"
-                        android:visibility="gone"/>
+                        android:visibility="gone"
+                        android:elevation="16dp"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </RelativeLayout>
 </LinearLayout>
