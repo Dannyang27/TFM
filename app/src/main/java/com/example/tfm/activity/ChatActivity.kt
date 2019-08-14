@@ -4,15 +4,18 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
+import android.icu.text.SimpleDateFormat
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import androidx.emoji.text.EmojiCompat
 import androidx.emoji.widget.EmojiEditText
 import androidx.core.app.ActivityCompat
 import android.view.*
 import android.widget.FrameLayout
+import androidx.core.content.FileProvider
 import androidx.emoji.bundled.BundledEmojiCompatConfig
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
@@ -30,6 +33,8 @@ import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.coroutines.*
 import org.jetbrains.anko.toast
 import java.io.File
+import java.io.IOException
+import java.util.*
 
 class ChatActivity : AppCompatActivity(), CoroutineScope {
 
@@ -43,6 +48,8 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
     private val GALLERY_CODE = 100
     private val CAMERA_MODE = 101
     private val ATTACHMENT_MODE = 102
+
+    var currentPhotoPath: String? = null
 
     val PERMISSION_ALL = 1
     val PERMISSIONS = arrayOf(
@@ -231,13 +238,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
             }
 
             CAMERA_MODE -> {
-                data?.let{
-                    val imageBitmap = it.extras?.get("data") as Bitmap
-
-                    messages.add(Message(Sender.OWN, MessageType.PHOTO, imageBitmap, 1 , "EN"))
-                    messagesRecyclerView.scrollToPosition(viewAdapter.itemCount - 1)
-                    viewAdapter.notifyDataSetChanged()
-                } ?: toast("Could not get any shot")
+              //TODO
             }
 
             ATTACHMENT_MODE -> {
@@ -273,7 +274,27 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
     }
 
     private fun openCamera() {
-
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            // Ensure that there's a camera activity to handle the intent
+            takePictureIntent.resolveActivity(packageManager)?.also {
+                // Create the File where the photo should go
+                val photoFile: File? = try {
+                    createImageFile()
+                } catch (ex: IOException) {
+                    null
+                }
+                // Continue only if the File was successfully created
+                photoFile?.also {
+                    val photoURI: Uri = FileProvider.getUriForFile(
+                        this,
+                        "com.example.tfm.fileprovider",
+                        it
+                    )
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                    startActivityForResult(takePictureIntent, CAMERA_MODE)
+                }
+            }
+        }
     }
 
     private fun hasPermissions(context: Context, permissions: Array<String>): Boolean = permissions.all {
@@ -303,6 +324,21 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
                 container.visibility = View.VISIBLE
                 bottomNavBar.visibility = View.VISIBLE
             }
+        }
+    }
+
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        // Create an image file name
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir: File = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(
+            "JPEG_${timeStamp}_", /* prefix */
+            ".jpg", /* suffix */
+            storageDir /* directory */
+        ).apply {
+            // Save a file: path for use with ACTION_VIEW intents
+            currentPhotoPath = absolutePath
         }
     }
 }
