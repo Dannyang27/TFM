@@ -7,7 +7,6 @@ import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
-import android.util.Log
 import android.widget.Button
 import android.widget.SearchView
 import android.widget.TextView
@@ -44,6 +43,22 @@ class LocationSenderActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMa
         val searchView: SearchView = findViewById(R.id.location_searchview)
         val locationSendButton: Button = findViewById(R.id.location_sender_button)
         locationAddressTv = findViewById(R.id.location_sender_address)
+
+        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                toast("query submited")
+                val address = Geocoder(this@LocationSenderActivity, Locale.getDefault())
+                    .getFromLocationName(query, 1)
+
+                moveToLocation(LatLng(address[0].latitude, address[0].longitude))
+                searchView.clearFocus()
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return true
+            }
+        })
 
         locationSendButton.setOnClickListener {
             toast("Location sent...")

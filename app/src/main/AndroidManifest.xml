@@ -26,8 +26,6 @@
                 android:value="AIzaSyDonzV1O6YpOHKE0QwNLhzKqMmlwKkm9ng"/>
 
         <activity android:name=".activity.LocationSenderActivity">
-            <meta-data android:name="android.app.searchable"
-                       android:resource="@xml/searchable" />
         </activity>
         <activity
                 android:name=".activity.ImageSenderActivity"
