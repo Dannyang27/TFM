@@ -85,10 +85,12 @@ class ChatAdapter(private val messages : MutableList<Message>) : RecyclerView.Ad
         when(holder){
             is SenderMessageViewHolder -> {
                 holder.text.text = message.body as String
+                holder.time.text = "00:00"
             }
 
             is ReceiverMessageViewHolder ->{
                 holder.text.text = message.body as String
+                holder.time.text = "01:21"
             }
 
             is SenderImageViewHolder ->  {

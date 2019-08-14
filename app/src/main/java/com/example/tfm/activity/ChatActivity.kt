@@ -245,7 +245,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
                     val uploadFileUri = it.data
                     val file = File(uploadFileUri?.path)
                     toast(file.absolutePath)
-                }?: toast("Didnt chose any file")
+                } ?: toast("Didnt chose any file")
             }
 
             else -> toast("Other")

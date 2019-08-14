@@ -5,19 +5,30 @@
                 android:paddingVertical="10dp"
                 android:paddingRight="15dp"
                 android:paddingLeft="60dp"
-                android:clipToPadding="false">
-
-    <androidx.emoji.widget.EmojiTextView
+                android:gravity="right">
+    <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/senderMessage"
+            android:orientation="horizontal"
             android:background="@drawable/sender_message"
-            android:textColor="#fff"
             android:padding="10dp"
-            android:elevation="2dp"
-            android:textSize="18dp"
-            android:layout_alignParentRight="true"
-            android:text="Placeholder message"
-    />
+            android:elevation="2dp">
 
+        <androidx.emoji.widget.EmojiTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/senderMessage"
+                android:textColor="#fff"
+                android:textSize="18dp"
+                android:text="Placeholder message"/>
+
+        <TextView
+                android:id="@+id/sender_message_time"
+                android:text="@string/time_sample"
+                android:textColor="@color/colorBackground"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:padding="5dp"/>
+    </LinearLayout>
 </RelativeLayout>

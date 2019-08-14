@@ -4,18 +4,30 @@
                 android:layout_height="wrap_content"
                 android:paddingVertical="10dp"
                 android:paddingLeft="15dp"
-                android:paddingRight="60dp"
-                android:clipToPadding="false">
-
-    <androidx.emoji.widget.EmojiTextView
+                android:layout_marginRight="50dp">
+    <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/receiverMessage"
             android:background="@drawable/receiver_message"
-            android:paddingVertical="12dp"
-            android:paddingHorizontal="16dp"
             android:elevation="2dp"
-            android:textSize="18dp"
-            android:text="@string/long_text_sample"
-    />
+            android:paddingVertical="12dp"
+            android:paddingHorizontal="10dp">
+
+        <androidx.emoji.widget.EmojiTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/receiverMessage"
+                android:textSize="18dp"
+                android:text="@string/long_text_sample"
+                android:paddingRight="35dp"/>
+        <TextView
+                android:id="@+id/receiver_message_time"
+                android:text="@string/time_sample"
+                android:textColor="@color/imageSenderBackground"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/receiverMessage"
+                android:layout_alignRight="@+id/receiverMessage"
+                android:layout_marginLeft="20dp"/>
+    </RelativeLayout>
 </RelativeLayout>
