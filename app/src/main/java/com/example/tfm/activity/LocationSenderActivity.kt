@@ -34,6 +34,8 @@ class LocationSenderActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMa
     private lateinit var locationAddressTv: TextView
     private lateinit var toolbarTitle: TextView
 
+    private lateinit var currentLocation: LatLng
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_location_sender)
@@ -55,13 +57,16 @@ class LocationSenderActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMa
                 return true
             }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
+            override fun onQueryTextChange(newText: String): Boolean {
+                if(newText.isEmpty()){
+                    searchView.clearFocus()
+                }
                 return true
             }
         })
 
         locationSendButton.setOnClickListener {
-            toast("Location sent...")
+            toast("$currentLocation")
         }
 
         searchView.queryHint = getString(R.string.search_title)
@@ -142,11 +147,15 @@ class LocationSenderActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMa
     }
 
     private fun moveToLocation(location: LatLng){
-        googleMap?.clear()
-        googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 16F))
-        googleMap?.addMarker(MarkerOptions()
-            .position(location)
-            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)))
+        currentLocation = location
+
+        googleMap?.apply {
+            clear()
+            animateCamera(CameraUpdateFactory.newLatLngZoom(location, 16F))
+            addMarker(MarkerOptions()
+                .position(location)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)))
+        }
 
         val geocoder = Geocoder(this, Locale.getDefault())
         val address = geocoder.getFromLocation(location.latitude, location.longitude, 1)[0]
