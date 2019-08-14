@@ -74,11 +74,11 @@
                 <ImageButton
                         android:layout_width="20dp"
                         android:layout_height="40dp"
-                        app:srcCompat="@android:drawable/ic_menu_send"
+                        app:srcCompat="@drawable/send"
                         android:id="@+id/sendButton"
                         android:layout_weight="1"
                         android:scaleType="fitXY"
-                        android:padding="12dp"
+                        android:padding="8dp"
                         android:layout_marginLeft="5dp"
                         android:background="@drawable/round_button"/>
             </LinearLayout>

@@ -60,6 +60,7 @@
                     android:clickable="true"
                     app:srcCompat="@drawable/add_user"
                     android:id="@+id/fab"
+                    android:elevation="6dp"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
                     android:layout_margin="20dp"/>
