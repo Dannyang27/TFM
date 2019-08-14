@@ -33,13 +33,14 @@ class LocationSenderActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMa
     private val MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey"
     private lateinit var  fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationAddressTv: TextView
+    private lateinit var toolbarTitle: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_location_sender)
 
         val toolbar: Toolbar =  findViewById(R.id.location_sender_toolbar)
-        val toolbarTitle: TextView = findViewById(R.id.location_toolbar_title)
+        toolbarTitle = findViewById(R.id.location_toolbar_title)
         val searchView: SearchView = findViewById(R.id.location_searchview)
         val locationSendButton: Button = findViewById(R.id.location_sender_button)
         locationAddressTv = findViewById(R.id.location_sender_address)
@@ -47,7 +48,7 @@ class LocationSenderActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMa
         locationSendButton.setOnClickListener {
             toast("Location sent...")
         }
-        toolbarTitle.text = getString(R.string.current_location)
+
         searchView.queryHint = getString(R.string.search_title)
 
         setSupportActionBar(toolbar)
@@ -133,7 +134,8 @@ class LocationSenderActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMa
             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)))
 
         val geocoder = Geocoder(this, Locale.getDefault())
-        val address = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-        locationAddressTv.text = address[0].getAddressLine(0)
+        val address = geocoder.getFromLocation(location.latitude, location.longitude, 1)[0]
+        locationAddressTv.text = address.getAddressLine(0)
+        toolbarTitle.text = address.adminArea
     }
 }
