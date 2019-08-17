@@ -2,6 +2,7 @@ package com.example.tfm.activity
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -47,6 +48,7 @@ class ImageSenderActivity : AppCompatActivity() {
             this.source = source
             context.startActivity(intent)
         }
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,6 +58,8 @@ class ImageSenderActivity : AppCompatActivity() {
         media = findViewById(R.id.image_sender_media)
         sendBtn = findViewById(R.id.image_sender_button)
         captionEt = findViewById(R.id.image_sender_caption)
+
+        captionEt.setText("")
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -96,30 +100,34 @@ class ImageSenderActivity : AppCompatActivity() {
 
         uriString?.let{
             val uri = Uri.parse(it)
-
             val cursor = contentResolver.query(uri, filePath, null, null, null)
-            if(cursor.moveToFirst()){
+            if(cursor!!.moveToFirst()){
                 val columnIndex = cursor.getColumnIndex(filePath[0])
                 val fileP = cursor.getString(columnIndex)
-                val imageBitmap = BitmapFactory.decodeFile(fileP)
-
-                val imageAspectRatio = imageBitmap.height / imageBitmap.width
-
-                Glide.with(this)
-                    .load(imageBitmap)
-                    .override(media.width, media.width * imageAspectRatio)
-                    .into(media)
-
-                sendBtn.setOnClickListener {
-                    ChatActivity.sendMessage(Message(Sender.OWN, MessageType.PHOTO, MediaContent(imageBitmap, ""), 1 , "EN"))
-                    onBackPressed()
-                }
+                loadBitmap(BitmapFactory.decodeFile(fileP))
             }
             cursor.close()
         }
     }
 
     private fun loadImageFromCamera(){
-        //TODO
+        val uriString = intent.getStringExtra("imageUrl")
+        uriString?.let{
+            loadBitmap(BitmapFactory.decodeFile(it))
+        }
+    }
+
+    private fun loadBitmap(bitmap: Bitmap){
+        val imageAspectRatio = bitmap.height / bitmap.width
+
+        Glide.with(this)
+            .load(bitmap)
+            .override(media.width, media.width * imageAspectRatio)
+            .into(media)
+
+        sendBtn.setOnClickListener {
+            ChatActivity.sendMessage(Message(Sender.OWN, MessageType.PHOTO, MediaContent(bitmap, captionEt.text.toString()), 1 , "EN"))
+            onBackPressed()
+        }
     }
 }

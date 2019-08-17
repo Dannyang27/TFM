@@ -251,8 +251,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
 
                 CAMERA_MODE -> {
                     if(resultCode == RESULT_OK){
-                        sendMessage(Message(Sender.OWN, MessageType.PHOTO,
-                            MediaContent(BitmapFactory.decodeFile(currentPhotoPath), ""), 1, "EN"))
+                        ImageSenderActivity.launchActivityWithImage(this, Uri.parse(currentPhotoPath), MediaSource.CAMERA)
                     }
                 }
 
