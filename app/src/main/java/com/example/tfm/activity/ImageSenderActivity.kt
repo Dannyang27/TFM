@@ -104,9 +104,11 @@ class ImageSenderActivity : AppCompatActivity() {
                 val fileP = cursor.getString(columnIndex)
                 val imageBitmap = BitmapFactory.decodeFile(fileP)
 
+                val imageAspectRatio = imageBitmap.height / imageBitmap.width
+
                 Glide.with(this)
                     .load(imageBitmap)
-                    .centerCrop()
+                    .override(media.width, media.width * imageAspectRatio)
                     .into(media)
 
                 sendBtn.setOnClickListener {

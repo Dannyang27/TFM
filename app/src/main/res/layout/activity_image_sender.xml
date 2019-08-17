@@ -34,7 +34,7 @@
         <ImageView
                 android:id="@+id/image_sender_media"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="wrap_content"
                 app:srcCompat="@drawable/white_placeholder"
                 android:layout_gravity="center"/>
     </LinearLayout>
