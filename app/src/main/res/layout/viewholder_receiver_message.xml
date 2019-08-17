@@ -4,12 +4,13 @@
                 android:layout_height="wrap_content"
                 android:paddingVertical="10dp"
                 android:paddingLeft="15dp"
-                android:layout_marginRight="50dp">
-    <RelativeLayout
+                android:layout_marginRight="60dp">
+    <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/receiver_message"
             android:elevation="1dp"
+            android:orientation="vertical"
             android:paddingVertical="12dp"
             android:paddingHorizontal="10dp">
 
@@ -19,15 +20,14 @@
                 android:id="@+id/receiverMessage"
                 android:textSize="18dp"
                 android:text="@string/long_text_sample"
-                android:paddingRight="35dp"/>
+        />
         <TextView
                 android:id="@+id/receiver_message_time"
                 android:text="@string/time_sample"
                 android:textColor="@color/imageSenderBackground"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/receiverMessage"
-                android:layout_alignRight="@+id/receiverMessage"
-                android:layout_marginLeft="20dp"/>
-    </RelativeLayout>
+                android:layout_marginTop="5dp"
+                android:layout_alignBottom="@+id/receiverMessage"/>
+    </LinearLayout>
 </RelativeLayout>

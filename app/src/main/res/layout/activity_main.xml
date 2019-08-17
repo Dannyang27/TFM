@@ -24,6 +24,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/toolbar_title"
+                        android:textColor="@color/colorPrimaryText"
                         android:textSize="@dimen/text_large"
                         android:textStyle="bold"
                         android:gravity="center_horizontal"

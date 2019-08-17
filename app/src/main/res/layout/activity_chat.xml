@@ -39,6 +39,7 @@
                             android:layout_height="wrap_content"
                             android:id="@+id/chat_toolbar_title"
                             android:textSize="@dimen/text_large"
+                            android:textColor="@color/colorPrimaryText"
                             android:textStyle="bold"
                             android:paddingBottom="20dp"/>
                 </LinearLayout>
