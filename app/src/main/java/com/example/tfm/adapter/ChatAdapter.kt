@@ -15,6 +15,7 @@ import com.example.tfm.viewHolder.ReceiverImageViewHolder
 import com.example.tfm.viewHolder.ReceiverMessageViewHolder
 import com.example.tfm.viewHolder.SenderImageViewHolder
 import com.example.tfm.viewHolder.SenderMessageViewHolder
+import org.jetbrains.anko.toast
 
 class ChatAdapter(private val messages : MutableList<Message>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
@@ -22,31 +23,23 @@ class ChatAdapter(private val messages : MutableList<Message>) : RecyclerView.Ad
         var viewType: Int
         val message = messages[position]
 
-        if(message.sender == Sender.OWN){
-            when(message.messageType){
-                MessageType.MESSAGE -> {
-                    viewType = 0
+        when(message.sender){
+            Sender.OWN ->{
+                viewType = when(message.messageType){
+                    MessageType.MESSAGE -> 0
+                    MessageType.PHOTO, MessageType.GIF -> 2
+                    else ->  -1
                 }
-
-                MessageType.PHOTO, MessageType.GIF -> {
-                    viewType = 2
-                }
-
-                else -> viewType = -1
             }
-        }else{
-            when(message.messageType){
-                MessageType.MESSAGE -> {
-                    viewType = 1
+            Sender.OTHER -> {
+                viewType = when(message.messageType){
+                    MessageType.MESSAGE -> 1
+                    MessageType.PHOTO -> 3
+                    else ->  -1
                 }
-
-                MessageType.PHOTO -> {
-                    viewType = 3
-                }
-
-                else -> viewType = -1
             }
         }
+
         return viewType
     }
 
@@ -97,6 +90,9 @@ class ChatAdapter(private val messages : MutableList<Message>) : RecyclerView.Ad
                 val mediaContent = message.body as MediaContent
                 if(message.messageType == MessageType.PHOTO){
                     holder.image.setImageBitmap(mediaContent.content as Bitmap)
+                    holder.image.setOnClickListener {
+                        holder.image.context.toast("Image pressed, expanding...")
+                    }
                 }else{
                     Glide.with(holder.image.context)
                         .asGif()
