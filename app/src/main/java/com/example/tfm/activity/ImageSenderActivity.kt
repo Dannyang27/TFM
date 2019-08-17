@@ -77,9 +77,8 @@ class ImageSenderActivity : AppCompatActivity() {
         url?.let {
             Glide.with(media.context)
                 .asGif()
-                .centerCrop()
                 .load(url)
-                .override(media.width/4,media.height/4)
+                .override(media.width, media.width / 2)
                 .into(media)
 
             sendBtn.setOnClickListener {

@@ -60,7 +60,7 @@
                 android:id="@+id/image_sender_button"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                app:srcCompat="@android:drawable/ic_menu_send"
+                app:srcCompat="@drawable/send"
                 android:background="@drawable/round_button"
                 android:scaleType="centerCrop"
                 android:padding="10dp"
