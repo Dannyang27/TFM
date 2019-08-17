@@ -235,27 +235,29 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        when(requestCode){
-            GALLERY_CODE ->{
-                data.let{ ImageSenderActivity.launchActivityWithImage(this, it?.data, MediaSource.GALLERY) }
-            }
-
-            ATTACHMENT_MODE -> {
-                data.let{
-                    val uploadFileUri = it?.data
-                    val file = File(uploadFileUri?.path)
-                    toast(file.absolutePath)
+        if(resultCode != RESULT_CANCELED){
+            when(requestCode){
+                GALLERY_CODE ->{
+                    data.let{ ImageSenderActivity.launchActivityWithImage(this, it?.data, MediaSource.GALLERY) }
                 }
-            }
 
-            CAMERA_MODE -> {
-                if(resultCode == Activity.RESULT_OK){
-                    sendMessage(Message(Sender.OWN, MessageType.PHOTO,
-                        MediaContent(BitmapFactory.decodeFile(currentPhotoPath), ""), 1, "EN"))
+                ATTACHMENT_MODE -> {
+                    data.let{
+                        val uploadFileUri = it?.data
+                        val file = File(uploadFileUri?.path)
+                        toast(file.absolutePath)
+                    }
                 }
-            }
 
-            else -> toast("Other")
+                CAMERA_MODE -> {
+                    if(resultCode == RESULT_OK){
+                        sendMessage(Message(Sender.OWN, MessageType.PHOTO,
+                            MediaContent(BitmapFactory.decodeFile(currentPhotoPath), ""), 1, "EN"))
+                    }
+                }
+
+                else -> toast("Other")
+            }
         }
     }
 
