@@ -59,8 +59,6 @@ class ImageSenderActivity : AppCompatActivity() {
         sendBtn = findViewById(R.id.image_sender_button)
         captionEt = findViewById(R.id.image_sender_caption)
 
-        captionEt.setText("")
-
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
