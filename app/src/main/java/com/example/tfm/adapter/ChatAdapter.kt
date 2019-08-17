@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.example.tfm.R
 import com.example.tfm.enum.MessageType
 import com.example.tfm.enum.Sender
+import com.example.tfm.enum.ViewTypeEnum
 import com.example.tfm.model.MediaContent
 import com.example.tfm.model.Message
 import com.example.tfm.viewHolder.ReceiverImageViewHolder
@@ -44,32 +45,29 @@ class ChatAdapter(private val messages : MutableList<Message>) : RecyclerView.Ad
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        var view: View? = null
+        var view: View?
 
-        when(viewType){
-            0 -> {
+        return when( ViewTypeEnum.fromInt(viewType)){
+            ViewTypeEnum.OWN_MESSAGE -> {
                 view = LayoutInflater.from(parent.context).inflate(R.layout.viewholder_sender_message, parent, false)
                 return SenderMessageViewHolder(view)
             }
 
-            1 ->{
+            ViewTypeEnum.OTHER_MESSAGE ->{
                 view = LayoutInflater.from(parent.context).inflate(R.layout.viewholder_receiver_message, parent, false)
                 return ReceiverMessageViewHolder(view)
             }
 
-            2 -> {
+            ViewTypeEnum.OWN_MEDIA -> {
                 view = LayoutInflater.from(parent.context).inflate(R.layout.viewholder_sender_image, parent, false)
                 return SenderImageViewHolder(view)
             }
 
-            3 -> {
+            ViewTypeEnum.OTHER_MEDIA -> {
                 view = LayoutInflater.from(parent.context).inflate(R.layout.viewholder_receiver_image, parent, false)
                 return ReceiverImageViewHolder(view)
             }
         }
-
-        // TODO never happen I think
-        return ReceiverMessageViewHolder(view!!)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
