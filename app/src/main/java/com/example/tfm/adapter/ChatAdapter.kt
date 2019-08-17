@@ -108,7 +108,24 @@ class ChatAdapter(private val messages : MutableList<Message>) : RecyclerView.Ad
             }
 
             is ReceiverImageViewHolder -> {
-                // TODO
+                val mediaContent = message.body as MediaContent
+                if(message.messageType == MessageType.PHOTO){
+                    holder.image.setImageBitmap(mediaContent.content as Bitmap)
+                    holder.image.setOnClickListener {
+                        holder.image.context.toast("Image pressed, expanding...")
+                    }
+                }else{
+                    Glide.with(holder.image.context)
+                        .asGif()
+                        .centerCrop()
+                        .load(mediaContent.content as String)
+                        .into(holder.image)
+                }
+
+                if(mediaContent.caption.isNotEmpty()){
+                    holder.caption.text = mediaContent.caption
+                    holder.caption.visibility = View.VISIBLE
+                }
             }
         }
     }
