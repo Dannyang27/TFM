@@ -1,9 +1,11 @@
 package com.example.tfm.activity
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.icu.text.SimpleDateFormat
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -26,6 +28,7 @@ import com.example.tfm.enum.MessageType
 import com.example.tfm.enum.Sender
 import com.example.tfm.fragments.EmojiFragment
 import com.example.tfm.fragments.GifFragment
+import com.example.tfm.model.MediaContent
 import com.example.tfm.model.Message
 import com.example.tfm.util.KeyboardUtil
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -196,7 +199,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
                 ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL)
             }else{
                 closeSpecialKeyboard()
-                openCamera()
+                dispatchCameraIntent()
             }
         }
         micButton.setOnClickListener {
@@ -234,19 +237,22 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
 
         when(requestCode){
             GALLERY_CODE ->{
-                data?.let{ ImageSenderActivity.launchActivityWithImage(this, it.data, MediaSource.GALLERY) } ?: toast("No image loaded")
-            }
-
-            CAMERA_MODE -> {
-              //TODO
+                data.let{ ImageSenderActivity.launchActivityWithImage(this, it?.data, MediaSource.GALLERY) }
             }
 
             ATTACHMENT_MODE -> {
-                data?.let{
-                    val uploadFileUri = it.data
+                data.let{
+                    val uploadFileUri = it?.data
                     val file = File(uploadFileUri?.path)
                     toast(file.absolutePath)
-                } ?: toast("Didnt chose any file")
+                }
+            }
+
+            CAMERA_MODE -> {
+                if(resultCode == Activity.RESULT_OK){
+                    sendMessage(Message(Sender.OWN, MessageType.PHOTO,
+                        MediaContent(BitmapFactory.decodeFile(currentPhotoPath), ""), 1, "EN"))
+                }
             }
 
             else -> toast("Other")
@@ -270,30 +276,6 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
             val attachIntent = Intent(Intent.ACTION_GET_CONTENT)
             attachIntent.type = "*/*"
             startActivityForResult(Intent.createChooser(attachIntent, "Select file"), ATTACHMENT_MODE)
-        }
-    }
-
-    private fun openCamera() {
-        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-            // Ensure that there's a camera activity to handle the intent
-            takePictureIntent.resolveActivity(packageManager)?.also {
-                // Create the File where the photo should go
-                val photoFile: File? = try {
-                    createImageFile()
-                } catch (ex: IOException) {
-                    null
-                }
-                // Continue only if the File was successfully created
-                photoFile?.also {
-                    val photoURI: Uri = FileProvider.getUriForFile(
-                        this,
-                        "com.example.tfm.fileprovider",
-                        it
-                    )
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                    startActivityForResult(takePictureIntent, CAMERA_MODE)
-                }
-            }
         }
     }
 
@@ -327,17 +309,29 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         }
     }
 
+    private fun dispatchCameraIntent() {
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            takePictureIntent.resolveActivity(packageManager)?.also {
+                val photoFile: File? = try {
+                    createImageFile()
+                } catch (ex: IOException) {
+                    null
+                }
+
+                photoFile?.also {
+                    val photoURI: Uri = FileProvider.getUriForFile(this, "com.example.tfm.fileprovider", it)
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                    startActivityForResult(takePictureIntent, CAMERA_MODE)
+                }
+            }
+        }
+    }
+
     @Throws(IOException::class)
     private fun createImageFile(): File {
-        // Create an image file name
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val storageDir: File = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        return File.createTempFile(
-            "JPEG_${timeStamp}_", /* prefix */
-            ".jpg", /* suffix */
-            storageDir /* directory */
-        ).apply {
-            // Save a file: path for use with ACTION_VIEW intents
+        return File.createTempFile("JPEG_${timeStamp}_", ".jpg", storageDir).apply {
             currentPhotoPath = absolutePath
         }
     }
