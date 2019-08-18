@@ -14,10 +14,7 @@ import com.example.tfm.enum.ViewTypeEnum
 import com.example.tfm.model.MediaContent
 import com.example.tfm.model.Message
 import com.example.tfm.util.LogUtil
-import com.example.tfm.viewHolder.ReceiverImageViewHolder
-import com.example.tfm.viewHolder.ReceiverMessageViewHolder
-import com.example.tfm.viewHolder.SenderImageViewHolder
-import com.example.tfm.viewHolder.SenderMessageViewHolder
+import com.example.tfm.viewHolder.*
 import org.jetbrains.anko.toast
 
 class ChatAdapter(private val messages : MutableList<Message>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
@@ -31,6 +28,7 @@ class ChatAdapter(private val messages : MutableList<Message>) : RecyclerView.Ad
                 viewType = when(message.messageType){
                     MessageType.MESSAGE -> 0
                     MessageType.PHOTO, MessageType.GIF -> 2
+                    MessageType.LOCATION -> 4
                     else ->  -1
                 }
             }
@@ -49,7 +47,7 @@ class ChatAdapter(private val messages : MutableList<Message>) : RecyclerView.Ad
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         var view: View?
 
-        return when( ViewTypeEnum.fromInt(viewType)){
+        return when(ViewTypeEnum.fromInt(viewType)){
             ViewTypeEnum.OWN_MESSAGE -> {
                 view = LayoutInflater.from(parent.context).inflate(R.layout.viewholder_sender_message, parent, false)
                 return SenderMessageViewHolder(view)
@@ -68,6 +66,11 @@ class ChatAdapter(private val messages : MutableList<Message>) : RecyclerView.Ad
             ViewTypeEnum.OTHER_MEDIA -> {
                 view = LayoutInflater.from(parent.context).inflate(R.layout.viewholder_receiver_image, parent, false)
                 return ReceiverImageViewHolder(view)
+            }
+
+            ViewTypeEnum.LOCATION -> {
+                view = LayoutInflater.from(parent.context).inflate(R.layout.viewholder_location, parent, false)
+                return LocationViewHolder(view)
             }
         }
     }
@@ -126,6 +129,10 @@ class ChatAdapter(private val messages : MutableList<Message>) : RecyclerView.Ad
                     holder.caption.text = mediaContent.caption
                     holder.caption.visibility = View.VISIBLE
                 }
+            }
+
+            is LocationViewHolder -> {
+                //TODO fill viewholder
             }
         }
     }

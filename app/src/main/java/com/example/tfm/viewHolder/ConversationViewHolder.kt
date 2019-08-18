@@ -8,8 +8,8 @@ import com.example.tfm.R
 import de.hdodenhof.circleimageview.CircleImageView
 
 class ConversationViewHolder(view: View) : RecyclerView.ViewHolder(view){
-    val image = view.findViewById(R.id.profile_image) as CircleImageView
+    val image: CircleImageView = view.findViewById(R.id.profile_image)
     val name :EmojiTextView= view.findViewById(R.id.name_chat)
-    val lastTime = view.findViewById(R.id.last_message_time_chat) as TextView
+    val lastTime: TextView = view.findViewById(R.id.last_message_time_chat)
     val lastMessage :EmojiTextView = view.findViewById(R.id.last_message_chat)
 }
