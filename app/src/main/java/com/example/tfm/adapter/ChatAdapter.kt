@@ -1,6 +1,8 @@
 package com.example.tfm.adapter
 
+import android.content.Context
 import android.graphics.Bitmap
+import android.location.Address
 import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
@@ -8,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.example.tfm.R
+import com.example.tfm.activity.ChatActivity
 import com.example.tfm.enum.MessageType
 import com.example.tfm.enum.Sender
 import com.example.tfm.enum.ViewTypeEnum
@@ -15,10 +18,19 @@ import com.example.tfm.model.MediaContent
 import com.example.tfm.model.Message
 import com.example.tfm.util.LogUtil
 import com.example.tfm.viewHolder.*
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapsInitializer
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import org.jetbrains.anko.toast
 
-class ChatAdapter(private val messages : MutableList<Message>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class ChatAdapter(private val messages : MutableList<Message>, context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), OnMapReadyCallback{
 
+    private val context = context
+    private var googleMap: GoogleMap? = null
     override fun getItemViewType(position: Int): Int {
         var viewType: Int
         val message = messages[position]
@@ -132,10 +144,35 @@ class ChatAdapter(private val messages : MutableList<Message>) : RecyclerView.Ad
             }
 
             is LocationViewHolder -> {
-                //TODO fill viewholder
+                val address = message.body as Address
+                Log.d(LogUtil.TAG, "Lat: ${address.latitude} | Lng: ${address.longitude}")
+                Log.d(LogUtil.TAG, "Address Line: ${address.getAddressLine(0)}")
+
+                holder.place.text = address.getAddressLine(0)
+                holder.time.text = "11:11"
+
+                holder.mapView.onCreate(null)
+                holder.mapView.getMapAsync(this)
+
+
+                googleMap?.apply {
+                    Log.d(LogUtil.TAG, "Running...")
+                    val latLng = LatLng(address.latitude, address.longitude)
+
+//                    animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16F))
+//                    addMarker(MarkerOptions()
+//                        .position(latLng)
+//                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)))
+                }
+
             }
         }
     }
 
     override fun getItemCount() = messages.size
+
+    override fun onMapReady(googleMap: GoogleMap?) {
+        this.googleMap = googleMap
+        MapsInitializer.initialize(context)
+    }
 }

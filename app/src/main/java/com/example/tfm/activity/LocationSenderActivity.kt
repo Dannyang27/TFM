@@ -2,6 +2,7 @@ package com.example.tfm.activity
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +14,9 @@ import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import com.example.tfm.R
+import com.example.tfm.enum.MessageType
+import com.example.tfm.enum.Sender
+import com.example.tfm.model.Message
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -33,6 +37,7 @@ class LocationSenderActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMa
     private lateinit var  fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationAddressTv: TextView
     private lateinit var toolbarTitle: TextView
+    private lateinit var address: Address
 
     private lateinit var currentLocation: LatLng
 
@@ -70,7 +75,8 @@ class LocationSenderActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMa
         })
 
         locationSendButton.setOnClickListener {
-            toast("$currentLocation")
+            ChatActivity.sendMessage(Message(Sender.OWN, MessageType.LOCATION, address, 1, "EN"))
+            finish()
         }
 
         searchView.queryHint = getString(R.string.search_title)
@@ -161,7 +167,7 @@ class LocationSenderActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMa
         }
 
         val geocoder = Geocoder(this, Locale.getDefault())
-        val address = geocoder.getFromLocation(location.latitude, location.longitude, 1)[0]
+        address = geocoder.getFromLocation(location.latitude, location.longitude, 1)[0]
         locationAddressTv.text = address.getAddressLine(0)
         toolbarTitle.text = address.adminArea
     }
