@@ -40,6 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
+                app:cardElevation="4dp"
                 android:layout_margin="20dp">
             <SearchView
                     android:layout_width="match_parent"
@@ -54,6 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:orientation="vertical"
+                android:elevation="4dp"
                 android:background="@drawable/bg_rounded_top_corner">
                 <RelativeLayout
                         android:layout_width="match_parent"

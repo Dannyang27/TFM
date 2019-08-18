@@ -52,10 +52,10 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
     private val CAMERA_MODE = 101
     private val ATTACHMENT_MODE = 102
 
-    var currentPhotoPath: String? = null
+    private var currentPhotoPath: String? = null
 
-    val PERMISSION_ALL = 1
-    val PERMISSIONS = arrayOf(
+    private val PERMISSION_ALL = 1
+    private val PERMISSIONS = arrayOf(
         Manifest.permission.CAMERA,
         Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
