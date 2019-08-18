@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.GridView
-import android.widget.ListAdapter
 import androidx.fragment.app.Fragment
 import com.example.tfm.R
 import com.example.tfm.adapter.GifAdapter
@@ -16,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import androidx.appcompat.widget.SearchView
+import com.example.tfm.util.KeyboardUtil
 
 class GifFragment : Fragment(), CoroutineScope{
 
@@ -43,8 +43,7 @@ class GifFragment : Fragment(), CoroutineScope{
 
         searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
-                gifImages.clear()
-                adapter.notifyDataSetChanged()
+                KeyboardUtil.hideKeyboard(activity!!)
                 launch {
                     RetrofitClient.getSearchGifFromGiphy(query!!)
                 }

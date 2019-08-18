@@ -46,8 +46,14 @@ object RetrofitClient {
 
             override fun onResponse(call: Call<GiphyPojo>, response: Response<GiphyPojo>) {
                 val gifs = response.body()
-                gifs?.data?.forEach {
-                    GifFragment.gifImages.add(it.gifs)
+
+                if(gifs?.data?.size != 0){
+                    GifFragment.gifImages.clear()
+                    gifs?.data?.forEach {
+                        GifFragment.gifImages.add(it.gifs)
+                    }.also {
+                        GifFragment.adapter.notifyDataSetChanged()
+                    }
                 }
             }
 
