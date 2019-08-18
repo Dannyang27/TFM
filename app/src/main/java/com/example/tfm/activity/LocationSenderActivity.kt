@@ -85,8 +85,7 @@ class LocationSenderActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMa
         mapview.onCreate(savedInstanceState)
         mapview.getMapAsync(this)
 
-        val locationPermission = ContextCompat.checkSelfPermission(
-            this, Manifest.permission.ACCESS_FINE_LOCATION)
+        val locationPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
 
         if(locationPermission == PackageManager.PERMISSION_GRANTED) {
             fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
