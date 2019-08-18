@@ -87,8 +87,6 @@ class ImageSenderActivity : AppCompatActivity() {
                 ChatActivity.sendMessage(Message(Sender.OWN, MessageType.GIF, MediaContent(url, captionEt.text.toString()), 10, "EN" ))
                 onBackPressed()
             }
-        }.also {
-            Log.d("DEBUG", url)
         }
     }
 

@@ -15,6 +15,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import androidx.appcompat.widget.SearchView
 
 class GifFragment : Fragment(), CoroutineScope{
 
@@ -23,7 +24,7 @@ class GifFragment : Fragment(), CoroutineScope{
 
     companion object{
         fun newInstance(): GifFragment = GifFragment()
-        lateinit var adapter: ListAdapter
+        lateinit var adapter: GifAdapter
         var gifImages = mutableListOf<Gifs>()
     }
 
@@ -31,12 +32,32 @@ class GifFragment : Fragment(), CoroutineScope{
         val view = inflater.inflate(R.layout.fragment_gif, container, false)
 
         val gridview = view.findViewById(R.id.gif_gridview) as GridView
+        val searchView = view.findViewById(R.id.gif_searchview) as SearchView
+
         adapter = GifAdapter(activity?.applicationContext!!, gifImages)
         gridview.adapter = adapter
 
         launch {
-            RetrofitClient.getSearchGifFromGiphy("pugs")
+            RetrofitClient.getGifsFromGiphy()
         }
+
+        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                gifImages.clear()
+                adapter.notifyDataSetChanged()
+                launch {
+                    RetrofitClient.getSearchGifFromGiphy(query!!)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                if(newText.isEmpty()){
+                    searchView.clearFocus()
+                }
+                return true
+            }
+        })
 
         return view
     }

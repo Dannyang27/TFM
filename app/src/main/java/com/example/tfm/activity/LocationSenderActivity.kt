@@ -48,11 +48,15 @@ class LocationSenderActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMa
 
         searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
-                toast("query submited")
                 val address = Geocoder(this@LocationSenderActivity, Locale.getDefault())
                     .getFromLocationName(query, 1)
 
-                moveToLocation(LatLng(address[0].latitude, address[0].longitude))
+                if(address.isNotEmpty()) {
+                    moveToLocation(LatLng(address[0].latitude, address[0].longitude))
+                }else{
+                    toast("Could not find place")
+                }
+
                 searchView.clearFocus()
                 return true
             }

@@ -1,6 +1,7 @@
 package com.example.tfm.adapter
 
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import com.example.tfm.enum.Sender
 import com.example.tfm.enum.ViewTypeEnum
 import com.example.tfm.model.MediaContent
 import com.example.tfm.model.Message
+import com.example.tfm.util.LogUtil
 import com.example.tfm.viewHolder.ReceiverImageViewHolder
 import com.example.tfm.viewHolder.ReceiverMessageViewHolder
 import com.example.tfm.viewHolder.SenderImageViewHolder
@@ -35,7 +37,7 @@ class ChatAdapter(private val messages : MutableList<Message>) : RecyclerView.Ad
             Sender.OTHER -> {
                 viewType = when(message.messageType){
                     MessageType.MESSAGE -> 1
-                    MessageType.PHOTO -> 3
+                    MessageType.PHOTO, MessageType.GIF -> 3
                     else ->  -1
                 }
             }

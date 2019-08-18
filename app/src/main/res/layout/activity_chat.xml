@@ -169,7 +169,7 @@
                 <FrameLayout
                         android:id="@+id/emoji_container"
                         android:layout_width="match_parent"
-                        android:layout_height="248dp"
+                        android:layout_height="295dp"
                         app:layout_constraintTop_toTopOf="parent"
                         android:visibility="gone">
 
