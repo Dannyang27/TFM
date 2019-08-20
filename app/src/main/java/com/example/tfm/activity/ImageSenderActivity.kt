@@ -84,7 +84,7 @@ class ImageSenderActivity : AppCompatActivity() {
                 .into(media)
 
             sendBtn.setOnClickListener {
-                ChatActivity.sendMessage(Message(Sender.OWN, MessageType.GIF, MediaContent(url, captionEt.text.toString()), 10, "EN" ))
+                ChatActivity.sendMessage(Message(Sender.OWN, MessageType.MEDIA, MediaContent(url, captionEt.text.toString()), 10, "EN" ))
                 onBackPressed()
             }
         }
@@ -122,7 +122,7 @@ class ImageSenderActivity : AppCompatActivity() {
             .into(media)
 
         sendBtn.setOnClickListener {
-            ChatActivity.sendMessage(Message(Sender.OWN, MessageType.PHOTO, MediaContent(bitmap, captionEt.text.toString()), 1 , "EN"))
+            ChatActivity.sendMessage(Message(Sender.OWN, MessageType.MEDIA, MediaContent(bitmap, captionEt.text.toString()), 1 , "EN"))
             onBackPressed()
         }
     }
