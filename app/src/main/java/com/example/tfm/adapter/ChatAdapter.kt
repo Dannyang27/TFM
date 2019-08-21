@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.RelativeLayout
+import com.bumptech.glide.Glide
 import com.example.tfm.R
 import com.example.tfm.enum.MessageType
 import com.example.tfm.enum.Sender
@@ -25,7 +27,7 @@ class ChatAdapter(private val messages : MutableList<Message>, context: Context)
 
     override fun getItemViewType(position: Int) =  when(messages[position].messageType){
         MessageType.MESSAGE -> MessageType.MESSAGE.value
-        MessageType.MEDIA -> MessageType.MEDIA.value
+        MessageType.IMAGE, MessageType.GIF -> MessageType.IMAGE.value
         MessageType.LOCATION -> MessageType.LOCATION.value
     }
 
@@ -39,7 +41,7 @@ class ChatAdapter(private val messages : MutableList<Message>, context: Context)
                 return SenderMessageViewHolder(view)
             }
 
-            MessageType.MEDIA ->{
+            MessageType.IMAGE, MessageType.GIF ->{
                 view = LayoutInflater.from(parent.context).inflate(R.layout.viewholder_sender_image, parent, false)
                 return SenderImageViewHolder(view)
             }
@@ -77,19 +79,31 @@ class ChatAdapter(private val messages : MutableList<Message>, context: Context)
             }
 
             is SenderImageViewHolder ->  {
-                val mediaContent = message.body as MediaContent
-                holder.image.setImageBitmap(mediaContent.content as Bitmap)
-                holder.image.setOnClickListener {
-                    holder.image.context.toast("Image pressed, expanding...")
+
+                if(message.sender == Sender.OTHER){
+                    holder.layout.setPadding(getDpValue(10), getDpValue(10), getDpValue(60), getDpValue(10))
+                    holder.layout.gravity = Gravity.LEFT
+                    holder.time.gravity = Gravity.LEFT
+                    holder.placeholder.setBackgroundColor(context.getColor(R.color.colorWhite))
+                    holder.caption.setTextColor(context.getColor(R.color.colorReceiverMessage))
+                    holder.time.setTextColor(context.getColor(R.color.imageSenderBackground))
                 }
 
-//                }else{
-//                    Glide.with(holder.image.context)
-//                        .asGif()
-//                        .centerCrop()
-//                        .load(mediaContent.content as String)
-//                        .into(holder.image)
-//                }
+                val mediaContent = message.body as MediaContent
+                if(message.messageType == MessageType.IMAGE){
+                    holder.image.setImageBitmap(mediaContent.content as Bitmap)
+                }else{
+                    Glide.with(context)
+                        .asGif()
+                        .centerCrop()
+                        .load(mediaContent.content as String)
+                        .into(holder.image)
+                }
+
+                holder.time.text = "11:11"
+                holder.image.setOnClickListener {
+                    context.toast("Image pressed, expanding...")
+                }
 
                 if(mediaContent.caption.isNotEmpty()){
                     holder.caption.text = mediaContent.caption
@@ -114,7 +128,5 @@ class ChatAdapter(private val messages : MutableList<Message>, context: Context)
     }
 
     override fun getItemCount() = messages.size
-
     private fun getDpValue( dpValue: Int): Int = (dpValue * context.displayMetrics.density).toInt()
-
 }

@@ -8,8 +8,7 @@
         android:gravity="right"
         android:paddingVertical="10dp"
         android:paddingRight="15dp"
-        android:paddingLeft="60dp"
-        android:clipToPadding="false">
+        android:paddingLeft="60dp">
     <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -17,6 +16,7 @@
             app:cardElevation="4dp">
 
         <LinearLayout
+                android:id="@+id/media_placeholder"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -28,34 +28,29 @@
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="5dp">
                 <ImageView
+                        android:id="@+id/media_image"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
                         app:srcCompat="@drawable/white_placeholder"
-                        android:scaleType="centerCrop"
-                        android:id="@+id/sender_image_viewholder"/>
+                        android:scaleType="centerCrop"/>
             </androidx.cardview.widget.CardView>
 
-            <LinearLayout
-                    android:layout_width="match_parent"
+            <androidx.emoji.widget.EmojiTextView
+                    android:id="@+id/media_caption"
+                    android:layout_marginHorizontal="5dp"
+                    android:textSize="@dimen/text_large"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                <androidx.emoji.widget.EmojiTextView
-                        android:id="@+id/sender_caption_viewholder"
-                        android:padding="5dp"
-                        android:textSize="@dimen/text_large"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        android:layout_weight="5"/>
-                <TextView
-                        android:text="@string/time_sample"
-                        android:textColor="@color/colorBackground"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:textAlignment="textEnd"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1"/>
-            </LinearLayout>
+                    android:visibility="gone"/>
+            <TextView
+                    android:id="@+id/media_time"
+                    android:text="@string/time_sample"
+                    android:textColor="@color/colorBackground"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:layout_marginHorizontal="5dp"
+                    android:layout_marginBottom="5dp"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </RelativeLayout>

@@ -1,7 +1,7 @@
 package com.example.tfm.enum
 
 enum class MessageType constructor(val value: Int) {
-    MESSAGE(0), MEDIA(1), LOCATION(2);
+    MESSAGE(0), IMAGE(1), GIF(1), LOCATION(2);
 
     companion object{
         private val map = values().associateBy(MessageType::value)
