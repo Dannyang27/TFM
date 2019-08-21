@@ -5,7 +5,6 @@ import android.location.Address
 import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -63,14 +62,14 @@ class LocationViewHolder(view: View) : RecyclerView.ViewHolder(view), OnMapReady
 
     private fun setSenderViewHolder(){
         locationLayout.gravity = Gravity.RIGHT
-        locationLayout.setPadding(0,0,getDpValue(context, 15),0)
+        locationLayout.setPadding(0,0,getDpValue(15),0)
         userPhoto.visibility = View.GONE
         time.gravity = Gravity.RIGHT
     }
 
     private fun setReceiverViewHolder(){
         locationLayout.gravity = Gravity.LEFT
-        locationLayout.setPadding(getDpValue(context, 15),0,0,0)
+        locationLayout.setPadding(getDpValue(15),0,0,0)
         userPhoto.visibility = View.VISIBLE
         time.gravity = Gravity.LEFT
     }
@@ -83,6 +82,5 @@ class LocationViewHolder(view: View) : RecyclerView.ViewHolder(view), OnMapReady
         this.time.text = TimeUtil.setTimeFromTimeStamp(time)
     }
 
-    private fun getDpValue(context: Context, dpValue: Int): Int = (dpValue * context.displayMetrics.density).toInt()
-
+    private fun getDpValue( dpValue: Int): Int = (dpValue * context.displayMetrics.density).toInt()
 }
