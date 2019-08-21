@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.RelativeLayout
 import com.bumptech.glide.Glide
 import com.example.tfm.R
@@ -37,13 +36,13 @@ class ChatAdapter(private val messages : MutableList<Message>, context: Context)
 
         return when(MessageType.fromInt(viewType)){
             MessageType.MESSAGE -> {
-                view = LayoutInflater.from(parent.context).inflate(R.layout.viewholder_sender_message, parent, false)
-                return SenderMessageViewHolder(view)
+                view = LayoutInflater.from(parent.context).inflate(R.layout.viewholder_message, parent, false)
+                return MessageViewHolder(view)
             }
 
             MessageType.IMAGE, MessageType.GIF ->{
-                view = LayoutInflater.from(parent.context).inflate(R.layout.viewholder_sender_image, parent, false)
-                return SenderImageViewHolder(view)
+                view = LayoutInflater.from(parent.context).inflate(R.layout.viewholder_image, parent, false)
+                return ImageViewHolder(view)
             }
 
             MessageType.LOCATION -> {
@@ -57,36 +56,18 @@ class ChatAdapter(private val messages : MutableList<Message>, context: Context)
         val message = messages[position]
 
         when(holder){
-            is SenderMessageViewHolder -> {
+            is MessageViewHolder -> {
                 if(message.sender == Sender.OTHER){
-                    val layoutParams = RelativeLayout.LayoutParams(
-                        RelativeLayout.LayoutParams.MATCH_PARENT,
-                        RelativeLayout.LayoutParams.WRAP_CONTENT)
-
-                    layoutParams.setMargins(0, 0, getDpValue(60), 0)
-
-                    holder.layout.layoutParams = layoutParams
-                    holder.layout.gravity = Gravity.LEFT
-                    holder.placeholder.background = context.getDrawable(R.drawable.receiver_message)
-                    holder.layout.setPadding(getDpValue(15),getDpValue(10),0, getDpValue(10))
-                    holder.text.setTextColor(context.getColor(R.color.colorReceiverMessage))
-                    holder.time.gravity = Gravity.LEFT
-                    holder.time.setTextColor(context.getColor(R.color.imageSenderBackground))
+                    setReceiverMessageHolder(holder)
                 }
 
                 holder.text.text = message.body as String
-                holder.time.text = "00:00"
+                holder.time.text = setTimeFromTimeStamp(123123213)
             }
 
-            is SenderImageViewHolder ->  {
-
+            is ImageViewHolder ->  {
                 if(message.sender == Sender.OTHER){
-                    holder.layout.setPadding(getDpValue(10), getDpValue(10), getDpValue(60), getDpValue(10))
-                    holder.layout.gravity = Gravity.LEFT
-                    holder.time.gravity = Gravity.LEFT
-                    holder.placeholder.setBackgroundColor(context.getColor(R.color.colorWhite))
-                    holder.caption.setTextColor(context.getColor(R.color.colorReceiverMessage))
-                    holder.time.setTextColor(context.getColor(R.color.imageSenderBackground))
+                   setReceiverImageHolder(holder)
                 }
 
                 val mediaContent = message.body as MediaContent
@@ -100,7 +81,7 @@ class ChatAdapter(private val messages : MutableList<Message>, context: Context)
                         .into(holder.image)
                 }
 
-                holder.time.text = "11:11"
+                holder.time.text = setTimeFromTimeStamp(123123213)
                 holder.image.setOnClickListener {
                     context.toast("Image pressed, expanding...")
                 }
@@ -116,17 +97,48 @@ class ChatAdapter(private val messages : MutableList<Message>, context: Context)
                 holder.initAndUpdateMap(context, LatLng(address.latitude, address.longitude))
 
                 if(message.sender == Sender.OTHER){
-                    holder.locationLayout.gravity = Gravity.LEFT
-                    holder.locationLayout.setPadding(getDpValue(15),0,0,0)
-                    holder.time.gravity = Gravity.LEFT
-
+                    setReceiverLocationHolder(holder)
                 }
                 holder.place.text = address.getAddressLine(0)
-                holder.time.text = "11:11"
+                holder.time.text = setTimeFromTimeStamp(123123213)
             }
         }
     }
 
     override fun getItemCount() = messages.size
     private fun getDpValue( dpValue: Int): Int = (dpValue * context.displayMetrics.density).toInt()
+    private fun setReceiverMessageHolder(holder: MessageViewHolder){
+        val layoutParams = RelativeLayout.LayoutParams(
+            RelativeLayout.LayoutParams.MATCH_PARENT,
+            RelativeLayout.LayoutParams.WRAP_CONTENT)
+
+        layoutParams.setMargins(0, 0, getDpValue(60), 0)
+        holder.layout.layoutParams = layoutParams
+        holder.layout.gravity = Gravity.LEFT
+        holder.placeholder.background = context.getDrawable(R.drawable.receiver_message)
+        holder.layout.setPadding(getDpValue(15),getDpValue(10),0, getDpValue(10))
+        holder.text.setTextColor(context.getColor(R.color.colorReceiverMessage))
+        holder.time.gravity = Gravity.LEFT
+        holder.time.setTextColor(context.getColor(R.color.imageSenderBackground))
+    }
+
+    private fun setReceiverImageHolder(holder: ImageViewHolder){
+        holder.layout.setPadding(getDpValue(10), getDpValue(10), getDpValue(60), getDpValue(10))
+        holder.layout.gravity = Gravity.LEFT
+        holder.time.gravity = Gravity.LEFT
+        holder.placeholder.setBackgroundColor(context.getColor(R.color.colorWhite))
+        holder.caption.setTextColor(context.getColor(R.color.colorReceiverMessage))
+        holder.time.setTextColor(context.getColor(R.color.imageSenderBackground))
+    }
+
+    private fun setReceiverLocationHolder(holder: LocationViewHolder){
+        holder.locationLayout.gravity = Gravity.LEFT
+        holder.locationLayout.setPadding(getDpValue(15),0,0,0)
+        holder.time.gravity = Gravity.LEFT
+    }
+
+    private fun setTimeFromTimeStamp( timeInMillis: Long): String{
+        //TODO add actual time from timestamp which will be a long Type
+        return "11:11"
+    }
 }
