@@ -57,8 +57,8 @@ class ChatAdapter(private val messages : MutableList<Message>, context: Context)
 
         when(holder){
             is MessageViewHolder -> {
-                if(message.sender == Sender.OTHER){
-                    setReceiverMessageHolder(holder)
+                if(message.sender == Sender.OWN){
+                    setSenderMessageHolder(holder)
                 }
 
                 holder.text.text = message.body as String
@@ -107,18 +107,18 @@ class ChatAdapter(private val messages : MutableList<Message>, context: Context)
 
     override fun getItemCount() = messages.size
     private fun getDpValue( dpValue: Int): Int = (dpValue * context.displayMetrics.density).toInt()
-    private fun setReceiverMessageHolder(holder: MessageViewHolder){
+    private fun setSenderMessageHolder(holder: MessageViewHolder){
         val layoutParams = RelativeLayout.LayoutParams(
             RelativeLayout.LayoutParams.MATCH_PARENT,
             RelativeLayout.LayoutParams.WRAP_CONTENT)
 
-        layoutParams.setMargins(0, 0, getDpValue(60), 0)
+        layoutParams.setMargins(getDpValue(60), 0, 0, 0)
         holder.layout.layoutParams = layoutParams
-        holder.layout.gravity = Gravity.LEFT
-        holder.placeholder.background = context.getDrawable(R.drawable.receiver_message)
-        holder.layout.setPadding(getDpValue(15),getDpValue(10),0, getDpValue(10))
-        holder.text.setTextColor(context.getColor(R.color.colorReceiverMessage))
-        holder.time.gravity = Gravity.LEFT
+        holder.layout.gravity = Gravity.RIGHT
+        holder.placeholder.background = context.getDrawable(R.drawable.sender_message)
+        holder.layout.setPadding(0,getDpValue(10),getDpValue(15), getDpValue(10))
+        holder.text.setTextColor(context.getColor(R.color.colorWhite))
+        holder.time.gravity = Gravity.RIGHT
         holder.time.setTextColor(context.getColor(R.color.imageSenderBackground))
     }
 
