@@ -113,8 +113,8 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         initListeners()
 
         //sample messages
-        messages.add(Message(Sender.OWN, MessageType.MESSAGE, getString(R.string.dwight_quote),  1212, "EN" ))
-       // messages.add(Message(Sender.OTHER, MessageType.MESSAGE, getString(R.string.dwight_quote), 1213 , "EN"))
+        messages.add(Message(Sender.OWN, MessageType.MESSAGE, "Hello World",  1212, "EN" ))
+        messages.add(Message(Sender.OTHER, MessageType.MESSAGE, getString(R.string.dwight_quote), 1213 , "EN"))
 
         viewManager = androidx.recyclerview.widget.LinearLayoutManager(this)
         viewAdapter = ChatAdapter(messages, this)

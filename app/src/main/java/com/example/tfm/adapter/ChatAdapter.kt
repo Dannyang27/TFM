@@ -56,91 +56,18 @@ class ChatAdapter(private val messages : MutableList<Message>, context: Context)
 
         when(holder){
             is MessageViewHolder -> {
-                if(message.sender == Sender.OWN){
-                    setSenderMessageHolder(holder)
-                }
-
-                holder.text.text = message.body as String
-                holder.time.text = setTimeFromTimeStamp(123123213)
+                holder.initMessageViewHolder(message)
             }
 
             is ImageViewHolder ->  {
-                if(message.sender == Sender.OWN){
-                    setSenderImageViewHolder(holder)
-                }
-
-                val mediaContent = message.body as MediaContent
-                if(message.messageType == MessageType.IMAGE){
-                    holder.image.setImageBitmap(mediaContent.content as Bitmap)
-                }else{
-                    Glide.with(context)
-                        .asGif()
-                        .centerCrop()
-                        .load(mediaContent.content as String)
-                        .into(holder.image)
-                }
-
-                holder.time.text = setTimeFromTimeStamp(123123213)
-                holder.image.setOnClickListener {
-                    context.toast("Image pressed, expanding...")
-                }
-
-                if(mediaContent.caption.isNotEmpty()){
-                    holder.caption.text = mediaContent.caption
-                    holder.caption.visibility = View.VISIBLE
-                }
+                holder.initImageViewHolder(message)
             }
 
             is LocationViewHolder -> {
-                val address = message.body as Address
-                holder.initAndUpdateMap(context, LatLng(address.latitude, address.longitude))
-
-                if(message.sender == Sender.OWN){
-                    setSenderLocationViewHolder(holder)
-                }
-                holder.place.text = address.getAddressLine(0)
-                holder.time.text = setTimeFromTimeStamp(123123213)
+                holder.initAndUpdateMap(context, message)
             }
         }
     }
 
     override fun getItemCount() = messages.size
-    private fun getDpValue( dpValue: Int): Int = (dpValue * context.displayMetrics.density).toInt()
-    private fun setSenderMessageHolder(holder: MessageViewHolder){
-        val layoutParams = RelativeLayout.LayoutParams(
-            RelativeLayout.LayoutParams.MATCH_PARENT,
-            RelativeLayout.LayoutParams.WRAP_CONTENT)
-
-        layoutParams.setMargins(getDpValue(60), 0, 0, 0)
-        holder.layout.layoutParams = layoutParams
-        holder.layout.gravity = Gravity.RIGHT
-        holder.placeholder.background = context.getDrawable(R.drawable.sender_message)
-        holder.layout.setPadding(0,getDpValue(10),getDpValue(15), getDpValue(10))
-        holder.userPhoto.visibility = View.GONE
-        holder.text.setTextColor(context.getColor(R.color.colorWhite))
-        holder.time.gravity = Gravity.RIGHT
-        holder.time.setTextColor(context.getColor(R.color.imageSenderBackground))
-    }
-
-    private fun setSenderImageViewHolder(holder: ImageViewHolder){
-        holder.layout.setPadding(getDpValue(60), getDpValue(10), getDpValue(15), getDpValue(10))
-        holder.layout.gravity = Gravity.RIGHT
-        holder.userPhoto.visibility = View.GONE
-        holder.time.gravity = Gravity.RIGHT
-        holder.placeholder.setBackgroundColor(context.getColor(R.color.colorAccent))
-        holder.caption.setTextColor(context.getColor(R.color.colorWhite))
-        holder.time.setTextColor(context.getColor(R.color.imageSenderBackground))
-    }
-
-    private fun setSenderLocationViewHolder(holder: LocationViewHolder){
-        holder.locationLayout.gravity = Gravity.RIGHT
-        holder.locationLayout.setPadding(0,0,getDpValue(15),0)
-        holder.userPhoto.visibility = View.GONE
-        holder.time.gravity = Gravity.RIGHT
-    }
-
-    private fun setTimeFromTimeStamp( timeInMillis: Long): String{
-        //TODO add actual time from timestamp which will be a long Type
-        return "11:11"
-    }
 }

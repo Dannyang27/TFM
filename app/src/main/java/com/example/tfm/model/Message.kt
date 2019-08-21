@@ -6,5 +6,5 @@ import com.example.tfm.enum.Sender
 data class Message (val sender: Sender,
                     val messageType: MessageType,
                     val body: Any?,
-                    val timestamp: Int,
+                    val timestamp: Long,
                     val languageCode: String)
