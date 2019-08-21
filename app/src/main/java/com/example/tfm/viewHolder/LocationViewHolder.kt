@@ -2,7 +2,9 @@ package com.example.tfm.viewHolder
 
 import android.content.Context
 import android.view.View
+import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
@@ -16,7 +18,8 @@ class LocationViewHolder(view: View) : RecyclerView.ViewHolder(view), OnMapReady
     lateinit var googleMap: GoogleMap
     private var latLng: LatLng? = null
 
-    val locationLayout: LinearLayout = view.findViewById(R.id.location_layout)
+    val locationLayout: RelativeLayout = view.findViewById(R.id.location_layout)
+    val userPhoto: ImageView = view.findViewById(R.id.location_image)
     private val mapView: MapView = view.findViewById(R.id.mapview_location_viewholder)
     val place: TextView = view.findViewById(R.id.place_location_viewholder)
     val time: TextView = view.findViewById(R.id.time_location_viewholder)

@@ -30,7 +30,6 @@ class ChatAdapter(private val messages : MutableList<Message>, context: Context)
         MessageType.LOCATION -> MessageType.LOCATION.value
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         var view: View?
 
@@ -117,6 +116,7 @@ class ChatAdapter(private val messages : MutableList<Message>, context: Context)
         holder.layout.gravity = Gravity.RIGHT
         holder.placeholder.background = context.getDrawable(R.drawable.sender_message)
         holder.layout.setPadding(0,getDpValue(10),getDpValue(15), getDpValue(10))
+        holder.userPhoto.visibility = View.GONE
         holder.text.setTextColor(context.getColor(R.color.colorWhite))
         holder.time.gravity = Gravity.RIGHT
         holder.time.setTextColor(context.getColor(R.color.imageSenderBackground))
@@ -125,6 +125,7 @@ class ChatAdapter(private val messages : MutableList<Message>, context: Context)
     private fun setSenderImageViewHolder(holder: ImageViewHolder){
         holder.layout.setPadding(getDpValue(60), getDpValue(10), getDpValue(15), getDpValue(10))
         holder.layout.gravity = Gravity.RIGHT
+        holder.userPhoto.visibility = View.GONE
         holder.time.gravity = Gravity.RIGHT
         holder.placeholder.setBackgroundColor(context.getColor(R.color.colorAccent))
         holder.caption.setTextColor(context.getColor(R.color.colorWhite))
@@ -134,6 +135,7 @@ class ChatAdapter(private val messages : MutableList<Message>, context: Context)
     private fun setSenderLocationViewHolder(holder: LocationViewHolder){
         holder.locationLayout.gravity = Gravity.RIGHT
         holder.locationLayout.setPadding(0,0,getDpValue(15),0)
+        holder.userPhoto.visibility = View.GONE
         holder.time.gravity = Gravity.RIGHT
     }
 
