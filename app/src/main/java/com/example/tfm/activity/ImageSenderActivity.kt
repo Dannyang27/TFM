@@ -122,7 +122,7 @@ class ImageSenderActivity : AppCompatActivity() {
             .into(media)
 
         sendBtn.setOnClickListener {
-            ChatActivity.sendMessage(Message(Sender.OWN, MessageType.PHOTO, MediaContent(bitmap, captionEt.text.toString()), 1 , "EN"))
+            ChatActivity.sendMessage(Message(Sender.OWN, MessageType.IMAGE, MediaContent(bitmap, captionEt.text.toString()), 1 , "EN"))
             onBackPressed()
         }
     }
