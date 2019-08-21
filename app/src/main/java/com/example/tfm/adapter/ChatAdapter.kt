@@ -96,7 +96,7 @@ class ChatAdapter(private val messages : MutableList<Message>, context: Context)
                 val address = message.body as Address
                 holder.initAndUpdateMap(context, LatLng(address.latitude, address.longitude))
 
-                if(message.sender == Sender.OTHER){
+                if(message.sender == Sender.OWN){
                     setSenderLocationViewHolder(holder)
                 }
                 holder.place.text = address.getAddressLine(0)
@@ -123,7 +123,7 @@ class ChatAdapter(private val messages : MutableList<Message>, context: Context)
     }
 
     private fun setSenderImageViewHolder(holder: ImageViewHolder){
-        holder.layout.setPadding(getDpValue(60), getDpValue(10), getDpValue(10), getDpValue(10))
+        holder.layout.setPadding(getDpValue(60), getDpValue(10), getDpValue(15), getDpValue(10))
         holder.layout.gravity = Gravity.RIGHT
         holder.time.gravity = Gravity.RIGHT
         holder.placeholder.setBackgroundColor(context.getColor(R.color.colorAccent))
@@ -132,9 +132,9 @@ class ChatAdapter(private val messages : MutableList<Message>, context: Context)
     }
 
     private fun setSenderLocationViewHolder(holder: LocationViewHolder){
-        holder.locationLayout.gravity = Gravity.LEFT
-        holder.locationLayout.setPadding(getDpValue(15),0,0,0)
-        holder.time.gravity = Gravity.LEFT
+        holder.locationLayout.gravity = Gravity.RIGHT
+        holder.locationLayout.setPadding(0,0,getDpValue(15),0)
+        holder.time.gravity = Gravity.RIGHT
     }
 
     private fun setTimeFromTimeStamp( timeInMillis: Long): String{

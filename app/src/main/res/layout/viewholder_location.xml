@@ -6,9 +6,9 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="right"
+        android:gravity="left"
         android:paddingVertical="10dp"
-        android:paddingRight="15dp">
+        android:paddingLeft="15dp">
     <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,13 +49,13 @@
                         android:text="@string/pinned_location_sample"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5dp"/>
+                        />
                 <TextView
                         android:id="@+id/time_location_viewholder"
                         android:text="@string/time_sample"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="right"/>
+                        android:gravity="left"/>
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
