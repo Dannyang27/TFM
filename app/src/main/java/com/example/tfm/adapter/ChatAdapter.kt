@@ -66,8 +66,8 @@ class ChatAdapter(private val messages : MutableList<Message>, context: Context)
             }
 
             is ImageViewHolder ->  {
-                if(message.sender == Sender.OTHER){
-                   setReceiverImageHolder(holder)
+                if(message.sender == Sender.OWN){
+                    setSenderImageViewHolder(holder)
                 }
 
                 val mediaContent = message.body as MediaContent
@@ -97,7 +97,7 @@ class ChatAdapter(private val messages : MutableList<Message>, context: Context)
                 holder.initAndUpdateMap(context, LatLng(address.latitude, address.longitude))
 
                 if(message.sender == Sender.OTHER){
-                    setReceiverLocationHolder(holder)
+                    setSenderLocationViewHolder(holder)
                 }
                 holder.place.text = address.getAddressLine(0)
                 holder.time.text = setTimeFromTimeStamp(123123213)
@@ -122,16 +122,16 @@ class ChatAdapter(private val messages : MutableList<Message>, context: Context)
         holder.time.setTextColor(context.getColor(R.color.imageSenderBackground))
     }
 
-    private fun setReceiverImageHolder(holder: ImageViewHolder){
-        holder.layout.setPadding(getDpValue(10), getDpValue(10), getDpValue(60), getDpValue(10))
-        holder.layout.gravity = Gravity.LEFT
-        holder.time.gravity = Gravity.LEFT
-        holder.placeholder.setBackgroundColor(context.getColor(R.color.colorWhite))
-        holder.caption.setTextColor(context.getColor(R.color.colorReceiverMessage))
+    private fun setSenderImageViewHolder(holder: ImageViewHolder){
+        holder.layout.setPadding(getDpValue(60), getDpValue(10), getDpValue(10), getDpValue(10))
+        holder.layout.gravity = Gravity.RIGHT
+        holder.time.gravity = Gravity.RIGHT
+        holder.placeholder.setBackgroundColor(context.getColor(R.color.colorAccent))
+        holder.caption.setTextColor(context.getColor(R.color.colorWhite))
         holder.time.setTextColor(context.getColor(R.color.imageSenderBackground))
     }
 
-    private fun setReceiverLocationHolder(holder: LocationViewHolder){
+    private fun setSenderLocationViewHolder(holder: LocationViewHolder){
         holder.locationLayout.gravity = Gravity.LEFT
         holder.locationLayout.setPadding(getDpValue(15),0,0,0)
         holder.time.gravity = Gravity.LEFT
