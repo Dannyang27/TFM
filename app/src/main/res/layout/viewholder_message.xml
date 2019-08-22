@@ -13,36 +13,38 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:src="@drawable/dwight"/>
-
     <LinearLayout
-            android:id="@+id/message_placeholder"
+            android:id="@+id/container_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_below="@id/message_image"
-            android:background="@drawable/receiver_message"
-            android:padding="10dp"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="10dp"
-            android:elevation="2dp">
-
-        <androidx.emoji.widget.EmojiTextView
+            android:layout_below="@id/message_image">
+        <LinearLayout
+                android:id="@+id/message_placeholder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/senderMessage"
-                android:textColor="@color/colorReceiverMessage"
-                android:textSize="18dp"
-                android:text="Placeholder message"/>
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:background="@drawable/receiver_message"
+                android:elevation="2dp">
 
+            <androidx.emoji.widget.EmojiTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/message_body"
+                    android:textColor="@color/colorReceiverMessage"
+                    android:textSize="18dp"
+                    android:text="Placeholder message"/>
+        </LinearLayout>
         <TextView
-                android:id="@+id/sender_message_time"
+                android:id="@+id/message_time"
                 android:text="@string/time_sample"
-                android:textColor="@color/imageSenderBackground"
                 android:layout_width="match_parent"
-                android:minWidth="30dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginTop="5dp"
+                android:minWidth="30dp"
+                android:padding="5dp"
                 android:gravity="left"/>
     </LinearLayout>
 </RelativeLayout>

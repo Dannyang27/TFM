@@ -1,6 +1,7 @@
 package com.example.tfm.viewHolder
 
 import android.content.Context
+import android.util.Log
 import android.view.Gravity
 import androidx.emoji.widget.EmojiTextView
 import androidx.recyclerview.widget.RecyclerView
@@ -12,15 +13,16 @@ import android.widget.TextView
 import com.example.tfm.R
 import com.example.tfm.enum.Sender
 import com.example.tfm.model.Message
+import com.example.tfm.util.LogUtil
 import com.example.tfm.util.TimeUtil
 import org.jetbrains.anko.displayMetrics
 
 class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
     val layout : RelativeLayout = view.findViewById(R.id.message_layout)
-    val placeholder: LinearLayout = view.findViewById(R.id.message_placeholder)
-    val userPhoto: ImageView = view.findViewById(R.id.message_image)
-    val body: EmojiTextView = view.findViewById(R.id.senderMessage)
-    val time: TextView = view.findViewById(R.id.sender_message_time)
+    private val placeholder: LinearLayout = view.findViewById(R.id.message_placeholder)
+    private val userPhoto: ImageView = view.findViewById(R.id.message_image)
+    private val body: EmojiTextView = view.findViewById(R.id.message_body)
+    private val time: TextView = view.findViewById(R.id.message_time)
 
     fun initMessageViewHolder(message: Message){
         if(message.sender == Sender.OWN){

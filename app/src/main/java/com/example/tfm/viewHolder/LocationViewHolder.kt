@@ -22,7 +22,6 @@ class LocationViewHolder(view: View) : RecyclerView.ViewHolder(view), OnMapReady
     lateinit var context: Context
     private lateinit var googleMap: GoogleMap
     private var latLng: LatLng? = null
-
     private val locationLayout: RelativeLayout = view.findViewById(R.id.location_layout)
     private val userPhoto: ImageView = view.findViewById(R.id.location_image)
     private val mapView: MapView = view.findViewById(R.id.mapview_location_viewholder)
