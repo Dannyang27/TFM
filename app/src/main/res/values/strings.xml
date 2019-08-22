@@ -39,4 +39,6 @@
     <string name="send_location_text">Send location</string>
     <string name="place">Current location</string>
     <string name="pinned_location_sample">Avenida Miguel Hernandez, 10B</string>
+    <string name="pdf_weight_sample">3.3MB</string>
+    <string name="pdf_title">dni_pasaporte.pdf</string>
 </resources>

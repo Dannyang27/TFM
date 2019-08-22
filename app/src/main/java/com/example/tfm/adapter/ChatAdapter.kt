@@ -28,6 +28,7 @@ class ChatAdapter(private val messages : MutableList<Message>, context: Context)
         MessageType.MESSAGE -> MessageType.MESSAGE.value
         MessageType.IMAGE, MessageType.GIF -> MessageType.IMAGE.value
         MessageType.LOCATION -> MessageType.LOCATION.value
+        MessageType.ATTACHMENT -> MessageType.ATTACHMENT.value
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -48,6 +49,11 @@ class ChatAdapter(private val messages : MutableList<Message>, context: Context)
                 view = LayoutInflater.from(parent.context).inflate(R.layout.viewholder_location, parent, false)
                 return LocationViewHolder(view)
             }
+
+            MessageType.ATTACHMENT -> {
+                view = LayoutInflater.from(parent.context).inflate(R.layout.viewholder_attachment, parent, false)
+                return AttachmentViewHolder(view)
+            }
         }
     }
 
@@ -65,6 +71,10 @@ class ChatAdapter(private val messages : MutableList<Message>, context: Context)
 
             is LocationViewHolder -> {
                 holder.initAndUpdateMap(context, message)
+            }
+
+            is AttachmentViewHolder -> {
+                holder.initAttachmentViewHolder(message)
             }
         }
     }

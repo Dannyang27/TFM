@@ -1,6 +1,5 @@
 package com.example.tfm.viewHolder
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.view.Gravity
 import androidx.recyclerview.widget.RecyclerView
@@ -40,8 +39,8 @@ class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view){
     }
 
     private fun setSenderViewHolder(){
-        val context = image.context
-        layout.setPadding(getDpValue(context, 60), getDpValue(context, 10), getDpValue(context, 15), getDpValue(context, 10))
+        val context = layout.context
+        layout.setPadding(getDpValue(60), getDpValue(10), getDpValue(15), getDpValue(10))
         layout.gravity = Gravity.RIGHT
         userPhoto.visibility = View.GONE
         time.gravity = Gravity.RIGHT
@@ -51,8 +50,8 @@ class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view){
     }
 
     private fun setReceiverViewHolder(){
-        val context = image.context
-        layout.setPadding(getDpValue(context, 15), getDpValue(context, 10), getDpValue(context, 60), getDpValue(context, 10))
+        val context = layout.context
+        layout.setPadding(getDpValue(15), getDpValue(10), getDpValue(60), getDpValue(10))
         layout.gravity = Gravity.LEFT
         userPhoto.visibility = View.VISIBLE
         time.gravity = Gravity.LEFT
@@ -90,5 +89,5 @@ class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view){
     private fun setTime(time: Long){
         this.time.text = TimeUtil.setTimeFromTimeStamp(time)
     }
-    private fun getDpValue(context: Context, dpValue: Int): Int = (dpValue * context.displayMetrics.density).toInt()
+    private fun getDpValue(dpValue: Int): Int = (dpValue * layout.context.displayMetrics.density).toInt()
 }

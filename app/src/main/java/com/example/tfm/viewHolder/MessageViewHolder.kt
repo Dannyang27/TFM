@@ -1,7 +1,5 @@
 package com.example.tfm.viewHolder
 
-import android.content.Context
-import android.util.Log
 import android.view.Gravity
 import androidx.emoji.widget.EmojiTextView
 import androidx.recyclerview.widget.RecyclerView
@@ -13,7 +11,6 @@ import android.widget.TextView
 import com.example.tfm.R
 import com.example.tfm.enum.Sender
 import com.example.tfm.model.Message
-import com.example.tfm.util.LogUtil
 import com.example.tfm.util.TimeUtil
 import org.jetbrains.anko.displayMetrics
 
@@ -41,11 +38,11 @@ class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
             RelativeLayout.LayoutParams.MATCH_PARENT,
             RelativeLayout.LayoutParams.WRAP_CONTENT)
 
-        layoutParams.setMargins(getDpValue(context,60), 0, 0, 0)
+        layoutParams.setMargins(getDpValue(60), 0, 0, 0)
         layout.layoutParams = layoutParams
         layout.gravity = Gravity.RIGHT
         placeholder.background = context.getDrawable(R.drawable.sender_message)
-        layout.setPadding(0,getDpValue(context, 10),getDpValue(context, 15), getDpValue(context, 10))
+        layout.setPadding(0,getDpValue(10),getDpValue(15), getDpValue(10))
         userPhoto.visibility = View.GONE
         body.setTextColor(context.getColor(R.color.colorWhite))
         time.gravity = Gravity.RIGHT
@@ -58,11 +55,11 @@ class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
             RelativeLayout.LayoutParams.MATCH_PARENT,
             RelativeLayout.LayoutParams.WRAP_CONTENT)
 
-        layoutParams.setMargins(0, 0, getDpValue(context,60), 0)
+        layoutParams.setMargins(0, 0, getDpValue(60), 0)
         layout.layoutParams = layoutParams
         layout.gravity = Gravity.LEFT
         placeholder.background = context.getDrawable(R.drawable.receiver_message)
-        layout.setPadding(getDpValue(context,15),getDpValue(context, 10), 0, getDpValue(context, 10))
+        layout.setPadding(getDpValue(15),getDpValue(10), 0, getDpValue(10))
         userPhoto.visibility = View.VISIBLE
         body.setTextColor(context.getColor(R.color.colorReceiverMessage))
         time.gravity = Gravity.LEFT
@@ -77,5 +74,5 @@ class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
         this.time.text = TimeUtil.setTimeFromTimeStamp(time)
     }
 
-    private fun getDpValue( context: Context, dpValue: Int): Int = (dpValue * context.displayMetrics.density).toInt()
+    private fun getDpValue(dpValue: Int): Int = (dpValue * layout.context.displayMetrics.density).toInt()
 }
