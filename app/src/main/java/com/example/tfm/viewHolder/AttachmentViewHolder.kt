@@ -32,8 +32,8 @@ class AttachmentViewHolder (view: View): RecyclerView.ViewHolder(view){
             setReceiverViewHolder()
         }
 
-        this.title.text = "blablabla.pdf"
-        this.weight.text = "15.5 MB"
+        setTitle("dni_pasaporte", ".pdf")
+        setPdfWeightInMB(15.5)
     }
 
     private fun setSenderViewHolder(){
@@ -48,6 +48,14 @@ class AttachmentViewHolder (view: View): RecyclerView.ViewHolder(view){
         layout.gravity = Gravity.LEFT
         userPhoto.visibility = View.VISIBLE
         time.gravity = Gravity.LEFT
+    }
+
+    private fun setTitle(title: String, extension: String){
+        this.title.text = title + extension
+    }
+
+    private fun setPdfWeightInMB( weight: Double){
+        this.weight.text = "$weight MB"
     }
 
     private fun getDpValue(dpValue: Int): Int = (dpValue * layout.context.displayMetrics.density).toInt()

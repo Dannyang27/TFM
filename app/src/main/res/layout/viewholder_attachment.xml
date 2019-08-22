@@ -37,14 +37,16 @@
                         app:srcCompat="@drawable/pdf_logo"
                         android:id="@+id/imageView"
                         android:layout_weight="1"
-                        android:padding="10dp"/>
+                        android:paddingHorizontal="5dp"
+                        android:paddingVertical="10dp"/>
                 <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_weight="3"
                         android:layout_gravity="center"
-                        android:padding="5dp">
+                        android:paddingVertical="5dp"
+                        android:paddingRight="20dp">
                     <TextView
                             android:id="@+id/pdf_title"
                             android:text="@string/pdf_title"
