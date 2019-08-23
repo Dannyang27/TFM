@@ -1,24 +1,14 @@
 package com.example.tfm.adapter
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.location.Address
-import android.view.Gravity
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RelativeLayout
-import com.bumptech.glide.Glide
 import com.example.tfm.R
 import com.example.tfm.enum.MessageType
-import com.example.tfm.enum.Sender
-import com.example.tfm.model.MediaContent
 import com.example.tfm.model.Message
 import com.example.tfm.viewHolder.*
-import com.google.android.gms.maps.model.LatLng
-import org.jetbrains.anko.displayMetrics
-import org.jetbrains.anko.toast
 
 class ChatAdapter(private val messages : MutableList<Message>, context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 

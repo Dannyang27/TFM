@@ -9,8 +9,8 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.example.tfm.R
-import com.example.tfm.enum.Sender
 import com.example.tfm.model.Message
+import com.example.tfm.util.AuthUtil
 import com.example.tfm.util.TimeUtil
 import org.jetbrains.anko.displayMetrics
 
@@ -22,7 +22,7 @@ class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
     private val time: TextView = view.findViewById(R.id.message_time)
 
     fun initMessageViewHolder(message: Message){
-        if(message.sender == Sender.OWN){
+        if(message.senderName == AuthUtil.getAccountEmail()){
             setSenderViewHolder()
         }else{
             setReceiverViewHolder()
@@ -46,7 +46,6 @@ class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
         userPhoto.visibility = View.GONE
         body.setTextColor(context.getColor(R.color.colorWhite))
         time.gravity = Gravity.RIGHT
-        time.setTextColor(context.getColor(R.color.imageSenderBackground))
     }
 
     private fun setReceiverViewHolder(){
@@ -63,7 +62,6 @@ class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
         userPhoto.visibility = View.VISIBLE
         body.setTextColor(context.getColor(R.color.colorReceiverMessage))
         time.gravity = Gravity.LEFT
-        time.setTextColor(context.getColor(R.color.imageSenderBackground))
     }
 
     private fun setBody( body: String){

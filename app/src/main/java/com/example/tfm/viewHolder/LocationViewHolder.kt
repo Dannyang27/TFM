@@ -9,8 +9,8 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
-import com.example.tfm.enum.Sender
 import com.example.tfm.model.Message
+import com.example.tfm.util.AuthUtil
 import com.example.tfm.util.TimeUtil
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
@@ -49,7 +49,7 @@ class LocationViewHolder(view: View) : RecyclerView.ViewHolder(view), OnMapReady
         mapView.onCreate(null)
         mapView.getMapAsync(this)
 
-        if(message.sender == Sender.OWN){
+        if(message.senderName == AuthUtil.getAccountEmail()){
             setSenderViewHolder()
         }else{
             setReceiverViewHolder()

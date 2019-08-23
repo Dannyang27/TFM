@@ -7,8 +7,8 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
-import com.example.tfm.enum.Sender
 import com.example.tfm.model.Message
+import com.example.tfm.util.AuthUtil
 import org.jetbrains.anko.displayMetrics
 import org.jetbrains.anko.toast
 
@@ -26,7 +26,7 @@ class AttachmentViewHolder (view: View): RecyclerView.ViewHolder(view){
     }
 
     fun initAttachmentViewHolder(message: Message){
-        if(message.sender == Sender.OWN){
+        if(message.senderName == AuthUtil.getAccountEmail()){
             setSenderViewHolder()
         }else{
             setReceiverViewHolder()

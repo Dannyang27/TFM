@@ -1,11 +1,9 @@
 package com.example.tfm.activity
 
 import android.Manifest
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.BitmapFactory
 import android.icu.text.SimpleDateFormat
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -25,11 +23,10 @@ import com.example.tfm.R
 import com.example.tfm.adapter.ChatAdapter
 import com.example.tfm.enum.MediaSource
 import com.example.tfm.enum.MessageType
-import com.example.tfm.enum.Sender
 import com.example.tfm.fragments.EmojiFragment
 import com.example.tfm.fragments.GifFragment
-import com.example.tfm.model.MediaContent
 import com.example.tfm.model.Message
+import com.example.tfm.util.AuthUtil
 import com.example.tfm.util.KeyboardUtil
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_chat.*
@@ -111,11 +108,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         supportFragmentManager.beginTransaction().add(R.id.emoji_container, emojiFragment, "1").commit()
 
         initListeners()
-
-        //sample messages
-        messages.add(Message(Sender.OWN, MessageType.MESSAGE, "Hello World",  1212, "EN" ))
-        messages.add(Message(Sender.OTHER, MessageType.MESSAGE, getString(R.string.dwight_quote), 1213 , "EN"))
-        messages.add(Message(Sender.OWN, MessageType.ATTACHMENT, "", 1213 , "EN"))
+        loadSampleMessages()
 
         viewManager = androidx.recyclerview.widget.LinearLayoutManager(this)
         viewAdapter = ChatAdapter(messages, this)
@@ -225,7 +218,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         sendButton.setOnClickListener {
             val fieldText = chat_edittext.text.toString()
             if(fieldText.isNotEmpty()){
-                messages.add(Message(Sender.OWN, MessageType.MESSAGE, fieldText, 1, "EN" ))
+                messages.add(Message(AuthUtil.getAccountEmail(), AuthUtil.receiverEmail, MessageType.MESSAGE, fieldText, 1,true, true, true, "EN" ))
                 messagesRecyclerView.scrollToPosition(viewAdapter.itemCount - 1)
                 viewAdapter.notifyDataSetChanged()
                 chat_edittext.text.clear()
@@ -336,5 +329,12 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         return File.createTempFile("JPEG_${timeStamp}_", ".jpg", storageDir).apply {
             currentPhotoPath = absolutePath
         }
+    }
+
+    private fun loadSampleMessages(){
+        messages.add(Message(AuthUtil.getAccountEmail(), AuthUtil.receiverEmail ,MessageType.MESSAGE, "Hello World",  1212, true, true, true, "EN" ))
+        messages.add(Message(AuthUtil.receiverEmail, AuthUtil.getAccountEmail(), MessageType.MESSAGE, getString(R.string.dwight_quote), 1213 ,true, true, true, "EN"))
+        messages.add(Message(AuthUtil.getAccountEmail(), AuthUtil.receiverEmail, MessageType.ATTACHMENT, "", 1213 , true, true, true,"EN"))
+
     }
 }

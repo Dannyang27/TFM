@@ -1,10 +1,13 @@
 package com.example.tfm.model
 
 import com.example.tfm.enum.MessageType
-import com.example.tfm.enum.Sender
 
-data class Message (val sender: Sender,
+data class Message (val senderName: String,
+                    val receiverName: String,
                     val messageType: MessageType,
                     val body: Any?,
                     val timestamp: Long,
+                    var isSent: Boolean,
+                    var isReceived: Boolean,
+                    val isPrivateChat: Boolean,
                     val languageCode: String)

@@ -8,7 +8,6 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
@@ -18,9 +17,9 @@ import com.bumptech.glide.Glide
 import com.example.tfm.R
 import com.example.tfm.enum.MediaSource
 import com.example.tfm.enum.MessageType
-import com.example.tfm.enum.Sender
 import com.example.tfm.model.MediaContent
 import com.example.tfm.model.Message
+import com.example.tfm.util.AuthUtil
 import org.jetbrains.anko.toast
 
 class ImageSenderActivity : AppCompatActivity() {
@@ -84,7 +83,9 @@ class ImageSenderActivity : AppCompatActivity() {
                 .into(media)
 
             sendBtn.setOnClickListener {
-                ChatActivity.sendMessage(Message(Sender.OWN, MessageType.GIF, MediaContent(url, captionEt.text.toString()), 10, "EN" ))
+                ChatActivity.sendMessage(Message(AuthUtil.getAccountEmail(), AuthUtil.receiverEmail,
+                    MessageType.GIF, MediaContent(url, captionEt.text.toString()), 10,
+                    true, true, true,"EN" ))
                 onBackPressed()
             }
         }
@@ -122,7 +123,7 @@ class ImageSenderActivity : AppCompatActivity() {
             .into(media)
 
         sendBtn.setOnClickListener {
-            ChatActivity.sendMessage(Message(Sender.OWN, MessageType.IMAGE, MediaContent(bitmap, captionEt.text.toString()), 1 , "EN"))
+            ChatActivity.sendMessage(Message(AuthUtil.getAccountEmail(), AuthUtil.receiverEmail, MessageType.IMAGE, MediaContent(bitmap, captionEt.text.toString()), 1 , true, true, true,"EN"))
             onBackPressed()
         }
     }

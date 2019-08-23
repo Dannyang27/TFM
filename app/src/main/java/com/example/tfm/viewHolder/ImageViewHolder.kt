@@ -12,9 +12,9 @@ import androidx.emoji.widget.EmojiTextView
 import com.bumptech.glide.Glide
 import com.example.tfm.R
 import com.example.tfm.enum.MessageType
-import com.example.tfm.enum.Sender
 import com.example.tfm.model.MediaContent
 import com.example.tfm.model.Message
+import com.example.tfm.util.AuthUtil
 import com.example.tfm.util.TimeUtil
 import org.jetbrains.anko.displayMetrics
 import org.jetbrains.anko.toast
@@ -28,7 +28,7 @@ class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view){
     private val time: TextView = view.findViewById(R.id.media_time)
 
     fun initImageViewHolder(message: Message){
-        if(message.sender == Sender.OWN){
+        if(message.senderName == AuthUtil.getAccountEmail()){
             setSenderViewHolder()
         }else{
             setReceiverViewHolder()
@@ -46,7 +46,6 @@ class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view){
         time.gravity = Gravity.RIGHT
         placeholder.setBackgroundColor(context.getColor(R.color.colorAccent))
         caption.setTextColor(context.getColor(R.color.colorWhite))
-        time.setTextColor(context.getColor(R.color.imageSenderBackground))
     }
 
     private fun setReceiverViewHolder(){
@@ -57,7 +56,6 @@ class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view){
         time.gravity = Gravity.LEFT
         placeholder.setBackgroundColor(context.getColor(R.color.colorWhite))
         caption.setTextColor(context.getColor(R.color.colorReceiverMessage))
-        time.setTextColor(context.getColor(R.color.imageSenderBackground))
     }
 
     private fun setImageOrGif(message: Message){

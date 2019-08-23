@@ -15,8 +15,8 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import com.example.tfm.R
 import com.example.tfm.enum.MessageType
-import com.example.tfm.enum.Sender
 import com.example.tfm.model.Message
+import com.example.tfm.util.AuthUtil
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -75,7 +75,7 @@ class LocationSenderActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMa
         })
 
         locationSendButton.setOnClickListener {
-            ChatActivity.sendMessage(Message(Sender.OWN, MessageType.LOCATION, address, 1, "EN"))
+            ChatActivity.sendMessage(Message(AuthUtil.getAccountEmail(), AuthUtil.receiverEmail, MessageType.LOCATION, address, 1, true, true, true, "EN"))
             finish()
         }
 
