@@ -10,12 +10,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
 import com.example.tfm.model.Message
 import com.example.tfm.util.AuthUtil
-import com.example.tfm.util.showVisibility
+import com.example.tfm.util.showUsernameIfGroup
 import org.jetbrains.anko.displayMetrics
 import org.jetbrains.anko.toast
 
 class AttachmentViewHolder (view: View): RecyclerView.ViewHolder(view){
-    lateinit var username: EmojiTextView
+    private val username: EmojiTextView = view.findViewById(R.id.pdf_username)
     private val layout: RelativeLayout = view.findViewById(R.id.pdf_layout)
     private val userPhoto: ImageView = view.findViewById(R.id.pdf_image)
     private val title: TextView = view.findViewById(R.id.pdf_title)
@@ -33,10 +33,7 @@ class AttachmentViewHolder (view: View): RecyclerView.ViewHolder(view){
             setSenderViewHolder()
         }else{
             setReceiverViewHolder()
-            if(!message.isPrivateChat){
-                username = layout.rootView.findViewById(R.id.pdf_username)
-                username.showVisibility()
-            }
+            username.showUsernameIfGroup(message.isPrivateChat, message.senderName)
         }
 
         setTitle("dni_pasaporte", ".pdf")
@@ -48,6 +45,7 @@ class AttachmentViewHolder (view: View): RecyclerView.ViewHolder(view){
         layout.gravity = Gravity.RIGHT
         userPhoto.visibility = View.GONE
         time.gravity = Gravity.RIGHT
+        username.visibility = View.GONE
     }
 
     private fun setReceiverViewHolder(){

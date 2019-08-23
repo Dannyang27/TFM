@@ -16,15 +16,15 @@ import com.example.tfm.model.MediaContent
 import com.example.tfm.model.Message
 import com.example.tfm.util.AuthUtil
 import com.example.tfm.util.TimeUtil
-import com.example.tfm.util.showVisibility
+import com.example.tfm.util.showUsernameIfGroup
 import org.jetbrains.anko.displayMetrics
 import org.jetbrains.anko.toast
 
 class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view){
-    lateinit var username: EmojiTextView
     val layout: RelativeLayout = view.findViewById(R.id.media_layout)
     private val placeholder: LinearLayout = view.findViewById(R.id.media_placeholder)
     private val userPhoto: ImageView = view.findViewById(R.id.media_photo)
+    private val username: EmojiTextView = view.findViewById(R.id.media_username)
     private val image: ImageView = view.findViewById(R.id.media_image)
     private val caption: EmojiTextView = view.findViewById(R.id.media_caption)
     private val time: TextView = view.findViewById(R.id.media_time)
@@ -34,11 +34,9 @@ class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view){
             setSenderViewHolder()
         }else {
             setReceiverViewHolder()
-            if (!message.isPrivateChat) {
-                username = layout.rootView.findViewById(R.id.media_username)
-                username.showVisibility()
-            }
+            username.showUsernameIfGroup(message.isPrivateChat, message.senderName)
         }
+
         setImageOrGif(message)
         setTime(message.timestamp)
     }
@@ -51,6 +49,7 @@ class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view){
         time.gravity = Gravity.RIGHT
         placeholder.setBackgroundColor(context.getColor(R.color.colorAccent))
         caption.setTextColor(context.getColor(R.color.colorWhite))
+        username.visibility = View.GONE
     }
 
     private fun setReceiverViewHolder(){

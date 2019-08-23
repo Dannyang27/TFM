@@ -107,7 +107,8 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         supportFragmentManager.beginTransaction().add(R.id.emoji_container, emojiFragment, "1").commit()
 
         initListeners()
-        loadSampleMessages()
+        //loadSampleMessagesPrivateChat()
+        loadSampleMessagesGroupChat()
 
         viewManager = androidx.recyclerview.widget.LinearLayoutManager(this)
         viewAdapter = ChatAdapter(messages, this)
@@ -330,10 +331,18 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         }
     }
 
-    private fun loadSampleMessages(){
+    private fun loadSampleMessagesPrivateChat(){
         messages.add(Message(AuthUtil.getAccountEmail(), AuthUtil.receiverEmail ,MessageType.MESSAGE, "Hello World",  1212, true, true, true, "EN" ))
         messages.add(Message(AuthUtil.receiverEmail, AuthUtil.getAccountEmail(), MessageType.MESSAGE, getString(R.string.dwight_quote), 1213 ,true, true, true, "EN"))
         messages.add(Message(AuthUtil.receiverEmail, AuthUtil.getAccountEmail(), MessageType.ATTACHMENT, "", 1213 , true, true, false,"EN"))
         messages.add(Message(AuthUtil.getAccountEmail(), AuthUtil.receiverEmail, MessageType.ATTACHMENT, "", 1213 , true, true, true,"EN"))
+    }
+
+    private fun loadSampleMessagesGroupChat(){
+        messages.add(Message(AuthUtil.getAccountEmail(), AuthUtil.receiverEmail ,MessageType.MESSAGE, "Hello World",  1212, true, true, false, "EN" ))
+        messages.add(Message(AuthUtil.celia, AuthUtil.getAccountEmail(), MessageType.MESSAGE, getString(R.string.dwight_quote), 1213 ,true, true, false, "EN"))
+        messages.add(Message(AuthUtil.jorge, AuthUtil.getAccountEmail(), MessageType.MESSAGE, getString(R.string.long_text_sample), 1213 ,true, true, false, "EN"))
+        messages.add(Message(AuthUtil.lesley, AuthUtil.getAccountEmail(), MessageType.ATTACHMENT, "", 1213 , true, true, false,"EN"))
+        messages.add(Message(AuthUtil.getAccountEmail(), AuthUtil.receiverEmail, MessageType.ATTACHMENT, "", 1213 , true, true, false,"EN"))
     }
 }

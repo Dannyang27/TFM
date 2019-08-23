@@ -10,13 +10,11 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import com.example.tfm.R
 import com.example.tfm.model.Message
-import com.example.tfm.util.AuthUtil
-import com.example.tfm.util.TimeUtil
-import com.example.tfm.util.showVisibility
+import com.example.tfm.util.*
 import org.jetbrains.anko.displayMetrics
 
 class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
-    private lateinit var username: EmojiTextView
+    private val username: EmojiTextView = view.findViewById(R.id.message_username)
     val layout : RelativeLayout = view.findViewById(R.id.message_layout)
     private val placeholder: LinearLayout = view.findViewById(R.id.message_placeholder)
     private val userPhoto: ImageView = view.findViewById(R.id.message_image)
@@ -28,11 +26,7 @@ class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
             setSenderViewHolder()
         }else{
             setReceiverViewHolder()
-
-            if(!message.isPrivateChat){
-                username = layout.rootView.findViewById(R.id.message_username)
-                username.showVisibility()
-            }
+            username.showUsernameIfGroup(message.isPrivateChat, message.senderName)
         }
 
         setBody(message.body as String)
@@ -53,6 +47,7 @@ class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
         userPhoto.visibility = View.GONE
         body.setTextColor(context.getColor(R.color.colorWhite))
         time.gravity = Gravity.RIGHT
+        username.visibility = View.GONE
     }
 
     private fun setReceiverViewHolder(){
