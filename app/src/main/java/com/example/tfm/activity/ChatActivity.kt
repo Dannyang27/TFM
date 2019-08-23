@@ -18,6 +18,7 @@ import android.widget.FrameLayout
 import androidx.core.content.FileProvider
 import androidx.emoji.bundled.BundledEmojiCompatConfig
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
 import com.example.tfm.adapter.ChatAdapter
@@ -110,7 +111,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         //loadSampleMessagesPrivateChat()
         loadSampleMessagesGroupChat()
 
-        viewManager = androidx.recyclerview.widget.LinearLayoutManager(this)
+        viewManager = LinearLayoutManager(this)
         viewAdapter = ChatAdapter(messages, this)
 
         messagesRecyclerView = findViewById<RecyclerView>(R.id.chat_recyclerview).apply {

@@ -1,5 +1,6 @@
 package com.example.tfm.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -16,6 +17,7 @@ import org.jetbrains.anko.toast
 import android.view.*
 import com.example.tfm.R
 import com.example.tfm.util.getAllUsers
+import com.example.tfm.util.loadFakeUsers
 import com.google.firebase.database.*
 
 class MainActivity : AppCompatActivity() {
@@ -63,6 +65,8 @@ class MainActivity : AppCompatActivity() {
         fab.setOnClickListener {
             if(activeFragment is PrivateFragment){
                 toast("Creating private chat...")
+                val intent = Intent(this, UserSearcherActivity::class.java)
+                startActivity(intent)
             }else{
                 toast("Creating group chat...")
             }
@@ -85,7 +89,8 @@ class MainActivity : AppCompatActivity() {
 
         //TEST FIREBASE
         database = FirebaseDatabase.getInstance().reference
-        database.getAllUsers()
+        //database.loadFakeUsers()
+        //database.getAllUsers()
 
     }
 

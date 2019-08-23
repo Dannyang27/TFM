@@ -43,15 +43,9 @@
                 android:windowSoftInputMode="adjustResize">
         </activity>
 
-        <provider
-                android:name="androidx.core.content.FileProvider"
-                android:authorities="com.example.tfm.fileprovider"
-                android:exported="false"
-                android:grantUriPermissions="true">
-            <meta-data
-                    android:name="android.support.FILE_PROVIDER_PATHS"
-                    android:resource="@xml/file_paths"/>
-        </provider>
+        <activity
+                android:name="com.example.tfm.activity.UserSearcherActivity"
+                android:screenOrientation="portrait"/>
 
         <activity
                 android:name=".activity.ChatActivity"
@@ -69,5 +63,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>

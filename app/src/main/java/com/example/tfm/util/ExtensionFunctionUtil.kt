@@ -20,13 +20,13 @@ fun TextView.showUsernameIfGroup( isPrivateChat: Boolean, username: String){
 
 
 fun DatabaseReference.loadFakeUsers(){
-    val celia = User("celiasoler@gmail.com", "Celia Soler", "")
+    val celia = User("celiasoler@gmail.com", "Celia Soler", "Trabajando en el oysho jiji", "dasdas")
     this.child("Users").push().setValue(celia)
-    val jorge = User("jorgeredon@gmail.com", "Jorge Redón", "")
+    val jorge = User("jorgeredon@gmail.com", "Jorge Redón", "Drakukeooo, te meto el dedoo", "dasda")
     this.child("Users").push().setValue(jorge)
-    val pam = User("pamtheoffice@gmail.com", "Pam Beesly", "")
+    val pam = User("pamtheoffice@gmail.com", "Pam Beesly", "Dunder Mifflin this is Pam", "dasdasasd")
     this.child("Users").push().setValue(pam)
-    val lesley = User("weilesley@gmail.com", "Wei Lesley Yang", "")
+    val lesley = User("weilesley@gmail.com", "Wei Lesley Yang", "Viajando...", "dasda")
     this.child("Users").push().setValue(lesley)
 }
 
