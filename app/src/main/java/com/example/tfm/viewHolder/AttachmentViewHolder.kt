@@ -5,14 +5,17 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.emoji.widget.EmojiTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
 import com.example.tfm.model.Message
 import com.example.tfm.util.AuthUtil
+import com.example.tfm.util.showVisibility
 import org.jetbrains.anko.displayMetrics
 import org.jetbrains.anko.toast
 
 class AttachmentViewHolder (view: View): RecyclerView.ViewHolder(view){
+    lateinit var username: EmojiTextView
     private val layout: RelativeLayout = view.findViewById(R.id.pdf_layout)
     private val userPhoto: ImageView = view.findViewById(R.id.pdf_image)
     private val title: TextView = view.findViewById(R.id.pdf_title)
@@ -30,6 +33,10 @@ class AttachmentViewHolder (view: View): RecyclerView.ViewHolder(view){
             setSenderViewHolder()
         }else{
             setReceiverViewHolder()
+            if(!message.isPrivateChat){
+                username = layout.rootView.findViewById(R.id.pdf_username)
+                username.showVisibility()
+            }
         }
 
         setTitle("dni_pasaporte", ".pdf")

@@ -12,9 +12,11 @@ import com.example.tfm.R
 import com.example.tfm.model.Message
 import com.example.tfm.util.AuthUtil
 import com.example.tfm.util.TimeUtil
+import com.example.tfm.util.showVisibility
 import org.jetbrains.anko.displayMetrics
 
 class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
+    private lateinit var username: EmojiTextView
     val layout : RelativeLayout = view.findViewById(R.id.message_layout)
     private val placeholder: LinearLayout = view.findViewById(R.id.message_placeholder)
     private val userPhoto: ImageView = view.findViewById(R.id.message_image)
@@ -26,6 +28,11 @@ class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
             setSenderViewHolder()
         }else{
             setReceiverViewHolder()
+
+            if(!message.isPrivateChat){
+                username = layout.rootView.findViewById(R.id.message_username)
+                username.showVisibility()
+            }
         }
 
         setBody(message.body as String)

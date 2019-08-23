@@ -7,11 +7,13 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.emoji.widget.EmojiTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
 import com.example.tfm.model.Message
 import com.example.tfm.util.AuthUtil
 import com.example.tfm.util.TimeUtil
+import com.example.tfm.util.showVisibility
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
@@ -21,6 +23,7 @@ import org.jetbrains.anko.displayMetrics
 class LocationViewHolder(view: View) : RecyclerView.ViewHolder(view), OnMapReadyCallback {
     lateinit var context: Context
     private lateinit var googleMap: GoogleMap
+    private lateinit var username: EmojiTextView
     private var latLng: LatLng? = null
     private val locationLayout: RelativeLayout = view.findViewById(R.id.location_layout)
     private val userPhoto: ImageView = view.findViewById(R.id.location_image)
@@ -53,6 +56,11 @@ class LocationViewHolder(view: View) : RecyclerView.ViewHolder(view), OnMapReady
             setSenderViewHolder()
         }else{
             setReceiverViewHolder()
+
+            if(!message.isPrivateChat){
+                username = locationLayout.rootView.findViewById(R.id.location_username)
+                username.showVisibility()
+            }
         }
 
         setAddress(address.getAddressLine(0))

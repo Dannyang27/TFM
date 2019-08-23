@@ -65,8 +65,6 @@ class MainActivity : AppCompatActivity() {
 
         supportFragmentManager.beginTransaction().add(R.id.container, groupChatFragment, "2").hide(groupChatFragment).commit()
         supportFragmentManager.beginTransaction().add(R.id.container, privateFragment, "1").commit()
-
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

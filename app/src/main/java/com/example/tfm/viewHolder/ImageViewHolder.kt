@@ -16,13 +16,15 @@ import com.example.tfm.model.MediaContent
 import com.example.tfm.model.Message
 import com.example.tfm.util.AuthUtil
 import com.example.tfm.util.TimeUtil
+import com.example.tfm.util.showVisibility
 import org.jetbrains.anko.displayMetrics
 import org.jetbrains.anko.toast
 
 class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view){
+    lateinit var username: EmojiTextView
     val layout: RelativeLayout = view.findViewById(R.id.media_layout)
     private val placeholder: LinearLayout = view.findViewById(R.id.media_placeholder)
-    private val userPhoto: ImageView = view.findViewById(R.id.image_photo)
+    private val userPhoto: ImageView = view.findViewById(R.id.media_photo)
     private val image: ImageView = view.findViewById(R.id.media_image)
     private val caption: EmojiTextView = view.findViewById(R.id.media_caption)
     private val time: TextView = view.findViewById(R.id.media_time)
@@ -30,10 +32,13 @@ class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view){
     fun initImageViewHolder(message: Message){
         if(message.senderName == AuthUtil.getAccountEmail()){
             setSenderViewHolder()
-        }else{
+        }else {
             setReceiverViewHolder()
+            if (!message.isPrivateChat) {
+                username = layout.rootView.findViewById(R.id.media_username)
+                username.showVisibility()
+            }
         }
-
         setImageOrGif(message)
         setTime(message.timestamp)
     }

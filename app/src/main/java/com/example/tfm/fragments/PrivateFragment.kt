@@ -17,18 +17,18 @@ class PrivateFragment : Fragment(){
 
     companion object{
         fun newInstance(): PrivateFragment = PrivateFragment()
-        lateinit var conversationList: RecyclerView
+        lateinit var friends: RecyclerView
         lateinit var viewAdapter : RecyclerView.Adapter<*>
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_private_chat, container, false)
 
-        viewManager = LinearLayoutManager(activity)
+        viewManager = LinearLayoutManager(this.activity)
         viewAdapter = ConversationAdapter(mutableListOf("test","test","test","test","test","test",
             "test","test","test","test","test","test","test"))
 
-        conversationList = view.findViewById<RecyclerView>(R.id.private_recyclerview).apply {
+        friends = view.findViewById<RecyclerView>(R.id.private_recyclerview).apply {
             setHasFixedSize(true)
             addItemDecoration(HorizontalDivider(this.context))
             layoutManager = viewManager

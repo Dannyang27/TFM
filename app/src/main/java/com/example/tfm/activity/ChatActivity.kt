@@ -99,7 +99,6 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         displayBackArrow()
 
         emojiEditText = findViewById(R.id.chat_edittext)
-
         container = findViewById(R.id.emoji_container)
         bottomNavBar = findViewById(R.id.emoji_navbar)
 
@@ -334,7 +333,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
     private fun loadSampleMessages(){
         messages.add(Message(AuthUtil.getAccountEmail(), AuthUtil.receiverEmail ,MessageType.MESSAGE, "Hello World",  1212, true, true, true, "EN" ))
         messages.add(Message(AuthUtil.receiverEmail, AuthUtil.getAccountEmail(), MessageType.MESSAGE, getString(R.string.dwight_quote), 1213 ,true, true, true, "EN"))
+        messages.add(Message(AuthUtil.receiverEmail, AuthUtil.getAccountEmail(), MessageType.ATTACHMENT, "", 1213 , true, true, false,"EN"))
         messages.add(Message(AuthUtil.getAccountEmail(), AuthUtil.receiverEmail, MessageType.ATTACHMENT, "", 1213 , true, true, true,"EN"))
-
     }
 }
