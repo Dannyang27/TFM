@@ -2,6 +2,7 @@ package com.example.tfm.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import androidx.emoji.text.EmojiCompat
@@ -15,14 +16,20 @@ import com.example.tfm.fragments.GroupChatFragment
 import org.jetbrains.anko.toast
 import android.view.*
 import com.example.tfm.R
+import com.example.tfm.model.User
+import com.example.tfm.util.LogUtil
+import com.example.tfm.util.getAllUsers
+import com.example.tfm.util.loadFakeUsers
+import com.google.firebase.database.*
 
 class MainActivity : AppCompatActivity() {
-
     private val privateFragment = PrivateFragment.newInstance()
     private val groupChatFragment = GroupChatFragment.newInstance()
     private var activeFragment: Fragment = privateFragment
     private lateinit var toolbar: Toolbar
     private lateinit var searchView: SearchView
+
+    private lateinit var database: DatabaseReference
 
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -63,8 +70,15 @@ class MainActivity : AppCompatActivity() {
         val navView: BottomNavigationView = findViewById(R.id.navigation)
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
 
-        supportFragmentManager.beginTransaction().add(R.id.container, groupChatFragment, "2").hide(groupChatFragment).commit()
+        supportFragmentManager.beginTransaction().add(R.id.container, groupChatFragment, "2").hide(groupChatFragment)
+            .commit()
         supportFragmentManager.beginTransaction().add(R.id.container, privateFragment, "1").commit()
+
+
+        //TEST FIREBASE
+        database = FirebaseDatabase.getInstance().reference
+        database.getAllUsers()
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
