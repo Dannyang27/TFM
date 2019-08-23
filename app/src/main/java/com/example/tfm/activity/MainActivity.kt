@@ -2,7 +2,6 @@ package com.example.tfm.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import androidx.emoji.text.EmojiCompat
@@ -16,10 +15,7 @@ import com.example.tfm.fragments.GroupChatFragment
 import org.jetbrains.anko.toast
 import android.view.*
 import com.example.tfm.R
-import com.example.tfm.model.User
-import com.example.tfm.util.LogUtil
 import com.example.tfm.util.getAllUsers
-import com.example.tfm.util.loadFakeUsers
 import com.google.firebase.database.*
 
 class MainActivity : AppCompatActivity() {
@@ -28,16 +24,19 @@ class MainActivity : AppCompatActivity() {
     private var activeFragment: Fragment = privateFragment
     private lateinit var toolbar: Toolbar
     private lateinit var searchView: SearchView
+    private lateinit var fab: FloatingActionButton
 
     private lateinit var database: DatabaseReference
 
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_chat -> {
+                fab.setImageDrawable(getDrawable(R.drawable.add_user))
                 openFragment(privateFragment)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_groupchat -> {
+                fab.setImageDrawable(getDrawable(R.drawable.add_group))
                 openFragment(groupChatFragment)
                 return@OnNavigationItemSelectedListener true
             }
@@ -60,9 +59,13 @@ class MainActivity : AppCompatActivity() {
         toolbarTitle.text = getString(R.string.messages)
         setSupportActionBar(toolbar)
 
-        val fab = findViewById<FloatingActionButton>(R.id.fab)
+        fab = findViewById(R.id.fab)
         fab.setOnClickListener {
-            toast("Fab button clicked...")
+            if(activeFragment is PrivateFragment){
+                toast("Creating private chat...")
+            }else{
+                toast("Creating group chat...")
+            }
         }
 
         searchView = findViewById(R.id.search_chat)
@@ -70,9 +73,14 @@ class MainActivity : AppCompatActivity() {
         val navView: BottomNavigationView = findViewById(R.id.navigation)
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
 
-        supportFragmentManager.beginTransaction().add(R.id.container, groupChatFragment, "2").hide(groupChatFragment)
+        supportFragmentManager.beginTransaction()
+            .add(R.id.container, groupChatFragment, "2")
+            .hide(groupChatFragment)
             .commit()
-        supportFragmentManager.beginTransaction().add(R.id.container, privateFragment, "1").commit()
+
+        supportFragmentManager.beginTransaction()
+            .add(R.id.container, privateFragment, "1")
+            .commit()
 
 
         //TEST FIREBASE
@@ -87,11 +95,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?) = when(item?.itemId) {
-
-        R.id.new_group -> {
-            toast("New groups Clicked")
-            true
-        }
 
         R.id.settings -> {
             toast("Settings Clicked")
