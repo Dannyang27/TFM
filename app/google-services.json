@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "497162771789",
+    "firebase_url": "https://tfm-chat-41326.firebaseio.com",
+    "project_id": "tfm-chat",
+    "storage_bucket": "tfm-chat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:497162771789:android:92a9700205f068ec",
+        "android_client_info": {
+          "package_name": "com.example.tfm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "497162771789-8ib83c5clao3rbgln701c1kt1dqhn2au.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tfm",
+            "certificate_hash": "f5470cf75cc9ed935647b7df2a404f7aa01835fc"
+          }
+        },
+        {
+          "client_id": "497162771789-npsrt6l0igsicms9jerhutcll4dhpjer.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkghlzmxSkWEXvsf0G-te0KLoHlWLKVQI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "497162771789-npsrt6l0igsicms9jerhutcll4dhpjer.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
