@@ -21,7 +21,7 @@ import org.jetbrains.anko.displayMetrics
 import org.jetbrains.anko.toast
 
 class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view){
-    val layout: RelativeLayout = view.findViewById(R.id.media_layout)
+    private val layout: RelativeLayout = view.findViewById(R.id.media_layout)
     private val placeholder: LinearLayout = view.findViewById(R.id.media_placeholder)
     private val userPhoto: ImageView = view.findViewById(R.id.media_photo)
     private val username: EmojiTextView = view.findViewById(R.id.media_username)

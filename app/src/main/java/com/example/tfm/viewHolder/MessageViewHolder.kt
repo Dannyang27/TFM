@@ -15,7 +15,7 @@ import org.jetbrains.anko.displayMetrics
 
 class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
     private val username: EmojiTextView = view.findViewById(R.id.message_username)
-    val layout : RelativeLayout = view.findViewById(R.id.message_layout)
+    private val layout : RelativeLayout = view.findViewById(R.id.message_layout)
     private val placeholder: LinearLayout = view.findViewById(R.id.message_placeholder)
     private val userPhoto: ImageView = view.findViewById(R.id.message_image)
     private val body: EmojiTextView = view.findViewById(R.id.message_body)
