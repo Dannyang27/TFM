@@ -16,6 +16,8 @@ import com.example.tfm.fragments.GroupChatFragment
 import org.jetbrains.anko.toast
 import android.view.*
 import com.example.tfm.R
+import com.example.tfm.util.FirebaseUtil
+import com.example.tfm.util.loadFakeUsers
 import com.google.firebase.database.*
 
 class MainActivity : AppCompatActivity() {
@@ -62,11 +64,9 @@ class MainActivity : AppCompatActivity() {
         fab = findViewById(R.id.fab)
         fab.setOnClickListener {
             if(activeFragment is PrivateFragment){
-                toast("Creating private chat...")
                 val intent = Intent(this, UserSearcherActivity::class.java)
                 startActivity(intent)
             }else{
-                toast("Creating group chat...")
             }
         }
 

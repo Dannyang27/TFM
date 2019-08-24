@@ -6,9 +6,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.tfm.R
 import com.example.tfm.activity.ChatActivity
+import com.example.tfm.model.Conversation
 import com.example.tfm.viewHolder.ConversationViewHolder
 
-class ConversationAdapter(private val conversations: MutableList<String>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class ConversationAdapter(private val conversations: MutableList<Conversation>): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.viewholder_conversation, parent, false)

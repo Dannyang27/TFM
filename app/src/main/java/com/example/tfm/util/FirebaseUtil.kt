@@ -32,7 +32,26 @@ fun DatabaseReference.getUsersByName(name: String){
     }
 }
 
+fun DatabaseReference.checkIfConversationExists( email: String) : Boolean{
+    val ref = this.child("Users").orderByChild("email").startAt(AuthUtil.getAccountEmail()).limitToFirst(1)
+    ref.addChildEventListener(object : ChildEventListener{
+        override fun onCancelled(p0: DatabaseError) {}
+        override fun onChildMoved(p0: DataSnapshot, p1: String?) {}
+        override fun onChildChanged(p0: DataSnapshot, p1: String?) {}
+        override fun onChildRemoved(p0: DataSnapshot) {}
+
+        override fun onChildAdded(dataSnapshot: DataSnapshot, p1: String?) {
+            val user = dataSnapshot.getValue(User::class.java)
+            Log.d(LogUtil.TAG, user?.email )
+        }
+    })
+
+    return true
+}
+
 fun DatabaseReference.loadFakeUsers(){
+    val danny = User("danny27995@gmail.com", "Le Danny Yang", "Haciendo el TFM", "dasdas")
+    this.child("Users").push().setValue(danny)
     val celia = User("celiasoler@gmail.com", "Celia Soler", "Trabajando en el oysho jiji", "dasdas")
     this.child("Users").push().setValue(celia)
     val jorge = User("jorgeredon@gmail.com", "Jorge Redón", "Drakukeooo, te meto el dedoo", "dasda")

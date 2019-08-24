@@ -44,7 +44,6 @@ class UserSearcherActivity : AppCompatActivity(), CoroutineScope {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                toast("searching...$newText")
                 newText?.let{
                     FirebaseUtil.database.getUsersByName(newText)
                 }

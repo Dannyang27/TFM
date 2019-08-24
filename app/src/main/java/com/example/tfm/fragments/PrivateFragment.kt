@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import com.example.tfm.adapter.ConversationAdapter
 import com.example.tfm.divider.HorizontalDivider
 import com.example.tfm.R
+import com.example.tfm.model.Conversation
 
 class PrivateFragment : Fragment(){
 
@@ -17,18 +18,25 @@ class PrivateFragment : Fragment(){
 
     companion object{
         fun newInstance(): PrivateFragment = PrivateFragment()
-        lateinit var friends: RecyclerView
+        lateinit var conversationRecyclerView: RecyclerView
         lateinit var viewAdapter : RecyclerView.Adapter<*>
+        lateinit var conversations : MutableList<Conversation>
+
+        fun addConversation( conversation: Conversation){
+            conversations.add(conversation)
+            viewAdapter.notifyDataSetChanged()
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_private_chat, container, false)
 
         viewManager = LinearLayoutManager(this.activity)
-        viewAdapter = ConversationAdapter(mutableListOf("test","test","test","test","test","test",
-            "test","test","test","test","test","test","test"))
 
-        friends = view.findViewById<RecyclerView>(R.id.private_recyclerview).apply {
+        conversations = mutableListOf()
+        viewAdapter = ConversationAdapter(conversations)
+
+        conversationRecyclerView = view.findViewById<RecyclerView>(R.id.private_recyclerview).apply {
             setHasFixedSize(true)
             addItemDecoration(HorizontalDivider(this.context))
             layoutManager = viewManager

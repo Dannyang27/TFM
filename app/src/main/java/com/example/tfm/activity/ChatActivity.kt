@@ -109,7 +109,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
 
         initListeners()
         //loadSampleMessagesPrivateChat()
-        loadSampleMessagesGroupChat()
+        //loadSampleMessagesGroupChat()
 
         viewManager = LinearLayoutManager(this)
         viewAdapter = ChatAdapter(messages, this)
@@ -332,18 +332,18 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         }
     }
 
-    private fun loadSampleMessagesPrivateChat(){
-        messages.add(Message(AuthUtil.getAccountEmail(), AuthUtil.receiverEmail ,MessageType.MESSAGE, "Hello World",  1212, true, true, true, "EN" ))
-        messages.add(Message(AuthUtil.receiverEmail, AuthUtil.getAccountEmail(), MessageType.MESSAGE, getString(R.string.dwight_quote), 1213 ,true, true, true, "EN"))
-        messages.add(Message(AuthUtil.receiverEmail, AuthUtil.getAccountEmail(), MessageType.ATTACHMENT, "", 1213 , true, true, false,"EN"))
-        messages.add(Message(AuthUtil.getAccountEmail(), AuthUtil.receiverEmail, MessageType.ATTACHMENT, "", 1213 , true, true, true,"EN"))
-    }
-
-    private fun loadSampleMessagesGroupChat(){
-        messages.add(Message(AuthUtil.getAccountEmail(), AuthUtil.receiverEmail ,MessageType.MESSAGE, "Hello World",  1212, true, true, false, "EN" ))
-        messages.add(Message(AuthUtil.celia, AuthUtil.getAccountEmail(), MessageType.MESSAGE, getString(R.string.dwight_quote), 1213 ,true, true, false, "EN"))
-        messages.add(Message(AuthUtil.jorge, AuthUtil.getAccountEmail(), MessageType.MESSAGE, getString(R.string.long_text_sample), 1213 ,true, true, false, "EN"))
-        messages.add(Message(AuthUtil.lesley, AuthUtil.getAccountEmail(), MessageType.ATTACHMENT, "", 1213 , true, true, false,"EN"))
-        messages.add(Message(AuthUtil.getAccountEmail(), AuthUtil.receiverEmail, MessageType.ATTACHMENT, "", 1213 , true, true, false,"EN"))
-    }
+//    private fun loadSampleMessagesPrivateChat(){
+//        messages.add(Message(AuthUtil.getAccountEmail(), AuthUtil.receiverEmail ,MessageType.MESSAGE, "Hello World",  1212, true, true, true, "EN" ))
+//        messages.add(Message(AuthUtil.receiverEmail, AuthUtil.getAccountEmail(), MessageType.MESSAGE, getString(R.string.dwight_quote), 1213 ,true, true, true, "EN"))
+//        messages.add(Message(AuthUtil.receiverEmail, AuthUtil.getAccountEmail(), MessageType.ATTACHMENT, "", 1213 , true, true, false,"EN"))
+//        messages.add(Message(AuthUtil.getAccountEmail(), AuthUtil.receiverEmail, MessageType.ATTACHMENT, "", 1213 , true, true, true,"EN"))
+//    }
+//
+//    private fun loadSampleMessagesGroupChat(){
+//        messages.add(Message(AuthUtil.getAccountEmail(), AuthUtil.receiverEmail ,MessageType.MESSAGE, "Hello World",  1212, true, true, false, "EN" ))
+//        messages.add(Message(AuthUtil.celia, AuthUtil.getAccountEmail(), MessageType.MESSAGE, getString(R.string.dwight_quote), 1213 ,true, true, false, "EN"))
+//        messages.add(Message(AuthUtil.jorge, AuthUtil.getAccountEmail(), MessageType.MESSAGE, getString(R.string.long_text_sample), 1213 ,true, true, false, "EN"))
+//        messages.add(Message(AuthUtil.lesley, AuthUtil.getAccountEmail(), MessageType.ATTACHMENT, "", 1213 , true, true, false,"EN"))
+//        messages.add(Message(AuthUtil.getAccountEmail(), AuthUtil.receiverEmail, MessageType.ATTACHMENT, "", 1213 , true, true, false,"EN"))
+//    }
 }

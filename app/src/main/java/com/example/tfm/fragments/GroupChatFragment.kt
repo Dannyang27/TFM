@@ -25,7 +25,7 @@ class GroupChatFragment : Fragment(){
         val view = inflater.inflate(R.layout.fragment_groupchat, container, false)
 
         viewManager = LinearLayoutManager(this.activity)
-        viewAdapter = ConversationAdapter(mutableListOf("test","test","test"))
+        viewAdapter = ConversationAdapter(mutableListOf())
 
         groups = view.findViewById<RecyclerView>(R.id.group_recyclerview).apply {
             setHasFixedSize(true)

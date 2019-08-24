@@ -18,6 +18,7 @@ class UserSearchAdapter (private var users: MutableList<User>): RecyclerView.Ada
 
     override fun onBindViewHolder(holder: UserSearchViewHolder, position: Int) {
         val user = users[position]
+        holder.email = user.email
         holder.username.text = user.name
         holder.status.text = user.status
     }
