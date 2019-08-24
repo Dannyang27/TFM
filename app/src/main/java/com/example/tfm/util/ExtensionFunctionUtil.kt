@@ -17,37 +17,3 @@ fun TextView.showUsernameIfGroup( isPrivateChat: Boolean, username: String){
         this.visibility = View.VISIBLE
     }
 }
-
-
-fun DatabaseReference.loadFakeUsers(){
-    val celia = User("celiasoler@gmail.com", "Celia Soler", "Trabajando en el oysho jiji", "dasdas")
-    this.child("Users").push().setValue(celia)
-    val jorge = User("jorgeredon@gmail.com", "Jorge Redón", "Drakukeooo, te meto el dedoo", "dasda")
-    this.child("Users").push().setValue(jorge)
-    val pam = User("pamtheoffice@gmail.com", "Pam Beesly", "Dunder Mifflin this is Pam", "dasdasasd")
-    this.child("Users").push().setValue(pam)
-    val lesley = User("weilesley@gmail.com", "Wei Lesley Yang", "Viajando...", "dasda")
-    this.child("Users").push().setValue(lesley)
-}
-
-fun DatabaseReference.getAllUsers(){
-    this.child("Users").addChildEventListener(object: ChildEventListener {
-        override fun onCancelled(p0: DatabaseError) {
-
-        }
-
-        override fun onChildMoved(p0: DataSnapshot, p1: String?) {
-        }
-
-        override fun onChildChanged(dataSnapshot: DataSnapshot, key: String?) {
-            Log.d(LogUtil.TAG, "Email: ${dataSnapshot.getValue(User::class.java)?.email} has changed its value with key: $key")
-        }
-
-        override fun onChildAdded(dataSnapshot: DataSnapshot, key: String?) {
-            Log.d(LogUtil.TAG, dataSnapshot.getValue(User::class.java)?.email)
-        }
-
-        override fun onChildRemoved(p0: DataSnapshot) {
-        }
-    })
-}

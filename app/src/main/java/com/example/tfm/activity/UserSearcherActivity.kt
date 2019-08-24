@@ -9,11 +9,12 @@ import com.example.tfm.R
 import com.example.tfm.adapter.UserSearchAdapter
 import com.example.tfm.divider.HorizontalDivider
 import com.example.tfm.model.User
+import com.example.tfm.util.FirebaseUtil
+import com.example.tfm.util.getUsersByName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import org.jetbrains.anko.toast
-import kotlin.coroutines.CoroutineContext
 
 class UserSearcherActivity : AppCompatActivity(), CoroutineScope {
     private val job = Job()
@@ -24,7 +25,12 @@ class UserSearcherActivity : AppCompatActivity(), CoroutineScope {
     private lateinit var viewManager: RecyclerView.LayoutManager
 
     companion object{
-        lateinit var viewAdapter : RecyclerView.Adapter<*>
+        lateinit var viewAdapter : UserSearchAdapter
+        lateinit var users: MutableList<User>
+
+        fun updateList( users: MutableList<User>){
+            viewAdapter.updateList(users)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,20 +40,21 @@ class UserSearcherActivity : AppCompatActivity(), CoroutineScope {
         searchView = findViewById(R.id.search_user)
         searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
-                toast(query.toString())
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
+                toast("searching...$newText")
+                newText?.let{
+                    FirebaseUtil.database.getUsersByName(newText)
+                }
                 return true
             }
         })
 
         viewManager = LinearLayoutManager(this)
-        val users = mutableListOf(User("danny27995@gmail.com", "Le Danny Yang", "At the gym", "kdnasdna"),
-            User("celiasoler@gmail.com", "Celia Soler","Trabajando en el Oysho jiji", "kdnasdna"),
-            User("weilesley@gmail.com", "Wei Lesley Yang","Viajando...", "kdnasdna"),
-            User("jorgeguzman@gmail.com", "Jorge Guzman", "Drakukeo, te meto el dedo","kdnasdna"))
+
+        users = mutableListOf()
         viewAdapter = UserSearchAdapter(users)
 
         recyclerview = findViewById<RecyclerView>(R.id.seach_recyclerview).apply {

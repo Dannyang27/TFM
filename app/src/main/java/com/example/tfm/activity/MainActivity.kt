@@ -16,8 +16,6 @@ import com.example.tfm.fragments.GroupChatFragment
 import org.jetbrains.anko.toast
 import android.view.*
 import com.example.tfm.R
-import com.example.tfm.util.getAllUsers
-import com.example.tfm.util.loadFakeUsers
 import com.google.firebase.database.*
 
 class MainActivity : AppCompatActivity() {
@@ -85,13 +83,6 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .add(R.id.container, privateFragment, "1")
             .commit()
-
-
-        //TEST FIREBASE
-        database = FirebaseDatabase.getInstance().reference
-        //database.loadFakeUsers()
-        //database.getAllUsers()
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
