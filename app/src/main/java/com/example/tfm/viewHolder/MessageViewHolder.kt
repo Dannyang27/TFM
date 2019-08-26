@@ -26,7 +26,7 @@ class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
             setSenderViewHolder()
         }else{
             setReceiverViewHolder()
-            username.showUsernameIfGroup(message.isPrivateChat, message.senderName)
+            username.showUsernameIfGroup(false, message.senderName)
         }
 
         setBody(message.body as String)

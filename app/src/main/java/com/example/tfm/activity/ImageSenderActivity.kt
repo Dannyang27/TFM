@@ -85,8 +85,8 @@ class ImageSenderActivity : AppCompatActivity() {
             sendBtn.setOnClickListener {
                 ChatActivity.sendMessage(Message(AuthUtil.getAccountEmail(), AuthUtil.receiverEmail,
                     MessageType.GIF, MediaContent(url, captionEt.text.toString()), 10,
-                    true, true, true,"EN" ))
-                onBackPressed()
+                    true, true,"EN" ))
+                finish()
             }
         }
     }
@@ -123,8 +123,10 @@ class ImageSenderActivity : AppCompatActivity() {
             .into(media)
 
         sendBtn.setOnClickListener {
-            ChatActivity.sendMessage(Message(AuthUtil.getAccountEmail(), AuthUtil.receiverEmail, MessageType.IMAGE, MediaContent(bitmap, captionEt.text.toString()), 1 , true, true, true,"EN"))
-            onBackPressed()
+            ChatActivity.sendMessage(Message(AuthUtil.getAccountEmail(), AuthUtil.receiverEmail,
+                MessageType.IMAGE, MediaContent(bitmap, captionEt.text.toString()), 1 ,
+                true, true,"EN"))
+            finish()
         }
     }
 }

@@ -33,7 +33,7 @@ class AttachmentViewHolder (view: View): RecyclerView.ViewHolder(view){
             setSenderViewHolder()
         }else{
             setReceiverViewHolder()
-            username.showUsernameIfGroup(message.isPrivateChat, message.senderName)
+            username.showUsernameIfGroup(false, message.senderName)
         }
 
         setTitle("dni_pasaporte", ".pdf")

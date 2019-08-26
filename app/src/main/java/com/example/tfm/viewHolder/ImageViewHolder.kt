@@ -34,7 +34,7 @@ class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view){
             setSenderViewHolder()
         }else {
             setReceiverViewHolder()
-            username.showUsernameIfGroup(message.isPrivateChat, message.senderName)
+            username.showUsernameIfGroup(false, message.senderName)
         }
 
         setImageOrGif(message)

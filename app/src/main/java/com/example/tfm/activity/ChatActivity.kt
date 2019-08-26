@@ -219,7 +219,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         sendButton.setOnClickListener {
             val fieldText = chat_edittext.text.toString()
             if(fieldText.isNotEmpty()){
-                messages.add(Message(AuthUtil.getAccountEmail(), AuthUtil.receiverEmail, MessageType.MESSAGE, fieldText, 1,true, true, true, "EN" ))
+                messages.add(Message(AuthUtil.getAccountEmail(), AuthUtil.receiverEmail, MessageType.MESSAGE, fieldText, 1,true, true, "EN" ))
                 messagesRecyclerView.scrollToPosition(viewAdapter.itemCount - 1)
                 viewAdapter.notifyDataSetChanged()
                 chat_edittext.text.clear()
@@ -326,7 +326,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
     @Throws(IOException::class)
     private fun createImageFile(): File {
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val storageDir: File = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return File.createTempFile("JPEG_${timeStamp}_", ".jpg", storageDir).apply {
             currentPhotoPath = absolutePath
         }

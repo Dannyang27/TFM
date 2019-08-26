@@ -9,5 +9,4 @@ data class Message (val senderName: String,
                     val timestamp: Long,
                     var isSent: Boolean,
                     var isReceived: Boolean,
-                    val isPrivateChat: Boolean,
                     val languageCode: String)

@@ -56,7 +56,7 @@ class LocationViewHolder(view: View) : RecyclerView.ViewHolder(view), OnMapReady
             setSenderViewHolder()
         }else{
             setReceiverViewHolder()
-            username.showUsernameIfGroup(message.isPrivateChat, message.senderName)
+            username.showUsernameIfGroup(false, message.senderName)
         }
 
         setAddress(address.getAddressLine(0))

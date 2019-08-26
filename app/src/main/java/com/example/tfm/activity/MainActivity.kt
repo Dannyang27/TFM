@@ -83,6 +83,8 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .add(R.id.container, privateFragment, "1")
             .commit()
+
+        //FirebaseUtil.database.loadFakeUsers()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
