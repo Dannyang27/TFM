@@ -22,4 +22,7 @@ interface ConversationDAO {
 
     @Delete
     fun delete(conversation: Conversation)
+
+    @Query("DELETE FROM Conversation")
+    fun deleteAll()
 }

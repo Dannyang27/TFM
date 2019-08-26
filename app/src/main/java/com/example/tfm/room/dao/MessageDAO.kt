@@ -17,9 +17,6 @@ interface MessageDAO {
     @Query("SELECT * FROM Message WHERE receiverName = :name")
     fun getReceivedMessages( name: String) : MutableList<Message>
 
-    @Query("SELECT * FROM Message WHERE isSent = isSent")
-    fun getUnsentMessage( isSent: String) : MutableList<Message>
-
     @Query("SELECT COUNT(*) FROM Message")
     fun getSize(): Int
 
@@ -31,4 +28,7 @@ interface MessageDAO {
 
     @Delete
     fun delete(message: Message)
+
+    @Query("DELETE FROM Message")
+    fun deleteAll()
 }

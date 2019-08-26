@@ -1,8 +1,9 @@
 package com.example.tfm.activity
 
-import android.content.Intent
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import androidx.emoji.text.EmojiCompat
@@ -16,11 +17,20 @@ import com.example.tfm.fragments.GroupChatFragment
 import org.jetbrains.anko.toast
 import android.view.*
 import com.example.tfm.R
-import com.example.tfm.util.FirebaseUtil
-import com.example.tfm.util.loadFakeUsers
+import com.example.tfm.enum.MessageType
+import com.example.tfm.model.Conversation
+import com.example.tfm.model.Message
+import com.example.tfm.model.User
+import com.example.tfm.room.database.MyRoomDatabase
+import com.example.tfm.util.LogUtil
 import com.google.firebase.database.*
+import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), CoroutineScope {
+    private val job = Job()
+    override val coroutineContext = Dispatchers.IO + job
+
     private val privateFragment = PrivateFragment.newInstance()
     private val groupChatFragment = GroupChatFragment.newInstance()
     private var activeFragment: Fragment = privateFragment
@@ -63,11 +73,12 @@ class MainActivity : AppCompatActivity() {
 
         fab = findViewById(R.id.fab)
         fab.setOnClickListener {
-            if(activeFragment is PrivateFragment){
-                val intent = Intent(this, UserSearcherActivity::class.java)
-                startActivity(intent)
-            }else{
-            }
+//            if(activeFragment is PrivateFragment){
+//                val intent = Intent(this, UserSearcherActivity::class.java)
+//                startActivity(intent)
+//            }else{
+//            }
+
         }
 
         searchView = findViewById(R.id.search_chat)
@@ -83,8 +94,6 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .add(R.id.container, privateFragment, "1")
             .commit()
-
-        //FirebaseUtil.database.loadFakeUsers()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -105,5 +114,12 @@ class MainActivity : AppCompatActivity() {
     private fun initEmoji(){
         val config = BundledEmojiCompatConfig(this)
         EmojiCompat.init(config)
+    }
+
+    fun deleteAllItems(context: Context){
+        val database: MyRoomDatabase? = MyRoomDatabase.getMyRoomDatabase(context)
+        database?.userDao()?.deleteAll()
+        database?.conversationDao()?.deleteAll()
+        database?.messageDao()?.deleteAll()
     }
 }

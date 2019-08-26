@@ -1,4 +1,4 @@
-package com.example.tfm.room
+package com.example.tfm.room.typeconverters
 
 import androidx.room.TypeConverter
 import java.util.*
