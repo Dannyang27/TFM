@@ -37,7 +37,7 @@ class UserSearchViewHolder(view : View) : RecyclerView.ViewHolder(view), Corouti
 
                 job.await()
 
-                Log.d(LogUtil.TAG, "Coroutine: $exists")
+                //Log.d(LogUtil.TAG, "Coroutine: $exists")
 
             }
 

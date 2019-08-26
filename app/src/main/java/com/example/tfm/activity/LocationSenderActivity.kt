@@ -75,7 +75,7 @@ class LocationSenderActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMa
         })
 
         locationSendButton.setOnClickListener {
-            ChatActivity.sendMessage(Message(AuthUtil.getAccountEmail(), AuthUtil.receiverEmail,
+            ChatActivity.sendMessage(Message(0,AuthUtil.getAccountEmail(), AuthUtil.receiverEmail,
                 MessageType.LOCATION, address, 1, true, true, "EN"))
             finish()
         }

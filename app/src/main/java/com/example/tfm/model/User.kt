@@ -1,3 +1,11 @@
 package com.example.tfm.model
 
-data class User(val email: String = "", val name: String = "", val status: String = "",  val profilePhoto: String = "")
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "User")
+data class User(@PrimaryKey(autoGenerate = false)
+                val email: String = "",
+                val name: String = "",
+                val status: String = "",
+                val profilePhoto: String = "")
