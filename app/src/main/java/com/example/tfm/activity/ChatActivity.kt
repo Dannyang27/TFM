@@ -38,7 +38,6 @@ import java.io.IOException
 import java.util.*
 
 class ChatActivity : AppCompatActivity(), CoroutineScope {
-
     private val job = Job()
     override val coroutineContext get() = Dispatchers.Default + job
 
