@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         fab = findViewById(R.id.fab)
         fab.setOnClickListener {
             if(activeFragment is PrivateFragment){
-                val intent = Intent(this, LoginActivity::class.java)
+                val intent = Intent(this, UserSearcherActivity::class.java)
                 startActivity(intent)
             }else{
                 //TODO add search group
@@ -105,15 +105,20 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
 
     override fun onOptionsItemSelected(item: MenuItem?) = when(item?.itemId) {
 
-        R.id.signout -> {
-            FirebaseAuth.getInstance().signOut()
-            PreferenceManager.getDefaultSharedPreferences(this).clearCredential()
-            startActivity(Intent(this, LoginActivity::class.java))
+        R.id.profile -> {
+            startActivity(Intent(this, UserProfileActivity::class.java))
             true
         }
 
         R.id.settings -> {
             toast("Settings Clicked")
+            true
+        }
+
+        R.id.signout -> {
+            FirebaseAuth.getInstance().signOut()
+            PreferenceManager.getDefaultSharedPreferences(this).clearCredential()
+            startActivity(Intent(this, LoginActivity::class.java))
             true
         }
 

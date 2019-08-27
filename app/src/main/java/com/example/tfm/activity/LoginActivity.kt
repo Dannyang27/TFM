@@ -22,7 +22,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var loginBtn: Button
 
     private lateinit var prefs: SharedPreferences
-    private lateinit var auth: FirebaseAuth
+    private var auth: FirebaseAuth? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +30,7 @@ class LoginActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
         auth?.let {
-            Log.d(LogUtil.TAG, "CurrentUserEmail: " + auth.currentUser?.email)
+            Log.d(LogUtil.TAG, "CurrentUserEmail: " + it.currentUser?.email)
         }
         prefs = PreferenceManager.getDefaultSharedPreferences(this)
         val (emailPref, passwordPref) = prefs.getCredentials()
@@ -58,8 +58,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun loginUser(user: String, password: String){
-        auth.signInWithEmailAndPassword(user, password)
-            .addOnCompleteListener(this){ task ->
+        auth?.signInWithEmailAndPassword(user, password)
+            ?.addOnCompleteListener(this){ task ->
                 if(task.isSuccessful){
                     Log.d(LogUtil.TAG, "Signed in successfully")
                     prefs.updateCurrentUser(user, password)

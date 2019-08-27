@@ -21,8 +21,11 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".activity.SignupActivity"
+        <activity android:name=".activity.UserProfileActivity"
                 android:screenOrientation="portrait"/>
+        <activity
+                android:name=".activity.SignupActivity"
+                android:screenOrientation="portrait" />
         <activity
                 android:name=".activity.LoginActivity"
                 android:screenOrientation="portrait">
@@ -62,7 +65,7 @@
         <activity
                 android:name=".activity.MainActivity"
                 android:screenOrientation="portrait"
-                android:windowSoftInputMode="adjustPan"/>
+                android:windowSoftInputMode="adjustPan" />
     </application>
 
 </manifest>
