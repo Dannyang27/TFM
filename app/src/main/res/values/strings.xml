@@ -50,4 +50,5 @@
     <string name="password">Password</string>
     <string name="email_hint">johndoe@gmail.com</string>
     <string name="user_hint">John Doe</string>
+    <string name="signout">Sign out</string>
 </resources>

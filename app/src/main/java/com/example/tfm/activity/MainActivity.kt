@@ -3,6 +3,7 @@ package com.example.tfm.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.preference.PreferenceManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import androidx.emoji.text.EmojiCompat
@@ -18,6 +19,8 @@ import android.view.*
 import com.example.tfm.R
 import com.example.tfm.model.User
 import com.example.tfm.room.database.MyRoomDatabase
+import com.example.tfm.util.clearCredential
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.coroutines.*
 
@@ -73,11 +76,11 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             }else{
                 //TODO add search group
             }
-
-            val roomDatabase = MyRoomDatabase.getMyRoomDatabase(this)
-            roomDatabase?.addUser(User("danny27995@gmail.com", "le danny yang", "Mi estado", "empty"))
-            roomDatabase?.addUser(User("celiasoler@gmail.com", "celia soler", "Mi estado", "ndkasndjas"))
-            roomDatabase?.showAllUserInLog()
+//
+//            val roomDatabase = MyRoomDatabase.getMyRoomDatabase(this)
+//            roomDatabase?.addUser(User("danny27995@gmail.com", "le danny yang", "Mi estado", "empty"))
+//            roomDatabase?.addUser(User("celiasoler@gmail.com", "celia soler", "Mi estado", "ndkasndjas"))
+//            roomDatabase?.showAllUserInLog()
         }
 
         searchView = findViewById(R.id.search_chat)
@@ -101,6 +104,13 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?) = when(item?.itemId) {
+
+        R.id.signout -> {
+            FirebaseAuth.getInstance().signOut()
+            PreferenceManager.getDefaultSharedPreferences(this).clearCredential()
+            startActivity(Intent(this, LoginActivity::class.java))
+            true
+        }
 
         R.id.settings -> {
             toast("Settings Clicked")

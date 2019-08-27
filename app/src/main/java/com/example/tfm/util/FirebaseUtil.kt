@@ -1,11 +1,15 @@
 package com.example.tfm.util
 
+import android.content.Context
+import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.util.Log
+import com.example.tfm.activity.MainActivity
 import com.example.tfm.activity.UserSearcherActivity
 import com.example.tfm.model.Conversation
 import com.example.tfm.model.User
 import com.google.firebase.database.*
-import kotlinx.coroutines.*
+import com.google.firebase.firestore.FirebaseFirestore
 
 object FirebaseUtil {
     val database = FirebaseDatabase.getInstance().reference
@@ -84,4 +88,19 @@ fun DatabaseReference.loadFakeUsers(){
     this.child("Users").child(pam.hashCode().toString()).setValue(pam)
     val lesley = User("weilesley@gmail.com", "Wei Lesley Yang", "Viajando...", "dasda")
     this.child("Users").child(lesley.hashCode().toString()).setValue(lesley)
+}
+
+
+fun FirebaseFirestore.addUser(context: Context, user: User){
+    collection("users")
+        .document(user.email)
+        .set(User(user.email, user.name, user.status, user.profilePhoto))
+        .addOnSuccessListener {
+            Log.d(LogUtil.TAG, "User added into FirebaseFirestore")
+            val intent = Intent(context, MainActivity::class.java)
+            intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(intent)
+        }.addOnFailureListener {
+            Log.d(LogUtil.TAG, "Error adding document")
+        }
 }
