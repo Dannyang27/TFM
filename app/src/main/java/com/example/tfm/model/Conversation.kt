@@ -15,7 +15,7 @@ class Conversation (@PrimaryKey
                     var userOne: User? = null,
                     @TypeConverters(UserConverter::class)
                     var userTwo : User? = null,
-                    @TypeConverters(MessageListConverter::class)
+                    @Ignore
                     var messages: MutableList<Message> = mutableListOf(),
                     var timestamp: Long = -1,
                     @Ignore

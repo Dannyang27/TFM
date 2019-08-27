@@ -1,9 +1,8 @@
 package com.example.tfm.activity
 
-import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import androidx.emoji.text.EmojiCompat
@@ -17,16 +16,10 @@ import com.example.tfm.fragments.GroupChatFragment
 import org.jetbrains.anko.toast
 import android.view.*
 import com.example.tfm.R
-import com.example.tfm.enum.MessageType
-import com.example.tfm.model.Conversation
-import com.example.tfm.model.Message
 import com.example.tfm.model.User
 import com.example.tfm.room.database.MyRoomDatabase
-import com.example.tfm.util.LogUtil
 import com.google.firebase.database.*
 import kotlinx.coroutines.*
-import java.lang.Exception
-import kotlin.coroutines.CoroutineContext
 
 class MainActivity : AppCompatActivity(), CoroutineScope {
     private val job = Job()
@@ -78,7 +71,13 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
 //                val intent = Intent(this, UserSearcherActivity::class.java)
 //                startActivity(intent)
 //            }else{
+//                //TODO add search group
 //            }
+
+            val roomDatabase = MyRoomDatabase.getMyRoomDatabase(this)
+            roomDatabase?.addUser(User("danny27995@gmail.com", "le danny yang", "Mi estado", "empty"))
+            roomDatabase?.addUser(User("celiasoler@gmail.com", "celia soler", "Mi estado", "ndkasndjas"))
+            roomDatabase?.showAllUserInLog()
         }
 
         searchView = findViewById(R.id.search_chat)
