@@ -218,7 +218,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         sendButton.setOnClickListener {
             val fieldText = chat_edittext.text.toString()
             if(fieldText.isNotEmpty()){
-                messages.add(Message(0,AuthUtil.getAccountEmail(), AuthUtil.receiverEmail, MessageType.MESSAGE, fieldText, 1, false,true,"EN" ))
+                messages.add(Message(0, "",AuthUtil.getAccountEmail(), AuthUtil.receiverEmail, MessageType.MESSAGE, fieldText, 1, false,true,"EN" ))
                 messagesRecyclerView.scrollToPosition(viewAdapter.itemCount - 1)
                 viewAdapter.notifyDataSetChanged()
                 chat_edittext.text.clear()

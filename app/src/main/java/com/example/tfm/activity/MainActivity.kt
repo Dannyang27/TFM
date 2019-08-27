@@ -25,6 +25,7 @@ import com.example.tfm.room.database.MyRoomDatabase
 import com.example.tfm.util.LogUtil
 import com.google.firebase.database.*
 import kotlinx.coroutines.*
+import java.lang.Exception
 import kotlin.coroutines.CoroutineContext
 
 class MainActivity : AppCompatActivity(), CoroutineScope {
@@ -78,7 +79,6 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
 //                startActivity(intent)
 //            }else{
 //            }
-
         }
 
         searchView = findViewById(R.id.search_chat)
@@ -114,12 +114,5 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     private fun initEmoji(){
         val config = BundledEmojiCompatConfig(this)
         EmojiCompat.init(config)
-    }
-
-    fun deleteAllItems(context: Context){
-        val database: MyRoomDatabase? = MyRoomDatabase.getMyRoomDatabase(context)
-        database?.userDao()?.deleteAll()
-        database?.conversationDao()?.deleteAll()
-        database?.messageDao()?.deleteAll()
     }
 }
