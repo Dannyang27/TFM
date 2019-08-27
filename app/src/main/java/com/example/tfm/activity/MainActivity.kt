@@ -67,12 +67,12 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
 
         fab = findViewById(R.id.fab)
         fab.setOnClickListener {
-//            if(activeFragment is PrivateFragment){
-//                val intent = Intent(this, UserSearcherActivity::class.java)
-//                startActivity(intent)
-//            }else{
-//                //TODO add search group
-//            }
+            if(activeFragment is PrivateFragment){
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
+            }else{
+                //TODO add search group
+            }
 
             val roomDatabase = MyRoomDatabase.getMyRoomDatabase(this)
             roomDatabase?.addUser(User("danny27995@gmail.com", "le danny yang", "Mi estado", "empty"))
