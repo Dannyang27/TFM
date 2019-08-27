@@ -33,7 +33,7 @@ class SignupActivity : AppCompatActivity() {
         password = findViewById(R.id.signup_password)
         joinusBtn = findViewById<Button>(R.id.signup_joinus).apply {
             this.setOnClickListener {
-                toast("Creating User...")
+                createUser()
             }
         }
     }
@@ -44,5 +44,10 @@ class SignupActivity : AppCompatActivity() {
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    private fun createUser(){
+        //check if user exists
+        toast("Creating User...")
     }
 }

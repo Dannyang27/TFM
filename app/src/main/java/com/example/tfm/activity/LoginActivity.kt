@@ -29,7 +29,14 @@ class LoginActivity : AppCompatActivity() {
         }
 
         loginBtn = findViewById<Button>(R.id.login_button).apply {
-            toast("Login in...")
+            setOnClickListener {
+                loginUser()
+            }
         }
     }
+
+    private fun loginUser(){
+        toast("Login in...")
+    }
 }
+
