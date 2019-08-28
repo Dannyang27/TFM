@@ -11,6 +11,9 @@ interface ConversationDAO {
     @Query("SELECT * FROM Conversation WHERE id = :id")
     fun getById( id: String) : Conversation
 
+    @Query("SELECT * FROM Conversation where userOne = :email or userTwo = :email")
+    fun getUserConversations(email: String): MutableList<Conversation>
+
     @Query("SELECT COUNT(*) FROM Conversation")
     fun getSize(): Int
 
@@ -25,4 +28,7 @@ interface ConversationDAO {
 
     @Query("DELETE FROM Conversation where id = :id")
     fun deleteConversationById(id : String)
+
+    @Query("DELETE FROM Conversation")
+    fun deleteAll()
 }

@@ -76,11 +76,6 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             }else{
                 //TODO add search group
             }
-//
-//            val roomDatabase = MyRoomDatabase.getMyRoomDatabase(this)
-//            roomDatabase?.addUser(User("danny27995@gmail.com", "le danny yang", "Mi estado", "empty"))
-//            roomDatabase?.addUser(User("celiasoler@gmail.com", "celia soler", "Mi estado", "ndkasndjas"))
-//            roomDatabase?.showAllUserInLog()
         }
 
         searchView = findViewById(R.id.search_chat)

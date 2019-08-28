@@ -10,11 +10,9 @@ import com.example.tfm.adapter.UserSearchAdapter
 import com.example.tfm.divider.HorizontalDivider
 import com.example.tfm.model.User
 import com.example.tfm.util.FirebaseUtil
-import com.example.tfm.util.getUsersByName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import org.jetbrains.anko.toast
 
 class UserSearcherActivity : AppCompatActivity(), CoroutineScope {
     private val job = Job()
@@ -45,7 +43,7 @@ class UserSearcherActivity : AppCompatActivity(), CoroutineScope {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 newText?.let{
-                    FirebaseUtil.database.getUsersByName(newText)
+                    FirebaseUtil.getUsersByName(newText)
                 }
                 return true
             }

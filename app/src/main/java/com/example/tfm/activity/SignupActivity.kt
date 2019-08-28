@@ -15,6 +15,7 @@ import com.example.tfm.util.*
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import org.jetbrains.anko.toast
 
@@ -26,6 +27,11 @@ class SignupActivity : AppCompatActivity() {
     private lateinit var password: EditText
     private lateinit var joinusBtn: Button
     private lateinit var prefs: SharedPreferences
+
+    companion object{
+        lateinit var currentUserEmail: String
+        lateinit var currentUserPassword: String
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,10 +86,9 @@ class SignupActivity : AppCompatActivity() {
         auth.createUserWithEmailAndPassword(email.text.toString(), password.text.toString())
             .addOnSuccessListener(object : OnSuccessListener<AuthResult>{
                 override fun onSuccess(p0: AuthResult?) {
-                    val firestoreDb = FirebaseFirestore.getInstance()
-                    firestoreDb.addUser(applicationContext, user)
-                    prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-                    prefs.updateCurrentUser(email.text.toString(), password.text.toString())
+                    FirebaseFirestore.getInstance().addUser(applicationContext, user)
+                    currentUserEmail = email.text.toString()
+                    currentUserPassword = password.text.toString()
                 }
             })
     }

@@ -1,9 +1,6 @@
 package com.example.tfm.model
 
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
+import androidx.room.*
 import com.example.tfm.enum.MessageType
 import com.example.tfm.room.typeconverters.AnyTypeConverter
 
@@ -13,7 +10,9 @@ import com.example.tfm.room.typeconverters.AnyTypeConverter
                         onDelete = ForeignKey.CASCADE)))
 
 data class Message (@PrimaryKey(autoGenerate = true)
+                    @ColumnInfo(name = "id", index = true)
                     var id: Long = 0,
+                    @ColumnInfo(name = "ownerId", index = true)
                     var ownerId: String = "",
                     var senderName: String = "",
                     var receiverName: String = "",

@@ -11,6 +11,8 @@ import com.example.tfm.adapter.ConversationAdapter
 import com.example.tfm.divider.HorizontalDivider
 import com.example.tfm.R
 import com.example.tfm.model.Conversation
+import com.example.tfm.room.database.MyRoomDatabase
+import com.google.firebase.auth.FirebaseAuth
 
 class PrivateFragment : Fragment(){
 
@@ -19,12 +21,16 @@ class PrivateFragment : Fragment(){
     companion object{
         fun newInstance(): PrivateFragment = PrivateFragment()
         lateinit var conversationRecyclerView: RecyclerView
-        lateinit var viewAdapter : RecyclerView.Adapter<*>
+        lateinit var viewAdapter : ConversationAdapter
         lateinit var conversations : MutableList<Conversation>
 
         fun addConversation( conversation: Conversation){
             conversations.add(conversation)
             viewAdapter.notifyDataSetChanged()
+        }
+
+        fun updateConversation(newConversations: MutableList<Conversation>){
+            viewAdapter.updateList(newConversations)
         }
     }
 
@@ -42,6 +48,13 @@ class PrivateFragment : Fragment(){
             layoutManager = viewManager
             adapter = viewAdapter
         }
+
+        val roomDatabase = MyRoomDatabase.getMyRoomDatabase(activity?.applicationContext!!)
+//        roomDatabase?.deleteAllConversation()
+        roomDatabase?.showAllConversationInLog()
+        roomDatabase?.showAllUserInLog()
+
+        roomDatabase?.loadUserConversation(FirebaseAuth.getInstance().currentUser?.email!!)
 
         return view
     }

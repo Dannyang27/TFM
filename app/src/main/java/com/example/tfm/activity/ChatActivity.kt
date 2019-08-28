@@ -27,6 +27,7 @@ import com.example.tfm.enum.MessageType
 import com.example.tfm.fragments.EmojiFragment
 import com.example.tfm.fragments.GifFragment
 import com.example.tfm.model.Message
+import com.example.tfm.room.database.MyRoomDatabase
 import com.example.tfm.util.AuthUtil
 import com.example.tfm.util.KeyboardUtil
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -107,8 +108,6 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         supportFragmentManager.beginTransaction().add(R.id.emoji_container, emojiFragment, "1").commit()
 
         initListeners()
-        //loadSampleMessagesPrivateChat()
-        //loadSampleMessagesGroupChat()
 
         viewManager = LinearLayoutManager(this)
         viewAdapter = ChatAdapter(messages, this)
@@ -138,6 +137,11 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?) = when(item?.itemId) {
+
+        android.R.id.home -> {
+            startActivity(Intent(this, MainActivity::class.java))
+            true
+        }
 
         R.id.call -> {
             toast("Phonecalling...")
@@ -330,19 +334,4 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
             currentPhotoPath = absolutePath
         }
     }
-
-//    private fun loadSampleMessagesPrivateChat(){
-//        messages.add(Message(AuthUtil.getAccountEmail(), AuthUtil.receiverEmail ,MessageType.MESSAGE, "Hello World",  1212, true, true, true, "EN" ))
-//        messages.add(Message(AuthUtil.receiverEmail, AuthUtil.getAccountEmail(), MessageType.MESSAGE, getString(R.string.dwight_quote), 1213 ,true, true, true, "EN"))
-//        messages.add(Message(AuthUtil.receiverEmail, AuthUtil.getAccountEmail(), MessageType.ATTACHMENT, "", 1213 , true, true, false,"EN"))
-//        messages.add(Message(AuthUtil.getAccountEmail(), AuthUtil.receiverEmail, MessageType.ATTACHMENT, "", 1213 , true, true, true,"EN"))
-//    }
-//
-//    private fun loadSampleMessagesGroupChat(){
-//        messages.add(Message(AuthUtil.getAccountEmail(), AuthUtil.receiverEmail ,MessageType.MESSAGE, "Hello World",  1212, true, true, false, "EN" ))
-//        messages.add(Message(AuthUtil.celia, AuthUtil.getAccountEmail(), MessageType.MESSAGE, getString(R.string.dwight_quote), 1213 ,true, true, false, "EN"))
-//        messages.add(Message(AuthUtil.jorge, AuthUtil.getAccountEmail(), MessageType.MESSAGE, getString(R.string.long_text_sample), 1213 ,true, true, false, "EN"))
-//        messages.add(Message(AuthUtil.lesley, AuthUtil.getAccountEmail(), MessageType.ATTACHMENT, "", 1213 , true, true, false,"EN"))
-//        messages.add(Message(AuthUtil.getAccountEmail(), AuthUtil.receiverEmail, MessageType.ATTACHMENT, "", 1213 , true, true, false,"EN"))
-//    }
 }

@@ -6,6 +6,9 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.tfm.fragments.PrivateFragment
 import com.example.tfm.model.Conversation
 import com.example.tfm.model.Message
 import com.example.tfm.model.User
@@ -16,7 +19,7 @@ import com.example.tfm.room.typeconverters.*
 import com.example.tfm.util.LogUtil
 import kotlinx.coroutines.*
 
-@Database(entities = [User::class, Conversation::class, Message::class], version = 1)
+@Database(entities = [User::class, Conversation::class, Message::class], version = 1, exportSchema = false)
 @TypeConverters(DateTypeConverter::class, UserConverter::class, UserListConverter::class, MessageConverter::class, MessageListConverter::class, AnyTypeConverter::class)
 abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
     private val job = Job()
@@ -25,7 +28,6 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
     abstract fun userDao(): UserDAO
     abstract fun conversationDao(): ConversationDAO
     abstract fun messageDao(): MessageDAO
-
 
     companion object{
         var INSTANCE: MyRoomDatabase? = null
@@ -43,6 +45,7 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
             INSTANCE = null
         }
     }
+
     fun addUser(user: User){
         launch {
             async{ userDao().add(user) }.also { Log.d(LogUtil.TAG, "User ${user.email} has been added into dabatase") }
@@ -79,9 +82,21 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
             async {
                 Log.d(LogUtil.TAG, "Id: | UserOne: | UserTwo: ")
                 conversationDao().getAll().forEach {
-                    Log.d(LogUtil.TAG, "${it.id} | ${it.userOne?.email} | ${it.userTwo?.email}")
+                    Log.d(LogUtil.TAG, "${it.id} | ${it.userOne} | ${it.userTwo}")
                 }
             }
+        }
+    }
+
+    fun loadUserConversation(email: String){
+        launch {
+            PrivateFragment.updateConversation(conversationDao().getUserConversations(email))
+        }
+    }
+
+    fun deleteAllConversation(){
+        launch {
+            conversationDao().deleteAll()
         }
     }
 

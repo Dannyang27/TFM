@@ -11,10 +11,8 @@ import org.jetbrains.annotations.NotNull
 @Entity(tableName = "Conversation")
 class Conversation (@PrimaryKey
                     @NotNull var id: String = "",
-                    @TypeConverters(UserConverter::class)
-                    var userOne: User? = null,
-                    @TypeConverters(UserConverter::class)
-                    var userTwo : User? = null,
+                    var userOne: String? = "",
+                    var userTwo : String? = "",
                     @Ignore
                     var messages: MutableList<Message> = mutableListOf(),
                     var timestamp: Long = -1,
