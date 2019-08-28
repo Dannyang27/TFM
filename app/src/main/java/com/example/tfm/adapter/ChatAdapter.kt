@@ -1,14 +1,17 @@
 package com.example.tfm.adapter
 
 import android.content.Context
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
 import com.example.tfm.enum.MessageType
 import com.example.tfm.model.Message
-import com.example.tfm.viewHolder.*
+import com.example.tfm.viewHolder.AttachmentViewHolder
+import com.example.tfm.viewHolder.ImageViewHolder
+import com.example.tfm.viewHolder.LocationViewHolder
+import com.example.tfm.viewHolder.MessageViewHolder
 
 class ChatAdapter(private val messages : MutableList<Message>, context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 

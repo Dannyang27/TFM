@@ -2,13 +2,13 @@ package com.example.tfm.viewHolder
 
 import android.graphics.Bitmap
 import android.view.Gravity
-import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.emoji.widget.EmojiTextView
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.tfm.R
 import com.example.tfm.enum.MessageType

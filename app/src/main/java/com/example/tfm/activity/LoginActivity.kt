@@ -2,12 +2,12 @@ package com.example.tfm.activity
 
 import android.content.Intent
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import androidx.appcompat.app.AppCompatActivity
 import com.example.tfm.R
 import com.example.tfm.util.LogUtil
 import com.example.tfm.util.getCredentials

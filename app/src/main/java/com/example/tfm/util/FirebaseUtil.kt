@@ -13,12 +13,13 @@ import com.example.tfm.model.Conversation
 import com.example.tfm.model.User
 import com.example.tfm.room.database.MyRoomDatabase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
-import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 
 object FirebaseUtil {
@@ -96,30 +97,6 @@ object FirebaseUtil {
         }
     }
 }
-
-//fun DatabaseReference.addPrivateChats(hashcode: String, conversation: Conversation){
-//    this.child("PrivateChats").child(hashcode).setValue(conversation)
-//}
-//
-//fun DatabaseReference.addGroupChat(hashcode: String, conversation: Conversation){
-//    this.child("GroupChats").child(hashcode).setValue(conversation)
-//}
-//
-//fun DatabaseReference.getAllUsers(){
-//    this.child("Users").addChildEventListener(object: ChildEventListener {
-//        override fun onCancelled(p0: DatabaseError) {}
-//        override fun onChildMoved(p0: DataSnapshot, p1: String?) {}
-//        override fun onChildRemoved(p0: DataSnapshot) {}
-//
-//        override fun onChildChanged(dataSnapshot: DataSnapshot, key: String?) {
-//            Log.d(LogUtil.TAG, "Email: ${dataSnapshot.getValue(User::class.java)?.email} has changed its value with key: $key")
-//        }
-//
-//        override fun onChildAdded(dataSnapshot: DataSnapshot, key: String?) {
-//            Log.d(LogUtil.TAG, dataSnapshot.getValue(User::class.java)?.email)
-//        }
-//    })
-//}
 
 suspend fun FirebaseFirestore.createRoomUser(email: String?): User?{
     return collection(FirebaseUtil.FIREBASE_USER_PATH).document(email!!).get().await().toObject(User::class.java)

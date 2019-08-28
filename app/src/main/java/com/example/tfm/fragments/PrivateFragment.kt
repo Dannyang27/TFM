@@ -1,15 +1,15 @@
 package com.example.tfm.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.tfm.R
 import com.example.tfm.adapter.ConversationAdapter
 import com.example.tfm.divider.HorizontalDivider
-import com.example.tfm.R
 import com.example.tfm.model.Conversation
 import com.example.tfm.room.database.MyRoomDatabase
 import com.google.firebase.auth.FirebaseAuth

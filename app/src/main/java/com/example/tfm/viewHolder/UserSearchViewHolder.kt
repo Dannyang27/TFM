@@ -1,6 +1,5 @@
 package com.example.tfm.viewHolder
 
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.emoji.widget.EmojiTextView
@@ -11,15 +10,14 @@ import com.example.tfm.model.Conversation
 import com.example.tfm.model.Message
 import com.example.tfm.model.User
 import com.example.tfm.util.FirebaseUtil
-import com.example.tfm.util.LogUtil
 import com.example.tfm.util.addConversation
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.*
-import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import java.lang.Exception
 
 class UserSearchViewHolder(view : View) : RecyclerView.ViewHolder(view), CoroutineScope{
     private val job = Job()

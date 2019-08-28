@@ -1,10 +1,10 @@
 package com.example.tfm.adapter
 
 import android.content.Intent
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
 import com.example.tfm.activity.ChatActivity
 import com.example.tfm.diffUtil.ConversationDiffCallback

@@ -1,28 +1,29 @@
 package com.example.tfm.activity
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import androidx.emoji.text.EmojiCompat
-import androidx.emoji.bundled.BundledEmojiCompatConfig
-import androidx.fragment.app.Fragment
-import androidx.appcompat.widget.Toolbar
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.SearchView
 import android.widget.TextView
-import com.example.tfm.fragments.PrivateFragment
-import com.example.tfm.fragments.GroupChatFragment
-import org.jetbrains.anko.toast
-import android.view.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.emoji.bundled.BundledEmojiCompatConfig
+import androidx.emoji.text.EmojiCompat
+import androidx.fragment.app.Fragment
 import com.example.tfm.R
-import com.example.tfm.model.User
-import com.example.tfm.room.database.MyRoomDatabase
+import com.example.tfm.fragments.GroupChatFragment
+import com.example.tfm.fragments.PrivateFragment
 import com.example.tfm.util.clearCredential
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
-import kotlinx.coroutines.*
+import com.google.firebase.database.DatabaseReference
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import org.jetbrains.anko.toast
 
 class MainActivity : AppCompatActivity(), CoroutineScope {
     private val job = Job()

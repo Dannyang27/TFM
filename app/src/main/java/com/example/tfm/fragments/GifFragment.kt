@@ -5,17 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.GridView
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import com.example.tfm.R
 import com.example.tfm.adapter.GifAdapter
 import com.example.tfm.model.giphy.Gifs
 import com.example.tfm.retrofit.RetrofitClient
+import com.example.tfm.util.KeyboardUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import androidx.appcompat.widget.SearchView
-import com.example.tfm.util.KeyboardUtil
 
 class GifFragment : Fragment(), CoroutineScope{
 

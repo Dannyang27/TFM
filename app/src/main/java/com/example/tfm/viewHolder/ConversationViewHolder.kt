@@ -1,9 +1,9 @@
 package com.example.tfm.viewHolder
 
-import androidx.emoji.widget.EmojiTextView
-import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.widget.TextView
+import androidx.emoji.widget.EmojiTextView
+import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
 import de.hdodenhof.circleimageview.CircleImageView
 

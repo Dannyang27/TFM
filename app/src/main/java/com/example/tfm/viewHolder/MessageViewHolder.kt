@@ -1,16 +1,18 @@
 package com.example.tfm.viewHolder
 
 import android.view.Gravity
-import androidx.emoji.widget.EmojiTextView
-import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.emoji.widget.EmojiTextView
+import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
 import com.example.tfm.model.Message
-import com.example.tfm.util.*
+import com.example.tfm.util.AuthUtil
+import com.example.tfm.util.TimeUtil
+import com.example.tfm.util.showUsernameIfGroup
 import org.jetbrains.anko.displayMetrics
 
 class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){

@@ -3,9 +3,6 @@ package com.example.tfm.model
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
-import com.example.tfm.room.typeconverters.MessageListConverter
-import com.example.tfm.room.typeconverters.UserConverter
 import org.jetbrains.annotations.NotNull
 
 @Entity(tableName = "Conversation")
