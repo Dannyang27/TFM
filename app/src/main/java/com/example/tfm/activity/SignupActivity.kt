@@ -12,8 +12,6 @@ import com.example.tfm.R
 import com.example.tfm.model.User
 import com.example.tfm.util.LogUtil
 import com.example.tfm.util.addUser
-import com.google.android.gms.tasks.OnSuccessListener
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import org.jetbrains.anko.toast
@@ -25,7 +23,6 @@ class SignupActivity : AppCompatActivity() {
     private lateinit var email: EditText
     private lateinit var password: EditText
     private lateinit var joinusBtn: Button
-    private lateinit var prefs: SharedPreferences
 
     companion object{
         lateinit var currentUserEmail: String
@@ -46,14 +43,15 @@ class SignupActivity : AppCompatActivity() {
         user = findViewById(R.id.signup_user)
         email = findViewById(R.id.signup_email)
         password = findViewById(R.id.signup_password)
-        joinusBtn = findViewById<Button>(R.id.signup_joinus).apply {
-            this.setOnClickListener {
-                if(isFormNotEmpty()){
-                    val user = User(email.text.toString(), user.text.toString(), "", "")
-                    addUserToFirestore(user)
-                }else{
-                    toast("Form cannot be empty")
-                }
+        joinusBtn = findViewById(R.id.signup_joinus)
+
+        joinusBtn.setOnClickListener {
+            if(isFormNotEmpty()){
+                disableViews()
+                val user = User(email.text.toString(), user.text.toString(), "", "")
+                addUserToFirestore(user)
+            }else{
+                toast("Form cannot be empty")
             }
         }
     }
@@ -83,15 +81,26 @@ class SignupActivity : AppCompatActivity() {
     private fun addUserToFirestore(user: User){
         val auth = FirebaseAuth.getInstance()
         auth.createUserWithEmailAndPassword(email.text.toString(), password.text.toString())
-            .addOnSuccessListener(object : OnSuccessListener<AuthResult>{
-                override fun onSuccess(p0: AuthResult?) {
-                    FirebaseFirestore.getInstance().addUser(applicationContext, user)
-                    currentUserEmail = email.text.toString()
-                    currentUserPassword = password.text.toString()
-                }
-            })
+            .addOnSuccessListener{
+                FirebaseFirestore.getInstance().addUser(this, user)
+                currentUserEmail = email.text.toString()
+                currentUserPassword = password.text.toString()
+            }
+            .addOnFailureListener { enableViews() }
     }
 
     private fun isFormNotEmpty() = user.text.isNotEmpty() && email.text.isNotEmpty() && password.text.isNotEmpty()
+    private fun disableViews(){
+        user.isEnabled = false
+        email.isEnabled = false
+        password.isEnabled = false
+        joinusBtn.isEnabled = false
+    }
+    private fun enableViews(){
+        user.isEnabled = true
+        email.isEnabled = true
+        password.isEnabled = true
+        joinusBtn.isEnabled = true
+    }
 }
 

@@ -13,6 +13,7 @@ import com.example.tfm.util.LogUtil
 import com.example.tfm.util.getCredentials
 import com.example.tfm.util.updateCurrentUser
 import com.google.firebase.auth.FirebaseAuth
+import org.jetbrains.anko.toast
 
 class LoginActivity : AppCompatActivity() {
 
@@ -28,6 +29,11 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        email = findViewById(R.id.login_email)
+        password = findViewById(R.id.login_password)
+        signupBtn = findViewById(R.id.login_signup_button)
+        loginBtn = findViewById(R.id.login_button)
+
         auth = FirebaseAuth.getInstance()
         auth?.let {
             Log.d(LogUtil.TAG, "CurrentUserEmail: " + it.currentUser?.email)
@@ -39,25 +45,22 @@ class LoginActivity : AppCompatActivity() {
             loginUser(emailPref, passwordPref)
         }
 
-        email = findViewById(R.id.login_email)
-        password = findViewById(R.id.login_password)
 
-        signupBtn = findViewById<Button>(R.id.login_signup_button).apply {
-            setOnClickListener {
-                startActivity(Intent(context, SignupActivity::class.java))
-            }
+
+        signupBtn.setOnClickListener {
+            startActivity(Intent(this, SignupActivity::class.java))
         }
 
-        loginBtn = findViewById<Button>(R.id.login_button).apply {
-            setOnClickListener {
-                if(email.text.isNotEmpty() && password.text.isNotEmpty()){
-                    loginUser( email.text.toString(), password.text.toString())
-                }
+
+        loginBtn.setOnClickListener {
+            if(email.text.isNotEmpty() && password.text.isNotEmpty()){
+                loginUser( email.text.toString(), password.text.toString())
             }
         }
     }
 
     private fun loginUser(user: String, password: String){
+        disableViews()
         auth?.signInWithEmailAndPassword(user, password)
             ?.addOnCompleteListener(this){ task ->
                 if(task.isSuccessful){
@@ -65,9 +68,24 @@ class LoginActivity : AppCompatActivity() {
                     prefs.updateCurrentUser(user, password)
                     startActivity(Intent(this, MainActivity::class.java))
                 }else{
-                    Log.d(LogUtil.TAG, "User does not exist")
+                    toast("Wrong user/password")
+                    enableViews()
                 }
             }
+    }
+
+    private fun disableViews(){
+        this.email.isEnabled = false
+        this.password.isEnabled = false
+        this.signupBtn.isEnabled = false
+        this.loginBtn.isEnabled = false
+    }
+
+    private fun enableViews(){
+        this.email.isEnabled = true
+        this.password.isEnabled = true
+        this.signupBtn.isEnabled = true
+        this.loginBtn.isEnabled = true
     }
 }
 
