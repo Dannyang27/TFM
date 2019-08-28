@@ -121,6 +121,8 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         else -> super.onOptionsItemSelected(item)
     }
 
+    override fun onBackPressed() {}
+
     private fun initEmoji(){
         val config = BundledEmojiCompatConfig(this)
         EmojiCompat.init(config)
