@@ -1,7 +1,6 @@
 package com.example.tfm.activity
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,7 +10,7 @@ import com.example.tfm.adapter.UserSearchAdapter
 import com.example.tfm.divider.HorizontalDivider
 import com.example.tfm.model.User
 import com.example.tfm.util.FirebaseUtil
-import com.example.tfm.util.LogUtil
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -46,7 +45,8 @@ class UserSearcherActivity : AppCompatActivity(), CoroutineScope {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                viewAdapter.updateList(cacheUserList.filter { it.name.contains(newText!!, ignoreCase = true) }.toMutableList())
+                viewAdapter.updateList(cacheUserList
+                    .filter { it.name.contains(newText!!, ignoreCase = true) }.toMutableList())
                 return true
             }
         })

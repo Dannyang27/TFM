@@ -26,6 +26,7 @@ object FirebaseUtil {
     const val FIREBASE_USER_PATH = "users"
     const val FIREBASE_PRIVATE_CHAT_PATH = "chat"
     private val database = FirebaseDatabase.getInstance().reference
+    private val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email.toString()
 
     fun addUser(context: Context, user: User){
         database.child(FIREBASE_USER_PATH)
@@ -75,7 +76,9 @@ object FirebaseUtil {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 dataSnapshot.children.forEach {
                     val user = it.getValue(User::class.java)
-                    cacheList.add(user!!)
+                    if(user?.email != currentUserEmail){
+                        cacheList.add(user!!)
+                    }
                 }
                 UserSearcherActivity.updateList(cacheList)
             }
