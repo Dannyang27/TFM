@@ -101,6 +101,9 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         setSupportActionBar(chat_toolbar)
         displayBackArrow()
 
+        val conversationId = intent.getStringExtra("conversationId")
+        toast(conversationId)
+
         emojiEditText = findViewById(R.id.chat_edittext)
         container = findViewById(R.id.emoji_container)
         bottomNavBar = findViewById(R.id.emoji_navbar)
@@ -288,7 +291,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         if(container.visibility == View.VISIBLE){
             closeSpecialKeyboard()
         }else{
-            super.onBackPressed()
+            startActivity(Intent(this, MainActivity::class.java))
         }
     }
 

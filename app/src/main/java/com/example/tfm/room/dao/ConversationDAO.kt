@@ -14,6 +14,9 @@ interface ConversationDAO {
     @Query("SELECT * FROM Conversation where userOne = :email or userTwo = :email")
     fun getUserConversations(email: String): MutableList<Conversation>
 
+    @Query("SELECT * FROM Conversation where (userOne = :email or userTwo = :email )AND (userOne = :newEmail or userTwo = :newEmail)")
+    fun getMutualConversation(email: String, newEmail: String) : Conversation
+
     @Query("SELECT COUNT(*) FROM Conversation")
     fun getSize(): Int
 

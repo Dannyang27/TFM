@@ -9,7 +9,9 @@ import com.example.tfm.R
 import com.example.tfm.activity.ChatActivity
 import com.example.tfm.diffUtil.ConversationDiffCallback
 import com.example.tfm.model.Conversation
+import com.example.tfm.room.database.MyRoomDatabase
 import com.example.tfm.viewHolder.ConversationViewHolder
+import com.google.firebase.auth.FirebaseAuth
 
 class ConversationAdapter(private val conversations: MutableList<Conversation>): RecyclerView.Adapter<ConversationViewHolder>(){
 
@@ -21,12 +23,21 @@ class ConversationAdapter(private val conversations: MutableList<Conversation>):
     override fun onBindViewHolder(holder: ConversationViewHolder, position: Int) {
         val conversation = conversations[position]
 
-        //TODO need to evaluate which user is you or friend
-        holder.name.text = conversation.userOne
+        val currentUser = FirebaseAuth.getInstance().currentUser?.email
+        val roomDatabase =  MyRoomDatabase.getMyRoomDatabase(holder.name.context)
+        if(conversation.userOne == currentUser){
+            roomDatabase?.getUserNameByEmail(holder.name, conversation.userTwo!!)
+        }else{
+            roomDatabase?.getUserNameByEmail(holder.name, conversation.userOne!!)
+        }
+
+        holder.lastMessage.text = if(conversation.lastMessage!!.isNotEmpty()) conversation.lastMessage else "Be the first to start the conversation"
+        holder.lastTime.text = conversation.timestamp.toString()
 
         holder.itemView.setOnClickListener {
             val context = holder.itemView.context
             val intent = Intent(context, ChatActivity::class.java)
+            intent.putExtra("conversationId", conversation.id)
             context.startActivity(intent)
         }
     }

@@ -12,6 +12,7 @@ class Conversation (@PrimaryKey
                     var userTwo : String? = "",
                     @Ignore
                     var messages: MutableList<Message> = mutableListOf(),
+                    var lastMessage: String? = "",
                     var timestamp: Long = -1,
                     @Ignore
                     val userTyping: MutableList<User> = mutableListOf(),

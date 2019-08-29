@@ -11,6 +11,9 @@ interface UserDAO {
     @Query("SELECT * FROM User WHERE email = :email")
     fun getByEmail( email: String) : User
 
+    @Query("SELECT name FROM User WHERE email = :email")
+    fun getNameByEmail(email: String): String
+
     @Query("SELECT COUNT(*) FROM user")
     fun getSize(): Int
 

@@ -17,6 +17,9 @@ interface MessageDAO {
     @Query("SELECT * FROM Message WHERE receiverName = :name")
     fun getReceivedMessages( name: String) : MutableList<Message>
 
+    @Query("SELECT * FROM Message WHERE ownerId = :conversationId ORDER BY timestamp")
+    fun getConversationMessages(conversationId: String): MutableList<Message>
+
     @Query("SELECT COUNT(*) FROM Message")
     fun getSize(): Int
 
