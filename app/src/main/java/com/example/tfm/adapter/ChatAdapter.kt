@@ -4,8 +4,10 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
+import com.example.tfm.diffUtil.MessageDiffCallback
 import com.example.tfm.enum.MessageType
 import com.example.tfm.model.Message
 import com.example.tfm.viewHolder.AttachmentViewHolder
@@ -73,4 +75,11 @@ class ChatAdapter(private val messages : MutableList<Message>, context: Context)
     }
 
     override fun getItemCount() = messages.size
+
+    fun updateList( newMessages : MutableList<Message>){
+        val diffResult: DiffUtil.DiffResult = DiffUtil.calculateDiff(MessageDiffCallback(messages, newMessages))
+        messages.clear()
+        messages.addAll(newMessages)
+        diffResult.dispatchUpdatesTo(this)
+    }
 }

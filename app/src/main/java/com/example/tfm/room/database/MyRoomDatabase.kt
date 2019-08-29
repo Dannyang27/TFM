@@ -58,9 +58,7 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
     }
 
     fun getUserNameByEmail(emojiTv: EmojiTextView, email: String){
-        launch {
-            emojiTv.text = userDao().getNameByEmail(email)
-        }
+        async{emojiTv.text = userDao().getNameByEmail(email)}
     }
 
     fun showAllUserInLog(){
@@ -122,7 +120,7 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
         }
     }
 
-    suspend fun deleteAllConversation(){
+    fun deleteAllConversation(){
         launch {
             conversationDao().deleteAll()
         }
@@ -132,6 +130,16 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
         launch {
             async{ messageDao().add(message) }
                 .also { Log.d(LogUtil.TAG, "Message with conversation id: ${message.ownerId} has been added into database") }
+        }
+    }
+
+    fun getAllMessagesFromConversation(messages: MutableList<Message>, conversationId: String){
+        launch {
+            async {
+                messages.addAll(messageDao().getConversationMessages(conversationId))
+            }.also {
+                Log.d(LogUtil.TAG, "All conversations retrieved for $conversationId")
+            }
         }
     }
 

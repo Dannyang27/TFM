@@ -26,7 +26,7 @@ class UserSearchViewHolder(view : View) : RecyclerView.ViewHolder(view), Corouti
             launch {
                 val currentUser = FirebaseAuth.getInstance().currentUser
                 val roomDatabase = MyRoomDatabase.getMyRoomDatabase(username.context)
-                roomDatabase?.getMutualConversation(username.context, currentUser?.email!!, email)
+                roomDatabase?.getMutualConversation(username.context, currentUser?.email.toString(), email)
             }
         }
     }

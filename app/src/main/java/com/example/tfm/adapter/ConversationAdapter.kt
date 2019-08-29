@@ -29,12 +29,12 @@ class ConversationAdapter(private val conversations: MutableList<Conversation>):
         val currentUser = FirebaseAuth.getInstance().currentUser?.email
         val roomDatabase =  MyRoomDatabase.getMyRoomDatabase(holder.name.context)
         if(conversation.userOne == currentUser){
-            roomDatabase?.getUserNameByEmail(holder.name, conversation.userTwo!!)
+            roomDatabase?.getUserNameByEmail(holder.name, conversation.userTwo.toString())
         }else{
-            roomDatabase?.getUserNameByEmail(holder.name, conversation.userOne!!)
+            roomDatabase?.getUserNameByEmail(holder.name, conversation.userOne.toString())
         }
 
-        holder.lastMessage.text = if(conversation.lastMessage!!.isNotEmpty()) conversation.lastMessage else "Be the first to start the conversation"
+        holder.lastMessage.text = if(conversation.lastMessage.toString().isNotEmpty()) conversation.lastMessage else "Be the first to start the conversation"
         holder.lastTime.text = "${SimpleDateFormat("HH:mm").format(Date(conversation.timestamp))}"
 
         holder.itemView.setOnClickListener {

@@ -31,7 +31,9 @@ import com.example.tfm.enum.MessageType
 import com.example.tfm.fragments.EmojiFragment
 import com.example.tfm.fragments.GifFragment
 import com.example.tfm.model.Message
+import com.example.tfm.room.database.MyRoomDatabase
 import com.example.tfm.util.AuthUtil
+import com.example.tfm.util.FirebaseUtil
 import com.example.tfm.util.KeyboardUtil
 import com.example.tfm.util.LogUtil
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -50,6 +52,9 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
     private lateinit var container: FrameLayout
     private lateinit var bottomNavBar: BottomNavigationView
 
+    val roomDatabase = MyRoomDatabase.getMyRoomDatabase(this)
+
+    private lateinit var conversationId: String
     private val GALLERY_CODE = 100
     private val CAMERA_MODE = 101
     private val ATTACHMENT_MODE = 102
@@ -65,17 +70,22 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         var messages = mutableListOf<Message>()
         lateinit var messagesRecyclerView: RecyclerView
         lateinit var emojiEditText: EmojiEditText
-        lateinit var viewAdapter : RecyclerView.Adapter<*>
+        lateinit var viewAdapter : ChatAdapter
 
         val emojiFragment = EmojiFragment.newInstance()
         val gifFragment = GifFragment.newInstance()
         var activeFragment: Fragment = emojiFragment
 
         fun sendMessage(message: Message){
+            //TODO add to firebaseRealtime and if successfull then add to local
             messages.add(message)
+            viewAdapter.updateList(messages)
             messagesRecyclerView.scrollToPosition(viewAdapter.itemCount - 1)
-            viewAdapter.notifyDataSetChanged()
-            Log.d(LogUtil.TAG, "Timestamp: ${System.currentTimeMillis()}")
+        }
+
+        fun updateList(newMessages: MutableList<Message>){
+            viewAdapter.updateList(newMessages)
+            messagesRecyclerView.scrollToPosition(viewAdapter.itemCount - 1)
         }
     }
 
@@ -105,7 +115,9 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         setSupportActionBar(chat_toolbar)
         displayBackArrow()
 
-        val conversationId = intent.getStringExtra("conversationId")
+        messages.clear()
+
+        conversationId = intent.getStringExtra("conversationId")
         toast(conversationId)
 
         emojiEditText = findViewById(R.id.chat_edittext)
@@ -136,6 +148,10 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
 
     override fun onResume() {
         super.onResume()
+
+        if(messages.isEmpty()){
+            roomDatabase?.getAllMessagesFromConversation(messages, conversationId)
+        }
         messagesRecyclerView.scrollToPosition(viewAdapter.itemCount - 1)
         KeyboardUtil.hideKeyboard(this)
     }
@@ -231,10 +247,14 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         sendButton.setOnClickListener {
             val fieldText = chat_edittext.text.toString()
             if(fieldText.isNotEmpty()){
-                sendMessage(Message(0, "",AuthUtil.getAccountEmail(), AuthUtil.receiverEmail, MessageType.MESSAGE, fieldText, 1, false,true,"EN" ))
+                val timestamp = System.currentTimeMillis()
+                val message = Message(timestamp, conversationId ,AuthUtil.getAccountEmail(), AuthUtil.receiverEmail, MessageType.MESSAGE, fieldText, timestamp, false,true,"EN" )
+                FirebaseUtil.addMessage(this, message)
                 chat_edittext.text.clear()
             }
         }
+
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

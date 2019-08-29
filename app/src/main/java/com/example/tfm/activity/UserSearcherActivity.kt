@@ -46,7 +46,7 @@ class UserSearcherActivity : AppCompatActivity(), CoroutineScope {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 viewAdapter.updateList(cacheUserList
-                    .filter { it.name.contains(newText!!, ignoreCase = true) }.toMutableList())
+                    .filter { it.name.contains(newText.toString(), ignoreCase = true) }.toMutableList())
                 return true
             }
         })

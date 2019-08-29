@@ -50,7 +50,7 @@ class PrivateFragment : Fragment(){
         }
 
         val roomDatabase = MyRoomDatabase.getMyRoomDatabase(activity?.applicationContext!!)
-        roomDatabase?.loadUserConversation(FirebaseAuth.getInstance().currentUser?.email!!)
+        roomDatabase?.loadUserConversation(FirebaseAuth.getInstance().currentUser?.email.toString())
 
         return view
     }

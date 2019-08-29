@@ -10,9 +10,11 @@ import com.example.tfm.activity.MainActivity
 import com.example.tfm.activity.SignupActivity
 import com.example.tfm.activity.UserSearcherActivity
 import com.example.tfm.model.Conversation
+import com.example.tfm.model.Message
 import com.example.tfm.model.User
 import com.example.tfm.room.database.MyRoomDatabase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthSettings
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -24,7 +26,9 @@ import kotlinx.coroutines.tasks.await
 
 object FirebaseUtil {
     const val FIREBASE_USER_PATH = "users"
-    const val FIREBASE_PRIVATE_CHAT_PATH = "chat"
+    const val FIREBASE_PRIVATE_CHAT_PATH = "chats"
+    const val FIREBASE_PRIVATE_MESSAGE_PATH = "messages"
+
     private val database = FirebaseDatabase.getInstance().reference
     private val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email.toString()
 
@@ -93,8 +97,6 @@ object FirebaseUtil {
                 val roomDatabase = MyRoomDatabase.getMyRoomDatabase(context)
                 roomDatabase?.addConversation(conversation)
 
-                val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email
-
                 var userToCreate: String?
                 if(conversation.userOne.equals(currentUserEmail)){
                     userToCreate = conversation.userTwo
@@ -114,10 +116,29 @@ object FirebaseUtil {
                 context.startActivity(intent)
         }
     }
+
+    fun addMessage(context: Context, message: Message){
+        database.child(FIREBASE_PRIVATE_CHAT_PATH).child(message.ownerId)
+            .child(FIREBASE_PRIVATE_MESSAGE_PATH)
+            .child(message.hashCode().toString())
+            .setValue(message)
+            .addOnSuccessListener {
+                Log.d(LogUtil.TAG, "Message added to firebaserealtime: ${message.body}")
+                val roomDatabase = MyRoomDatabase.getMyRoomDatabase(context)
+                roomDatabase?.addMessage(message)
+                val newMessages: MutableList<Message> = mutableListOf()
+                newMessages.addAll(ChatActivity.messages)
+                newMessages.add(message)
+                ChatActivity.updateList(newMessages)
+            }
+            .addOnFailureListener {
+                Log.d(LogUtil.TAG, "Error while sending message")
+            }
+    }
 }
 
 suspend fun FirebaseFirestore.createRoomUser(email: String?): User?{
-    return collection(FirebaseUtil.FIREBASE_USER_PATH).document(email!!).get().await().toObject(User::class.java)
+    return collection(FirebaseUtil.FIREBASE_USER_PATH).document(email.toString()).get().await().toObject(User::class.java)
 }
 
 fun FirebaseFirestore.addUser(context: Context, user: User){

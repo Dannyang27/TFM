@@ -83,8 +83,9 @@ class ImageSenderActivity : AppCompatActivity() {
                 .into(media)
 
             sendBtn.setOnClickListener {
-                ChatActivity.sendMessage(Message(0,"",AuthUtil.getAccountEmail(), AuthUtil.receiverEmail,
-                    MessageType.GIF, MediaContent(url, captionEt.text.toString()), 10,
+                val timestamp = System.currentTimeMillis()
+                ChatActivity.sendMessage(Message(timestamp,"",AuthUtil.getAccountEmail(), AuthUtil.receiverEmail,
+                    MessageType.GIF, MediaContent(url, captionEt.text.toString()), timestamp,
                     true, true,"EN" ))
                 finish()
             }
@@ -123,8 +124,9 @@ class ImageSenderActivity : AppCompatActivity() {
             .into(media)
 
         sendBtn.setOnClickListener {
-            ChatActivity.sendMessage(Message(0,"",AuthUtil.getAccountEmail(), AuthUtil.receiverEmail,
-                MessageType.IMAGE, MediaContent(bitmap, captionEt.text.toString()), 1 ,
+            val timestamp = System.currentTimeMillis()
+            ChatActivity.sendMessage(Message(timestamp,"",AuthUtil.getAccountEmail(), AuthUtil.receiverEmail,
+                MessageType.IMAGE, MediaContent(bitmap, captionEt.text.toString()), timestamp ,
                 true, true,"EN"))
             finish()
         }
