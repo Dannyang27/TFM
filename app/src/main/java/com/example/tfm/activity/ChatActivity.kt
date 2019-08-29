@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
@@ -32,6 +33,7 @@ import com.example.tfm.fragments.GifFragment
 import com.example.tfm.model.Message
 import com.example.tfm.util.AuthUtil
 import com.example.tfm.util.KeyboardUtil
+import com.example.tfm.util.LogUtil
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.coroutines.*
@@ -71,7 +73,9 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
 
         fun sendMessage(message: Message){
             messages.add(message)
+            messagesRecyclerView.scrollToPosition(viewAdapter.itemCount - 1)
             viewAdapter.notifyDataSetChanged()
+            Log.d(LogUtil.TAG, "Timestamp: ${System.currentTimeMillis()}")
         }
     }
 
@@ -227,9 +231,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         sendButton.setOnClickListener {
             val fieldText = chat_edittext.text.toString()
             if(fieldText.isNotEmpty()){
-                messages.add(Message(0, "",AuthUtil.getAccountEmail(), AuthUtil.receiverEmail, MessageType.MESSAGE, fieldText, 1, false,true,"EN" ))
-                messagesRecyclerView.scrollToPosition(viewAdapter.itemCount - 1)
-                viewAdapter.notifyDataSetChanged()
+                sendMessage(Message(0, "",AuthUtil.getAccountEmail(), AuthUtil.receiverEmail, MessageType.MESSAGE, fieldText, 1, false,true,"EN" ))
                 chat_edittext.text.clear()
             }
         }

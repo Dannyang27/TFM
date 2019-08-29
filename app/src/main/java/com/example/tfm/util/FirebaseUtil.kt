@@ -93,6 +93,7 @@ object FirebaseUtil {
 
                 val intent = Intent(context, ChatActivity::class.java)
                 intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
+                intent.putExtra("conversationId", conversation.id)
                 context.startActivity(intent)
         }
     }

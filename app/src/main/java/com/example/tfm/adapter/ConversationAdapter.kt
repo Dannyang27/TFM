@@ -12,6 +12,9 @@ import com.example.tfm.model.Conversation
 import com.example.tfm.room.database.MyRoomDatabase
 import com.example.tfm.viewHolder.ConversationViewHolder
 import com.google.firebase.auth.FirebaseAuth
+import java.text.SimpleDateFormat
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 class ConversationAdapter(private val conversations: MutableList<Conversation>): RecyclerView.Adapter<ConversationViewHolder>(){
 
@@ -32,7 +35,7 @@ class ConversationAdapter(private val conversations: MutableList<Conversation>):
         }
 
         holder.lastMessage.text = if(conversation.lastMessage!!.isNotEmpty()) conversation.lastMessage else "Be the first to start the conversation"
-        holder.lastTime.text = conversation.timestamp.toString()
+        holder.lastTime.text = "${SimpleDateFormat("HH:mm").format(Date(conversation.timestamp))}"
 
         holder.itemView.setOnClickListener {
             val context = holder.itemView.context

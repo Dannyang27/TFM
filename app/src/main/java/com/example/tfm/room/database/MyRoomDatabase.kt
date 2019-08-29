@@ -155,8 +155,7 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
         }
 
         val hashcode = userOneHash.toString().plus(userTwoHash.toString())
-        val message = Message(1, "1", userOne?.email!!, userTwo?.email!!, MessageType.MESSAGE, "Hello World", 1,false, false, "EN")
-        val conversation = Conversation(hashcode, userOne.email, userTwo.email, mutableListOf(message), "",1, mutableListOf(), true )
+        val conversation = Conversation(hashcode, userOne?.email, userTwo?.email, mutableListOf(), "",System.currentTimeMillis(), mutableListOf(), true )
 
         firestore.addConversation(context, conversation)
     }
