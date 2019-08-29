@@ -15,7 +15,7 @@ fun TextView.showUsernameIfGroup( isPrivateChat: Boolean, username: String){
 
 fun SharedPreferences.updateCurrentUser(email: String, password: String){
     val pref = edit()
-    pref.putString("currentUserEmail", email)
+    pref.putString("currentUserEmail", email.trimBothSides())
     pref.putString("currentUserPassword", password)
     pref.apply()
 }
@@ -33,3 +33,5 @@ fun SharedPreferences.getCredentials(): Pair<String, String>{
 
     return Pair(email, password)
 }
+
+fun String.trimBothSides() = this.trimStart().trimEnd()

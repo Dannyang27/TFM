@@ -1,8 +1,6 @@
 package com.example.tfm.activity
 
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
@@ -10,8 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.tfm.R
 import com.example.tfm.model.User
-import com.example.tfm.util.LogUtil
 import com.example.tfm.util.addUser
+import com.example.tfm.util.trimBothSides
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import org.jetbrains.anko.toast
@@ -48,7 +46,7 @@ class SignupActivity : AppCompatActivity() {
         joinusBtn.setOnClickListener {
             if(isFormNotEmpty()){
                 disableViews()
-                val user = User(email.text.toString(), user.text.toString(), "", "")
+                val user = User(email.text.toString().trimBothSides(), user.text.toString().trimBothSides(), "", "")
                 addUserToFirestore(user)
             }else{
                 toast("Form cannot be empty")
@@ -62,20 +60,6 @@ class SignupActivity : AppCompatActivity() {
             true
         }
         else -> super.onOptionsItemSelected(item)
-    }
-
-    private fun getUser(email: String){
-        val db = FirebaseFirestore.getInstance()
-
-        val user = db.collection("users")
-            .document(email)
-            .get()
-            .addOnSuccessListener {
-                val user = it.toObject(User::class.java)
-                Log.d(LogUtil.TAG, user?.toString())
-            }.addOnFailureListener { exception ->
-                Log.w(LogUtil.TAG, "Error getting documents.", exception)
-            }
     }
 
     private fun addUserToFirestore(user: User){

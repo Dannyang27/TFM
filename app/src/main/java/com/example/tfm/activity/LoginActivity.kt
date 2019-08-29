@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.tfm.R
 import com.example.tfm.util.LogUtil
 import com.example.tfm.util.getCredentials
+import com.example.tfm.util.trimBothSides
 import com.example.tfm.util.updateCurrentUser
 import com.google.firebase.auth.FirebaseAuth
 import org.jetbrains.anko.toast
@@ -42,19 +43,16 @@ class LoginActivity : AppCompatActivity() {
         val (emailPref, passwordPref) = prefs.getCredentials()
 
         if(emailPref.isNotEmpty() && passwordPref.isNotEmpty()){
-            loginUser(emailPref, passwordPref)
+            loginUser(emailPref.trimBothSides(), passwordPref)
         }
-
-
 
         signupBtn.setOnClickListener {
             startActivity(Intent(this, SignupActivity::class.java))
         }
 
-
         loginBtn.setOnClickListener {
             if(email.text.isNotEmpty() && password.text.isNotEmpty()){
-                loginUser( email.text.toString(), password.text.toString())
+                loginUser( email.text.toString().trimBothSides(), password.text.toString())
             }
         }
     }

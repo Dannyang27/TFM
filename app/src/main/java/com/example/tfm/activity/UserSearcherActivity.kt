@@ -1,6 +1,7 @@
 package com.example.tfm.activity
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,6 +11,7 @@ import com.example.tfm.adapter.UserSearchAdapter
 import com.example.tfm.divider.HorizontalDivider
 import com.example.tfm.model.User
 import com.example.tfm.util.FirebaseUtil
+import com.example.tfm.util.LogUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -21,6 +23,8 @@ class UserSearcherActivity : AppCompatActivity(), CoroutineScope {
     private lateinit var searchView: SearchView
     private lateinit var recyclerview: RecyclerView
     private lateinit var viewManager: RecyclerView.LayoutManager
+
+    private val cacheUserList = mutableListOf<User>()
 
     companion object{
         lateinit var viewAdapter : UserSearchAdapter
@@ -42,9 +46,7 @@ class UserSearcherActivity : AppCompatActivity(), CoroutineScope {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                newText?.let{
-                    FirebaseUtil.getUsersByName(newText)
-                }
+                viewAdapter.updateList(cacheUserList.filter { it.name.contains(newText!!, ignoreCase = true) }.toMutableList())
                 return true
             }
         })
@@ -59,6 +61,7 @@ class UserSearcherActivity : AppCompatActivity(), CoroutineScope {
             addItemDecoration(HorizontalDivider(this.context))
             layoutManager = viewManager
             adapter = viewAdapter
+            FirebaseUtil.loadAllUsers(cacheUserList)
         }
     }
 }

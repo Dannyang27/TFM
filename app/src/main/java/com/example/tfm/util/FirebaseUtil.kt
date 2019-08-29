@@ -68,6 +68,20 @@ object FirebaseUtil {
         }
     }
 
+    fun loadAllUsers( cacheList: MutableList<User>){
+        database.child(FIREBASE_USER_PATH).addListenerForSingleValueEvent(object: ValueEventListener{
+            override fun onCancelled(p0: DatabaseError) {}
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                dataSnapshot.children.forEach {
+                    val user = it.getValue(User::class.java)
+                    cacheList.add(user!!)
+                }
+                UserSearcherActivity.updateList(cacheList)
+            }
+        })
+    }
+
     fun addPrivateChat(context: Context, conversation: Conversation){
         database.child(FIREBASE_PRIVATE_CHAT_PATH)
             .child(conversation.id).setValue(conversation)
@@ -78,7 +92,7 @@ object FirebaseUtil {
 
                 val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email
 
-                var userToCreate: String? = null
+                var userToCreate: String?
                 if(conversation.userOne.equals(currentUserEmail)){
                     userToCreate = conversation.userTwo
                 }else{
