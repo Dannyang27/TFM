@@ -37,6 +37,7 @@ import com.example.tfm.util.FirebaseUtil
 import com.example.tfm.util.KeyboardUtil
 import com.example.tfm.util.LogUtil
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.coroutines.*
 import org.jetbrains.anko.toast
@@ -52,7 +53,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
     private lateinit var container: FrameLayout
     private lateinit var bottomNavBar: BottomNavigationView
 
-    val roomDatabase = MyRoomDatabase.getMyRoomDatabase(this)
+    private val roomDatabase = MyRoomDatabase.getMyRoomDatabase(this)
 
     private lateinit var conversationId: String
     private val GALLERY_CODE = 100
@@ -248,13 +249,11 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
             val fieldText = chat_edittext.text.toString()
             if(fieldText.isNotEmpty()){
                 val timestamp = System.currentTimeMillis()
-                val message = Message(timestamp, conversationId ,AuthUtil.getAccountEmail(), AuthUtil.receiverEmail, MessageType.MESSAGE, fieldText, timestamp, false,true,"EN" )
+                val message = Message(timestamp, conversationId ,FirebaseAuth.getInstance().currentUser?.email.toString(), AuthUtil.receiverEmail, MessageType.MESSAGE, fieldText, timestamp, false,true,"EN" )
                 FirebaseUtil.addMessage(this, message)
                 chat_edittext.text.clear()
             }
         }
-
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
