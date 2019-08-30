@@ -9,8 +9,6 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.tfm.activity.ChatActivity
-import com.example.tfm.activity.MainActivity
-import com.example.tfm.enum.MessageType
 import com.example.tfm.fragments.PrivateFragment
 import com.example.tfm.model.Conversation
 import com.example.tfm.model.Message

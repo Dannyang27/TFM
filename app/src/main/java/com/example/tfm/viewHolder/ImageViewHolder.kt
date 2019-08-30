@@ -14,7 +14,10 @@ import com.example.tfm.R
 import com.example.tfm.enum.MessageType
 import com.example.tfm.model.MediaContent
 import com.example.tfm.model.Message
-import com.example.tfm.util.*
+import com.example.tfm.util.AuthUtil
+import com.example.tfm.util.setMessageCheckIfSeen
+import com.example.tfm.util.setTime
+import com.example.tfm.util.showUsernameIfGroup
 import org.jetbrains.anko.displayMetrics
 import org.jetbrains.anko.toast
 

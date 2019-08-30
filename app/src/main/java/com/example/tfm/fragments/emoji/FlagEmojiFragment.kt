@@ -7,9 +7,12 @@ import android.view.ViewGroup
 import android.widget.GridView
 import androidx.fragment.app.Fragment
 import com.example.tfm.R
-import com.example.tfm.adapter.EmojiFlagAdapter
 import com.example.tfm.util.EmojiUtil
-import kotlinx.coroutines.*
+import com.example.tfm.util.loadGridview
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class FlagEmojiFragment : Fragment(), CoroutineScope {
 
@@ -25,20 +28,9 @@ class FlagEmojiFragment : Fragment(), CoroutineScope {
         val gridview = view.findViewById(R.id.flag_gridview) as GridView
 
         launch {
-            loadGridview(gridview)
+            loadGridview(gridview, EmojiUtil.getFlagEmoji())
         }
 
         return view
-    }
-
-    private suspend fun loadGridview( gridview : GridView){
-        launch{
-            withContext(Dispatchers.IO){
-                val adapter = EmojiFlagAdapter(activity?.applicationContext!!, EmojiUtil.getFlagEmoji())
-                withContext(Dispatchers.Main){
-                    gridview.adapter = adapter
-                }
-            }
-        }
     }
 }

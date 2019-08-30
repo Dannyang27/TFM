@@ -8,7 +8,6 @@ import android.widget.BaseAdapter
 import android.widget.Button
 import com.example.tfm.R
 import com.example.tfm.activity.ChatActivity
-import com.example.tfm.util.EmojiUtil
 import kotlinx.coroutines.*
 
 class EmojiGridViewAdapter : BaseAdapter, CoroutineScope{
@@ -16,17 +15,18 @@ class EmojiGridViewAdapter : BaseAdapter, CoroutineScope{
     private val job = Job()
     override val coroutineContext get() = Dispatchers.Default + job
 
-    var emojiUnicodes = arrayListOf<Int>()
+    var emojis = arrayListOf<String>()
     var context : Context? = null
 
-    constructor(context: Context, emojiUnicodes: ArrayList<Int>){
+
+    constructor(context: Context, emojis: ArrayList<String>){
         this.context = context
-        this.emojiUnicodes = emojiUnicodes
+        this.emojis = emojis
     }
 
-    override fun getCount() = emojiUnicodes.size
+    override fun getCount() = emojis.size
 
-    override fun getItem(position: Int) = emojiUnicodes[position]
+    override fun getItem(position: Int) = emojis[position]
 
     override fun getItemId(position: Int) = position.toLong()
 
@@ -45,15 +45,14 @@ class EmojiGridViewAdapter : BaseAdapter, CoroutineScope{
 
         launch {
             withContext(Dispatchers.IO) {
-                val unicode = emojiUnicodes[position]
-                val unicodeStr = EmojiUtil.getEmojiUnicode(unicode)
+                val emoji = emojis[position]
 
                 withContext(Dispatchers.Main) {
-                    imgBtn.text = unicodeStr
+                    imgBtn.text = emoji
 
                     imgBtn.setOnClickListener {
                         ChatActivity.emojiEditText.requestFocus()
-                        ChatActivity.emojiEditText.append(unicodeStr)
+                        ChatActivity.emojiEditText.append(emoji)
                     }
                 }
             }

@@ -10,15 +10,13 @@ import com.example.tfm.activity.ChatActivity
 import com.example.tfm.diffUtil.ConversationDiffCallback
 import com.example.tfm.model.Conversation
 import com.example.tfm.room.database.MyRoomDatabase
-import com.example.tfm.util.TimeUtil
 import com.example.tfm.util.setTime
 import com.example.tfm.viewHolder.ConversationViewHolder
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.*
-import java.text.SimpleDateFormat
-import java.util.*
-import java.util.concurrent.TimeUnit
-import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class ConversationAdapter(private val conversations: MutableList<Conversation>): RecyclerView.Adapter<ConversationViewHolder>(), CoroutineScope{
     private val job = Job()

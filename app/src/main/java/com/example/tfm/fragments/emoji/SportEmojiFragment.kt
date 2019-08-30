@@ -9,7 +9,10 @@ import androidx.fragment.app.Fragment
 import com.example.tfm.R
 import com.example.tfm.util.EmojiUtil
 import com.example.tfm.util.loadGridview
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class SportEmojiFragment : Fragment(), CoroutineScope {
 
