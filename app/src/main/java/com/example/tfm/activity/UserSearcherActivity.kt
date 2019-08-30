@@ -10,7 +10,6 @@ import com.example.tfm.adapter.UserSearchAdapter
 import com.example.tfm.divider.HorizontalDivider
 import com.example.tfm.model.User
 import com.example.tfm.util.FirebaseUtil
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

@@ -3,7 +3,6 @@ package com.example.tfm.activity
 import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.SearchView
@@ -17,13 +16,15 @@ import com.example.tfm.R
 import com.example.tfm.fragments.GroupChatFragment
 import com.example.tfm.fragments.PrivateFragment
 import com.example.tfm.room.database.MyRoomDatabase
-import com.example.tfm.util.LogUtil
 import com.example.tfm.util.clearCredential
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import org.jetbrains.anko.toast
 
 class MainActivity : AppCompatActivity(), CoroutineScope {

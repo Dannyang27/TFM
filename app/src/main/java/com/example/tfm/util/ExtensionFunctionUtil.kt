@@ -4,7 +4,6 @@ import android.content.SharedPreferences
 import android.view.View
 import android.widget.GridView
 import android.widget.TextView
-import androidx.emoji.widget.EmojiTextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.adapter.EmojiGridViewAdapter
@@ -55,7 +54,7 @@ fun RecyclerView.ViewHolder.setMessageCheckIfSeen(time: TextView, isSent: Boolea
     }
 }
 
-suspend fun Fragment.loadGridview( gridview: GridView, emojiList: ArrayList<Int>){
+suspend fun Fragment.loadGridview( gridview: GridView, emojiList: ArrayList<String>){
     withContext(Dispatchers.IO) {
         val adapter = EmojiGridViewAdapter(activity?.applicationContext!!, emojiList)
         withContext(Dispatchers.Main) {

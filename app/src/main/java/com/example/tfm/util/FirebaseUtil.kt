@@ -14,7 +14,6 @@ import com.example.tfm.model.Message
 import com.example.tfm.model.User
 import com.example.tfm.room.database.MyRoomDatabase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthSettings
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase

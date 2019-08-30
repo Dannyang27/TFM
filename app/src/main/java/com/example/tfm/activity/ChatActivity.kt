@@ -32,7 +32,10 @@ import com.example.tfm.fragments.EmojiFragment
 import com.example.tfm.fragments.GifFragment
 import com.example.tfm.model.Message
 import com.example.tfm.room.database.MyRoomDatabase
-import com.example.tfm.util.*
+import com.example.tfm.util.AuthUtil
+import com.example.tfm.util.FirebaseUtil
+import com.example.tfm.util.KeyboardUtil
+import com.example.tfm.util.LogUtil
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_chat.*
@@ -43,16 +46,14 @@ import java.io.IOException
 import java.util.*
 
 class ChatActivity : AppCompatActivity(), CoroutineScope {
-    private val job = Job()
-    override val coroutineContext get() = Dispatchers.Default + job
+    override val coroutineContext get() = Dispatchers.Default + Job()
 
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var container: FrameLayout
     private lateinit var bottomNavBar: BottomNavigationView
-
+    private lateinit var conversationId: String
     private val roomDatabase = MyRoomDatabase.getMyRoomDatabase(this)
 
-    private lateinit var conversationId: String
     private val GALLERY_CODE = 100
     private val CAMERA_MODE = 101
     private val ATTACHMENT_MODE = 102
@@ -62,7 +63,9 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
     private val PERMISSION_ALL = 1
     private val PERMISSIONS = arrayOf(
         Manifest.permission.CAMERA,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.RECORD_AUDIO)
 
     companion object{
         var messages = mutableListOf<Message>()
@@ -139,17 +142,13 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
             }
         }
 
+        Log.d(LogUtil.TAG, "Inicializando bottomnavbar")
         bottomNavBar.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         supportFragmentManager.beginTransaction().add(R.id.emoji_container, gifFragment, "2").hide(gifFragment).commit()
         supportFragmentManager.beginTransaction().add(R.id.emoji_container, emojiFragment, "1").commit()
 
         messages.clear()
         roomDatabase?.getAllMessagesFromConversation(conversationId)
-//        if(messages.isEmpty()){
-//            roomDatabase?.getAllMessagesFromConversation(conversationId)
-//        }else{
-//            scrollToBottom()
-//        }
 
         initListeners()
     }
