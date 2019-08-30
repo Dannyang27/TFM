@@ -14,9 +14,7 @@ import com.example.tfm.R
 import com.example.tfm.enum.MessageType
 import com.example.tfm.model.MediaContent
 import com.example.tfm.model.Message
-import com.example.tfm.util.AuthUtil
-import com.example.tfm.util.TimeUtil
-import com.example.tfm.util.showUsernameIfGroup
+import com.example.tfm.util.*
 import org.jetbrains.anko.displayMetrics
 import org.jetbrains.anko.toast
 
@@ -38,7 +36,8 @@ class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view){
         }
 
         setImageOrGif(message)
-        setTime(message.timestamp)
+        setTime(time, message.timestamp)
+        setMessageCheckIfSeen(time, message.isSent)
     }
 
     private fun setSenderViewHolder(){
@@ -88,8 +87,5 @@ class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view){
         this.caption.visibility = View.VISIBLE
     }
 
-    private fun setTime(time: Long){
-        this.time.text = TimeUtil.setTimeFromTimeStamp(time)
-    }
     private fun getDpValue(dpValue: Int): Int = (dpValue * layout.context.displayMetrics.density).toInt()
 }

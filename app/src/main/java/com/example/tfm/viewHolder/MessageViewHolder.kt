@@ -10,9 +10,7 @@ import androidx.emoji.widget.EmojiTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
 import com.example.tfm.model.Message
-import com.example.tfm.util.AuthUtil
-import com.example.tfm.util.TimeUtil
-import com.example.tfm.util.showUsernameIfGroup
+import com.example.tfm.util.*
 import org.jetbrains.anko.displayMetrics
 
 class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
@@ -32,7 +30,8 @@ class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
         }
 
         setBody(message.body as String)
-        setTime(message.timestamp)
+        setTime(time, message.timestamp)
+        setMessageCheckIfSeen(time, message.isSent)
     }
 
     private fun setSenderViewHolder(){
@@ -70,10 +69,6 @@ class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
 
     private fun setBody( body: String){
         this.body.text = body
-    }
-
-    private fun setTime(time: Long){
-        this.time.text = TimeUtil.setTimeFromTimeStamp(time)
     }
 
     private fun getDpValue(dpValue: Int): Int = (dpValue * layout.context.displayMetrics.density).toInt()

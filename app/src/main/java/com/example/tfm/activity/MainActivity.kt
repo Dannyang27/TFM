@@ -78,8 +78,11 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             }else{
                 //TODO add search group
                 launch {
-                    async{MyRoomDatabase.getMyRoomDatabase(toolbar.context)?.deleteAllConversation()}.await()
-                    Log.d(LogUtil.TAG, "Room database conversation removed")
+                    val roomDatabase = MyRoomDatabase.getMyRoomDatabase(toolbar.context)
+//                    roomDatabase?.deleteAllConversation()
+//                    roomDatabase?.deleteAllUsers()
+                    roomDatabase?.showAllUserInLog()
+                    roomDatabase?.showAllConversationInLog()
                 }
             }
         }

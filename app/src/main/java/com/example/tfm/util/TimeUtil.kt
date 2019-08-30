@@ -1,8 +1,10 @@
 package com.example.tfm.util
 
+import java.text.SimpleDateFormat
+import java.util.*
+
 object TimeUtil{
-    fun setTimeFromTimeStamp( timeInMillis: Long): String{
-        //TODO add actual time from timestamp which will be a long Type
-        return "11:11"
+    fun setTimeFromTimeStamp( timestamp: Long): String{
+        return "${SimpleDateFormat("HH:mm").format(Date(timestamp))}"
     }
 }

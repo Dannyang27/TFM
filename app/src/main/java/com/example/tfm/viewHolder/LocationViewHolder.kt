@@ -11,9 +11,7 @@ import androidx.emoji.widget.EmojiTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
 import com.example.tfm.model.Message
-import com.example.tfm.util.AuthUtil
-import com.example.tfm.util.TimeUtil
-import com.example.tfm.util.showUsernameIfGroup
+import com.example.tfm.util.*
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
@@ -60,7 +58,8 @@ class LocationViewHolder(view: View) : RecyclerView.ViewHolder(view), OnMapReady
         }
 
         setAddress(address.getAddressLine(0))
-        setTime(message.timestamp)
+        setTime(time, message.timestamp)
+        setMessageCheckIfSeen(time, message.isSent)
     }
 
     private fun setSenderViewHolder(){
@@ -80,10 +79,6 @@ class LocationViewHolder(view: View) : RecyclerView.ViewHolder(view), OnMapReady
 
     private fun setAddress(addressLine: String){
         this.place.text = addressLine
-    }
-
-    private fun setTime(time: Long){
-        this.time.text = TimeUtil.setTimeFromTimeStamp(time)
     }
 
     private fun getDpValue( dpValue: Int): Int = (dpValue * context.displayMetrics.density).toInt()

@@ -32,10 +32,7 @@ import com.example.tfm.fragments.EmojiFragment
 import com.example.tfm.fragments.GifFragment
 import com.example.tfm.model.Message
 import com.example.tfm.room.database.MyRoomDatabase
-import com.example.tfm.util.AuthUtil
-import com.example.tfm.util.FirebaseUtil
-import com.example.tfm.util.KeyboardUtil
-import com.example.tfm.util.LogUtil
+import com.example.tfm.util.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_chat.*
@@ -81,11 +78,15 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
             //TODO add to firebaseRealtime and if successfull then add to local
             messages.add(message)
             viewAdapter.updateList(messages)
-            messagesRecyclerView.scrollToPosition(viewAdapter.itemCount - 1)
+            scrollToBottom()
         }
 
         fun updateList(newMessages: MutableList<Message>){
             viewAdapter.updateList(newMessages)
+            scrollToBottom()
+        }
+
+        private fun scrollToBottom(){
             messagesRecyclerView.scrollToPosition(viewAdapter.itemCount - 1)
         }
     }
@@ -116,20 +117,12 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         setSupportActionBar(chat_toolbar)
         displayBackArrow()
 
-        messages.clear()
-
-        conversationId = intent.getStringExtra("conversationId")
-        toast(conversationId)
-
         emojiEditText = findViewById(R.id.chat_edittext)
         container = findViewById(R.id.emoji_container)
         bottomNavBar = findViewById(R.id.emoji_navbar)
 
-        bottomNavBar.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        supportFragmentManager.beginTransaction().add(R.id.emoji_container, gifFragment, "2").hide(gifFragment).commit()
-        supportFragmentManager.beginTransaction().add(R.id.emoji_container, emojiFragment, "1").commit()
-
-        initListeners()
+        conversationId = intent.getStringExtra("conversationId")
+        toast(conversationId)
 
         viewManager = LinearLayoutManager(this)
         viewAdapter = ChatAdapter(messages, this)
@@ -145,15 +138,24 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
                 }
             }
         }
+
+        bottomNavBar.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        supportFragmentManager.beginTransaction().add(R.id.emoji_container, gifFragment, "2").hide(gifFragment).commit()
+        supportFragmentManager.beginTransaction().add(R.id.emoji_container, emojiFragment, "1").commit()
+
+        messages.clear()
+        roomDatabase?.getAllMessagesFromConversation(conversationId)
+//        if(messages.isEmpty()){
+//            roomDatabase?.getAllMessagesFromConversation(conversationId)
+//        }else{
+//            scrollToBottom()
+//        }
+
+        initListeners()
     }
 
     override fun onResume() {
         super.onResume()
-
-        if(messages.isEmpty()){
-            roomDatabase?.getAllMessagesFromConversation(messages, conversationId)
-        }
-        messagesRecyclerView.scrollToPosition(viewAdapter.itemCount - 1)
         KeyboardUtil.hideKeyboard(this)
     }
 
@@ -198,18 +200,15 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
     }
 
     private fun initListeners(){
-        emojiEditText.setOnTouchListener(object : View.OnTouchListener {
-            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                when (event?.action) {
-                    MotionEvent.ACTION_UP -> {
-                        closeSpecialKeyboard()
-                        KeyboardUtil.showKeyboard(this@ChatActivity)
-                    }
-
+        emojiEditText.setOnTouchListener { view , event ->
+            when(event?.action){
+                MotionEvent.ACTION_UP -> {
+                    closeSpecialKeyboard()
+                    KeyboardUtil.showKeyboard(this@ChatActivity)
                 }
-                return v?.onTouchEvent(event) ?: true
             }
-        })
+            view?.onTouchEvent(event ) ?: true
+        }
 
         emojiButton.setOnClickListener {
             showSpecialKeyboard()

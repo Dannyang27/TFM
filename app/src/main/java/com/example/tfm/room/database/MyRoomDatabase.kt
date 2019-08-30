@@ -1,12 +1,14 @@
 package com.example.tfm.room.database
 
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.emoji.widget.EmojiTextView
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.example.tfm.activity.ChatActivity
 import com.example.tfm.activity.MainActivity
 import com.example.tfm.enum.MessageType
 import com.example.tfm.fragments.PrivateFragment
@@ -53,63 +55,78 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
 
     fun addUser(user: User){
         launch {
-            async{ userDao().add(user) }.also { Log.d(LogUtil.TAG, "User ${user.email} has been added into dabatase") }
+            userDao().add(user)
+        }.also {
+            Log.d(LogUtil.TAG, "User ${user.email} has been added into dabatase")
         }
     }
 
-    fun getUserNameByEmail(emojiTv: EmojiTextView, email: String){
-        async{emojiTv.text = userDao().getNameByEmail(email)}
+    fun deleteAllUsers(){
+        launch{
+            userDao().deleteAll()
+        }.also {
+            Log.d(LogUtil.TAG, "All users removed from ROOM")
+        }
+
+    }
+
+    suspend fun getUserNameByEmail(emojiTv: EmojiTextView, email: String){
+        withContext(Dispatchers.IO){
+            val name = userDao().getNameByEmail(email)
+            withContext(Dispatchers.Main){
+                emojiTv.text = name
+            }
+        }
     }
 
     fun showAllUserInLog(){
         launch {
-            async {
                 Log.d(LogUtil.TAG, "Email: | Name: | Status: | PhotoPath: ")
                 userDao().getAll().forEach {
                     Log.d(LogUtil.TAG, "${it.email} | ${it.name} | ${it.status} | ${it.profilePhoto}")
                 }
-            }
         }
     }
 
     fun addConversation(conversation: Conversation){
         launch {
-            async{ conversationDao().add(conversation) }
-                .also { Log.d(LogUtil.TAG, "Conversation ${conversation.id} has been added into database") }
+            conversationDao().add(conversation)
+        }.also {
+            Log.d(LogUtil.TAG, "Conversation ${conversation.id} has been added into database")
         }
     }
 
     fun getMutualConversation(context: Context, email: String, newEmail: String): Conversation?{
         var conversation: Conversation? = null
         launch {
-            async{
-                conversation = conversationDao().getMutualConversation(email, newEmail)
-                if(conversation != null){
-                    Log.d(LogUtil.TAG, "Conversation exists: " + conversation?.id)
-                }else{
-                    Log.d(LogUtil.TAG, "Conversation does not exist, do some stuff")
-                    createNewConversation(context, email, newEmail)
-                }
+            conversation = conversationDao().getMutualConversation(email, newEmail)
+            if(conversation != null){
+                Log.d(LogUtil.TAG, "Conversation exists: " + conversation?.id)
+                val intent = Intent(context, ChatActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                intent.putExtra("conversationId", conversation?.id)
+                context.startActivity(intent)
+            }else{
+                Log.d(LogUtil.TAG, "Conversation does not exist, do some stuff")
+                createNewConversation(context, email, newEmail)
             }
         }
-
         return conversation
     }
 
     fun deleteConversation(id: String){
         launch {
-            async{ conversationDao().deleteConversationById(id)}
-                .also { Log.d(LogUtil.TAG, "Conversation id: $id is deleted and all its messages") }
+            conversationDao().deleteConversationById(id)
+        }.also {
+            Log.d(LogUtil.TAG, "Conversation id: $id is deleted and all its messages")
         }
     }
 
     fun showAllConversationInLog(){
         launch {
-            async {
-                Log.d(LogUtil.TAG, "Id: | UserOne: | UserTwo: ")
-                conversationDao().getAll().forEach {
-                    Log.d(LogUtil.TAG, "${it.id} | ${it.userOne} | ${it.userTwo}")
-                }
+            Log.d(LogUtil.TAG, "Id: | UserOne: | UserTwo: ")
+            conversationDao().getAll().forEach {
+                Log.d(LogUtil.TAG, "${it.id} | ${it.userOne} | ${it.userTwo}")
             }
         }
     }
@@ -123,23 +140,26 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
     fun deleteAllConversation(){
         launch {
             conversationDao().deleteAll()
+        }.also {
+            Log.d(LogUtil.TAG, "All conversations removed also its messages")
         }
     }
 
     fun addMessage(message: Message){
         launch {
-            async{ messageDao().add(message) }
-                .also { Log.d(LogUtil.TAG, "Message with conversation id: ${message.ownerId} has been added into database") }
+            messageDao().add(message)
+        }.also {
+            Log.d(LogUtil.TAG, "Message with conversation id: ${message.ownerId} has been added into database")
         }
     }
 
-    fun getAllMessagesFromConversation(messages: MutableList<Message>, conversationId: String){
+    fun getAllMessagesFromConversation(conversationId: String){
         launch {
-            async {
-                messages.addAll(messageDao().getConversationMessages(conversationId))
-            }.also {
-                Log.d(LogUtil.TAG, "All conversations retrieved for $conversationId")
-            }
+            val messages = mutableListOf<Message>()
+            messages.addAll(messageDao().getConversationMessages(conversationId))
+            ChatActivity.updateList(messages)
+        }.also {
+            Log.d(LogUtil.TAG, "All conversations retrieved for $conversationId")
         }
     }
 

@@ -32,13 +32,11 @@ class FlagEmojiFragment : Fragment(), CoroutineScope {
     }
 
     private suspend fun loadGridview( gridview : GridView){
-        coroutineScope {
-            async {
-                withContext(Dispatchers.IO){
-                    val adapter = EmojiFlagAdapter(activity?.applicationContext!!, EmojiUtil.getFlagEmoji())
-                    withContext(Dispatchers.Main){
-                        gridview.adapter = adapter
-                    }
+        launch{
+            withContext(Dispatchers.IO){
+                val adapter = EmojiFlagAdapter(activity?.applicationContext!!, EmojiUtil.getFlagEmoji())
+                withContext(Dispatchers.Main){
+                    gridview.adapter = adapter
                 }
             }
         }

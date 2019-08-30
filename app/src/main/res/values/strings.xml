@@ -52,4 +52,5 @@
     <string name="user_hint">John Doe</string>
     <string name="signout">Sign out</string>
     <string name="profile">User profile</string>
+    <string name="bethefirst">Be the first to start the conversation</string>
 </resources>

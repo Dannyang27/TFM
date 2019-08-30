@@ -118,6 +118,11 @@ object FirebaseUtil {
     }
 
     fun addMessage(context: Context, message: Message){
+        val newMessages: MutableList<Message> = mutableListOf()
+        newMessages.addAll(ChatActivity.messages)
+        newMessages.add(message)
+        ChatActivity.updateList(newMessages)
+
         database.child(FIREBASE_PRIVATE_CHAT_PATH).child(message.ownerId)
             .child(FIREBASE_PRIVATE_MESSAGE_PATH)
             .child(message.hashCode().toString())
@@ -126,10 +131,6 @@ object FirebaseUtil {
                 Log.d(LogUtil.TAG, "Message added to firebaserealtime: ${message.body}")
                 val roomDatabase = MyRoomDatabase.getMyRoomDatabase(context)
                 roomDatabase?.addMessage(message)
-                val newMessages: MutableList<Message> = mutableListOf()
-                newMessages.addAll(ChatActivity.messages)
-                newMessages.add(message)
-                ChatActivity.updateList(newMessages)
             }
             .addOnFailureListener {
                 Log.d(LogUtil.TAG, "Error while sending message")

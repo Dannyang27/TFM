@@ -43,22 +43,18 @@ class EmojiFlagAdapter : BaseAdapter, CoroutineScope {
         val imgBtn = emojiView.findViewById(R.id.emoji_button) as Button
 
         launch {
-            val job = async {
-                withContext(Dispatchers.IO) {
-                    val unicode = flags[position]
+            withContext(Dispatchers.IO) {
+                val unicode = flags[position]
 
-                    withContext(Dispatchers.Main){
-                        imgBtn.text = unicode
+                withContext(Dispatchers.Main){
+                    imgBtn.text = unicode
 
-                        imgBtn.setOnClickListener {
-                            ChatActivity.emojiEditText.requestFocus()
-                            ChatActivity.emojiEditText.append(unicode)
-                        }
+                    imgBtn.setOnClickListener {
+                        ChatActivity.emojiEditText.requestFocus()
+                        ChatActivity.emojiEditText.append(unicode)
                     }
                 }
-                emojiView
             }
-            job.await()
         }
 
         return emojiView

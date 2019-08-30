@@ -9,8 +9,7 @@ import androidx.emoji.widget.EmojiTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
 import com.example.tfm.model.Message
-import com.example.tfm.util.AuthUtil
-import com.example.tfm.util.showUsernameIfGroup
+import com.example.tfm.util.*
 import org.jetbrains.anko.displayMetrics
 import org.jetbrains.anko.toast
 
@@ -38,6 +37,8 @@ class AttachmentViewHolder (view: View): RecyclerView.ViewHolder(view){
 
         setTitle("dni_pasaporte", ".pdf")
         setPdfWeightInMB(15.5)
+        setTime(time, message.timestamp)
+        setMessageCheckIfSeen(time, message.isSent)
     }
 
     private fun setSenderViewHolder(){

@@ -44,21 +44,18 @@ class EmojiGridViewAdapter : BaseAdapter, CoroutineScope{
         val imgBtn = emojiView.findViewById(R.id.emoji_button) as Button
 
         launch {
-            async {
-                withContext(Dispatchers.IO) {
-                    val unicode = emojiUnicodes[position]
-                    val unicodeStr = EmojiUtil.getEmojiUnicode(unicode)
+            withContext(Dispatchers.IO) {
+                val unicode = emojiUnicodes[position]
+                val unicodeStr = EmojiUtil.getEmojiUnicode(unicode)
 
-                    withContext(Dispatchers.Main) {
-                        imgBtn.text = unicodeStr
+                withContext(Dispatchers.Main) {
+                    imgBtn.text = unicodeStr
 
-                        imgBtn.setOnClickListener {
-                            ChatActivity.emojiEditText.requestFocus()
-                            ChatActivity.emojiEditText.append(unicodeStr)
-                        }
+                    imgBtn.setOnClickListener {
+                        ChatActivity.emojiEditText.requestFocus()
+                        ChatActivity.emojiEditText.append(unicodeStr)
                     }
                 }
-                emojiView
             }
         }
 
