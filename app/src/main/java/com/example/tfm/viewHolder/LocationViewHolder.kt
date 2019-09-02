@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.emoji.widget.EmojiTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
+import com.example.tfm.model.LocationRoomModel
 import com.example.tfm.model.Message
 import com.example.tfm.util.AuthUtil
 import com.example.tfm.util.setMessageCheckIfSeen
@@ -47,7 +48,8 @@ class LocationViewHolder(view: View) : RecyclerView.ViewHolder(view), OnMapReady
     fun initAndUpdateMap(ctx: Context, message: Message){
         this.context = ctx
 
-        val address = message.body as Address
+        val address = message.body as LocationRoomModel
+
         this.latLng = LatLng(address.latitude, address.longitude)
 
         mapView.onCreate(null)
@@ -60,7 +62,7 @@ class LocationViewHolder(view: View) : RecyclerView.ViewHolder(view), OnMapReady
             username.showUsernameIfGroup(false, message.senderName)
         }
 
-        setAddress(address.getAddressLine(0))
+        setAddress(address.addressLine)
         setTime(time, message.timestamp)
         setMessageCheckIfSeen(time, message.isSent)
     }

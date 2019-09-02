@@ -4,19 +4,15 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import androidx.emoji.widget.EmojiTextView
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
+import androidx.room.*
 import com.example.tfm.activity.ChatActivity
+import com.example.tfm.enum.MessageType
 import com.example.tfm.fragments.PrivateFragment
-import com.example.tfm.model.Conversation
-import com.example.tfm.model.Message
-import com.example.tfm.model.User
+import com.example.tfm.model.*
 import com.example.tfm.room.dao.ConversationDAO
 import com.example.tfm.room.dao.MessageDAO
 import com.example.tfm.room.dao.UserDAO
-import com.example.tfm.room.typeconverters.*
+import com.example.tfm.room.typeconverters.AnyTypeConverter
 import com.example.tfm.util.FirebaseUtil
 import com.example.tfm.util.LogUtil
 import com.example.tfm.util.addConversation
@@ -24,8 +20,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 
-@Database(entities = [User::class, Conversation::class, Message::class], version = 1, exportSchema = false)
-@TypeConverters(DateTypeConverter::class, UserConverter::class, UserListConverter::class, MessageConverter::class, MessageListConverter::class, AnyTypeConverter::class)
+@Database(entities = [User::class, Conversation::class, Message::class, GifRoomModel::class, ImageRoomModel::class, LocationRoomModel::class], version = 1, exportSchema = false)
+@TypeConverters(AnyTypeConverter::class)
 abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
     private val job = Job()
     override val coroutineContext = Dispatchers.IO + job
@@ -146,21 +142,60 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
     fun addMessage(message: Message){
         launch {
             messageDao().add(message)
+            when(MessageType.fromInt(message.messageType)) {
+                MessageType.MESSAGE -> {}
+                MessageType.GIF -> messageDao().addGif(message.body as GifRoomModel)
+                MessageType.IMAGE -> messageDao().addImage(message.body as ImageRoomModel)
+                MessageType.LOCATION -> messageDao().addLocation(message.body as LocationRoomModel)
+                MessageType.ATTACHMENT -> {}
+            }
+
         }.also {
-            Log.d(LogUtil.TAG, "Message with conversation id: ${message.ownerId} has been added into database")
+            Log.d(LogUtil.TAG, "Message id: ${message.ownerId} added in Room and MessageType ${message.body} ")
         }
     }
 
     fun getAllMessagesFromConversation(conversationId: String){
         launch {
+            val roomMessages = messageDao().getConversationMessages(conversationId)
+            roomMessages.forEach {
+                Log.d(LogUtil.TAG, "MessageType: ${it.messageType}")
+
+                when(MessageType.fromInt(it.messageType)){
+                    MessageType.MESSAGE -> {
+                        Log.d(LogUtil.TAG, "Body of plain message: ${it.body}")
+                    }
+                    MessageType.IMAGE -> {
+                        val image = messageDao().getImageById(it.id)
+                        it.body = image
+                        Log.d(LogUtil.TAG, "Adding image to message")
+                    }
+                    MessageType.GIF -> {
+                        val gif = messageDao().getGifById(it.id)
+                        it.body = gif
+                        Log.d(LogUtil.TAG, "Adding gif to message")
+                    }
+                    MessageType.LOCATION -> {
+                        val location = messageDao().getLocationById(it.id)
+                        it.body = location
+                        Log.d(LogUtil.TAG, "Location ${location.id} | ${location.latitude} | ${location.longitude} | ${location.addressLine}")
+                        Log.d(LogUtil.TAG, "Adding location to messageType: ${it.messageType}")
+                    }
+
+                    MessageType.ATTACHMENT -> {
+                        Log.d(LogUtil.TAG, "Adding attachemtn to messageType: ${it.messageType}")
+                    }
+                }
+            }
+
             val messages = mutableListOf<Message>()
-            messages.addAll(messageDao().getConversationMessages(conversationId))
+            messages.addAll(roomMessages)
             ChatActivity.updateList(messages)
+
         }.also {
             Log.d(LogUtil.TAG, "All conversations retrieved for $conversationId")
         }
     }
-
 
     private suspend fun createNewConversation(context: Context, email: String, newEmail: String){
         val firestore = FirebaseFirestore.getInstance()
@@ -185,5 +220,56 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
 
         firestore.addConversation(context, conversation)
     }
-}
 
+    fun addGif(gif: GifRoomModel){
+        launch {
+            messageDao().addGif(gif)
+        }.also{
+            Log.d(LogUtil.TAG, "Gif added to Room | Url: ${gif.url}")
+        }
+    }
+
+    fun addImage(image: ImageRoomModel){
+        launch {
+            messageDao().addImage(image)
+        }.also{
+            Log.d(LogUtil.TAG, "Image added to Room | Url: ${image.encodedImage}")
+        }
+    }
+
+    fun addLocation(location: LocationRoomModel){
+        launch {
+            messageDao().addLocation(location)
+        }.also{
+            Log.d(LogUtil.TAG, "Location added to Room | Latitude: ${location.latitude} | Longitude: ${location.longitude} ")
+        }
+    }
+//
+//    fun getAllGif(){
+//        launch{
+//            val gifs = messageDao().getGifById()
+//            gifs.forEach {
+//                Log.d(LogUtil.TAG, "Gif id: ${it.id} | url: ${it.url}")
+//            }
+//        }
+//    }
+//
+//    fun getAllLocation(){
+//        launch{
+//            val locations = messageDao().getLocationById()
+//            locations.forEach {
+//                Log.d(LogUtil.TAG, "Location latitude: ${it.latitude} | longitude: ${it.longitude} | address ${it.addressLine}")
+//            }
+//        }
+//    }
+//
+//    fun getAllImages(){
+//        launch{
+//            val images = messageDao().getImageById()
+//            images.forEach {
+//                Log.d(LogUtil.TAG, "Image id: ${it.id} | encoded: ${it.encodedImage}")
+//            }
+//        }
+//    }
+
+}

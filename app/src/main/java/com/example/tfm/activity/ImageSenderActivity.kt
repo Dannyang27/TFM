@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
@@ -17,9 +18,13 @@ import com.bumptech.glide.Glide
 import com.example.tfm.R
 import com.example.tfm.enum.MediaSource
 import com.example.tfm.enum.MessageType
+import com.example.tfm.model.GifRoomModel
+import com.example.tfm.model.ImageRoomModel
 import com.example.tfm.model.MediaContent
 import com.example.tfm.model.Message
 import com.example.tfm.util.AuthUtil
+import com.example.tfm.util.FirebaseUtil
+import com.example.tfm.util.LogUtil
 import org.jetbrains.anko.toast
 
 class ImageSenderActivity : AppCompatActivity() {
@@ -43,7 +48,7 @@ class ImageSenderActivity : AppCompatActivity() {
         fun launchActivityWithImage(context: Context, uri: Uri?, source: MediaSource){
             val intent = Intent(context, ImageSenderActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            intent.putExtra("imageUrl", uri?.toString() )
+            intent.putExtra("imageUrl", uri?.toString())
             this.source = source
             context.startActivity(intent)
         }
@@ -84,9 +89,10 @@ class ImageSenderActivity : AppCompatActivity() {
 
             sendBtn.setOnClickListener {
                 val timestamp = System.currentTimeMillis()
-                ChatActivity.sendMessage(Message(timestamp,"",AuthUtil.getAccountEmail(), AuthUtil.receiverEmail,
-                    MessageType.GIF, MediaContent(url, captionEt.text.toString()), timestamp,
-                    true, true,"EN" ))
+                val message = Message(timestamp, ChatActivity.conversationId, AuthUtil.getAccountEmail(), AuthUtil.receiverEmail,
+                    MessageType.GIF.value, GifRoomModel(timestamp, url, captionEt.text.toString()), timestamp,
+                    true, true,"EN" )
+                FirebaseUtil.addMessage(this, message)
                 finish()
             }
         }
@@ -124,10 +130,12 @@ class ImageSenderActivity : AppCompatActivity() {
             .into(media)
 
         sendBtn.setOnClickListener {
+            Log.d(LogUtil.TAG, "Sending image...")
             val timestamp = System.currentTimeMillis()
-            ChatActivity.sendMessage(Message(timestamp,"",AuthUtil.getAccountEmail(), AuthUtil.receiverEmail,
-                MessageType.IMAGE, MediaContent(bitmap, captionEt.text.toString()), timestamp ,
-                true, true,"EN"))
+            val message = Message(timestamp, ChatActivity.conversationId, AuthUtil.getAccountEmail(), AuthUtil.receiverEmail,
+                MessageType.IMAGE.value, ImageRoomModel(timestamp, bitmap.toString(), captionEt.text.toString()), timestamp ,
+                true, true,"EN")
+            FirebaseUtil.addMessage(this, message)
             finish()
         }
     }

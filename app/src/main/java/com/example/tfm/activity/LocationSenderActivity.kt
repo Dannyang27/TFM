@@ -15,8 +15,10 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import com.example.tfm.R
 import com.example.tfm.enum.MessageType
+import com.example.tfm.model.LocationRoomModel
 import com.example.tfm.model.Message
 import com.example.tfm.util.AuthUtil
+import com.example.tfm.util.FirebaseUtil
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -26,6 +28,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.auth.FirebaseAuth
 import org.jetbrains.anko.toast
 import java.util.*
 
@@ -76,8 +79,10 @@ class LocationSenderActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMa
 
         locationSendButton.setOnClickListener {
             val timestamp = System.currentTimeMillis()
-            ChatActivity.sendMessage(Message(timestamp,"",AuthUtil.getAccountEmail(), AuthUtil.receiverEmail,
-                MessageType.LOCATION, address, timestamp, true, true, "EN"))
+            val message = Message(timestamp, ChatActivity.conversationId, FirebaseAuth.getInstance().currentUser?.email.toString(), AuthUtil.receiverEmail,
+                MessageType.LOCATION.value, LocationRoomModel(timestamp, address.latitude, address.longitude, address.getAddressLine(0)), timestamp, true, true, "EN")
+
+            FirebaseUtil.addMessage(this, message)
             finish()
         }
 

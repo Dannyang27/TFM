@@ -16,10 +16,29 @@ data class Message (@PrimaryKey(autoGenerate = true)
                     var ownerId: String = "",
                     var senderName: String = "",
                     var receiverName: String = "",
-                    val messageType: MessageType = MessageType.MESSAGE,
+                    var messageType: Int = -1,
                     @TypeConverters(AnyTypeConverter::class)
-                    var body: Any? = null,
+                    var body: Any? = "",
                     var timestamp: Long = -1,
                     var isSent: Boolean = false,
                     var isReceived: Boolean = false,
                     var languageCode: String = "")
+
+@Entity(tableName = "Gif")
+class GifRoomModel(@PrimaryKey
+                   var id: Long = -1,
+                   var url: String = "",
+                   var caption: String = "")
+
+@Entity(tableName = "Image")
+class ImageRoomModel(@PrimaryKey
+                     var id: Long = -1,
+                     var encodedImage: String = "",
+                     var caption: String = "")
+
+@Entity(tableName = "Location")
+class LocationRoomModel(@PrimaryKey
+                        var id: Long = -1,
+                        var latitude: Double = -1.0,
+                        var longitude: Double = -1.0,
+                        var addressLine: String = "")

@@ -58,20 +58,23 @@
             <LinearLayout
                     android:id="@+id/field"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_margin="8dp"
                     android:layout_above="@+id/shortcuts">
                 <androidx.emoji.widget.EmojiEditText
                         android:layout_width="0dp"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
                         android:inputType="textMultiLine|textShortMessage"
                         android:hint="@string/chat_hint"
+                        android:gravity="center_vertical"
                         android:ems="10"
                         android:id="@+id/chat_edittext"
                         android:background="@drawable/roundcorner"
-                        android:paddingLeft="10dp"
-                        android:layout_weight="16"/>
+                        android:paddingVertical="10dp"
+                        android:paddingHorizontal="20dp"
+                        android:layout_weight="16" />
                 <ImageButton
                         android:layout_width="20dp"
                         android:layout_height="40dp"
@@ -81,6 +84,7 @@
                         android:scaleType="fitXY"
                         android:padding="8dp"
                         android:layout_marginLeft="5dp"
+                        android:layout_gravity="bottom"
                         android:background="@drawable/round_button"/>
             </LinearLayout>
             <LinearLayout

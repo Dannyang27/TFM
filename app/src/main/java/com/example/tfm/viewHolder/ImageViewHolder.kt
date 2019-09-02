@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.tfm.R
 import com.example.tfm.enum.MessageType
+import com.example.tfm.model.GifRoomModel
+import com.example.tfm.model.ImageRoomModel
 import com.example.tfm.model.MediaContent
 import com.example.tfm.model.Message
 import com.example.tfm.util.AuthUtil
@@ -26,7 +28,7 @@ class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view){
     private val placeholder: LinearLayout = view.findViewById(R.id.media_placeholder)
     private val userPhoto: ImageView = view.findViewById(R.id.media_photo)
     private val username: EmojiTextView = view.findViewById(R.id.media_username)
-    private val image: ImageView = view.findViewById(R.id.media_image)
+    private val media: ImageView = view.findViewById(R.id.media_image)
     private val caption: EmojiTextView = view.findViewById(R.id.media_caption)
     private val time: TextView = view.findViewById(R.id.media_time)
 
@@ -65,23 +67,23 @@ class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view){
     }
 
     private fun setImageOrGif(message: Message){
-        val mediaContent = message.body as MediaContent
-        if(message.messageType == MessageType.IMAGE){
-            image.setImageBitmap(mediaContent.content as Bitmap)
+        if(MessageType.fromInt(message.messageType) == MessageType.IMAGE){
+            val image = message.body as ImageRoomModel
+            //image.setImageBitmap( image.encodedImage)
+            setCaption(image.caption)
         }else{
-            Glide.with(image.context)
+            val gif = message.body as GifRoomModel
+            Glide.with(layout.context)
                 .asGif()
                 .centerCrop()
-                .load(mediaContent.content as String)
-                .into(image)
+                .load(gif.url)
+                .into(media)
+
+            setCaption(gif.caption)
         }
 
-        image.setOnClickListener {
-            image.context.toast("Image pressed, expanding...")
-        }
-
-        if(mediaContent.caption.isNotEmpty()){
-            setCaption(mediaContent.caption)
+        media.setOnClickListener {
+            layout.context.toast("Image pressed, expanding...")
         }
     }
 

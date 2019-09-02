@@ -19,17 +19,12 @@ class ChatAdapter(private val messages : MutableList<Message>, context: Context)
 
     private val context = context
 
-    override fun getItemViewType(position: Int) =  when(messages[position].messageType){
-        MessageType.MESSAGE -> MessageType.MESSAGE.value
-        MessageType.IMAGE, MessageType.GIF -> MessageType.IMAGE.value
-        MessageType.LOCATION -> MessageType.LOCATION.value
-        MessageType.ATTACHMENT -> MessageType.ATTACHMENT.value
-    }
+    override fun getItemViewType(position: Int) =  messages[position].messageType
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         var view: View?
 
-        return when(MessageType.fromInt(viewType)){
+        when(MessageType.fromInt(viewType)){
             MessageType.MESSAGE -> {
                 view = LayoutInflater.from(parent.context).inflate(R.layout.viewholder_message, parent, false)
                 return MessageViewHolder(view)

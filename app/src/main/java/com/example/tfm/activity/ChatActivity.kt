@@ -51,7 +51,6 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var container: FrameLayout
     private lateinit var bottomNavBar: BottomNavigationView
-    private lateinit var conversationId: String
     private val roomDatabase = MyRoomDatabase.getMyRoomDatabase(this)
 
     private val GALLERY_CODE = 100
@@ -72,7 +71,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         lateinit var messagesRecyclerView: RecyclerView
         lateinit var emojiEditText: EmojiEditText
         lateinit var viewAdapter : ChatAdapter
-
+        lateinit var conversationId: String
         val emojiFragment = EmojiFragment.newInstance()
         val gifFragment = GifFragment.newInstance()
         var activeFragment: Fragment = emojiFragment
@@ -80,7 +79,8 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         fun sendMessage(message: Message){
             //TODO add to firebaseRealtime and if successfull then add to local
             messages.add(message)
-            viewAdapter.updateList(messages)
+            viewAdapter.notifyDataSetChanged()
+            //viewAdapter.updateList(messages)
             scrollToBottom()
         }
 
@@ -230,9 +230,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         }
         locationButton.setOnClickListener {
             closeSpecialKeyboard()
-
-            val locationIntent = Intent(this, LocationSenderActivity::class.java)
-            startActivity(locationIntent)
+            startActivity(Intent(this, LocationSenderActivity::class.java))
         }
         attachmentButton.setOnClickListener {
             openAttachment()
@@ -247,7 +245,9 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
             val fieldText = chat_edittext.text.toString()
             if(fieldText.isNotEmpty()){
                 val timestamp = System.currentTimeMillis()
-                val message = Message(timestamp, conversationId ,FirebaseAuth.getInstance().currentUser?.email.toString(), AuthUtil.receiverEmail, MessageType.MESSAGE, fieldText, timestamp, false,true,"EN" )
+                val message = Message(timestamp, conversationId ,
+                    FirebaseAuth.getInstance().currentUser?.email.toString(), AuthUtil.receiverEmail,
+                    MessageType.MESSAGE.value, fieldText, timestamp, false,true,"EN" )
                 FirebaseUtil.addMessage(this, message)
                 chat_edittext.text.clear()
             }
@@ -273,7 +273,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
 
                 CAMERA_MODE -> {
                     if(resultCode == RESULT_OK){
-                        ImageSenderActivity.launchActivityWithImage(this, Uri.parse(currentPhotoPath), MediaSource.CAMERA)
+                        ImageSenderActivity.launchActivityWithImage(this, Uri.parse(currentPhotoPath),  MediaSource.CAMERA)
                     }
                 }
 

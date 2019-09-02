@@ -82,8 +82,12 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                     val roomDatabase = MyRoomDatabase.getMyRoomDatabase(toolbar.context)
 //                    roomDatabase?.deleteAllConversation()
 //                    roomDatabase?.deleteAllUsers()
-                    roomDatabase?.showAllUserInLog()
-                    roomDatabase?.showAllConversationInLog()
+//                    roomDatabase?.showAllUserInLog()
+//                    roomDatabase?.showAllConversationInLog()
+
+//                    roomDatabase?.getAllLocation()
+//                    roomDatabase?.getAllImages()
+//                    roomDatabase?.getAllGif()
                 }
             }
         }
