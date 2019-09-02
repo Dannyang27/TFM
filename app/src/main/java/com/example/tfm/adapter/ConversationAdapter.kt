@@ -7,12 +7,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
 import com.example.tfm.activity.ChatActivity
+import com.example.tfm.activity.MainActivity
 import com.example.tfm.diffUtil.ConversationDiffCallback
 import com.example.tfm.model.Conversation
 import com.example.tfm.room.database.MyRoomDatabase
 import com.example.tfm.util.setTime
 import com.example.tfm.viewHolder.ConversationViewHolder
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -29,12 +29,10 @@ class ConversationAdapter(private val conversations: MutableList<Conversation>):
 
     override fun onBindViewHolder(holder: ConversationViewHolder, position: Int) {
         val conversation = conversations[position]
-
-        val currentUser = FirebaseAuth.getInstance().currentUser?.email
         val roomDatabase =  MyRoomDatabase.getMyRoomDatabase(holder.name.context)
 
         launch {
-            if(conversation.userOne == currentUser){
+            if(conversation.userOne == MainActivity.currentUserEmail){
                 roomDatabase?.getUserNameByEmail(holder.name, conversation.userTwo.toString())
             }else{
                 roomDatabase?.getUserNameByEmail(holder.name, conversation.userOne.toString())

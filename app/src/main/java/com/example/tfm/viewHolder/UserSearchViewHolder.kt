@@ -5,6 +5,7 @@ import android.widget.ImageView
 import androidx.emoji.widget.EmojiTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
+import com.example.tfm.activity.MainActivity
 import com.example.tfm.room.database.MyRoomDatabase
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
@@ -24,9 +25,8 @@ class UserSearchViewHolder(view : View) : RecyclerView.ViewHolder(view), Corouti
     init {
         view.setOnClickListener {
             launch {
-                val currentUser = FirebaseAuth.getInstance().currentUser
                 val roomDatabase = MyRoomDatabase.getMyRoomDatabase(username.context)
-                roomDatabase?.getMutualConversation(username.context, currentUser?.email.toString(), email)
+                roomDatabase?.getMutualConversation(username.context, MainActivity.currentUserEmail, email)
             }
         }
     }

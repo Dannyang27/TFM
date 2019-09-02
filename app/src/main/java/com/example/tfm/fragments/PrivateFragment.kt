@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
+import com.example.tfm.activity.MainActivity
 import com.example.tfm.adapter.ConversationAdapter
 import com.example.tfm.divider.HorizontalDivider
 import com.example.tfm.model.Conversation
@@ -50,7 +51,7 @@ class PrivateFragment : Fragment(){
         }
 
         val roomDatabase = MyRoomDatabase.getMyRoomDatabase(activity?.applicationContext!!)
-        roomDatabase?.loadUserConversation(FirebaseAuth.getInstance().currentUser?.email.toString())
+        roomDatabase?.loadUserConversation(MainActivity.currentUserEmail)
 
         return view
     }

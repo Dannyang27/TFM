@@ -143,11 +143,13 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
         launch {
             messageDao().add(message)
             when(MessageType.fromInt(message.messageType)) {
-                MessageType.MESSAGE -> {}
-                MessageType.GIF -> messageDao().addGif(message.body as GifRoomModel)
-                MessageType.IMAGE -> messageDao().addImage(message.body as ImageRoomModel)
-                MessageType.LOCATION -> messageDao().addLocation(message.body as LocationRoomModel)
+                MessageType.GIF -> addGif(message.body as GifRoomModel)
+                MessageType.IMAGE -> addImage(message.body as ImageRoomModel)
+                MessageType.LOCATION -> addLocation(message.body as LocationRoomModel)
                 MessageType.ATTACHMENT -> {}
+                else -> {
+                    Log.d(LogUtil.TAG, "MessageType not specified")
+                }
             }
 
         }.also {
@@ -159,27 +161,19 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
         launch {
             val roomMessages = messageDao().getConversationMessages(conversationId)
             roomMessages.forEach {
-                Log.d(LogUtil.TAG, "MessageType: ${it.messageType}")
-
                 when(MessageType.fromInt(it.messageType)){
-                    MessageType.MESSAGE -> {
-                        Log.d(LogUtil.TAG, "Body of plain message: ${it.body}")
-                    }
+                    MessageType.MESSAGE -> { }
                     MessageType.IMAGE -> {
                         val image = messageDao().getImageById(it.id)
                         it.body = image
-                        Log.d(LogUtil.TAG, "Adding image to message")
                     }
                     MessageType.GIF -> {
                         val gif = messageDao().getGifById(it.id)
                         it.body = gif
-                        Log.d(LogUtil.TAG, "Adding gif to message")
                     }
                     MessageType.LOCATION -> {
                         val location = messageDao().getLocationById(it.id)
                         it.body = location
-                        Log.d(LogUtil.TAG, "Location ${location.id} | ${location.latitude} | ${location.longitude} | ${location.addressLine}")
-                        Log.d(LogUtil.TAG, "Adding location to messageType: ${it.messageType}")
                     }
 
                     MessageType.ATTACHMENT -> {
@@ -244,32 +238,4 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
             Log.d(LogUtil.TAG, "Location added to Room | Latitude: ${location.latitude} | Longitude: ${location.longitude} ")
         }
     }
-//
-//    fun getAllGif(){
-//        launch{
-//            val gifs = messageDao().getGifById()
-//            gifs.forEach {
-//                Log.d(LogUtil.TAG, "Gif id: ${it.id} | url: ${it.url}")
-//            }
-//        }
-//    }
-//
-//    fun getAllLocation(){
-//        launch{
-//            val locations = messageDao().getLocationById()
-//            locations.forEach {
-//                Log.d(LogUtil.TAG, "Location latitude: ${it.latitude} | longitude: ${it.longitude} | address ${it.addressLine}")
-//            }
-//        }
-//    }
-//
-//    fun getAllImages(){
-//        launch{
-//            val images = messageDao().getImageById()
-//            images.forEach {
-//                Log.d(LogUtil.TAG, "Image id: ${it.id} | encoded: ${it.encodedImage}")
-//            }
-//        }
-//    }
-
 }

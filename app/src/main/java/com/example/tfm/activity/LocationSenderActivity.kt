@@ -79,7 +79,7 @@ class LocationSenderActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMa
 
         locationSendButton.setOnClickListener {
             val timestamp = System.currentTimeMillis()
-            val message = Message(timestamp, ChatActivity.conversationId, FirebaseAuth.getInstance().currentUser?.email.toString(), AuthUtil.receiverEmail,
+            val message = Message(timestamp, ChatActivity.conversationId, MainActivity.currentUserEmail, AuthUtil.receiverEmail,
                 MessageType.LOCATION.value, LocationRoomModel(timestamp, address.latitude, address.longitude, address.getAddressLine(0)), timestamp, true, true, "EN")
 
             FirebaseUtil.addMessage(this, message)

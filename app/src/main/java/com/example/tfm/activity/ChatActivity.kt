@@ -246,7 +246,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
             if(fieldText.isNotEmpty()){
                 val timestamp = System.currentTimeMillis()
                 val message = Message(timestamp, conversationId ,
-                    FirebaseAuth.getInstance().currentUser?.email.toString(), AuthUtil.receiverEmail,
+                    MainActivity.currentUserEmail, AuthUtil.receiverEmail,
                     MessageType.MESSAGE.value, fieldText, timestamp, false,true,"EN" )
                 FirebaseUtil.addMessage(this, message)
                 chat_edittext.text.clear()

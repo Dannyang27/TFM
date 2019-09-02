@@ -29,7 +29,6 @@ object FirebaseUtil {
     const val FIREBASE_PRIVATE_MESSAGE_PATH = "messages"
 
     private val database = FirebaseDatabase.getInstance().reference
-    private val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email.toString()
 
     fun addUser(context: Context, user: User){
         database.child(FIREBASE_USER_PATH)
@@ -79,7 +78,7 @@ object FirebaseUtil {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 dataSnapshot.children.forEach {
                     val user = it.getValue(User::class.java)
-                    if(user?.email != currentUserEmail){
+                    if(user?.email != MainActivity.currentUserEmail){
                         cacheList.add(user!!)
                     }
                 }
@@ -97,7 +96,7 @@ object FirebaseUtil {
                 roomDatabase?.addConversation(conversation)
 
                 var userToCreate: String?
-                if(conversation.userOne.equals(currentUserEmail)){
+                if(conversation.userOne.equals(MainActivity.currentUserEmail)){
                     userToCreate = conversation.userTwo
                 }else{
                     userToCreate = conversation.userOne

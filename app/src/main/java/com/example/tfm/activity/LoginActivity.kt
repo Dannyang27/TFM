@@ -36,9 +36,7 @@ class LoginActivity : AppCompatActivity() {
         loginBtn = findViewById(R.id.login_button)
 
         auth = FirebaseAuth.getInstance()
-        auth?.let {
-            Log.d(LogUtil.TAG, "CurrentUserEmail: " + it.currentUser?.email)
-        }
+
         prefs = PreferenceManager.getDefaultSharedPreferences(this)
         val (emailPref, passwordPref) = prefs.getCredentials()
 
