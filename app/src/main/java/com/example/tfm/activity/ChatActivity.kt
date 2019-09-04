@@ -32,7 +32,6 @@ import com.example.tfm.fragments.EmojiFragment
 import com.example.tfm.fragments.GifFragment
 import com.example.tfm.model.Message
 import com.example.tfm.model.MessageContent
-import com.example.tfm.room.database.MyRoomDatabase
 import com.example.tfm.util.FirebaseUtil
 import com.example.tfm.util.KeyboardUtil
 import com.example.tfm.util.LogUtil
@@ -50,7 +49,6 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var container: FrameLayout
     private lateinit var bottomNavBar: BottomNavigationView
-    private val roomDatabase = MyRoomDatabase.getMyRoomDatabase(this)
 
     private val GALLERY_CODE = 100
     private val CAMERA_MODE = 101
@@ -150,7 +148,6 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         supportFragmentManager.beginTransaction().add(R.id.emoji_container, emojiFragment, "1").commit()
 
         messages.clear()
-//        roomDatabase?.getAllMessagesFromConversation(conversationId)
         FirebaseUtil.loadConversation(conversationId)
 
         initListeners()

@@ -147,8 +147,6 @@ object FirebaseUtil {
             .setValue(message)
             .addOnSuccessListener {
                 Log.d(LogUtil.TAG, "Message added to firebaserealtime: ${message.body}")
-//                val roomDatabase = MyRoomDatabase.getMyRoomDatabase(context)
-//                roomDatabase?.addMessage(message)
             }
             .addOnFailureListener {
                 Log.d(LogUtil.TAG, "Error while sending message")

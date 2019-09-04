@@ -16,7 +16,6 @@ import androidx.fragment.app.Fragment
 import com.example.tfm.R
 import com.example.tfm.fragments.GroupChatFragment
 import com.example.tfm.fragments.PrivateFragment
-import com.example.tfm.room.database.MyRoomDatabase
 import com.example.tfm.util.LogUtil
 import com.example.tfm.util.clearCredential
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -27,7 +26,6 @@ import com.google.firebase.database.DatabaseReference
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import org.jetbrains.anko.toast
 
 class MainActivity : AppCompatActivity(), CoroutineScope {
@@ -91,18 +89,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                 val intent = Intent(this, UserSearcherActivity::class.java)
                 startActivity(intent)
             }else{
-                //TODO add search group
-                launch {
-                    val roomDatabase = MyRoomDatabase.getMyRoomDatabase(toolbar.context)
-//                    roomDatabase?.deleteAllConversation()
-//                    roomDatabase?.deleteAllUsers()
-//                    roomDatabase?.showAllUserInLog()
-//                    roomDatabase?.showAllConversationInLog()
 
-//                    roomDatabase?.getAllLocation()
-//                    roomDatabase?.getAllImages()
-//                    roomDatabase?.getAllGif()
-                }
             }
         }
 
