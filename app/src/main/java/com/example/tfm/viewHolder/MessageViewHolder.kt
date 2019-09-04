@@ -9,8 +9,8 @@ import android.widget.TextView
 import androidx.emoji.widget.EmojiTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
+import com.example.tfm.activity.MainActivity
 import com.example.tfm.model.Message
-import com.example.tfm.util.AuthUtil
 import com.example.tfm.util.setMessageCheckIfSeen
 import com.example.tfm.util.setTime
 import com.example.tfm.util.showUsernameIfGroup
@@ -25,14 +25,14 @@ class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
     private val time: TextView = view.findViewById(R.id.message_time)
 
     fun initMessageViewHolder(message: Message){
-        if(message.senderName == AuthUtil.getAccountEmail()){
+        if(message.senderName == MainActivity.currentUserEmail){
             setSenderViewHolder()
         }else{
             setReceiverViewHolder()
-            username.showUsernameIfGroup(false, message.senderName)
+            username.showUsernameIfGroup(true, message.senderName)
         }
 
-        setBody(message.body as String)
+        setBody(message.body?.fieldOne.toString())
         setTime(time, message.timestamp)
         setMessageCheckIfSeen(time, message.isSent)
     }

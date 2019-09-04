@@ -18,13 +18,11 @@ import com.bumptech.glide.Glide
 import com.example.tfm.R
 import com.example.tfm.enum.MediaSource
 import com.example.tfm.enum.MessageType
-import com.example.tfm.model.GifRoomModel
-import com.example.tfm.model.ImageRoomModel
-import com.example.tfm.model.MediaContent
 import com.example.tfm.model.Message
-import com.example.tfm.util.AuthUtil
+import com.example.tfm.model.MessageContent
 import com.example.tfm.util.FirebaseUtil
 import com.example.tfm.util.LogUtil
+import com.example.tfm.util.toBase64
 import org.jetbrains.anko.toast
 
 class ImageSenderActivity : AppCompatActivity() {
@@ -89,10 +87,13 @@ class ImageSenderActivity : AppCompatActivity() {
 
             sendBtn.setOnClickListener {
                 val timestamp = System.currentTimeMillis()
-                val message = Message(timestamp, ChatActivity.conversationId, AuthUtil.getAccountEmail(), AuthUtil.receiverEmail,
-                    MessageType.GIF.value, GifRoomModel(timestamp, url, captionEt.text.toString()), timestamp,
-                    true, true,"EN" )
-                FirebaseUtil.addMessage(this, message)
+                val message = Message(
+                    id = timestamp,
+                    messageType = MessageType.GIF.value,
+                    body = MessageContent(fieldOne = url, fieldTwo = captionEt.text.toString()),
+                    timestamp = timestamp,
+                    languageCode = "EN" )
+                FirebaseUtil.addMessage(message)
                 finish()
             }
         }
@@ -132,10 +133,13 @@ class ImageSenderActivity : AppCompatActivity() {
         sendBtn.setOnClickListener {
             Log.d(LogUtil.TAG, "Sending image...")
             val timestamp = System.currentTimeMillis()
-            val message = Message(timestamp, ChatActivity.conversationId, AuthUtil.getAccountEmail(), AuthUtil.receiverEmail,
-                MessageType.IMAGE.value, ImageRoomModel(timestamp, bitmap.toString(), captionEt.text.toString()), timestamp ,
-                true, true,"EN")
-            FirebaseUtil.addMessage(this, message)
+            val message = Message(
+                id = timestamp,
+                messageType = MessageType.IMAGE.value,
+                body = MessageContent(fieldOne = bitmap.toBase64(), fieldTwo = captionEt.text.toString()),
+                timestamp = timestamp,
+                languageCode = "EN")
+            FirebaseUtil.addMessage(message)
             finish()
         }
     }

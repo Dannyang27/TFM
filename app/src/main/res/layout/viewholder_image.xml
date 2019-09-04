@@ -65,7 +65,7 @@
                         android:textSize="@dimen/text_large"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorReceiverMessage"
+                        android:textColor="@color/colorPrimaryText"
                         android:visibility="gone"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>

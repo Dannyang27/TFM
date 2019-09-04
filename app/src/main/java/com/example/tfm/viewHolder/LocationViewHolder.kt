@@ -1,7 +1,6 @@
 package com.example.tfm.viewHolder
 
 import android.content.Context
-import android.location.Address
 import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
@@ -10,7 +9,7 @@ import android.widget.TextView
 import androidx.emoji.widget.EmojiTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
-import com.example.tfm.model.LocationRoomModel
+import com.example.tfm.model.Location
 import com.example.tfm.model.Message
 import com.example.tfm.util.AuthUtil
 import com.example.tfm.util.setMessageCheckIfSeen
@@ -48,7 +47,10 @@ class LocationViewHolder(view: View) : RecyclerView.ViewHolder(view), OnMapReady
     fun initAndUpdateMap(ctx: Context, message: Message){
         this.context = ctx
 
-        val address = message.body as LocationRoomModel
+        val content = message.body
+        val address = Location(content?.fieldOne.toString().toDouble(),
+                               content?.fieldTwo.toString().toDouble(),
+                               content?.fieldThree.toString())
 
         this.latLng = LatLng(address.latitude, address.longitude)
 

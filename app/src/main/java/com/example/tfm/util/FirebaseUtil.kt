@@ -13,7 +13,6 @@ import com.example.tfm.model.Conversation
 import com.example.tfm.model.Message
 import com.example.tfm.model.User
 import com.example.tfm.room.database.MyRoomDatabase
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -87,6 +86,26 @@ object FirebaseUtil {
         })
     }
 
+    fun loadConversation( conversationId: String){
+        database.child(FIREBASE_PRIVATE_CHAT_PATH).child(conversationId).child(
+            FIREBASE_PRIVATE_MESSAGE_PATH).addListenerForSingleValueEvent(object: ValueEventListener{
+            override fun onCancelled(p0: DatabaseError) {}
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val messages = mutableListOf<Message>()
+                dataSnapshot.children.forEach{
+                    val message = it.getValue(Message::class.java)!!
+                    messages.add(message)
+                    Log.d(LogUtil.TAG, "Message from conversation: ${message.id}")
+                }
+
+                ChatActivity.updateList(messages)
+            }
+        })
+    }
+
+
+
     fun addPrivateChat(context: Context, conversation: Conversation){
         database.child(FIREBASE_PRIVATE_CHAT_PATH)
             .child(conversation.id).setValue(conversation)
@@ -111,11 +130,12 @@ object FirebaseUtil {
                 val intent = Intent(context, ChatActivity::class.java)
                 intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
                 intent.putExtra("conversationId", conversation.id)
+                intent.putExtra("receiverEmail", userToCreate.toString())
                 context.startActivity(intent)
         }
     }
 
-    fun addMessage(context: Context, message: Message){
+    fun addMessage(message: Message){
         val newMessages: MutableList<Message> = mutableListOf()
         newMessages.addAll(ChatActivity.messages)
         newMessages.add(message)
@@ -123,12 +143,12 @@ object FirebaseUtil {
 
         database.child(FIREBASE_PRIVATE_CHAT_PATH).child(message.ownerId)
             .child(FIREBASE_PRIVATE_MESSAGE_PATH)
-            .child(message.hashCode().toString())
+            .child(message.timestamp.toString())
             .setValue(message)
             .addOnSuccessListener {
                 Log.d(LogUtil.TAG, "Message added to firebaserealtime: ${message.body}")
-                val roomDatabase = MyRoomDatabase.getMyRoomDatabase(context)
-                roomDatabase?.addMessage(message)
+//                val roomDatabase = MyRoomDatabase.getMyRoomDatabase(context)
+//                roomDatabase?.addMessage(message)
             }
             .addOnFailureListener {
                 Log.d(LogUtil.TAG, "Error while sending message")
@@ -161,4 +181,17 @@ fun FirebaseFirestore.addConversation(context: Context, conversation: Conversati
         }.addOnFailureListener {
             Log.d(LogUtil.TAG, "Remove chat from Firestore")
         }
+}
+
+suspend fun FirebaseFirestore.findUser(conversationId: String): String{
+    val task = collection(FirebaseUtil.FIREBASE_PRIVATE_CHAT_PATH)
+        .document(conversationId).get().await()
+
+    val conversation =  task.toObject(Conversation::class.java)
+    val (userOne, userTwo) = Pair(conversation?.userOne.toString(), conversation?.userTwo.toString())
+    if(userOne == MainActivity.currentUserEmail){
+        return userTwo
+    }else{
+        return userOne
+    }
 }

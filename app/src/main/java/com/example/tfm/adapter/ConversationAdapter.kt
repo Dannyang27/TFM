@@ -34,8 +34,10 @@ class ConversationAdapter(private val conversations: MutableList<Conversation>):
         launch {
             if(conversation.userOne == MainActivity.currentUserEmail){
                 roomDatabase?.getUserNameByEmail(holder.name, conversation.userTwo.toString())
+                holder.email = conversation.userTwo.toString()
             }else{
                 roomDatabase?.getUserNameByEmail(holder.name, conversation.userOne.toString())
+                holder.email = conversation.userOne.toString()
             }
         }
 
@@ -46,6 +48,7 @@ class ConversationAdapter(private val conversations: MutableList<Conversation>):
             val context = holder.itemView.context
             val intent = Intent(context, ChatActivity::class.java)
             intent.putExtra("conversationId", conversation.id)
+            intent.putExtra( "receiverEmail", holder.email)
             context.startActivity(intent)
         }
     }

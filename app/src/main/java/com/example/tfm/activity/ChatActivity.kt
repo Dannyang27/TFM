@@ -31,13 +31,12 @@ import com.example.tfm.enum.MessageType
 import com.example.tfm.fragments.EmojiFragment
 import com.example.tfm.fragments.GifFragment
 import com.example.tfm.model.Message
+import com.example.tfm.model.MessageContent
 import com.example.tfm.room.database.MyRoomDatabase
-import com.example.tfm.util.AuthUtil
 import com.example.tfm.util.FirebaseUtil
 import com.example.tfm.util.KeyboardUtil
 import com.example.tfm.util.LogUtil
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.coroutines.*
 import org.jetbrains.anko.toast
@@ -75,6 +74,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         val emojiFragment = EmojiFragment.newInstance()
         val gifFragment = GifFragment.newInstance()
         var activeFragment: Fragment = emojiFragment
+        lateinit var receiverUser: String
 
         fun sendMessage(message: Message){
             //TODO add to firebaseRealtime and if successfull then add to local
@@ -125,6 +125,9 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         bottomNavBar = findViewById(R.id.emoji_navbar)
 
         conversationId = intent.getStringExtra("conversationId")
+        receiverUser = intent.getStringExtra("receiverEmail")
+
+        Log.d(LogUtil.TAG, "Receiver: $receiverUser")
         toast(conversationId)
 
         viewManager = LinearLayoutManager(this)
@@ -142,13 +145,13 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
             }
         }
 
-        Log.d(LogUtil.TAG, "Inicializando bottomnavbar")
         bottomNavBar.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         supportFragmentManager.beginTransaction().add(R.id.emoji_container, gifFragment, "2").hide(gifFragment).commit()
         supportFragmentManager.beginTransaction().add(R.id.emoji_container, emojiFragment, "1").commit()
 
         messages.clear()
-        roomDatabase?.getAllMessagesFromConversation(conversationId)
+//        roomDatabase?.getAllMessagesFromConversation(conversationId)
+        FirebaseUtil.loadConversation(conversationId)
 
         initListeners()
     }
@@ -245,10 +248,13 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
             val fieldText = chat_edittext.text.toString()
             if(fieldText.isNotEmpty()){
                 val timestamp = System.currentTimeMillis()
-                val message = Message(timestamp, conversationId ,
-                    MainActivity.currentUserEmail, AuthUtil.receiverEmail,
-                    MessageType.MESSAGE.value, fieldText, timestamp, false,true,"EN" )
-                FirebaseUtil.addMessage(this, message)
+                val message = Message(
+                    id = timestamp,
+                    messageType = MessageType.MESSAGE.value,
+                    body = MessageContent(fieldOne = fieldText),
+                    timestamp = timestamp,
+                    languageCode = "EN" )
+                FirebaseUtil.addMessage(message)
                 chat_edittext.text.clear()
             }
         }

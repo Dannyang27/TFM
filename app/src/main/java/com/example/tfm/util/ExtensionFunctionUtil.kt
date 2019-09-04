@@ -1,6 +1,9 @@
 package com.example.tfm.util
 
 import android.content.SharedPreferences
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
 import android.view.View
 import android.widget.GridView
 import android.widget.TextView
@@ -9,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.adapter.EmojiGridViewAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.io.ByteArrayOutputStream
 
 fun TextView.showUsernameIfGroup( isPrivateChat: Boolean, username: String){
     if(isPrivateChat) {
@@ -43,6 +47,17 @@ fun SharedPreferences.getCredentials(): Pair<String, String>{
 fun String.trimBothSides() = this.trimStart().trimEnd()
 
 fun String.addCheck() = this.plus("✓")
+
+fun Bitmap.toBase64() : String{
+    val outputStream = ByteArrayOutputStream()
+    this.compress(Bitmap.CompressFormat.JPEG, 70, outputStream)
+    return Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT)
+}
+
+fun String.toBitmap() : Bitmap {
+    val bitmap = Base64.decode(this, Base64.DEFAULT)
+    return BitmapFactory.decodeByteArray(bitmap, 0 , bitmap.size)
+}
 
 fun RecyclerView.ViewHolder.setTime(time: TextView, timestamp: Long){
     time.text = TimeUtil.setTimeFromTimeStamp(timestamp)

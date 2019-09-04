@@ -1,6 +1,5 @@
 package com.example.tfm.viewHolder
 
-import android.graphics.Bitmap
 import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
@@ -12,14 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.tfm.R
 import com.example.tfm.enum.MessageType
-import com.example.tfm.model.GifRoomModel
-import com.example.tfm.model.ImageRoomModel
-import com.example.tfm.model.MediaContent
 import com.example.tfm.model.Message
-import com.example.tfm.util.AuthUtil
-import com.example.tfm.util.setMessageCheckIfSeen
-import com.example.tfm.util.setTime
-import com.example.tfm.util.showUsernameIfGroup
+import com.example.tfm.util.*
 import org.jetbrains.anko.displayMetrics
 import org.jetbrains.anko.toast
 
@@ -52,7 +45,7 @@ class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view){
         userPhoto.visibility = View.GONE
         time.gravity = Gravity.RIGHT
         placeholder.setBackgroundColor(context.getColor(R.color.colorAccent))
-        caption.setTextColor(context.getColor(R.color.colorWhite))
+        caption.setTextColor(context.getColor(R.color.colorPrimaryText))
         username.visibility = View.GONE
     }
 
@@ -63,23 +56,25 @@ class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view){
         userPhoto.visibility = View.VISIBLE
         time.gravity = Gravity.LEFT
         placeholder.setBackgroundColor(context.getColor(R.color.colorWhite))
-        caption.setTextColor(context.getColor(R.color.colorReceiverMessage))
+        caption.setTextColor(context.getColor(R.color.colorPrimaryText))
     }
 
     private fun setImageOrGif(message: Message){
+        val caption = message.body?.fieldTwo
         if(MessageType.fromInt(message.messageType) == MessageType.IMAGE){
-            val image = message.body as ImageRoomModel
-            //image.setImageBitmap( image.encodedImage)
-            setCaption(image.caption)
+            media.setImageBitmap(message.body?.fieldOne?.toBitmap())
         }else{
-            val gif = message.body as GifRoomModel
+            val url = message.body?.fieldOne
+
             Glide.with(layout.context)
                 .asGif()
                 .centerCrop()
-                .load(gif.url)
+                .load(url)
                 .into(media)
+        }
 
-            setCaption(gif.caption)
+        if(caption!!.isNotEmpty()){
+            setCaption(caption)
         }
 
         media.setOnClickListener {

@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
 import com.example.tfm.activity.MainActivity
 import com.example.tfm.room.database.MyRoomDatabase
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.Job

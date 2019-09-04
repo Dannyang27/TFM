@@ -4,15 +4,17 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import androidx.emoji.widget.EmojiTextView
-import androidx.room.*
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
 import com.example.tfm.activity.ChatActivity
+import com.example.tfm.activity.MainActivity
 import com.example.tfm.enum.MessageType
 import com.example.tfm.fragments.PrivateFragment
 import com.example.tfm.model.*
 import com.example.tfm.room.dao.ConversationDAO
 import com.example.tfm.room.dao.MessageDAO
 import com.example.tfm.room.dao.UserDAO
-import com.example.tfm.room.typeconverters.AnyTypeConverter
 import com.example.tfm.util.FirebaseUtil
 import com.example.tfm.util.LogUtil
 import com.example.tfm.util.addConversation
@@ -21,7 +23,6 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 
 @Database(entities = [User::class, Conversation::class, Message::class, GifRoomModel::class, ImageRoomModel::class, LocationRoomModel::class], version = 1, exportSchema = false)
-@TypeConverters(AnyTypeConverter::class)
 abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
     private val job = Job()
     override val coroutineContext = Dispatchers.IO + job
@@ -96,9 +97,12 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
             conversation = conversationDao().getMutualConversation(email, newEmail)
             if(conversation != null){
                 Log.d(LogUtil.TAG, "Conversation exists: " + conversation?.id)
+                var receiver = getReceiverUser(conversation?.id.toString())
+
                 val intent = Intent(context, ChatActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 intent.putExtra("conversationId", conversation?.id)
+                intent.putExtra("receiverEmail", receiver)
                 context.startActivity(intent)
             }else{
                 Log.d(LogUtil.TAG, "Conversation does not exist, do some stuff")
@@ -157,37 +161,13 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
         }
     }
 
-    fun getAllMessagesFromConversation(conversationId: String){
-        launch {
-            val roomMessages = messageDao().getConversationMessages(conversationId)
-            roomMessages.forEach {
-                when(MessageType.fromInt(it.messageType)){
-                    MessageType.MESSAGE -> { }
-                    MessageType.IMAGE -> {
-                        val image = messageDao().getImageById(it.id)
-                        it.body = image
-                    }
-                    MessageType.GIF -> {
-                        val gif = messageDao().getGifById(it.id)
-                        it.body = gif
-                    }
-                    MessageType.LOCATION -> {
-                        val location = messageDao().getLocationById(it.id)
-                        it.body = location
-                    }
+    fun getReceiverUser(conversationId: String): String{
+        val conversation = conversationDao().getById(conversationId)
 
-                    MessageType.ATTACHMENT -> {
-                        Log.d(LogUtil.TAG, "Adding attachemtn to messageType: ${it.messageType}")
-                    }
-                }
-            }
-
-            val messages = mutableListOf<Message>()
-            messages.addAll(roomMessages)
-            ChatActivity.updateList(messages)
-
-        }.also {
-            Log.d(LogUtil.TAG, "All conversations retrieved for $conversationId")
+        if(conversation.userOne == MainActivity.currentUserEmail){
+            return conversation.userTwo.toString()
+        }else{
+            return conversation.userOne.toString()
         }
     }
 
