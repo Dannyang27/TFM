@@ -79,6 +79,9 @@ class LocationSenderActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMa
             val timestamp = System.currentTimeMillis()
             val message = Message(
                 id = timestamp,
+                ownerId = ChatActivity.conversationId,
+                senderName = MainActivity.currentUserEmail,
+                receiverName = ChatActivity.receiverUser,
                 messageType = MessageType.LOCATION.value,
                 body = MessageContent(address.latitude.toString(), address.longitude.toString(), address.getAddressLine(0)),
                 timestamp = timestamp,

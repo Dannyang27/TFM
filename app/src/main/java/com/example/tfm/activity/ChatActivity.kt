@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
 import com.example.tfm.adapter.ChatAdapter
+import com.example.tfm.data.DataRepository
 import com.example.tfm.enum.MediaSource
 import com.example.tfm.enum.MessageType
 import com.example.tfm.fragments.EmojiFragment
@@ -148,7 +149,13 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         supportFragmentManager.beginTransaction().add(R.id.emoji_container, emojiFragment, "1").commit()
 
         messages.clear()
-        FirebaseUtil.loadConversation(conversationId)
+
+        val conversationMessages = DataRepository.getConversation(conversationId)?.messages
+        conversationMessages?.let {
+            updateList(it)
+        }.also {
+            Log.d(LogUtil.TAG, "Size of conversation: ${conversationMessages?.size}")
+        }
 
         initListeners()
     }
@@ -247,6 +254,9 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
                 val timestamp = System.currentTimeMillis()
                 val message = Message(
                     id = timestamp,
+                    ownerId = ChatActivity.conversationId,
+                    senderName = MainActivity.currentUserEmail,
+                    receiverName = ChatActivity.receiverUser,
                     messageType = MessageType.MESSAGE.value,
                     body = MessageContent(fieldOne = fieldText),
                     timestamp = timestamp,

@@ -1,8 +1,6 @@
 package com.example.tfm.model
 
 import androidx.room.*
-import com.example.tfm.activity.ChatActivity
-import com.example.tfm.activity.MainActivity
 
 @Entity(foreignKeys = arrayOf(ForeignKey(entity = Conversation::class,
                         parentColumns = arrayOf("id"),
@@ -13,9 +11,9 @@ data class Message (@PrimaryKey(autoGenerate = true)
                     @ColumnInfo(name = "id", index = true)
                     var id: Long = 0,
                     @ColumnInfo(name = "ownerId", index = true)
-                    var ownerId: String = ChatActivity.conversationId,
-                    var senderName: String = MainActivity.currentUserEmail,
-                    var receiverName: String = ChatActivity.receiverUser,
+                    var ownerId: String = "",
+                    var senderName: String = "",
+                    var receiverName: String = "",
                     var messageType: Int = -1,
                     @Ignore
                     var body: MessageContent? = null,

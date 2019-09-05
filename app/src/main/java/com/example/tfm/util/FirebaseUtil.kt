@@ -9,14 +9,12 @@ import com.example.tfm.activity.ChatActivity
 import com.example.tfm.activity.MainActivity
 import com.example.tfm.activity.SignupActivity
 import com.example.tfm.activity.UserSearcherActivity
+import com.example.tfm.data.DataRepository
 import com.example.tfm.model.Conversation
 import com.example.tfm.model.Message
 import com.example.tfm.model.User
 import com.example.tfm.room.database.MyRoomDatabase
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -86,25 +84,29 @@ object FirebaseUtil {
         })
     }
 
-    fun loadConversation( conversationId: String){
-        database.child(FIREBASE_PRIVATE_CHAT_PATH).child(conversationId).child(
-            FIREBASE_PRIVATE_MESSAGE_PATH).addListenerForSingleValueEvent(object: ValueEventListener{
-            override fun onCancelled(p0: DatabaseError) {}
+    fun loadUserConversation(context: Context, user: String){
+        val userConversations = MyRoomDatabase.getMyRoomDatabase(context)?.conversationDao()?.getUserConversations(user)
 
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val messages = mutableListOf<Message>()
-                dataSnapshot.children.forEach{
-                    val message = it.getValue(Message::class.java)!!
-                    messages.add(message)
-                    Log.d(LogUtil.TAG, "Message from conversation: ${message.id}")
+        userConversations?.forEach {
+            val conversation = it
+            database.child(FIREBASE_PRIVATE_CHAT_PATH).child(conversation.id).child(
+                FIREBASE_PRIVATE_MESSAGE_PATH).limitToLast(20).addListenerForSingleValueEvent(object: ValueEventListener{
+                override fun onCancelled(p0: DatabaseError) {}
+
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    dataSnapshot.children.forEach{
+                        val message = it.getValue(Message::class.java)!!
+                        conversation.messages.add(message)
+                    }
+                    DataRepository.addConversation(it.id, conversation)
+
+                    val intent = Intent(context, MainActivity::class.java)
+                    intent.flags = FLAG_ACTIVITY_NEW_TASK
+                    context.startActivity(intent)
                 }
-
-                ChatActivity.updateList(messages)
-            }
-        })
+            })
+        }
     }
-
-
 
     fun addPrivateChat(context: Context, conversation: Conversation){
         database.child(FIREBASE_PRIVATE_CHAT_PATH)
@@ -179,17 +181,4 @@ fun FirebaseFirestore.addConversation(context: Context, conversation: Conversati
         }.addOnFailureListener {
             Log.d(LogUtil.TAG, "Remove chat from Firestore")
         }
-}
-
-suspend fun FirebaseFirestore.findUser(conversationId: String): String{
-    val task = collection(FirebaseUtil.FIREBASE_PRIVATE_CHAT_PATH)
-        .document(conversationId).get().await()
-
-    val conversation =  task.toObject(Conversation::class.java)
-    val (userOne, userTwo) = Pair(conversation?.userOne.toString(), conversation?.userTwo.toString())
-    if(userOne == MainActivity.currentUserEmail){
-        return userTwo
-    }else{
-        return userOne
-    }
 }

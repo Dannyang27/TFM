@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.util.Base64
 import android.view.View
 import android.widget.GridView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
@@ -76,4 +77,12 @@ suspend fun Fragment.loadGridview( gridview: GridView, emojiList: ArrayList<Stri
             gridview.adapter = adapter
         }
     }
+}
+
+fun ProgressBar.start(){
+    this.visibility = View.VISIBLE
+}
+
+fun ProgressBar.stop(){
+    this.visibility = View.GONE
 }

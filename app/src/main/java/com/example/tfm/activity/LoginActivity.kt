@@ -5,18 +5,20 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import com.example.tfm.R
-import com.example.tfm.util.LogUtil
-import com.example.tfm.util.getCredentials
-import com.example.tfm.util.trimBothSides
-import com.example.tfm.util.updateCurrentUser
+import com.example.tfm.util.*
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.*
 import org.jetbrains.anko.toast
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity(), CoroutineScope {
+    private val job = Job()
+    override val coroutineContext = Dispatchers.Default + job
 
     private lateinit var email: EditText
     private lateinit var password: EditText
@@ -26,6 +28,18 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var prefs: SharedPreferences
     private var auth: FirebaseAuth? = null
 
+    companion object{
+        lateinit var progressBar: ProgressBar
+
+        fun showLoadingView(){
+            progressBar.visibility = View.VISIBLE
+        }
+
+        fun stopLoadingView(){
+            progressBar.visibility = View.GONE
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -34,6 +48,7 @@ class LoginActivity : AppCompatActivity() {
         password = findViewById(R.id.login_password)
         signupBtn = findViewById(R.id.login_signup_button)
         loginBtn = findViewById(R.id.login_button)
+        progressBar = findViewById(R.id.login_progressbar)
 
         auth = FirebaseAuth.getInstance()
 
@@ -56,16 +71,22 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun loginUser(user: String, password: String){
+        progressBar.start()
         disableViews()
         auth?.signInWithEmailAndPassword(user, password)
             ?.addOnCompleteListener(this){ task ->
                 if(task.isSuccessful){
                     Log.d(LogUtil.TAG, "Signed in successfully")
                     prefs.updateCurrentUser(user, password)
-                    startActivity(Intent(this, MainActivity::class.java))
+
+                    launch {
+                        FirebaseUtil.loadUserConversation(this@LoginActivity, user)
+                    }
+
                 }else{
                     toast("Wrong user/password")
                     enableViews()
+                    progressBar.stop()
                 }
             }
     }

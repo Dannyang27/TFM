@@ -1,15 +1,16 @@
 package com.example.tfm.activity
 
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.tfm.R
 import com.example.tfm.model.User
-import com.example.tfm.util.addUser
-import com.example.tfm.util.trimBothSides
+import com.example.tfm.util.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import org.jetbrains.anko.toast
@@ -25,6 +26,7 @@ class SignupActivity : AppCompatActivity() {
     companion object{
         lateinit var currentUserEmail: String
         lateinit var currentUserPassword: String
+        lateinit var progressbar: ProgressBar
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,9 +44,11 @@ class SignupActivity : AppCompatActivity() {
         email = findViewById(R.id.signup_email)
         password = findViewById(R.id.signup_password)
         joinusBtn = findViewById(R.id.signup_joinus)
+        progressbar = findViewById(R.id.signup_progressbar)
 
         joinusBtn.setOnClickListener {
             if(isFormNotEmpty()){
+                progressbar.start()
                 disableViews()
                 val user = User(email.text.toString().trimBothSides(), user.text.toString().trimBothSides(), "", "")
                 addUserToFirestore(user)
@@ -70,7 +74,11 @@ class SignupActivity : AppCompatActivity() {
                 currentUserEmail = email.text.toString()
                 currentUserPassword = password.text.toString()
             }
-            .addOnFailureListener { enableViews() }
+            .addOnFailureListener {
+                enableViews()
+                progressbar.stop()
+                toast("Email already exist or badly formatted")
+            }
     }
 
     private fun isFormNotEmpty() = user.text.isNotEmpty() && email.text.isNotEmpty() && password.text.isNotEmpty()
