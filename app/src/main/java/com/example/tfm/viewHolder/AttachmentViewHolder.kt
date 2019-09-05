@@ -8,8 +8,8 @@ import android.widget.TextView
 import androidx.emoji.widget.EmojiTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
+import com.example.tfm.activity.MainActivity
 import com.example.tfm.model.Message
-import com.example.tfm.util.AuthUtil
 import com.example.tfm.util.setMessageCheckIfSeen
 import com.example.tfm.util.setTime
 import com.example.tfm.util.showUsernameIfGroup
@@ -31,7 +31,7 @@ class AttachmentViewHolder (view: View): RecyclerView.ViewHolder(view){
     }
 
     fun initAttachmentViewHolder(message: Message){
-        if(message.senderName == AuthUtil.getAccountEmail()){
+        if(message.senderName == MainActivity.currentUserEmail){
             setSenderViewHolder()
         }else{
             setReceiverViewHolder()

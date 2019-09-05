@@ -151,7 +151,7 @@ object FirebaseUtil {
             .child(message.timestamp.toString())
             .setValue(message)
             .addOnSuccessListener {
-                Log.d(LogUtil.TAG, "Message added to firebaserealtime: ${message.body}")
+                DataRepository.addMessage(message)
             }
             .addOnFailureListener {
                 Log.d(LogUtil.TAG, "Error while sending message")

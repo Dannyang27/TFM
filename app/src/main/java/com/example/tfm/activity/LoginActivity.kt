@@ -33,14 +33,6 @@ class LoginActivity : AppCompatActivity(), CoroutineScope {
 
     companion object{
         lateinit var progressBar: ProgressBar
-
-        fun showLoadingView(){
-            progressBar.visibility = View.VISIBLE
-        }
-
-        fun stopLoadingView(){
-            progressBar.visibility = View.GONE
-        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

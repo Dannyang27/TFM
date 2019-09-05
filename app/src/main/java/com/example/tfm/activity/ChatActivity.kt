@@ -75,14 +75,6 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         var activeFragment: Fragment = emojiFragment
         lateinit var receiverUser: String
 
-        fun sendMessage(message: Message){
-            //TODO add to firebaseRealtime and if successfull then add to local
-            messages.add(message)
-            viewAdapter.notifyDataSetChanged()
-            //viewAdapter.updateList(messages)
-            scrollToBottom()
-        }
-
         fun updateList(newMessages: MutableList<Message>){
             viewAdapter.updateList(newMessages)
             scrollToBottom()
