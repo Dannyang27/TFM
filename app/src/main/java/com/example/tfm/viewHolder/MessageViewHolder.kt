@@ -50,6 +50,7 @@ class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
         layout.setPadding(0,getDpValue(10),getDpValue(15), getDpValue(10))
         userPhoto.visibility = View.GONE
         body.setTextColor(context.getColor(R.color.colorWhite))
+        body.gravity = Gravity.RIGHT
         time.gravity = Gravity.RIGHT
         username.visibility = View.GONE
     }
@@ -67,6 +68,7 @@ class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
         layout.setPadding(getDpValue(15),getDpValue(10), 0, getDpValue(10))
         userPhoto.visibility = View.VISIBLE
         body.setTextColor(context.getColor(R.color.colorReceiverMessage))
+        body.gravity  = Gravity.LEFT
         time.gravity = Gravity.LEFT
     }
 

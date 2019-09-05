@@ -76,8 +76,6 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         currentUser = FirebaseAuth.getInstance().currentUser
         currentUserEmail = currentUser?.email.toString()
 
-        Log.d(LogUtil.TAG, "CurrentUser $currentUserEmail")
-
         toolbar = findViewById(R.id.my_toolbar)
         val toolbarTitle = findViewById<TextView>(R.id.toolbar_title)
         toolbarTitle.text = getString(R.string.messages)
@@ -89,7 +87,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                 val intent = Intent(this, UserSearcherActivity::class.java)
                 startActivity(intent)
             }else{
-
+                //TODO
             }
         }
 
