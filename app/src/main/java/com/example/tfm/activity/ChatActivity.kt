@@ -117,8 +117,6 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
 
         conversationId = intent.getStringExtra("conversationId")
         receiverUser = intent.getStringExtra("receiverEmail")
-
-        Log.d(LogUtil.TAG, "Receiver: $receiverUser")
         toast(conversationId)
 
         viewManager = LinearLayoutManager(this)
@@ -145,8 +143,6 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         val conversationMessages = DataRepository.getConversation(conversationId)?.messages
         conversationMessages?.let {
             updateList(it)
-        }.also {
-            Log.d(LogUtil.TAG, "Size of conversation: ${conversationMessages?.size}")
         }
 
         initListeners()
