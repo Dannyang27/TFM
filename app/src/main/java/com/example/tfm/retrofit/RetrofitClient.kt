@@ -1,10 +1,8 @@
 package com.example.tfm.retrofit
 
 import android.util.Log
-import android.view.View
 import com.example.tfm.fragments.GifFragment
 import com.example.tfm.model.giphy.GiphyPojo
-import com.example.tfm.util.stop
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

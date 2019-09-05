@@ -1,7 +1,6 @@
 package com.example.tfm.activity
 
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
@@ -10,7 +9,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.tfm.R
 import com.example.tfm.model.User
-import com.example.tfm.util.*
+import com.example.tfm.util.addUser
+import com.example.tfm.util.start
+import com.example.tfm.util.stop
+import com.example.tfm.util.trimBothSides
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import org.jetbrains.anko.toast

@@ -13,7 +13,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.tfm.R
 import com.example.tfm.util.*
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import org.jetbrains.anko.toast
 
 class LoginActivity : AppCompatActivity(), CoroutineScope {
