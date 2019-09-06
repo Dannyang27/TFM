@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import com.example.tfm.R
+import com.example.tfm.data.DataRepository
 import com.example.tfm.enum.MessageType
 import com.example.tfm.model.Message
 import com.example.tfm.model.MessageContent
@@ -80,7 +81,7 @@ class LocationSenderActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMa
             val message = Message(
                 id = timestamp,
                 ownerId = ChatActivity.conversationId,
-                senderName = MainActivity.currentUserEmail,
+                senderName = DataRepository.currentUserEmail,
                 receiverName = ChatActivity.receiverUser,
                 messageType = MessageType.LOCATION.value,
                 body = MessageContent(address.latitude.toString(), address.longitude.toString(), address.getAddressLine(0)),

@@ -8,8 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
-import com.example.tfm.activity.MainActivity
 import com.example.tfm.adapter.ConversationAdapter
+import com.example.tfm.data.DataRepository
 import com.example.tfm.divider.HorizontalDivider
 import com.example.tfm.model.Conversation
 import com.example.tfm.room.database.MyRoomDatabase
@@ -50,7 +50,7 @@ class PrivateFragment : Fragment(){
         }
 
         val roomDatabase = MyRoomDatabase.getMyRoomDatabase(activity?.applicationContext!!)
-        roomDatabase?.loadUserConversation(MainActivity.currentUserEmail)
+        roomDatabase?.loadUserConversation(DataRepository.currentUserEmail)
 
         return view
     }

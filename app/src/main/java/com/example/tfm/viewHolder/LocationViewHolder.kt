@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.emoji.widget.EmojiTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
-import com.example.tfm.activity.MainActivity
+import com.example.tfm.data.DataRepository
 import com.example.tfm.model.Location
 import com.example.tfm.model.Message
 import com.example.tfm.util.setMessageCheckIfSeen
@@ -57,7 +57,7 @@ class LocationViewHolder(view: View) : RecyclerView.ViewHolder(view), OnMapReady
         mapView.onCreate(null)
         mapView.getMapAsync(this)
 
-        if(message.senderName == MainActivity.currentUserEmail){
+        if(message.senderName == DataRepository.currentUserEmail){
             setSenderViewHolder()
         }else{
             setReceiverViewHolder()

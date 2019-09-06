@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
 import com.example.tfm.activity.ChatActivity
-import com.example.tfm.activity.MainActivity
+import com.example.tfm.data.DataRepository
 import com.example.tfm.diffUtil.ConversationDiffCallback
 import com.example.tfm.model.Conversation
 import com.example.tfm.room.database.MyRoomDatabase
@@ -32,7 +32,7 @@ class ConversationAdapter(private val conversations: MutableList<Conversation>):
         val roomDatabase =  MyRoomDatabase.getMyRoomDatabase(holder.name.context)
 
         launch {
-            if(conversation.userOne == MainActivity.currentUserEmail){
+            if(conversation.userOne == DataRepository.currentUserEmail){
                 roomDatabase?.getUserNameByEmail(holder.name, conversation.userTwo.toString())
                 holder.email = conversation.userTwo.toString()
             }else{

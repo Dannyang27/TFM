@@ -21,6 +21,7 @@ import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.tfm.R
+import com.example.tfm.data.DataRepository
 import com.example.tfm.enum.MediaSource
 import com.example.tfm.enum.MessageType
 import com.example.tfm.model.Message
@@ -118,7 +119,7 @@ class ImageSenderActivity : AppCompatActivity() {
                 val message = Message(
                     id = timestamp,
                     ownerId = ChatActivity.conversationId,
-                    senderName = MainActivity.currentUserEmail,
+                    senderName = DataRepository.currentUserEmail,
                     receiverName = ChatActivity.receiverUser,
                     messageType = MessageType.GIF.value,
                     body = MessageContent(fieldOne = url, fieldTwo = captionEt.text.toString()),
@@ -146,7 +147,7 @@ class ImageSenderActivity : AppCompatActivity() {
             val message = Message(
                 id = timestamp,
                 ownerId = ChatActivity.conversationId,
-                senderName = MainActivity.currentUserEmail,
+                senderName = DataRepository.currentUserEmail,
                 receiverName = ChatActivity.receiverUser,
                 messageType = MessageType.IMAGE.value,
                 body = MessageContent(fieldOne = bitmap.toBase64(), fieldTwo = captionEt.text.toString()),

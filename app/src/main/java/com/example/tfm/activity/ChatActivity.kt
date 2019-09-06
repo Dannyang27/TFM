@@ -9,7 +9,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
@@ -35,7 +34,6 @@ import com.example.tfm.model.Message
 import com.example.tfm.model.MessageContent
 import com.example.tfm.util.FirebaseUtil
 import com.example.tfm.util.KeyboardUtil
-import com.example.tfm.util.LogUtil
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.coroutines.*
@@ -243,7 +241,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
                 val message = Message(
                     id = timestamp,
                     ownerId = conversationId,
-                    senderName = MainActivity.currentUserEmail,
+                    senderName = DataRepository.currentUserEmail,
                     receiverName = receiverUser,
                     messageType = MessageType.MESSAGE.value,
                     body = MessageContent(fieldOne = fieldText),

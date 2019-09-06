@@ -5,7 +5,7 @@ import android.widget.ImageView
 import androidx.emoji.widget.EmojiTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
-import com.example.tfm.activity.MainActivity
+import com.example.tfm.data.DataRepository
 import com.example.tfm.room.database.MyRoomDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
@@ -25,7 +25,7 @@ class UserSearchViewHolder(view : View) : RecyclerView.ViewHolder(view), Corouti
         view.setOnClickListener {
             launch {
                 val roomDatabase = MyRoomDatabase.getMyRoomDatabase(username.context)
-                roomDatabase?.getMutualConversation(username.context, MainActivity.currentUserEmail, email)
+                roomDatabase?.getMutualConversation(username.context, DataRepository.currentUserEmail, email)
             }
         }
     }

@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.emoji.widget.EmojiTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
-import com.example.tfm.activity.MainActivity
+import com.example.tfm.data.DataRepository
 import com.example.tfm.model.Message
 import com.example.tfm.util.setMessageCheckIfSeen
 import com.example.tfm.util.setTime
@@ -25,7 +25,7 @@ class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
     private val time: TextView = view.findViewById(R.id.message_time)
 
     fun initMessageViewHolder(message: Message){
-        if(message.senderName == MainActivity.currentUserEmail){
+        if(message.senderName == DataRepository.currentUserEmail){
             setSenderViewHolder()
         }else{
             setReceiverViewHolder()

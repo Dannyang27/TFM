@@ -10,10 +10,13 @@ import androidx.emoji.widget.EmojiTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.tfm.R
-import com.example.tfm.activity.MainActivity
+import com.example.tfm.data.DataRepository
 import com.example.tfm.enum.MessageType
 import com.example.tfm.model.Message
-import com.example.tfm.util.*
+import com.example.tfm.util.setMessageCheckIfSeen
+import com.example.tfm.util.setTime
+import com.example.tfm.util.showUsernameIfGroup
+import com.example.tfm.util.toBitmap
 import org.jetbrains.anko.displayMetrics
 import org.jetbrains.anko.toast
 
@@ -27,7 +30,7 @@ class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view){
     private val time: TextView = view.findViewById(R.id.media_time)
 
     fun initImageViewHolder(message: Message){
-        if(message.senderName == MainActivity.currentUserEmail){
+        if(message.senderName == DataRepository.currentUserEmail){
             setSenderViewHolder()
         }else {
             setReceiverViewHolder()

@@ -8,7 +8,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.tfm.activity.ChatActivity
-import com.example.tfm.activity.MainActivity
+import com.example.tfm.data.DataRepository
 import com.example.tfm.enum.MessageType
 import com.example.tfm.fragments.PrivateFragment
 import com.example.tfm.model.*
@@ -172,7 +172,7 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
     fun getReceiverUser(conversationId: String): String{
         val conversation = conversationDao().getById(conversationId)
 
-        if(conversation.userOne == MainActivity.currentUserEmail){
+        if(conversation.userOne == DataRepository.currentUserEmail){
             return conversation.userTwo.toString()
         }else{
             return conversation.userOne.toString()

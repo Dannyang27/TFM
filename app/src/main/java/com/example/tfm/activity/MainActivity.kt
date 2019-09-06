@@ -3,7 +3,6 @@ package com.example.tfm.activity
 import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.SearchView
@@ -16,12 +15,10 @@ import androidx.fragment.app.Fragment
 import com.example.tfm.R
 import com.example.tfm.fragments.GroupChatFragment
 import com.example.tfm.fragments.PrivateFragment
-import com.example.tfm.util.LogUtil
 import com.example.tfm.util.clearCredential
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -40,12 +37,6 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     private lateinit var fab: FloatingActionButton
 
     private lateinit var database: DatabaseReference
-
-    companion object{
-        var currentUser: FirebaseUser? = null
-        var currentUserEmail: String = ""
-    }
-
 
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -72,9 +63,6 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         super.onCreate(savedInstanceState)
         initEmoji()
         setContentView(R.layout.activity_main)
-
-        currentUser = FirebaseAuth.getInstance().currentUser
-        currentUserEmail = currentUser?.email.toString()
 
         toolbar = findViewById(R.id.my_toolbar)
         val toolbarTitle = findViewById<TextView>(R.id.toolbar_title)

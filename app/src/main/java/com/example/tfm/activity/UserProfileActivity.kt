@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.tfm.R
+import com.example.tfm.data.DataRepository
 import com.example.tfm.model.User
 import com.example.tfm.util.FirebaseUtil
 import com.example.tfm.util.updateCurrentUser
@@ -34,13 +35,15 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
     private lateinit var email: TextView
     private lateinit var fab: FloatingActionButton
 
+    private lateinit var firestore: FirebaseFirestore
+
     private val GALLERY_REQUEST_CODE = 100
 
     private lateinit var toolbar: Toolbar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_profile)
-
+        firestore = FirebaseFirestore.getInstance()
         toolbar = findViewById(R.id.profile_toolbar)
         toolbar.title = getString(R.string.profile)
 
@@ -65,6 +68,7 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
         }
 
         displayArrowBack(toolbar)
+        launch { initUserProfile() }
     }
 
     private fun displayArrowBack(toolbar: Toolbar){
@@ -89,6 +93,13 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
         }
     }
 
+    private fun initUserProfile(){
+        val user = DataRepository.user
+        username.text = user?.name ?: "N?A"
+        status.text = user?.status ?: "N/A"
+        email.text = user?.email ?: "N/A"
+    }
+
     private fun showDialog(activity: Activity, isUsername: Boolean){
         val dialog = Dialog(activity)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -101,8 +112,7 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
         acceptBtn.setOnClickListener {
             if(input.text.isNotEmpty()){
                 launch{
-                    val firestore = FirebaseFirestore.getInstance()
-                    val task = firestore.collection(FirebaseUtil.FIREBASE_USER_PATH).document(MainActivity.currentUserEmail).get().await()
+                    val task = firestore.collection(FirebaseUtil.FIREBASE_USER_PATH).document(DataRepository.currentUserEmail).get().await()
 
                     if(isUsername){
                         var user = task.toObject(User::class.java)?.copy(name = input.text.toString())!!

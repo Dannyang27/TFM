@@ -5,18 +5,21 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import com.example.tfm.R
+import com.example.tfm.data.DataRepository
+import com.example.tfm.model.User
 import com.example.tfm.util.*
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import org.jetbrains.anko.toast
 
 class LoginActivity : AppCompatActivity(), CoroutineScope {
@@ -76,6 +79,8 @@ class LoginActivity : AppCompatActivity(), CoroutineScope {
 
                     launch {
                         FirebaseUtil.loadUserConversation(this@LoginActivity, user)
+                        val task = FirebaseFirestore.getInstance().collection(FirebaseUtil.FIREBASE_USER_PATH).document(DataRepository.currentUserEmail).get().await()
+                        DataRepository.user = task.toObject(User::class.java)
                     }
 
                 }else{

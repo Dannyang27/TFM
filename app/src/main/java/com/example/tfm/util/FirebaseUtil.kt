@@ -80,7 +80,7 @@ object FirebaseUtil {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 dataSnapshot.children.forEach {
                     val user = it.getValue(User::class.java)
-                    if(user?.email != MainActivity.currentUserEmail){
+                    if(user?.email != DataRepository.currentUserEmail){
                         cacheList.add(user!!)
                     }
                 }
@@ -122,7 +122,7 @@ object FirebaseUtil {
                 roomDatabase?.addConversation(conversation)
 
                 var userToCreate: String?
-                if(conversation.userOne.equals(MainActivity.currentUserEmail)){
+                if(conversation.userOne.equals(DataRepository.currentUserEmail)){
                     userToCreate = conversation.userTwo
                 }else{
                     userToCreate = conversation.userOne
@@ -193,7 +193,6 @@ fun FirebaseFirestore.updateCurrentUser(context: Context, user: User, input: Str
         .document(user.email)
         .set(user)
         .addOnSuccessListener {
-            Log.d(LogUtil.TAG, "User succesfully updated:  $user")
             MyRoomDatabase.getMyRoomDatabase(context)?.updateUser(user)
             context.toast("User updated")
             field.text = input

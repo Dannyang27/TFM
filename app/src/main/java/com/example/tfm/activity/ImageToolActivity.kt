@@ -3,11 +3,11 @@ package com.example.tfm.activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import com.example.tfm.R
 import com.example.tfm.util.loadImageFromUri
 import com.example.tfm.util.setBitmapToImageView
