@@ -1,16 +1,31 @@
 package com.example.tfm.activity
 
+import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.view.Window
+import android.widget.Button
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.tfm.R
+import com.example.tfm.model.User
+import com.example.tfm.util.FirebaseUtil
+import com.example.tfm.util.updateCurrentUser
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import org.jetbrains.anko.toast
 
-class UserProfileActivity : AppCompatActivity() {
+class UserProfileActivity : AppCompatActivity(), CoroutineScope {
+    override val coroutineContext = Dispatchers.Default + Job()
 
     private lateinit var usernameLayout: LinearLayout
     private lateinit var statusLayout: LinearLayout
@@ -42,11 +57,11 @@ class UserProfileActivity : AppCompatActivity() {
         }
 
         usernameLayout.setOnClickListener {
-            toast("Changing username")
+            showDialog(this, true)
         }
 
         statusLayout.setOnClickListener {
-            toast("Changing status")
+            showDialog(this, false)
         }
 
         displayArrowBack(toolbar)
@@ -72,5 +87,42 @@ class UserProfileActivity : AppCompatActivity() {
                 data?.let {ImageToolActivity.launchImageTool(this, it.data) }
             }
         }
+    }
+
+    private fun showDialog(activity: Activity, isUsername: Boolean){
+        val dialog = Dialog(activity)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.dialog_enter_input)
+
+        val input = dialog.findViewById<EditText>(R.id.dialog_input)
+        val acceptBtn = dialog.findViewById<Button>(R.id.dialog_accept)
+        val cancelBtn = dialog.findViewById<Button>(R.id.dialog_cancel)
+
+        acceptBtn.setOnClickListener {
+            if(input.text.isNotEmpty()){
+                launch{
+                    val firestore = FirebaseFirestore.getInstance()
+                    val task = firestore.collection(FirebaseUtil.FIREBASE_USER_PATH).document(MainActivity.currentUserEmail).get().await()
+
+                    if(isUsername){
+                        var user = task.toObject(User::class.java)?.copy(name = input.text.toString())!!
+                        firestore.updateCurrentUser(activity, user, input.text.toString(), username)
+                    }else{
+                        var user = task.toObject(User::class.java)?.copy(status = input.text.toString())!!
+                        firestore.updateCurrentUser(activity, user, input.text.toString(), status)
+                    }
+                }
+
+                dialog.dismiss()
+            }else{
+                toast("Input can't be empty")
+            }
+        }
+
+        cancelBtn.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 }

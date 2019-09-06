@@ -61,4 +61,6 @@
     <string name="email_sample">danny27995@gmail.com</string>
     <string name="cancel">Cancel</string>
     <string name="done">Done</string>
+    <string name="enter_text">Enter name:</string>
+    <string name="accept">Accept</string>
 </resources>

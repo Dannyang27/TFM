@@ -6,7 +6,7 @@
     <color name="colorAccent">#ffa4a8</color>
     <color name="colorPrimaryText">#1E1E1E</color>
     <color name="colorDivider">#EDEDED</color>
-    <color name="colorBackground">#F5F5F5</color>
+    <color name="colorBackground">#1E1E1E</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="imageSenderBackground">#444444</color>
     <color name="colorReceiverMessage">#757575</color>

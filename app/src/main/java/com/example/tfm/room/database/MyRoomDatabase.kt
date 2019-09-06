@@ -56,6 +56,14 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
         }
     }
 
+    fun updateUser(user: User){
+        launch {
+            userDao().update(user)
+        }.also {
+            Log.d(LogUtil.TAG, "User ${user.email} updated in RoomDatabase")
+        }
+    }
+
     fun deleteAllUsers(){
         launch{
             userDao().deleteAll()

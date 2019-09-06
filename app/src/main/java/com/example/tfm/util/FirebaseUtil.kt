@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.preference.PreferenceManager
 import android.util.Log
+import android.widget.TextView
 import com.example.tfm.activity.ChatActivity
 import com.example.tfm.activity.MainActivity
 import com.example.tfm.activity.SignupActivity
@@ -22,6 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import org.jetbrains.anko.toast
 
 object FirebaseUtil {
     const val FIREBASE_USER_PATH = "users"
@@ -184,4 +186,20 @@ fun FirebaseFirestore.addConversation(context: Context, conversation: Conversati
         }.addOnFailureListener {
             Log.d(LogUtil.TAG, "Remove chat from Firestore")
         }
+}
+
+fun FirebaseFirestore.updateCurrentUser(context: Context, user: User, input: String, field: TextView){
+    collection(FirebaseUtil.FIREBASE_USER_PATH)
+        .document(user.email)
+        .set(user)
+        .addOnSuccessListener {
+            Log.d(LogUtil.TAG, "User succesfully updated:  $user")
+            MyRoomDatabase.getMyRoomDatabase(context)?.updateUser(user)
+            context.toast("User updated")
+            field.text = input
+        }
+        .addOnFailureListener {
+            Log.d(LogUtil.TAG, "Error while updating user")
+        }
+
 }

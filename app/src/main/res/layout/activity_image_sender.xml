@@ -5,7 +5,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@color/imageSenderBackground"
+        android:background="@color/colorBackground"
         tools:context=".activity.ImageSenderActivity">
 
     <androidx.appcompat.widget.Toolbar
