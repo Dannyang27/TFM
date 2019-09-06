@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".activity.ImageToolActivity"
+        android:background="@color/colorPrimaryText">
+
+
+    <ImageView
+            android:id="@+id/tool_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/white_placeholder"
+            android:layout_centerVertical="true"
+            android:layout_above="@id/tool_button_layout"
+            android:layout_gravity="center"/>
+
+    <LinearLayout
+            android:id="@+id/tool_button_layout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true">
+        <Button
+                android:id="@+id/tool_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/colorWhite"
+                android:text="@string/cancel"
+                android:layout_weight="1"
+                android:fontFamily="@font/robotobold"
+                android:background="?android:attr/selectableItemBackground" />
+
+        <ImageButton
+                android:id="@+id/tool_rotate"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                app:srcCompat="@drawable/rotate"
+                android:background="?android:attr/selectableItemBackground"/>
+
+        <Button
+                android:id="@+id/tool_accept"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/colorWhite"
+                android:text="@string/done"
+                android:layout_weight="1"
+                android:fontFamily="@font/robotobold"
+                android:background="?android:attr/selectableItemBackground"/>
+    </LinearLayout>
+</RelativeLayout>

@@ -1,15 +1,22 @@
 package com.example.tfm.util
 
+import android.app.Activity
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
+import android.provider.MediaStore
 import android.util.Base64
 import android.view.View
 import android.widget.GridView
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.tfm.activity.ChatActivity
+import com.example.tfm.activity.ImageSenderActivity
 import com.example.tfm.adapter.EmojiGridViewAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -85,4 +92,29 @@ fun ProgressBar.start(){
 
 fun ProgressBar.stop(){
     this.visibility = View.GONE
+}
+
+fun Activity.loadImage(uri: String?): Bitmap{
+    val filePath : Array<String> = arrayOf(MediaStore.Images.Media.DATA)
+    var file = ""
+
+    uri?.let{
+        val uri = Uri.parse(it)
+        val cursor = contentResolver.query(uri, filePath, null, null, null)
+        if(cursor!!.moveToFirst()){
+            val columnIndex = cursor.getColumnIndex(filePath[0])
+            file = cursor.getString(columnIndex)
+        }
+        cursor.close()
+    }
+
+    return BitmapFactory.decodeFile(file)
+}
+
+fun Activity.setBitmapToImageView(placeholder: ImageView, bitmap: Bitmap){
+    val imageAspectRatio = bitmap.height / bitmap.width
+    Glide.with(this)
+        .load(bitmap)
+        .override(placeholder.width, placeholder.width * imageAspectRatio)
+        .into(placeholder)
 }

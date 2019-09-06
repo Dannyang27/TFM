@@ -59,4 +59,6 @@
     <string name="status_sample">In the gym</string>
     <string name="email_title">Email</string>
     <string name="email_sample">danny27995@gmail.com</string>
+    <string name="cancel">Cancel</string>
+    <string name="done">Done</string>
 </resources>

@@ -21,8 +21,10 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".activity.UserProfileActivity"
-                android:screenOrientation="portrait"/>
+        <activity android:name=".activity.ImageToolActivity"></activity>
+        <activity
+                android:name=".activity.UserProfileActivity"
+                android:screenOrientation="portrait" />
         <activity
                 android:name=".activity.SignupActivity"
                 android:screenOrientation="portrait" />

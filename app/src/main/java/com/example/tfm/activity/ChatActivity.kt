@@ -242,9 +242,9 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
                 val timestamp = System.currentTimeMillis()
                 val message = Message(
                     id = timestamp,
-                    ownerId = ChatActivity.conversationId,
+                    ownerId = conversationId,
                     senderName = MainActivity.currentUserEmail,
-                    receiverName = ChatActivity.receiverUser,
+                    receiverName = receiverUser,
                     messageType = MessageType.MESSAGE.value,
                     body = MessageContent(fieldOne = fieldText),
                     timestamp = timestamp,

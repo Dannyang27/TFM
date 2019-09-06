@@ -1,5 +1,6 @@
 package com.example.tfm.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -18,6 +19,8 @@ class UserProfileActivity : AppCompatActivity() {
     private lateinit var email: TextView
     private lateinit var fab: FloatingActionButton
 
+    private val GALLERY_REQUEST_CODE = 100
+
     private lateinit var toolbar: Toolbar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +38,7 @@ class UserProfileActivity : AppCompatActivity() {
 
         fab.setOnClickListener {
             toast("Changing profile photo...")
+            loadImage()
         }
 
         usernameLayout.setOnClickListener {
@@ -52,5 +56,21 @@ class UserProfileActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
+    }
+
+    private fun loadImage(){
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        val mimeTypes = arrayOf("image/jpeg", "image/png")
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
+        startActivityForResult(intent, GALLERY_REQUEST_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when(requestCode){
+            GALLERY_REQUEST_CODE -> {
+                data?.let {ImageToolActivity.launchImageTool(this, it.data) }
+            }
+        }
     }
 }

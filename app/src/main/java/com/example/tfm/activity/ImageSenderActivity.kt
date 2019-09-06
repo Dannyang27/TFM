@@ -34,6 +34,7 @@ class ImageSenderActivity : AppCompatActivity() {
     private lateinit var media: ImageView
     private lateinit var sendBtn: ImageButton
     private lateinit var captionEt: EmojiEditText
+    private lateinit var bitmap: Bitmap
     private lateinit var progressbar: ProgressBar
 
     companion object{
@@ -76,8 +77,19 @@ class ImageSenderActivity : AppCompatActivity() {
         receiver.text = getString(R.string.username_sample)
 
         when(source) {
-            MediaSource.GALLERY -> loadImageFromGallery()
-            MediaSource.CAMERA -> loadImageFromCamera()
+            MediaSource.GALLERY -> {
+                val uri = intent.getStringExtra("imageUrl")
+                bitmap = loadImage(uri)
+                progressbar.stop()
+                setBitmapToImageView(media, bitmap)
+                initOnClickListerner()
+            }
+
+            MediaSource.CAMERA -> {
+                loadImageFromCamera()
+                initOnClickListerner()
+            }
+
             MediaSource.GIF -> loadGif()
             else -> toast("No media source is found")
         }
@@ -119,39 +131,16 @@ class ImageSenderActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadImageFromGallery(){
-        val filePath : Array<String> = arrayOf(MediaStore.Images.Media.DATA)
-        val uriString = intent.getStringExtra("imageUrl")
-
-        uriString?.let{
-            val uri = Uri.parse(it)
-            val cursor = contentResolver.query(uri, filePath, null, null, null)
-            if(cursor!!.moveToFirst()){
-                val columnIndex = cursor.getColumnIndex(filePath[0])
-                val fileP = cursor.getString(columnIndex)
-                loadBitmap(BitmapFactory.decodeFile(fileP))
-            }
-            cursor.close()
-        }
-    }
 
     private fun loadImageFromCamera(){
         val uriString = intent.getStringExtra("imageUrl")
         uriString?.let{
-            loadBitmap(BitmapFactory.decodeFile(it))
+            bitmap = BitmapFactory.decodeFile(it)
+            setBitmapToImageView(media, bitmap)
         }
     }
 
-    private fun loadBitmap(bitmap: Bitmap){
-        val imageAspectRatio = bitmap.height / bitmap.width
-
-        Glide.with(this)
-            .load(bitmap)
-            .override(media.width, media.width * imageAspectRatio)
-            .into(media)
-
-        progressbar.stop()
-
+    private fun initOnClickListerner(){
         sendBtn.setOnClickListener {
             Log.d(LogUtil.TAG, "Sending image...")
             val timestamp = System.currentTimeMillis()
