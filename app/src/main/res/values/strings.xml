@@ -51,6 +51,12 @@
     <string name="email_hint">johndoe@gmail.com</string>
     <string name="user_hint">John Doe</string>
     <string name="signout">Sign out</string>
-    <string name="profile">User profile</string>
+    <string name="profile">Profile</string>
     <string name="bethefirst">Be the first to start the conversation</string>
+    <string name="username_warning">This is not your username or pin. This name will be visible only to this App users</string>
+    <string name="name">Username</string>
+    <string name="status_title">Status</string>
+    <string name="status_sample">In the gym</string>
+    <string name="email_title">Email</string>
+    <string name="email_sample">danny27995@gmail.com</string>
 </resources>
