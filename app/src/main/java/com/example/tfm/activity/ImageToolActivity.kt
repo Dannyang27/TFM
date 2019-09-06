@@ -9,7 +9,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import com.example.tfm.R
-import com.example.tfm.util.loadImage
+import com.example.tfm.util.loadImageFromUri
 import com.example.tfm.util.setBitmapToImageView
 import org.jetbrains.anko.toast
 
@@ -39,7 +39,7 @@ class ImageToolActivity : AppCompatActivity() {
         rotateBtn = findViewById(R.id.tool_rotate)
         acceptBtn = findViewById(R.id.tool_accept)
 
-        val bitmap = loadImage(uri)
+        val bitmap = loadImageFromUri(uri)
         setBitmapToImageView(image, bitmap)
 
         cancelBtn.setOnClickListener {

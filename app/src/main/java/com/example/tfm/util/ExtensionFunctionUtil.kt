@@ -94,7 +94,7 @@ fun ProgressBar.stop(){
     this.visibility = View.GONE
 }
 
-fun Activity.loadImage(uri: String?): Bitmap{
+fun Activity.loadImageFromUri(uri: String?): Bitmap{
     val filePath : Array<String> = arrayOf(MediaStore.Images.Media.DATA)
     var file = ""
 

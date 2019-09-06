@@ -6,7 +6,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -79,7 +78,7 @@ class ImageSenderActivity : AppCompatActivity() {
         when(source) {
             MediaSource.GALLERY -> {
                 val uri = intent.getStringExtra("imageUrl")
-                bitmap = loadImage(uri)
+                bitmap = loadImageFromUri(uri)
                 progressbar.stop()
                 setBitmapToImageView(media, bitmap)
                 initOnClickListerner()
