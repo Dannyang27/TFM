@@ -78,11 +78,6 @@
                         android:layout_height="wrap_content"
                         android:text="@string/username_warning"/>
 
-                <View
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                </View>
             </LinearLayout>
 
         </LinearLayout>
