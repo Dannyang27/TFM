@@ -2,6 +2,7 @@ package com.example.tfm.activity
 
 import android.os.Bundle
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.tfm.R
@@ -9,9 +10,11 @@ import org.jetbrains.anko.toast
 
 class UserProfileActivity : AppCompatActivity() {
 
-    private lateinit var username: LinearLayout
-    private lateinit var status: LinearLayout
-    private lateinit var email: LinearLayout
+    private lateinit var usernameLayout: LinearLayout
+    private lateinit var statusLayout: LinearLayout
+    private lateinit var username: TextView
+    private lateinit var status: TextView
+    private lateinit var email: TextView
 
     private lateinit var toolbar: Toolbar
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,20 +24,18 @@ class UserProfileActivity : AppCompatActivity() {
         toolbar = findViewById(R.id.profile_toolbar)
         toolbar.title = getString(R.string.profile)
 
-        username = findViewById(R.id.profile_username_layout)
-        status = findViewById(R.id.profile_status_layout)
-        email = findViewById(R.id.profile_email_layout)
+        usernameLayout = findViewById(R.id.profile_username_layout)
+        statusLayout = findViewById(R.id.profile_status_layout)
+        username = findViewById(R.id.profile_username)
+        status = findViewById(R.id.profile_status)
+        email = findViewById(R.id.profile_email)
 
-        username.setOnClickListener {
+        usernameLayout.setOnClickListener {
             toast("Changing username")
         }
 
-        status.setOnClickListener {
+        statusLayout.setOnClickListener {
             toast("Changing status")
-        }
-
-        email.setOnClickListener {
-            toast("Changing email")
         }
 
         displayArrowBack(toolbar)

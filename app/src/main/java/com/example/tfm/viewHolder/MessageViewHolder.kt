@@ -67,7 +67,7 @@ class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
         placeholder.background = context.getDrawable(R.drawable.receiver_message)
         layout.setPadding(getDpValue(15),getDpValue(10), 0, getDpValue(10))
         userPhoto.visibility = View.VISIBLE
-        body.setTextColor(context.getColor(R.color.colorReceiverMessage))
+        body.setTextColor(context.getColor(R.color.colorPrimaryText))
         body.gravity  = Gravity.LEFT
         time.gravity = Gravity.LEFT
     }

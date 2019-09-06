@@ -26,8 +26,9 @@
                     android:text="@string/username_sample"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_medium"
                     android:textStyle="bold"
-                    android:textSize="@dimen/text_medium"/>
+                    android:textColor="@color/colorPrimaryText"/>
         </LinearLayout>
         <androidx.emoji.widget.EmojiTextView
                 android:id="@+id/user_status"

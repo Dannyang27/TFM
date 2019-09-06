@@ -25,8 +25,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/name_chat"
+                    android:textSize="@dimen/text_medium"
                     android:textStyle="bold"
-                    android:textSize="@dimen/text_medium"/>
+                    android:textColor="@color/colorPrimaryText"/>
             <TextView
                     android:text="@string/time_sample"
                     android:layout_width="match_parent"

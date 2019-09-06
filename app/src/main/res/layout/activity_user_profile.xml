@@ -62,10 +62,12 @@
                             android:text="@string/name"/>
 
                     <TextView
+                            android:id="@+id/profile_username"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/username_sample"
-                            android:layout_below="@id/username_text"/>
+                            android:layout_below="@id/username_text"
+                            android:textColor="@color/colorPrimaryText"/>
 
                     </RelativeLayout>
 
@@ -112,9 +114,11 @@
 
                 </TextView>
                 <TextView
+                        android:id="@+id/profile_status"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/status_sample">
+                        android:text="@string/status_sample"
+                        android:textColor="@color/colorPrimaryText">
 
                 </TextView>
 
@@ -123,13 +127,10 @@
         </LinearLayout>
 
         <LinearLayout
-                android:id="@+id/profile_email_layout"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:orientation="horizontal"
-                android:padding="10dp"
-                android:foreground="?android:attr/selectableItemBackground">
-
+                android:padding="10dp">
             <ImageView
                     android:layout_width="0dp"
                     android:layout_height="25dp"
@@ -149,12 +150,12 @@
 
                 </TextView>
                 <TextView
+                        android:id="@+id/profile_email"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/email_sample">
-
+                        android:text="@string/email_sample"
+                        android:textColor="@color/colorPrimaryText">
                 </TextView>
-
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
