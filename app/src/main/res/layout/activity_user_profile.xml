@@ -25,10 +25,19 @@
                 android:gravity="center">
             <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/user_profile"
-                    android:layout_width="160dp"
-                    android:layout_height="160dp"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
                     android:src="@drawable/dwight"
                     android:layout_margin="50dp" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/profile_fab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    app:srcCompat="@drawable/camera_filled"
+                    android:layout_alignBottom="@id/user_profile"
+                    android:layout_alignEnd="@id/user_profile"/>
         </RelativeLayout>
 
         <LinearLayout

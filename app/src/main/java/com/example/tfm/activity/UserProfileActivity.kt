@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.tfm.R
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.jetbrains.anko.toast
 
 class UserProfileActivity : AppCompatActivity() {
@@ -15,6 +16,7 @@ class UserProfileActivity : AppCompatActivity() {
     private lateinit var username: TextView
     private lateinit var status: TextView
     private lateinit var email: TextView
+    private lateinit var fab: FloatingActionButton
 
     private lateinit var toolbar: Toolbar
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +31,11 @@ class UserProfileActivity : AppCompatActivity() {
         username = findViewById(R.id.profile_username)
         status = findViewById(R.id.profile_status)
         email = findViewById(R.id.profile_email)
+        fab = findViewById(R.id.profile_fab)
+
+        fab.setOnClickListener {
+            toast("Changing profile photo...")
+        }
 
         usernameLayout.setOnClickListener {
             toast("Changing username")
