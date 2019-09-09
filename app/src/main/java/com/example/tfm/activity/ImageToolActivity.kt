@@ -10,6 +10,7 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.tfm.R
 import com.example.tfm.util.loadImageFromUri
+import com.example.tfm.util.rotate
 import com.example.tfm.util.setBitmapToImageView
 import org.jetbrains.anko.toast
 
@@ -47,7 +48,7 @@ class ImageToolActivity : AppCompatActivity() {
         }
 
         rotateBtn.setOnClickListener {
-            toast("Rotating...")
+            image.rotate()
         }
 
         acceptBtn.setOnClickListener {

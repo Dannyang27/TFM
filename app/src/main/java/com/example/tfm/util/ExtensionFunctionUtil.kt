@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Base64
@@ -115,4 +117,13 @@ fun Activity.setBitmapToImageView(placeholder: ImageView, bitmap: Bitmap){
         .load(bitmap)
         .override(placeholder.width, placeholder.width * imageAspectRatio)
         .into(placeholder)
+}
+
+fun ImageView.rotate(){
+    val matrix = Matrix().apply {
+        postRotate(-90F)
+    }
+    val bitmap = (drawable as BitmapDrawable).bitmap
+    val bitmapRotated = Bitmap.createBitmap(bitmap, 0,0, bitmap.width, bitmap.height, matrix, true)
+    setImageBitmap(bitmapRotated)
 }
