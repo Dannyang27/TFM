@@ -34,7 +34,7 @@ object FirebaseUtil {
 
     fun addUser(context: Context, user: User){
         database.child(FIREBASE_USER_PATH)
-            .child(user.hashCode().toString()).setValue(user)
+            .child(user.id).setValue(user)
             .addOnSuccessListener {
                 Log.d(LogUtil.TAG, "FirebaseDatabase user added successfully")
 
@@ -98,7 +98,8 @@ object FirebaseUtil {
             userConversations.forEach {
                 val conversation = it
                 database.child(FIREBASE_PRIVATE_CHAT_PATH).child(conversation.id).child(
-                    FIREBASE_PRIVATE_MESSAGE_PATH).limitToLast(20).addListenerForSingleValueEvent(object: ValueEventListener{
+                    FIREBASE_PRIVATE_MESSAGE_PATH).limitToLast(10)
+                    .addListenerForSingleValueEvent(object: ValueEventListener{
                     override fun onCancelled(p0: DatabaseError) {}
 
                     override fun onDataChange(dataSnapshot: DataSnapshot) {

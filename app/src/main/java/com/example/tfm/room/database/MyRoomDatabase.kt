@@ -188,8 +188,8 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
         val taskTwo = firestore.collection(FirebaseUtil.FIREBASE_USER_PATH).document(newEmail).get().await()
         val userTwo = taskTwo.toObject(User::class.java)
 
-        var userOneHash = userOne.hashCode().toLong()
-        var userTwoHash = userTwo.hashCode().toLong()
+        var userOneHash = userOne?.id?.toLong()!!
+        var userTwoHash = userTwo?.id?.toLong()!!
 
         if(userOneHash > userTwoHash){
             val tmp = userOneHash
@@ -198,7 +198,7 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
         }
 
         val hashcode = userOneHash.toString().plus(userTwoHash.toString())
-        val conversation = Conversation(hashcode, userOne?.email, userTwo?.email, mutableListOf(), "",System.currentTimeMillis(), mutableListOf(), true )
+        val conversation = Conversation(hashcode, userOne.email, userTwo.email, mutableListOf(), "",System.currentTimeMillis(), mutableListOf(), true )
 
         firestore.addConversation(context, conversation)
     }

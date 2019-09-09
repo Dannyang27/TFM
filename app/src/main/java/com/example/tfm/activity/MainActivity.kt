@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import com.example.tfm.R
 import com.example.tfm.fragments.GroupChatFragment
 import com.example.tfm.fragments.PrivateFragment
+import com.example.tfm.room.database.MyRoomDatabase
 import com.example.tfm.util.clearCredential
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -75,7 +76,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                 val intent = Intent(this, UserSearcherActivity::class.java)
                 startActivity(intent)
             }else{
-                //TODO
+                MyRoomDatabase.getMyRoomDatabase(this)?.deleteAllConversation()
             }
         }
 

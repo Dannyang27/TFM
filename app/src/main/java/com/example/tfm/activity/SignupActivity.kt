@@ -52,7 +52,10 @@ class SignupActivity : AppCompatActivity() {
             if(isFormNotEmpty()){
                 progressbar.start()
                 disableViews()
-                val user = User(email.text.toString().trimBothSides(), user.text.toString().trimBothSides(), "", "")
+                val user = User("", email.text.toString().trimBothSides(), user.text.toString().trimBothSides(), "", "")
+                val hashcode = user.hashCode().toString()
+                user.id = hashcode
+
                 addUserToFirestore(user)
             }else{
                 toast("Form cannot be empty")
