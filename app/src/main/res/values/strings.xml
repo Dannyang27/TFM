@@ -63,4 +63,14 @@
     <string name="done">Done</string>
     <string name="enter_text">Enter name:</string>
     <string name="accept">Accept</string>
+    <string name="notificationToneTitle">Notification tone</string>
+    <string name="vibrateTitle">Vibrate</string>
+    <string name="defaultText">Default</string>
+    <string name="enablePopup">User notifications show when message arrives</string>
+    <string name="aboutus">About us</string>
+    <string name="faqs">FAQ</string>
+    <string name="termsAndConditions">Terms and Privacy Policy</string>
+    <string name="contactus">Contact us</string>
+    <string name="prefLanguage">Language preference</string>
+    <string name="languageSummary">Conversations will be translated to the chosen language</string>
 </resources>

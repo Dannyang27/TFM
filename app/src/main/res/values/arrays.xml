@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="notificationTones">
+        Default, None, Breeze, Brisk, Cloud, Ding, Dream, Funky
+    </string-array>
+
+    <string-array name="vibrate">
+        Off, Default, Short, Long
+    </string-array>
+
+    <string-array name="languages">
+        Arabic, Catalan,Chinese Simplified, English, French, Germany, Indian, Italian, Japanese, Polish, Portuguese, Russian,Spanish
+    </string-array>
+</resources>
