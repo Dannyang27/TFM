@@ -1,58 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-        xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.preference.PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory
-            android:title="@string/messages">
+    <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/languages"
+            android:entryValues="@array/languages"
+            android:key="chatLanguage"
+            android:title="@string/prefLanguage"
+            android:summary="@string/languageSummary"
+            app:allowDividerAbove="false"
+            app:allowDividerBelow="false"
+            android:layout="@layout/font_layout"/>
 
-        <ListPreference
-                android:defaultValue="1"
-                android:entries="@array/languages"
-                android:entryValues="@array/languages"
-                android:key="chatLanguage"
-                android:title="@string/prefLanguage"
-                android:summary="@string/languageSummary"/>
+    <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/notificationTones"
+            android:entryValues="@array/notificationTones"
+            android:key="notificationTone"
+            android:title="@string/notificationToneTitle"
+            android:summary="@string/defaultText"
+            app:allowDividerAbove="false"
+            app:allowDividerBelow="false"
+            android:layout="@layout/font_layout"/>
 
-        <ListPreference
-                android:defaultValue="1"
-                android:entries="@array/notificationTones"
-                android:entryValues="@array/notificationTones"
-                android:key="notificationTone"
-                android:title="@string/notificationToneTitle"
-                android:summary="@string/defaultText"/>
+    <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/vibrate"
+            android:entryValues="@array/notificationTones"
+            android:key="list_preference_1"
+            android:title="@string/vibrateTitle"
+            android:summary="@string/defaultText"
+            app:allowDividerAbove="false"
+            app:allowDividerBelow="false"
+            android:layout="@layout/font_layout"/>
+    <SwitchPreference
+            android:defaultValue="true"
+            android:key="popup"
+            android:title="Enable Popup"
+            android:summary="@string/enablePopup"
+            app:allowDividerAbove="false"
+            app:allowDividerBelow="false"/>
 
-        <ListPreference
-                android:defaultValue="1"
-                android:entries="@array/vibrate"
-                android:entryValues="@array/notificationTones"
-                android:key="list_preference_1"
-                android:title="@string/vibrateTitle"
-                android:summary="@string/defaultText"/>
-        <SwitchPreference
-                android:defaultValue="true"
-                android:key="popup"
-                android:title="Enable Popup"
-                android:summary="@string/enablePopup"/>
-    </PreferenceCategory>
-    <PreferenceCategory
-            android:title="@string/aboutus">
+    <Preference
+            android:key="faq"
+            android:title="@string/faqs"
+            app:allowDividerAbove="false"
+            app:allowDividerBelow="false"
+            android:layout="@layout/font_layout"/>
 
-        <EditTextPreference
-                android:key="faq"
-                android:selectAllOnFocus="true"
-                android:singleLine="true"
-                android:title="@string/faqs" />
+    <Preference
+            android:key="contactus"
+            android:title="@string/contactus"
+            app:allowDividerAbove="false"
+            app:allowDividerBelow="false"
+            android:layout="@layout/font_layout"/>
 
-        <EditTextPreference
-                android:key="contactus"
-                android:selectAllOnFocus="true"
-                android:singleLine="true"
-                android:title="@string/contactus" />
+    <Preference
+            android:key="termsAndConditions"
+            android:title="@string/termsAndConditions"
+            app:allowDividerAbove="false"
+            app:allowDividerBelow="false"
+            android:layout="@layout/font_layout"/>
 
-        <EditTextPreference
-                android:key="termsAndConditions"
-                android:selectAllOnFocus="true"
-                android:singleLine="true"
-                android:title="@string/termsAndConditions" />
-    </PreferenceCategory>
-</PreferenceScreen>
+</androidx.preference.PreferenceScreen>

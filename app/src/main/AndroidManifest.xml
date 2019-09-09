@@ -21,10 +21,13 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".activity.ImageToolActivity"></activity>
+        <activity android:name=".activity.MySettingActivity"
+                android:screenOrientation="portrait"/>
+
+        <activity android:name=".activity.ImageToolActivity" />
         <activity
                 android:name=".activity.UserProfileActivity"
-                android:screenOrientation="portrait"/>
+                android:screenOrientation="portrait" />
         <activity
                 android:name=".activity.SignupActivity"
                 android:screenOrientation="portrait" />
@@ -53,7 +56,6 @@
         </provider>
 
         <activity android:name=".activity.LocationSenderActivity" />
-
         <activity
                 android:name=".activity.UserSearcherActivity"
                 android:screenOrientation="portrait" />

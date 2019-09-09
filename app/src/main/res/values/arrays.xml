@@ -1,14 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="notificationTones">
-        Default, None, Breeze, Brisk, Cloud, Ding, Dream, Funky
+        <item>Default</item>
+        <item>None</item>
+        <item>Breeze</item>
+        <item>Brisk</item>
+        <item>Cloud</item>
+        <item>Ding</item>
+        <item>Dream</item>
+        <item>Funky</item>
     </string-array>
 
     <string-array name="vibrate">
-        Off, Default, Short, Long
+        <item>Off</item>
+        <item>Default</item>
+        <item>Short</item>
+        <item>Long</item>
     </string-array>
 
     <string-array name="languages">
-        Arabic, Catalan,Chinese Simplified, English, French, Germany, Indian, Italian, Japanese, Polish, Portuguese, Russian,Spanish
+        <item>Arabic</item>
+        <item>Catalan</item>
+        <item>Chinese (Simplified)</item>
+        <item>English</item>
+        <item>French</item>
+        <item>Germany</item>
+        <item>Indian</item>
+        <item>Italian</item>
+        <item>Japanese</item>
+        <item>Polish</item>
+        <item>Portuguese</item>
+        <item>Russian</item>
+        <item>Spanish</item>
     </string-array>
 </resources>

@@ -73,4 +73,5 @@
     <string name="contactus">Contact us</string>
     <string name="prefLanguage">Language preference</string>
     <string name="languageSummary">Conversations will be translated to the chosen language</string>
+    <string name="setting_title">Settings</string>
 </resources>

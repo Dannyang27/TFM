@@ -37,8 +37,6 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     private lateinit var searchView: SearchView
     private lateinit var fab: FloatingActionButton
 
-    private lateinit var database: DatabaseReference
-
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_chat -> {
@@ -119,6 +117,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
 
         R.id.settings -> {
             toast("Settings Clicked")
+            startActivity(Intent(this, MySettingActivity::class.java))
             true
         }
 
