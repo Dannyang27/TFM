@@ -45,13 +45,13 @@ class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
 
         layoutParams.setMargins(getDpValue(60), 0, 0, 0)
         layout.layoutParams = layoutParams
-        layout.gravity = Gravity.RIGHT
+        layout.gravity = Gravity.END
         placeholder.background = context.getDrawable(R.drawable.sender_message)
         layout.setPadding(0,getDpValue(10),getDpValue(15), getDpValue(10))
         userPhoto.visibility = View.GONE
         body.setTextColor(context.getColor(R.color.colorWhite))
-        body.gravity = Gravity.RIGHT
-        time.gravity = Gravity.RIGHT
+        body.gravity = Gravity.END
+        time.gravity = Gravity.END
         username.visibility = View.GONE
     }
 
@@ -63,13 +63,13 @@ class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
 
         layoutParams.setMargins(0, 0, getDpValue(60), 0)
         layout.layoutParams = layoutParams
-        layout.gravity = Gravity.LEFT
+        layout.gravity = Gravity.START
         placeholder.background = context.getDrawable(R.drawable.receiver_message)
         layout.setPadding(getDpValue(15),getDpValue(10), 0, getDpValue(10))
         userPhoto.visibility = View.VISIBLE
         body.setTextColor(context.getColor(R.color.colorPrimaryText))
-        body.gravity  = Gravity.LEFT
-        time.gravity = Gravity.LEFT
+        body.gravity  = Gravity.START
+        time.gravity = Gravity.START
     }
 
     private fun setBody( body: String){

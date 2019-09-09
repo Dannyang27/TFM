@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.tfm.R
 import com.example.tfm.data.DataRepository
+import com.example.tfm.enum.MediaSource
 import com.example.tfm.model.User
 import com.example.tfm.util.FirebaseUtil
 import com.example.tfm.util.updateCurrentUser
@@ -88,7 +89,7 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when(requestCode){
             GALLERY_REQUEST_CODE -> {
-                data?.let {ImageToolActivity.launchImageTool(this, it.data) }
+                data?.let {ImageToolActivity.launchImageTool(this, it.data, MediaSource.GALLERY, true) }
             }
         }
     }

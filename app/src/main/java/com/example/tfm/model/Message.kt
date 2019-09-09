@@ -31,8 +31,7 @@ class GifRoomModel(@PrimaryKey
 @Entity(tableName = "Image")
 class ImageRoomModel(@PrimaryKey
                      var id: Long = -1,
-                     var encodedImage: String = "",
-                     var caption: String = "")
+                     var encodedImage: String = "")
 
 @Entity(tableName = "Location")
 class LocationRoomModel(@PrimaryKey

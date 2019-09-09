@@ -1,6 +1,7 @@
 package com.example.tfm.adapter
 
 import android.content.Context
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +9,7 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.example.tfm.R
-import com.example.tfm.activity.ImageSenderActivity
+import com.example.tfm.activity.ImageToolActivity
 import com.example.tfm.enum.MediaSource
 import com.example.tfm.model.giphy.Gifs
 
@@ -38,7 +39,7 @@ class GifAdapter : BaseAdapter{
         Glide.with(context).asGif().load(gif.previewGif.url).centerCrop().into(gifImage)
 
         gifImage.setOnClickListener {
-            ImageSenderActivity.launchActivityWithGif(context, gif.original.url, MediaSource.GIF)
+            ImageToolActivity.launchImageTool(context, Uri.parse(gif.original.url), MediaSource.GIF, false)
         }
 
         return gifView

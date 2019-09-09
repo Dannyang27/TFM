@@ -58,15 +58,6 @@
                             app:srcCompat="@drawable/white_placeholder"
                             android:scaleType="centerCrop"/>
                 </androidx.cardview.widget.CardView>
-
-                <androidx.emoji.widget.EmojiTextView
-                        android:id="@+id/media_caption"
-                        android:layout_marginHorizontal="5dp"
-                        android:textSize="@dimen/text_large"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/colorPrimaryText"
-                        android:visibility="gone"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
         <TextView

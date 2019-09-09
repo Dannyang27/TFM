@@ -70,18 +70,18 @@ class LocationViewHolder(view: View) : RecyclerView.ViewHolder(view), OnMapReady
     }
 
     private fun setSenderViewHolder(){
-        locationLayout.gravity = Gravity.RIGHT
+        locationLayout.gravity = Gravity.END
         locationLayout.setPadding(0,0,getDpValue(15),0)
         userPhoto.visibility = View.GONE
-        time.gravity = Gravity.RIGHT
+        time.gravity = Gravity.END
         username.visibility = View.GONE
     }
 
     private fun setReceiverViewHolder(){
-        locationLayout.gravity = Gravity.LEFT
+        locationLayout.gravity = Gravity.START
         locationLayout.setPadding(getDpValue(15),0,0,0)
         userPhoto.visibility = View.VISIBLE
-        time.gravity = Gravity.LEFT
+        time.gravity = Gravity.START
     }
 
     private fun setAddress(addressLine: String){

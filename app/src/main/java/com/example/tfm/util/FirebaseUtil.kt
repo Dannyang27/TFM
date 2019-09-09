@@ -92,24 +92,25 @@ object FirebaseUtil {
     fun loadUserConversation(context: Context, user: String){
         val userConversations = MyRoomDatabase.getMyRoomDatabase(context)?.conversationDao()?.getUserConversations(user)
 
-        userConversations?.forEach {
-            val conversation = it
-            database.child(FIREBASE_PRIVATE_CHAT_PATH).child(conversation.id).child(
-                FIREBASE_PRIVATE_MESSAGE_PATH).limitToLast(20).addListenerForSingleValueEvent(object: ValueEventListener{
-                override fun onCancelled(p0: DatabaseError) {}
+        if(userConversations!!.isEmpty()){
+            launchMainActivity(context)
+        }else{
+            userConversations.forEach {
+                val conversation = it
+                database.child(FIREBASE_PRIVATE_CHAT_PATH).child(conversation.id).child(
+                    FIREBASE_PRIVATE_MESSAGE_PATH).limitToLast(20).addListenerForSingleValueEvent(object: ValueEventListener{
+                    override fun onCancelled(p0: DatabaseError) {}
 
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    dataSnapshot.children.forEach{
-                        val message = it.getValue(Message::class.java)!!
-                        conversation.messages.add(message)
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        dataSnapshot.children.forEach{
+                            val message = it.getValue(Message::class.java)!!
+                            conversation.messages.add(message)
+                        }
+                        DataRepository.addConversation(it.id, conversation)
+                        launchMainActivity(context)
                     }
-                    DataRepository.addConversation(it.id, conversation)
-
-                    val intent = Intent(context, MainActivity::class.java)
-                    intent.flags = FLAG_ACTIVITY_NEW_TASK
-                    context.startActivity(intent)
-                }
-            })
+                })
+            }
         }
     }
 
@@ -200,5 +201,11 @@ fun FirebaseFirestore.updateCurrentUser(context: Context, user: User, input: Str
         .addOnFailureListener {
             Log.d(LogUtil.TAG, "Error while updating user")
         }
-
 }
+
+private fun launchMainActivity(context: Context){
+    val intent = Intent(context, MainActivity::class.java)
+    intent.flags = FLAG_ACTIVITY_NEW_TASK
+    context.startActivity(intent)
+}
+

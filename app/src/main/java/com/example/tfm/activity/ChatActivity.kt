@@ -259,7 +259,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         if(resultCode != RESULT_CANCELED){
             when(requestCode){
                 GALLERY_CODE ->{
-                    data.let{ ImageSenderActivity.launchActivityWithImage(this, it?.data, MediaSource.GALLERY) }
+                    data.let{ ImageToolActivity.launchImageTool(this, it?.data, MediaSource.GALLERY, false) }
                 }
 
                 ATTACHMENT_MODE -> {
@@ -272,7 +272,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
 
                 CAMERA_MODE -> {
                     if(resultCode == RESULT_OK){
-                        ImageSenderActivity.launchActivityWithImage(this, Uri.parse(currentPhotoPath),  MediaSource.CAMERA)
+                        ImageToolActivity.launchImageTool(this, Uri.parse(currentPhotoPath),  MediaSource.CAMERA, false)
                     }
                 }
 

@@ -9,14 +9,36 @@
         android:background="@color/colorBackground">
 
 
-    <ImageView
-            android:id="@+id/tool_image"
+    <androidx.appcompat.widget.Toolbar
+            android:id="@+id/tool_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:srcCompat="@drawable/white_placeholder"
-            android:layout_centerVertical="true"
-            android:layout_above="@id/tool_button_layout"
-            android:layout_gravity="center"/>
+            android:layout_height="wrap_content"
+            android:elevation="4dp"
+            app:titleTextColor="@color/colorPrimary"
+            app:theme="@style/ToolbarTheme"/>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tool_toolbar"
+            android:layout_above="@id/tool_button_layout">
+
+        <ImageView
+                android:id="@+id/tool_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:srcCompat="@drawable/white_placeholder"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"/>
+
+        <ProgressBar
+                android:id="@+id/tool_progressbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="?android:attr/progressBarStyle"
+                android:layout_centerInParent="true"
+                android:visibility="gone"/>
+    </RelativeLayout>
 
     <LinearLayout
             android:id="@+id/tool_button_layout"

@@ -53,10 +53,7 @@
         </provider>
 
         <activity android:name=".activity.LocationSenderActivity" />
-        <activity
-                android:name=".activity.ImageSenderActivity"
-                android:screenOrientation="portrait"
-                android:windowSoftInputMode="adjustResize" />
+
         <activity
                 android:name=".activity.UserSearcherActivity"
                 android:screenOrientation="portrait" />

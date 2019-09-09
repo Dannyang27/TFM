@@ -26,7 +26,6 @@ class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view){
     private val userPhoto: ImageView = view.findViewById(R.id.media_photo)
     private val username: EmojiTextView = view.findViewById(R.id.media_username)
     private val media: ImageView = view.findViewById(R.id.media_image)
-    private val caption: EmojiTextView = view.findViewById(R.id.media_caption)
     private val time: TextView = view.findViewById(R.id.media_time)
 
     fun initImageViewHolder(message: Message){
@@ -45,31 +44,30 @@ class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view){
     private fun setSenderViewHolder(){
         val context = layout.context
         layout.setPadding(getDpValue(60), getDpValue(10), getDpValue(15), getDpValue(10))
-        layout.gravity = Gravity.RIGHT
+        layout.gravity = Gravity.END
         userPhoto.visibility = View.GONE
-        time.gravity = Gravity.RIGHT
+        time.gravity = Gravity.END
         placeholder.setBackgroundColor(context.getColor(R.color.colorAccent))
-        caption.setTextColor(context.getColor(R.color.colorPrimaryText))
         username.visibility = View.GONE
     }
 
     private fun setReceiverViewHolder(){
         val context = layout.context
         layout.setPadding(getDpValue(15), getDpValue(10), getDpValue(60), getDpValue(10))
-        layout.gravity = Gravity.LEFT
+        layout.gravity = Gravity.START
         userPhoto.visibility = View.VISIBLE
-        time.gravity = Gravity.LEFT
+        time.gravity = Gravity.START
         placeholder.setBackgroundColor(context.getColor(R.color.colorWhite))
-        caption.setTextColor(context.getColor(R.color.colorPrimaryText))
     }
 
     private fun setImageOrGif(message: Message){
-        val caption = message.body?.fieldTwo
         if(MessageType.fromInt(message.messageType) == MessageType.IMAGE){
-            media.setImageBitmap(message.body?.fieldOne?.toBitmap())
+            val bitmap = message.body?.fieldOne?.toBitmap()
+            Glide.with(layout.context)
+                .load(bitmap)
+                .into(media)
         }else{
             val url = message.body?.fieldOne
-
             Glide.with(layout.context)
                 .asGif()
                 .centerCrop()
@@ -77,18 +75,9 @@ class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view){
                 .into(media)
         }
 
-        if(caption!!.isNotEmpty()){
-            setCaption(caption)
-        }
-
         media.setOnClickListener {
             layout.context.toast("Image pressed, expanding...")
         }
-    }
-
-    private fun setCaption(caption: String){
-        this.caption.text = caption
-        this.caption.visibility = View.VISIBLE
     }
 
     private fun getDpValue(dpValue: Int): Int = (dpValue * layout.context.displayMetrics.density).toInt()
