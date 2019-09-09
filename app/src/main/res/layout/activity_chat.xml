@@ -66,7 +66,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:minHeight="40dp"
-                        android:inputType="textMultiLine|textShortMessage"
+                        android:inputType="textMultiLine|textShortMessage|textCapSentences"
                         android:hint="@string/chat_hint"
                         android:gravity="center_vertical"
                         android:ems="10"

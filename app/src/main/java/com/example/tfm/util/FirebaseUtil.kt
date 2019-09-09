@@ -161,6 +161,15 @@ object FirebaseUtil {
                 Log.d(LogUtil.TAG, "Error while sending message")
             }
     }
+
+    fun updateUser(user: User){
+        database.child(FIREBASE_USER_PATH)
+            .child(user.id)
+            .setValue(user)
+            .addOnSuccessListener {
+                Log.d(LogUtil.TAG, "User ${user.email} has been updated in RealtimeDatabase")
+            }
+    }
 }
 
 suspend fun FirebaseFirestore.createRoomUser(email: String?): User?{
@@ -198,6 +207,8 @@ fun FirebaseFirestore.updateCurrentUser(context: Context, user: User, input: Str
             MyRoomDatabase.getMyRoomDatabase(context)?.updateUser(user)
             context.toast("User updated")
             field.text = input
+
+            FirebaseUtil.updateUser(user)
         }
         .addOnFailureListener {
             Log.d(LogUtil.TAG, "Error while updating user")

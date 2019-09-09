@@ -106,7 +106,9 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.dialog_enter_input)
 
-        val input = dialog.findViewById<EditText>(R.id.dialog_input)
+        val input = dialog.findViewById<EditText>(R.id.dialog_input).apply {
+            text.append(if (isUsername) username.text else status.text)
+        }
         val acceptBtn = dialog.findViewById<Button>(R.id.dialog_accept)
         val cancelBtn = dialog.findViewById<Button>(R.id.dialog_cancel)
 
