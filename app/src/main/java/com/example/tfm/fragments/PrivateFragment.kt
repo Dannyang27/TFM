@@ -49,8 +49,7 @@ class PrivateFragment : Fragment(){
             adapter = viewAdapter
         }
 
-        val roomDatabase = MyRoomDatabase.getMyRoomDatabase(activity?.applicationContext!!)
-        roomDatabase?.loadUserConversation(DataRepository.currentUserEmail)
+        updateConversation(DataRepository.getConversations())
 
         return view
     }

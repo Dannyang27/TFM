@@ -1,6 +1,7 @@
 package com.example.tfm.adapter
 
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -11,6 +12,7 @@ import com.example.tfm.data.DataRepository
 import com.example.tfm.diffUtil.ConversationDiffCallback
 import com.example.tfm.model.Conversation
 import com.example.tfm.room.database.MyRoomDatabase
+import com.example.tfm.util.LogUtil
 import com.example.tfm.util.setTime
 import com.example.tfm.viewHolder.ConversationViewHolder
 import kotlinx.coroutines.CoroutineScope
@@ -41,6 +43,7 @@ class ConversationAdapter(private val conversations: MutableList<Conversation>):
             }
         }
 
+        Log.d(LogUtil.TAG, "Conversation lastMessage : ${conversation.lastMessage}")
         holder.lastMessage.text = if(conversation.lastMessage.toString().isNotEmpty()) conversation.lastMessage else holder.image.context.getString(R.string.bethefirst)
         holder.setTime(holder.lastTime, conversation.timestamp)
 

@@ -14,6 +14,15 @@ object DataRepository{
         conversations.putIfAbsent(key, conversation)
     }
 
+    fun getConversations() = conversations.values.toMutableList()
+
+    fun updateConversation(message: Message, content: String){
+        conversations[message.ownerId].apply {
+            this?.lastMessage = content
+            this?.timestamp = message.timestamp
+        }
+    }
+
     fun addMessage(message: Message){
         conversations[message.ownerId]?.messages?.add(message)
     }

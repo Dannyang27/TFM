@@ -247,7 +247,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
                     body = MessageContent(fieldOne = fieldText),
                     timestamp = timestamp,
                     languageCode = "EN" )
-                FirebaseUtil.addMessage(message)
+                FirebaseUtil.addMessage(this, message)
                 chat_edittext.text.clear()
             }
         }

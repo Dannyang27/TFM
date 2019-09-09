@@ -88,7 +88,7 @@ class LocationSenderActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMa
                 timestamp = timestamp,
                 languageCode = "EN")
 
-            FirebaseUtil.addMessage(message)
+            FirebaseUtil.addMessage(this, message)
             finish()
         }
 

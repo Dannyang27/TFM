@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.preference.PreferenceManager
+import android.transition.ChangeTransform
 import android.util.Log
 import android.widget.TextView
 import com.example.tfm.activity.ChatActivity
@@ -11,6 +12,8 @@ import com.example.tfm.activity.MainActivity
 import com.example.tfm.activity.SignupActivity
 import com.example.tfm.activity.UserSearcherActivity
 import com.example.tfm.data.DataRepository
+import com.example.tfm.enum.MessageType
+import com.example.tfm.fragments.PrivateFragment
 import com.example.tfm.model.Conversation
 import com.example.tfm.model.Message
 import com.example.tfm.model.User
@@ -29,6 +32,8 @@ object FirebaseUtil {
     const val FIREBASE_USER_PATH = "users"
     const val FIREBASE_PRIVATE_CHAT_PATH = "chats"
     const val FIREBASE_PRIVATE_MESSAGE_PATH = "messages"
+    const val FIREBASE_LAST_MESSAGE = "lastMessage"
+    const val FIREBASE_TIMESTAMP = "timestamp"
 
     private val database = FirebaseDatabase.getInstance().reference
 
@@ -90,9 +95,9 @@ object FirebaseUtil {
     }
 
     fun loadUserConversation(context: Context, user: String){
-        val userConversations = MyRoomDatabase.getMyRoomDatabase(context)?.conversationDao()?.getUserConversations(user)
+        val userConversations = MyRoomDatabase.getMyRoomDatabase(context)?.conversationDao()?.getUserConversations(user)!!
 
-        if(userConversations!!.isEmpty()){
+        if(userConversations.isEmpty()){
             launchMainActivity(context)
         }else{
             userConversations.forEach {
@@ -123,6 +128,8 @@ object FirebaseUtil {
                 val roomDatabase = MyRoomDatabase.getMyRoomDatabase(context)
                 roomDatabase?.addConversation(conversation)
 
+                PrivateFragment.updateConversation(DataRepository.getConversations())
+
                 var userToCreate: String?
                 if(conversation.userOne.equals(DataRepository.currentUserEmail)){
                     userToCreate = conversation.userTwo
@@ -144,7 +151,7 @@ object FirebaseUtil {
         }
     }
 
-    fun addMessage(message: Message){
+    fun addMessage(context: Context, message: Message){
         val newMessages: MutableList<Message> = mutableListOf()
         newMessages.addAll(ChatActivity.messages)
         newMessages.add(message)
@@ -156,6 +163,8 @@ object FirebaseUtil {
             .setValue(message)
             .addOnSuccessListener {
                 DataRepository.addMessage(message)
+                updateConversation(context, message)
+
             }
             .addOnFailureListener {
                 Log.d(LogUtil.TAG, "Error while sending message")
@@ -169,6 +178,32 @@ object FirebaseUtil {
             .addOnSuccessListener {
                 Log.d(LogUtil.TAG, "User ${user.email} has been updated in RealtimeDatabase")
             }
+    }
+
+    private fun updateConversation(context: Context, message: Message){
+
+        var lastMessage: String?
+        when(MessageType.fromInt(message.messageType)){
+            MessageType.MESSAGE -> lastMessage = message.body?.fieldOne
+            MessageType.GIF -> lastMessage = "[GIF]"
+            MessageType.IMAGE -> lastMessage = "[Image]"
+            MessageType.ATTACHMENT -> lastMessage = "[Attachment]"
+            MessageType.LOCATION -> lastMessage = message.body?.fieldTwo
+        }
+
+        database.child(FIREBASE_PRIVATE_CHAT_PATH)
+            .child(message.ownerId)
+            .child(FIREBASE_LAST_MESSAGE)
+            .setValue(lastMessage)
+
+        database.child(FIREBASE_PRIVATE_CHAT_PATH)
+            .child(message.ownerId)
+            .child(FIREBASE_TIMESTAMP)
+            .setValue(message.timestamp.toString())
+
+        MyRoomDatabase.getMyRoomDatabase(context)?.updateConversation(message, lastMessage.toString())
+        DataRepository.updateConversation(message, lastMessage.toString())
+        PrivateFragment.updateConversation(DataRepository.getConversations())
     }
 }
 

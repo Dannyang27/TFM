@@ -137,9 +137,14 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
         }
     }
 
-    fun loadUserConversation(email: String){
+    fun updateConversation( message: Message, content: String){
         launch {
-            PrivateFragment.updateConversation(conversationDao().getUserConversations(email))
+            val conv = conversationDao().getById(message.ownerId)
+            conv.lastMessage = content
+            conv.timestamp = message.timestamp
+            conversationDao().update(conv)
+        }.also {
+            Log.d(LogUtil.TAG, "Conversation with id: ${message.ownerId} has been updated")
         }
     }
 
