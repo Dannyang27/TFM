@@ -20,14 +20,20 @@
 
     <string-array name="languages">
         <item>Arabic</item>
+        <item>Danish</item>
+        <item>Dutch</item>
         <item>Catalan</item>
         <item>Chinese (Simplified)</item>
         <item>English</item>
         <item>French</item>
         <item>Germany</item>
+        <item>Greek</item>
+        <item>Hebrew</item>
         <item>Indian</item>
         <item>Italian</item>
         <item>Japanese</item>
+        <item>Korean</item>
+        <item>Norwegian</item>
         <item>Polish</item>
         <item>Portuguese</item>
         <item>Russian</item>
