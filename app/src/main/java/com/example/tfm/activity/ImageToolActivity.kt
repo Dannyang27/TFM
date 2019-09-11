@@ -138,17 +138,11 @@ class ImageToolActivity : AppCompatActivity() {
                 toast("Setting profile photo")
             }else{
                 val timestamp = System.currentTimeMillis()
-                val message = Message(
-                    id = timestamp,
-                    ownerId = ChatActivity.conversationId,
-                    senderName = DataRepository.currentUserEmail,
-                    receiverName = ChatActivity.receiverUser,
-                    messageType = typeValue,
-                    body = MessageContent(fieldOne = content),
-                    timestamp = timestamp,
-                    languageCode = "EN")
+                val message = Message(timestamp, ChatActivity.conversationId, DataRepository.currentUserEmail,
+                    ChatActivity.receiverUser, typeValue, MessageContent(fieldOne = content), timestamp)
 
-                FirebaseUtil.addMessage(this, message)
+                FirebaseUtil.addMessageLocal(message)
+                FirebaseUtil.addMessageFirebase(this, message)
             }
 
             finish()

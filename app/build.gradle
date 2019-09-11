@@ -83,6 +83,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:17.1.0'
     implementation 'com.google.firebase:firebase-auth:19.0.0'
     implementation 'com.google.firebase:firebase-firestore:21.0.0'
+    implementation 'com.google.firebase:firebase-ml-natural-language:21.0.2'
+    implementation 'com.google.firebase:firebase-ml-natural-language-translate-model:20.0.5'
 
     //preferences
     implementation group: 'androidx.preference', name: 'preference', version: '1.0.0-alpha1'

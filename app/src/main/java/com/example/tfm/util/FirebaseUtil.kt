@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.preference.PreferenceManager
-import android.transition.ChangeTransform
 import android.util.Log
 import android.widget.TextView
 import com.example.tfm.activity.ChatActivity
@@ -23,6 +22,9 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ml.naturallanguage.FirebaseNaturalLanguage
+import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslateLanguage
+import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslatorOptions
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -128,6 +130,7 @@ object FirebaseUtil {
                 val roomDatabase = MyRoomDatabase.getMyRoomDatabase(context)
                 roomDatabase?.addConversation(conversation)
 
+                DataRepository.addConversation(conversation.id, conversation)
                 PrivateFragment.updateConversation(DataRepository.getConversations())
 
                 var userToCreate: String?
@@ -151,12 +154,14 @@ object FirebaseUtil {
         }
     }
 
-    fun addMessage(context: Context, message: Message){
+    fun addMessageLocal(message: Message){
         val newMessages: MutableList<Message> = mutableListOf()
         newMessages.addAll(ChatActivity.messages)
         newMessages.add(message)
         ChatActivity.updateList(newMessages)
+    }
 
+    fun addMessageFirebase(context: Context, message: Message){
         database.child(FIREBASE_PRIVATE_CHAT_PATH).child(message.ownerId)
             .child(FIREBASE_PRIVATE_MESSAGE_PATH)
             .child(message.timestamp.toString())
@@ -168,6 +173,35 @@ object FirebaseUtil {
             }
             .addOnFailureListener {
                 Log.d(LogUtil.TAG, "Error while sending message")
+            }
+    }
+
+    fun addTranslatedMessage(context: Context, message: Message){
+        val fromLanguage = PreferenceManager.getDefaultSharedPreferences(context).getString("chatLanguage", "ENGLISH")
+        val languageCode = FirebaseTranslator.languageCodeFromString(fromLanguage)
+
+        val options = FirebaseTranslatorOptions.Builder()
+            .setSourceLanguage(languageCode)
+            .setTargetLanguage(FirebaseTranslateLanguage.EN)
+            .build()
+
+        val translator = FirebaseNaturalLanguage.getInstance().getTranslator(options)
+
+        translator.downloadModelIfNeeded()
+            .addOnSuccessListener {
+                translator.translate(message.body?.fieldOne.toString())
+                    .addOnSuccessListener {
+                        message.body?.fieldOne = it
+                        addMessageFirebase(context, message)
+                        Log.d(LogUtil.TAG, "Message translated: $it")
+                    }
+                    .addOnFailureListener{
+                        Log.d(LogUtil.TAG, "Could not translated text")
+                    }
+
+            }
+            .addOnFailureListener {
+                Log.d(LogUtil.TAG, "Could not download language model")
             }
     }
 

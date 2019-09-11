@@ -74,4 +74,7 @@
     <string name="prefLanguage">Language preference</string>
     <string name="languageSummary">Conversations will be translated to the chosen language</string>
     <string name="setting_title">Settings</string>
+    <string name="removeModels">Delete language models</string>
+    <string name="removeModelSummary">Missing models may be downloaded if needed</string>
+    <string name="modelsdeleted">All models deleted</string>
 </resources>

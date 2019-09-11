@@ -8,6 +8,7 @@ import android.icu.text.SimpleDateFormat
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.preference.PreferenceManager
 import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
@@ -32,6 +33,7 @@ import com.example.tfm.fragments.EmojiFragment
 import com.example.tfm.fragments.GifFragment
 import com.example.tfm.model.Message
 import com.example.tfm.model.MessageContent
+import com.example.tfm.util.FirebaseTranslator
 import com.example.tfm.util.FirebaseUtil
 import com.example.tfm.util.KeyboardUtil
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -238,16 +240,11 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
             val fieldText = chat_edittext.text.toString()
             if(fieldText.isNotEmpty()){
                 val timestamp = System.currentTimeMillis()
-                val message = Message(
-                    id = timestamp,
-                    ownerId = conversationId,
-                    senderName = DataRepository.currentUserEmail,
-                    receiverName = receiverUser,
-                    messageType = MessageType.MESSAGE.value,
-                    body = MessageContent(fieldOne = fieldText),
-                    timestamp = timestamp,
-                    languageCode = "EN" )
-                FirebaseUtil.addMessage(this, message)
+                val message = Message(timestamp, conversationId, DataRepository.currentUserEmail, receiverUser,
+                    MessageType.MESSAGE.value, MessageContent(fieldOne = fieldText), timestamp )
+
+                FirebaseUtil.addMessageLocal(message)
+                FirebaseUtil.addTranslatedMessage(this, message)
                 chat_edittext.text.clear()
             }
         }
