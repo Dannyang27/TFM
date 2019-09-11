@@ -2,12 +2,14 @@ package com.example.tfm.preference
 
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.example.tfm.R
+import com.example.tfm.activity.PrivacyPolicyActivity
 import com.example.tfm.enum.LanguageCode
 import com.example.tfm.util.FirebaseTranslator
 import com.example.tfm.util.LogUtil
@@ -15,7 +17,10 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.ml.naturallanguage.FirebaseNaturalLanguage
 import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslateModelManager
 import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslatorOptions
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import org.jetbrains.anko.toast
 
 class MySettingFragment : PreferenceFragmentCompat(), CoroutineScope{
@@ -29,6 +34,7 @@ class MySettingFragment : PreferenceFragmentCompat(), CoroutineScope{
 
         languagePreference =  findPreference("chatLanguage") as ListPreference
         val deleteModelPreference = findPreference("deleteLanguageModels") as Preference
+        val privacyPreference = findPreference("termsAndConditions") as Preference
 
         languagePreference.setOnPreferenceChangeListener { _, newValue ->
             Log.d(LogUtil.TAG, "Language selected: $newValue")
@@ -40,6 +46,11 @@ class MySettingFragment : PreferenceFragmentCompat(), CoroutineScope{
 
         deleteModelPreference.setOnPreferenceClickListener {
             deleteLanguageModels()
+            true
+        }
+
+        privacyPreference.setOnPreferenceClickListener {
+            activity?.startActivity(Intent(activity, PrivacyPolicyActivity::class.java))
             true
         }
     }

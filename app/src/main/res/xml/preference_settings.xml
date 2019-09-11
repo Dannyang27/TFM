@@ -53,20 +53,6 @@
             app:allowDividerBelow="false"/>
 
     <Preference
-            android:key="faq"
-            android:title="@string/faqs"
-            app:allowDividerAbove="false"
-            app:allowDividerBelow="false"
-            android:layout="@layout/font_layout"/>
-
-    <Preference
-            android:key="contactus"
-            android:title="@string/contactus"
-            app:allowDividerAbove="false"
-            app:allowDividerBelow="false"
-            android:layout="@layout/font_layout"/>
-
-    <Preference
             android:key="termsAndConditions"
             android:title="@string/termsAndConditions"
             app:allowDividerAbove="false"

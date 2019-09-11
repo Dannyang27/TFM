@@ -28,14 +28,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
 import com.example.tfm.adapter.ChatAdapter
 import com.example.tfm.data.DataRepository
-import com.example.tfm.enum.LanguageCode
 import com.example.tfm.enum.MediaSource
 import com.example.tfm.enum.MessageType
 import com.example.tfm.fragments.EmojiFragment
 import com.example.tfm.fragments.GifFragment
 import com.example.tfm.model.Message
 import com.example.tfm.model.MessageContent
-import com.example.tfm.util.*
+import com.example.tfm.util.FirebaseUtil
+import com.example.tfm.util.KeyboardUtil
+import com.example.tfm.util.LogUtil
+import com.example.tfm.util.isNotLanguagePreference
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.coroutines.*
@@ -123,7 +125,6 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
 
         conversationId = intent.getStringExtra("conversationId")
         receiverUser = intent.getStringExtra("receiverEmail")
-        toast(conversationId)
 
         viewManager = LinearLayoutManager(this)
         viewAdapter = ChatAdapter(messages, this)

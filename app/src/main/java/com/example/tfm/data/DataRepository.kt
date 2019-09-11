@@ -65,8 +65,6 @@ object DataRepository{
                     val firebaseNaturalLanguage = FirebaseNaturalLanguage.getInstance()
                     fromEnglishTranslator = firebaseNaturalLanguage.getTranslator(options)
                     toEnglishTranslator = firebaseNaturalLanguage.getTranslator(optionsTwo)
-
-                    Log.d(LogUtil.TAG, "Model initialised")
                 }else{
                     Log.d(LogUtil.TAG, "Model doesnt exist")
                 }
