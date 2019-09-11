@@ -1,34 +1,8 @@
 package com.example.tfm.util
 
-import android.util.Log
 import com.example.tfm.enum.LanguageCode
-import com.google.firebase.ml.naturallanguage.FirebaseNaturalLanguage
-import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslateLanguage
-import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslator
-import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslatorOptions
 
 object FirebaseTranslator {
-
-    fun downloadModelIfNeeded(targetCode: String): FirebaseTranslator{
-        val targetLanguage = languageCodeFromString(targetCode)
-
-        val options = FirebaseTranslatorOptions.Builder()
-            .setSourceLanguage(FirebaseTranslateLanguage.EN)
-            .setTargetLanguage(targetLanguage)
-            .build()
-
-        val translator = FirebaseNaturalLanguage.getInstance().getTranslator(options)
-
-        translator.downloadModelIfNeeded()
-            .addOnSuccessListener {
-                Log.d(LogUtil.TAG, "Ok to start translating...")
-            }
-            .addOnFailureListener {
-                Log.d(LogUtil.TAG, "Failed model")
-            }
-
-        return translator
-    }
 
     fun languageCodeFromString(languageStr: String): Int{
         var targetLanguage: Int = LanguageCode.ENGLISH.code
@@ -56,6 +30,4 @@ object FirebaseTranslator {
 
         return targetLanguage
     }
-
-
 }

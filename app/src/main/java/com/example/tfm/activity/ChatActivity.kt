@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.preference.PreferenceManager
 import android.provider.MediaStore
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
@@ -36,6 +37,7 @@ import com.example.tfm.model.MessageContent
 import com.example.tfm.util.FirebaseTranslator
 import com.example.tfm.util.FirebaseUtil
 import com.example.tfm.util.KeyboardUtil
+import com.example.tfm.util.LogUtil
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.coroutines.*
@@ -114,6 +116,12 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         emojiEditText = findViewById(R.id.chat_edittext)
         container = findViewById(R.id.emoji_container)
         bottomNavBar = findViewById(R.id.emoji_navbar)
+
+        val translateModel = PreferenceManager.getDefaultSharedPreferences(this).getString("chatLanguage", "Default")
+
+        if(translateModel == "Default"){
+            toast("No translation model provided")
+        }
 
         conversationId = intent.getStringExtra("conversationId")
         receiverUser = intent.getStringExtra("receiverEmail")
