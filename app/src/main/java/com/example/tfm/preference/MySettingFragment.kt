@@ -1,5 +1,7 @@
 package com.example.tfm.preference
 
+import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.preference.ListPreference
@@ -13,15 +15,14 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.ml.naturallanguage.FirebaseNaturalLanguage
 import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslateModelManager
 import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslatorOptions
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.jetbrains.anko.toast
 
 class MySettingFragment : PreferenceFragmentCompat(), CoroutineScope{
     override val coroutineContext = Dispatchers.Default + Job()
     private lateinit var languagePreference: ListPreference
+    private lateinit var dialog: Dialog
+    private var isModelDownloaded = false
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preference_settings, rootKey)
@@ -31,8 +32,9 @@ class MySettingFragment : PreferenceFragmentCompat(), CoroutineScope{
 
         languagePreference.setOnPreferenceChangeListener { _, newValue ->
             Log.d(LogUtil.TAG, "Language selected: $newValue")
+            showDialog(languagePreference.context)
+            isModelDownloaded = false
             downloadLanguageModels(newValue.toString())
-            activity?.toast(getString(R.string.restartapp))
             true
         }
 
@@ -46,13 +48,8 @@ class MySettingFragment : PreferenceFragmentCompat(), CoroutineScope{
     private fun downloadLanguageModels(fromLanguage: String){
         val targetLanguage = FirebaseTranslator.languageCodeFromString(fromLanguage)
 
-        launch {
-            Log.d(LogUtil.TAG, "Downloading English to Target")
+        async {
             downloadLanguageModel(LanguageCode.ENGLISH.code, targetLanguage)
-        }
-
-        launch {
-            Log.d(LogUtil.TAG, "Downloading Target to English")
             downloadLanguageModel(targetLanguage, LanguageCode.ENGLISH.code)
         }
     }
@@ -67,7 +64,12 @@ class MySettingFragment : PreferenceFragmentCompat(), CoroutineScope{
 
         translator.downloadModelIfNeeded()
             .addOnSuccessListener {
-                Log.d(LogUtil.TAG, "Model downloaded")
+                if(isModelDownloaded){
+                    dialog.dismiss()
+                    activity?.toast(getString(R.string.restartapp))
+                }else{
+                    isModelDownloaded = true
+                }
             }
             .addOnFailureListener {
                 Log.d(LogUtil.TAG, "Failed model")
@@ -95,5 +97,13 @@ class MySettingFragment : PreferenceFragmentCompat(), CoroutineScope{
             .addOnFailureListener {
                 Log.d(LogUtil.TAG, "Failed while getting all language models")
             }
+    }
+
+    private fun showDialog(context: Context){
+        dialog = Dialog(context)
+        dialog.setContentView(R.layout.dialog_progressbar)
+        dialog.setCancelable(false)
+        dialog.setCanceledOnTouchOutside(false)
+        dialog.show()
     }
 }
