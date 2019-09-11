@@ -32,6 +32,7 @@ class MySettingFragment : PreferenceFragmentCompat(), CoroutineScope{
         languagePreference.setOnPreferenceChangeListener { _, newValue ->
             Log.d(LogUtil.TAG, "Language selected: $newValue")
             downloadLanguageModels(newValue.toString())
+            activity?.toast(getString(R.string.restartapp))
             true
         }
 
@@ -54,7 +55,6 @@ class MySettingFragment : PreferenceFragmentCompat(), CoroutineScope{
             Log.d(LogUtil.TAG, "Downloading Target to English")
             downloadLanguageModel(targetLanguage, LanguageCode.ENGLISH.code)
         }
-
     }
 
     private fun downloadLanguageModel(fromLanguage: Int, toLanguage: Int){

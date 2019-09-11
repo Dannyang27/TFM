@@ -11,7 +11,6 @@ import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import com.example.tfm.R
 import com.example.tfm.data.DataRepository
-import com.example.tfm.enum.LanguageCode
 import com.example.tfm.model.User
 import com.example.tfm.util.*
 import com.google.firebase.auth.FirebaseAuth
@@ -79,6 +78,7 @@ class LoginActivity : AppCompatActivity(), CoroutineScope {
                     prefs.updateCurrentUser(user, password)
 
                     launch {
+                        DataRepository.initTranslator(this@LoginActivity)
                         FirebaseUtil.loadUserConversation(this@LoginActivity, user)
                         val task = FirebaseFirestore.getInstance().collection(FirebaseUtil.FIREBASE_USER_PATH).document(DataRepository.currentUserEmail).get().await()
                         DataRepository.user = task.toObject(User::class.java)

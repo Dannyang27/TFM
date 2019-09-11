@@ -77,4 +77,5 @@
     <string name="removeModels">Delete language models</string>
     <string name="removeModelSummary">Missing models may be downloaded if needed</string>
     <string name="modelsdeleted">All models deleted</string>
+    <string name="restartapp">Restart to view the changes</string>
 </resources>

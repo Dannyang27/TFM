@@ -28,16 +28,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
 import com.example.tfm.adapter.ChatAdapter
 import com.example.tfm.data.DataRepository
+import com.example.tfm.enum.LanguageCode
 import com.example.tfm.enum.MediaSource
 import com.example.tfm.enum.MessageType
 import com.example.tfm.fragments.EmojiFragment
 import com.example.tfm.fragments.GifFragment
 import com.example.tfm.model.Message
 import com.example.tfm.model.MessageContent
-import com.example.tfm.util.FirebaseTranslator
-import com.example.tfm.util.FirebaseUtil
-import com.example.tfm.util.KeyboardUtil
-import com.example.tfm.util.LogUtil
+import com.example.tfm.util.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.coroutines.*
@@ -146,14 +144,39 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         supportFragmentManager.beginTransaction().add(R.id.emoji_container, gifFragment, "2").hide(gifFragment).commit()
         supportFragmentManager.beginTransaction().add(R.id.emoji_container, emojiFragment, "1").commit()
 
+        initListeners()
+
         messages.clear()
 
         val conversationMessages = DataRepository.getConversation(conversationId)?.messages
-        conversationMessages?.let {
-            updateList(it)
-        }
 
-        initListeners()
+        val pref = PreferenceManager.getDefaultSharedPreferences(this).getString("chatLanguage", "Default")
+        if(pref == "Default"){
+            updateList(conversationMessages!!)
+            Log.d(LogUtil.TAG, "default")
+        }else{
+            val conversationTranslated = mutableListOf<Message>()
+
+            val translator = DataRepository.fromEnglishTranslator
+
+            launch {
+                conversationMessages.let{
+                    it?.forEach { message ->
+                        if(message.body?.fieldThree?.isNotLanguagePreference()!!){
+                            translator?.translate(message.body?.fieldTwo.toString())
+                                ?.addOnSuccessListener { translatedText ->
+                                    val m = message.copy( body = MessageContent(message.body?.fieldOne.toString(), translatedText, message.body?.fieldThree.toString()))
+                                    conversationTranslated.add(m)
+                                    updateList(conversationTranslated)
+                                }
+                        }else{
+                            conversationTranslated.add(message)
+                            updateList(conversationTranslated)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     override fun onResume() {

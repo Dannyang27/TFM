@@ -43,7 +43,6 @@ class ConversationAdapter(private val conversations: MutableList<Conversation>):
             }
         }
 
-        Log.d(LogUtil.TAG, "Conversation lastMessage : ${conversation.lastMessage}")
         holder.lastMessage.text = if(conversation.lastMessage.toString().isNotEmpty()) conversation.lastMessage else holder.image.context.getString(R.string.bethefirst)
         holder.setTime(holder.lastTime, conversation.timestamp)
 

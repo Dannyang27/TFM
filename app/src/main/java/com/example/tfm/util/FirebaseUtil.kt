@@ -11,24 +11,17 @@ import com.example.tfm.activity.MainActivity
 import com.example.tfm.activity.SignupActivity
 import com.example.tfm.activity.UserSearcherActivity
 import com.example.tfm.data.DataRepository
-import com.example.tfm.enum.LanguageCode
 import com.example.tfm.enum.MessageType
 import com.example.tfm.fragments.PrivateFragment
 import com.example.tfm.model.Conversation
 import com.example.tfm.model.Message
 import com.example.tfm.model.User
 import com.example.tfm.room.database.MyRoomDatabase
-import com.google.firebase.FirebaseApp
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ml.naturallanguage.FirebaseNaturalLanguage
-import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslateLanguage
-import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslateModelManager
-import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslateRemoteModel
-import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslatorOptions
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -184,28 +177,17 @@ object FirebaseUtil {
         val fromLanguage = PreferenceManager.getDefaultSharedPreferences(context).getString("chatLanguage", "ENGLISH")
         val languageCode = FirebaseTranslator.languageCodeFromString(fromLanguage)
 
-        val options = FirebaseTranslatorOptions.Builder()
-            .setSourceLanguage(languageCode)
-            .setTargetLanguage(FirebaseTranslateLanguage.EN)
-            .build()
-
-        val translator = FirebaseNaturalLanguage.getInstance().getTranslator(options)
-
-        translator.downloadModelIfNeeded()
-            .addOnSuccessListener {
-                translator.translate(message.body?.fieldOne.toString())
-                    .addOnSuccessListener {
-                        message.body?.fieldOne = it
-                        addMessageFirebase(context, message)
-                        Log.d(LogUtil.TAG, "Message translated: $it")
-                    }
-                    .addOnFailureListener{
-                        Log.d(LogUtil.TAG, "Could not translated text")
-                    }
-
+        val translator = DataRepository.toEnglishTranslator
+        translator?.translate(message.body?.fieldOne.toString())
+            ?.addOnSuccessListener {
+                val textInEnglish = it
+                message.body?.fieldTwo = textInEnglish
+                message.body?.fieldThree = languageCode.toString()
+                addMessageFirebase(context, message)
+                Log.d(LogUtil.TAG, "Text translated: $textInEnglish")
             }
-            .addOnFailureListener {
-                Log.d(LogUtil.TAG, "Could not download language model")
+            ?.addOnFailureListener {
+                Log.d(LogUtil.TAG, "Could not translated text")
             }
     }
 

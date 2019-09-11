@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.tfm.adapter.EmojiGridViewAdapter
+import com.example.tfm.data.DataRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
@@ -127,3 +128,8 @@ fun ImageView.rotate(){
     val bitmapRotated = Bitmap.createBitmap(bitmap, 0,0, bitmap.width, bitmap.height, matrix, true)
     setImageBitmap(bitmapRotated)
 }
+
+fun String.isNotCurrentUser() = !isCurrentUser()
+fun String.isCurrentUser() = this == DataRepository.currentUserEmail
+fun String.isNotLanguagePreference() = !isUserLanguagePreference()
+fun String.isUserLanguagePreference() = toInt() == DataRepository.languagePreferenceCode
