@@ -164,13 +164,20 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
             launch {
                 conversationMessages.let{
                     it?.forEach { message ->
-                        if(message.body?.fieldThree?.isNotLanguagePreference()!!){
-                            translator?.translate(message.body?.fieldTwo.toString())
-                                ?.addOnSuccessListener { translatedText ->
-                                    val m = message.copy( body = MessageContent(message.body?.fieldOne.toString(), translatedText, message.body?.fieldThree.toString()))
-                                    conversationTranslated.add(m)
-                                    updateList(conversationTranslated)
-                                }
+                        if(MessageType.fromInt(message.messageType) == MessageType.MESSAGE){
+                            val isLanguagePreference = message.body?.fieldThree.toString().isUserLanguagePreference()
+
+                            if(!isLanguagePreference){
+                                translator?.translate(message.body?.fieldTwo.toString())
+                                    ?.addOnSuccessListener { translatedText ->
+                                        val m = message.copy( body = MessageContent(message.body?.fieldOne.toString(), translatedText, message.body?.fieldThree.toString()))
+                                        conversationTranslated.add(m)
+                                        updateList(conversationTranslated)
+                                    }
+                            }else{
+                                conversationTranslated.add(message)
+                                updateList(conversationTranslated)
+                            }
                         }else{
                             conversationTranslated.add(message)
                             updateList(conversationTranslated)

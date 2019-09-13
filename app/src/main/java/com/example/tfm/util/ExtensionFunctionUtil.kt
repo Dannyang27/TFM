@@ -136,5 +136,4 @@ fun ImageView.rotate(){
 
 fun String.isNotCurrentUser() = !isCurrentUser()
 fun String.isCurrentUser() = this == DataRepository.currentUserEmail
-fun String.isNotLanguagePreference() = !isUserLanguagePreference()
 fun String.isUserLanguagePreference() = toInt() == DataRepository.languagePreferenceCode

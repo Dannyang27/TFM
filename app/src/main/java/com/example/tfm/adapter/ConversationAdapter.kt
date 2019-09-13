@@ -66,7 +66,7 @@ class ConversationAdapter(private val conversations: MutableList<Conversation>):
     fun updateList( newConversations : MutableList<Conversation>){
         val diffResult: DiffUtil.DiffResult = DiffUtil.calculateDiff(ConversationDiffCallback(conversations, newConversations))
         conversations.clear()
-        conversations.addAll(newConversations)
+        conversations.addAll(newConversations.sortedBy { it.timestamp })
         diffResult.dispatchUpdatesTo(this)
     }
 }

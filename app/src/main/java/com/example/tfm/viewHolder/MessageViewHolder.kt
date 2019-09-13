@@ -1,6 +1,7 @@
 package com.example.tfm.viewHolder
 
 import android.preference.PreferenceManager
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
@@ -81,7 +82,9 @@ class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view), CoroutineSc
 
     private fun initLayout(message: Message){
         val pref = PreferenceManager.getDefaultSharedPreferences(layout.context).getLanguage()
-        if( pref == "Default" || message.body?.fieldThree?.isUserLanguagePreference()!!){
+        val log = message.body?.fieldThree.toString()
+
+        if( pref == "Default" || log.isUserLanguagePreference()){
             this.body.text = message.body?.fieldOne
         }else{
             this.body.text = message.body?.fieldTwo
