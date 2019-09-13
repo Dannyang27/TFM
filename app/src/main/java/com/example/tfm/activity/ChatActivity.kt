@@ -28,16 +28,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
 import com.example.tfm.adapter.ChatAdapter
 import com.example.tfm.data.DataRepository
+import com.example.tfm.enum.LanguageCode
 import com.example.tfm.enum.MediaSource
 import com.example.tfm.enum.MessageType
 import com.example.tfm.fragments.EmojiFragment
 import com.example.tfm.fragments.GifFragment
 import com.example.tfm.model.Message
 import com.example.tfm.model.MessageContent
-import com.example.tfm.util.FirebaseUtil
-import com.example.tfm.util.KeyboardUtil
-import com.example.tfm.util.LogUtil
-import com.example.tfm.util.isNotLanguagePreference
+import com.example.tfm.util.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.coroutines.*
@@ -58,6 +56,9 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
     private val ATTACHMENT_MODE = 102
 
     private var currentPhotoPath: String? = null
+
+
+    private var translateModel: String = ""
 
     private val PERMISSION_ALL = 1
     private val PERMISSIONS = arrayOf(
@@ -117,7 +118,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         container = findViewById(R.id.emoji_container)
         bottomNavBar = findViewById(R.id.emoji_navbar)
 
-        val translateModel = PreferenceManager.getDefaultSharedPreferences(this).getString("chatLanguage", "Default")
+        translateModel = PreferenceManager.getDefaultSharedPreferences(this).getString("chatLanguage", "Default")
 
         if(translateModel == "Default"){
             toast("No translation model provided")
@@ -151,7 +152,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
 
         val conversationMessages = DataRepository.getConversation(conversationId)?.messages
 
-        val pref = PreferenceManager.getDefaultSharedPreferences(this).getString("chatLanguage", "Default")
+        val pref = PreferenceManager.getDefaultSharedPreferences(this).getLanguage()
         if(pref == "Default"){
             updateList(conversationMessages!!)
             Log.d(LogUtil.TAG, "default")
@@ -271,9 +272,11 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         sendButton.setOnClickListener {
             val fieldText = chat_edittext.text.toString()
             if(fieldText.isNotEmpty()){
+                Log.d(LogUtil.TAG, "chatLanguage: $translateModel")
+                val languageCode = FirebaseTranslator.languageCodeFromString(translateModel)
                 val timestamp = System.currentTimeMillis()
                 val message = Message(timestamp, conversationId, DataRepository.currentUserEmail, receiverUser,
-                    MessageType.MESSAGE.value, MessageContent(fieldOne = fieldText), timestamp )
+                    MessageType.MESSAGE.value, MessageContent(fieldOne = fieldText, fieldThree = languageCode.toString()), timestamp )
 
                 FirebaseUtil.addMessageLocal(message)
                 FirebaseUtil.addTranslatedMessage(this, message)

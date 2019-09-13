@@ -89,5 +89,6 @@
         This policy is effective as of 27 September 2019.
     </string>
     <string name="privacypolicyTitle">Privacy Policy</string>
+    <string name="selectLanguagePreference"><![CDATA[Select your language preference in Settings > Language Preferences]]></string>
 
 </resources>

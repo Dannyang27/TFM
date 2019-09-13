@@ -1,6 +1,7 @@
 package com.example.tfm.util
 
 import android.app.Activity
+import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -51,6 +52,10 @@ fun SharedPreferences.getCredentials(): Pair<String, String>{
     val password = getString("currentUserPassword","")
 
     return Pair(email, password)
+}
+
+fun SharedPreferences.getLanguage(): String{
+    return getString("chatLanguage", "Default")
 }
 
 fun String.trimBothSides() = this.trimStart().trimEnd()

@@ -12,10 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
 import com.example.tfm.data.DataRepository
 import com.example.tfm.model.Message
-import com.example.tfm.util.isUserLanguagePreference
-import com.example.tfm.util.setMessageCheckIfSeen
-import com.example.tfm.util.setTime
-import com.example.tfm.util.showUsernameIfGroup
+import com.example.tfm.util.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -83,8 +80,8 @@ class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view), CoroutineSc
     }
 
     private fun initLayout(message: Message){
-        val pref = PreferenceManager.getDefaultSharedPreferences(layout.context).getString("chatLanguage", "Default")
-        if(message.body?.fieldThree?.isUserLanguagePreference()!! || pref == "Default"){
+        val pref = PreferenceManager.getDefaultSharedPreferences(layout.context).getLanguage()
+        if( pref == "Default" || message.body?.fieldThree?.isUserLanguagePreference()!!){
             this.body.text = message.body?.fieldOne
         }else{
             this.body.text = message.body?.fieldTwo
