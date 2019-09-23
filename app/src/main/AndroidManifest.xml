@@ -21,9 +21,11 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".activity.MySettingActivity"
-                android:screenOrientation="portrait"/>
-
+        <activity android:name=".activity.ImageDisplayActivity"></activity>
+        <activity android:name=".activity.PrivacyPolicyActivity" />
+        <activity
+                android:name=".activity.MySettingActivity"
+                android:screenOrientation="portrait" />
         <activity android:name=".activity.ImageToolActivity" />
         <activity
                 android:name=".activity.UserProfileActivity"

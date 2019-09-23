@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
@@ -138,20 +139,22 @@ class ImageToolActivity : AppCompatActivity() {
                 toast("Setting profile photo")
             }else{
                 val timestamp = System.currentTimeMillis()
-                val message = Message(
-                    id = timestamp,
-                    ownerId = ChatActivity.conversationId,
-                    senderName = DataRepository.currentUserEmail,
-                    receiverName = ChatActivity.receiverUser,
-                    messageType = typeValue,
-                    body = MessageContent(fieldOne = content),
-                    timestamp = timestamp,
-                    languageCode = "EN")
+                val message = Message(timestamp, ChatActivity.conversationId, DataRepository.currentUserEmail,
+                    ChatActivity.receiverUser, typeValue, MessageContent(fieldOne = content), timestamp)
 
-                FirebaseUtil.addMessage(this, message)
+                FirebaseUtil.addMessageLocal(message)
+                FirebaseUtil.addMessageFirebase(this, message)
             }
 
             finish()
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?) = when(item?.itemId){
+        android.R.id.home -> {
+            finish()
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 }

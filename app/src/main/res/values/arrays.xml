@@ -19,12 +19,12 @@
     </string-array>
 
     <string-array name="languages">
+        <item>Default</item>
         <item>Arabic</item>
         <item>Danish</item>
         <item>Dutch</item>
         <item>Catalan</item>
-        <item>Chinese (Simplified)</item>
-        <item>English</item>
+        <item>Chinese</item>
         <item>French</item>
         <item>Germany</item>
         <item>Greek</item>

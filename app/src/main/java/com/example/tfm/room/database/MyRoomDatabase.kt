@@ -10,7 +10,6 @@ import androidx.room.RoomDatabase
 import com.example.tfm.activity.ChatActivity
 import com.example.tfm.data.DataRepository
 import com.example.tfm.enum.MessageType
-import com.example.tfm.fragments.PrivateFragment
 import com.example.tfm.model.*
 import com.example.tfm.room.dao.ConversationDAO
 import com.example.tfm.room.dao.MessageDAO

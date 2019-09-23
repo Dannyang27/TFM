@@ -5,22 +5,18 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.tfm.R
-import com.example.tfm.preference.MySettingFragment
 
-class MySettingActivity : AppCompatActivity() {
+class PrivacyPolicyActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_setting)
+        setContentView(R.layout.activity_privacy_policy)
 
-        val toolbar: Toolbar = findViewById(R.id.setting_toolbar)
-        toolbar.title = getString(R.string.setting_title)
-
+        val toolbar: Toolbar = findViewById(R.id.privacy_toolbar)
+        toolbar.title = getString(R.string.privacypolicyTitle)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-
-        supportFragmentManager.beginTransaction().replace(R.id.setting_container, MySettingFragment()).commit()
     }
 
     override fun onOptionsItemSelected(item: MenuItem?) = when(item?.itemId){

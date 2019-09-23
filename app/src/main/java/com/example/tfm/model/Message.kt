@@ -19,8 +19,7 @@ data class Message (@PrimaryKey(autoGenerate = true)
                     var body: MessageContent? = null,
                     var timestamp: Long = -1,
                     var isSent: Boolean = false,
-                    var isReceived: Boolean = false,
-                    var languageCode: String = "")
+                    var isReceived: Boolean = false)
 
 @Entity(tableName = "Gif")
 class GifRoomModel(@PrimaryKey

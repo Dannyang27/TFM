@@ -1,5 +1,5 @@
 package com.example.tfm.model
 
-data class MessageContent (val fieldOne: String = "",
-                           val fieldTwo: String = "",
-                           val fieldThree: String = "")
+data class MessageContent (var fieldOne: String = "",
+                           var fieldTwo: String = "",
+                           var fieldThree: String = "")

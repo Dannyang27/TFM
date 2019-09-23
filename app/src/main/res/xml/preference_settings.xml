@@ -14,6 +14,15 @@
             app:allowDividerBelow="false"
             android:layout="@layout/font_layout"/>
 
+    <Preference
+            android:key="deleteLanguageModels"
+            android:title="@string/removeModels"
+            android:summary="@string/removeModelSummary"
+            app:allowDividerAbove="false"
+            app:allowDividerBelow="false"
+            android:layout="@layout/font_layout"/>
+
+
     <ListPreference
             android:defaultValue="1"
             android:entries="@array/notificationTones"
@@ -42,20 +51,6 @@
             android:summary="@string/enablePopup"
             app:allowDividerAbove="false"
             app:allowDividerBelow="false"/>
-
-    <Preference
-            android:key="faq"
-            android:title="@string/faqs"
-            app:allowDividerAbove="false"
-            app:allowDividerBelow="false"
-            android:layout="@layout/font_layout"/>
-
-    <Preference
-            android:key="contactus"
-            android:title="@string/contactus"
-            app:allowDividerAbove="false"
-            app:allowDividerBelow="false"
-            android:layout="@layout/font_layout"/>
 
     <Preference
             android:key="termsAndConditions"

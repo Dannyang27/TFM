@@ -74,7 +74,7 @@ class ChatAdapter(private val messages : MutableList<Message>, context: Context)
     fun updateList( newMessages : MutableList<Message>){
         val diffResult: DiffUtil.DiffResult = DiffUtil.calculateDiff(MessageDiffCallback(messages, newMessages))
         messages.clear()
-        messages.addAll(newMessages)
+        messages.addAll(newMessages.sortedBy { it.timestamp })
         diffResult.dispatchUpdatesTo(this)
     }
 }

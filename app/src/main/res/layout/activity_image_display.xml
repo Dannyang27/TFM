@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        android:id="@+id/imagedisplay_layout"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".activity.ImageToolActivity"
+        android:background="@color/colorBackground">
+
+
+    <androidx.appcompat.widget.Toolbar
+            android:id="@+id/imagedisplay_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="4dp"
+            app:titleTextColor="@color/colorPrimary"
+            app:theme="@style/ToolbarTheme"/>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imagedisplay_toolbar"
+            android:layout_marginBottom="50dp">
+
+        <ImageView
+                android:id="@+id/imagedisplay_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:srcCompat="@drawable/white_placeholder"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"/>
+
+        <ProgressBar
+                android:id="@+id/imagedisplay_progressbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="?android:attr/progressBarStyle"
+                android:layout_centerInParent="true"
+                android:visibility="gone"/>
+    </RelativeLayout>
+</RelativeLayout>

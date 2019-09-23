@@ -78,6 +78,7 @@ class LoginActivity : AppCompatActivity(), CoroutineScope {
                     prefs.updateCurrentUser(user, password)
 
                     launch {
+                        DataRepository.initTranslator(this@LoginActivity)
                         FirebaseUtil.loadUserConversation(this@LoginActivity, user)
                         val task = FirebaseFirestore.getInstance().collection(FirebaseUtil.FIREBASE_USER_PATH).document(DataRepository.currentUserEmail).get().await()
                         DataRepository.user = task.toObject(User::class.java)

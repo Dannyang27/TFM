@@ -8,7 +8,9 @@ import android.icu.text.SimpleDateFormat
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.preference.PreferenceManager
 import android.provider.MediaStore
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
@@ -26,14 +28,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
 import com.example.tfm.adapter.ChatAdapter
 import com.example.tfm.data.DataRepository
+import com.example.tfm.enum.LanguageCode
 import com.example.tfm.enum.MediaSource
 import com.example.tfm.enum.MessageType
 import com.example.tfm.fragments.EmojiFragment
 import com.example.tfm.fragments.GifFragment
 import com.example.tfm.model.Message
 import com.example.tfm.model.MessageContent
-import com.example.tfm.util.FirebaseUtil
-import com.example.tfm.util.KeyboardUtil
+import com.example.tfm.util.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.coroutines.*
@@ -54,6 +56,9 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
     private val ATTACHMENT_MODE = 102
 
     private var currentPhotoPath: String? = null
+
+
+    private var translateModel: String = ""
 
     private val PERMISSION_ALL = 1
     private val PERMISSIONS = arrayOf(
@@ -113,9 +118,14 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         container = findViewById(R.id.emoji_container)
         bottomNavBar = findViewById(R.id.emoji_navbar)
 
+        translateModel = PreferenceManager.getDefaultSharedPreferences(this).getString("chatLanguage", "Default")
+
+        if(translateModel == "Default"){
+            toast("No translation model provided")
+        }
+
         conversationId = intent.getStringExtra("conversationId")
         receiverUser = intent.getStringExtra("receiverEmail")
-        toast(conversationId)
 
         viewManager = LinearLayoutManager(this)
         viewAdapter = ChatAdapter(messages, this)
@@ -136,14 +146,46 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         supportFragmentManager.beginTransaction().add(R.id.emoji_container, gifFragment, "2").hide(gifFragment).commit()
         supportFragmentManager.beginTransaction().add(R.id.emoji_container, emojiFragment, "1").commit()
 
+        initListeners()
+
         messages.clear()
 
         val conversationMessages = DataRepository.getConversation(conversationId)?.messages
-        conversationMessages?.let {
-            updateList(it)
-        }
 
-        initListeners()
+        val pref = PreferenceManager.getDefaultSharedPreferences(this).getLanguage()
+        if(pref == "Default"){
+            updateList(conversationMessages!!)
+            Log.d(LogUtil.TAG, "default")
+        }else{
+            val conversationTranslated = mutableListOf<Message>()
+
+            val translator = DataRepository.fromEnglishTranslator
+
+            launch {
+                conversationMessages.let{
+                    it?.forEach { message ->
+                        if(MessageType.fromInt(message.messageType) == MessageType.MESSAGE){
+                            val isLanguagePreference = message.body?.fieldThree.toString().isUserLanguagePreference()
+
+                            if(!isLanguagePreference){
+                                translator?.translate(message.body?.fieldTwo.toString())
+                                    ?.addOnSuccessListener { translatedText ->
+                                        val m = message.copy( body = MessageContent(message.body?.fieldOne.toString(), translatedText, message.body?.fieldThree.toString()))
+                                        conversationTranslated.add(m)
+                                        updateList(conversationTranslated)
+                                    }
+                            }else{
+                                conversationTranslated.add(message)
+                                updateList(conversationTranslated)
+                            }
+                        }else{
+                            conversationTranslated.add(message)
+                            updateList(conversationTranslated)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     override fun onResume() {
@@ -237,17 +279,14 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         sendButton.setOnClickListener {
             val fieldText = chat_edittext.text.toString()
             if(fieldText.isNotEmpty()){
+                Log.d(LogUtil.TAG, "chatLanguage: $translateModel")
+                val languageCode = FirebaseTranslator.languageCodeFromString(translateModel)
                 val timestamp = System.currentTimeMillis()
-                val message = Message(
-                    id = timestamp,
-                    ownerId = conversationId,
-                    senderName = DataRepository.currentUserEmail,
-                    receiverName = receiverUser,
-                    messageType = MessageType.MESSAGE.value,
-                    body = MessageContent(fieldOne = fieldText),
-                    timestamp = timestamp,
-                    languageCode = "EN" )
-                FirebaseUtil.addMessage(this, message)
+                val message = Message(timestamp, conversationId, DataRepository.currentUserEmail, receiverUser,
+                    MessageType.MESSAGE.value, MessageContent(fieldOne = fieldText, fieldThree = languageCode.toString()), timestamp )
+
+                FirebaseUtil.addMessageLocal(message)
+                FirebaseUtil.addTranslatedMessage(this, message)
                 chat_edittext.text.clear()
             }
         }

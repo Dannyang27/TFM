@@ -1,5 +1,7 @@
 package com.example.tfm.viewHolder
 
+import android.preference.PreferenceManager
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
@@ -11,12 +13,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
 import com.example.tfm.data.DataRepository
 import com.example.tfm.model.Message
-import com.example.tfm.util.setMessageCheckIfSeen
-import com.example.tfm.util.setTime
-import com.example.tfm.util.showUsernameIfGroup
+import com.example.tfm.util.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import org.jetbrains.anko.displayMetrics
 
-class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
+class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view), CoroutineScope{
+    override val coroutineContext = Dispatchers.Default + Job()
+
+    private var isOriginalText = false
+
     private val username: EmojiTextView = view.findViewById(R.id.message_username)
     private val layout : RelativeLayout = view.findViewById(R.id.message_layout)
     private val placeholder: LinearLayout = view.findViewById(R.id.message_placeholder)
@@ -27,12 +34,13 @@ class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
     fun initMessageViewHolder(message: Message){
         if(message.senderName == DataRepository.currentUserEmail){
             setSenderViewHolder()
+            initLayout(message)
         }else{
             setReceiverViewHolder()
+            initLayout(message)
             username.showUsernameIfGroup(true, message.senderName)
         }
 
-        setBody(message.body?.fieldOne.toString())
         setTime(time, message.timestamp)
         setMessageCheckIfSeen(time, message.isSent)
     }
@@ -43,7 +51,7 @@ class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
             RelativeLayout.LayoutParams.MATCH_PARENT,
             RelativeLayout.LayoutParams.WRAP_CONTENT)
 
-        layoutParams.setMargins(getDpValue(60), 0, 0, 0)
+        layoutParams.setMargins(getDpValue(40), 0, 0, 0)
         layout.layoutParams = layoutParams
         layout.gravity = Gravity.END
         placeholder.background = context.getDrawable(R.drawable.sender_message)
@@ -61,7 +69,7 @@ class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
             RelativeLayout.LayoutParams.MATCH_PARENT,
             RelativeLayout.LayoutParams.WRAP_CONTENT)
 
-        layoutParams.setMargins(0, 0, getDpValue(60), 0)
+        layoutParams.setMargins(0, 0, getDpValue(40), 0)
         layout.layoutParams = layoutParams
         layout.gravity = Gravity.START
         placeholder.background = context.getDrawable(R.drawable.receiver_message)
@@ -72,8 +80,24 @@ class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
         time.gravity = Gravity.START
     }
 
-    private fun setBody( body: String){
-        this.body.text = body
+    private fun initLayout(message: Message){
+        val pref = PreferenceManager.getDefaultSharedPreferences(layout.context).getLanguage()
+        val log = message.body?.fieldThree.toString()
+
+        if( pref == "Default" || log.isUserLanguagePreference()){
+            this.body.text = message.body?.fieldOne
+        }else{
+            this.body.text = message.body?.fieldTwo
+
+            itemView.setOnClickListener {
+                if(isOriginalText){
+                    this.body.text = message.body?.fieldTwo
+                }else{
+                    this.body.text = message.body?.fieldOne
+                }
+                isOriginalText = !isOriginalText
+            }
+        }
     }
 
     private fun getDpValue(dpValue: Int): Int = (dpValue * layout.context.displayMetrics.density).toInt()

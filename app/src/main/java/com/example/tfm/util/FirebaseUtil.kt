@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.preference.PreferenceManager
-import android.transition.ChangeTransform
 import android.util.Log
 import android.widget.TextView
 import com.example.tfm.activity.ChatActivity
@@ -128,6 +127,7 @@ object FirebaseUtil {
                 val roomDatabase = MyRoomDatabase.getMyRoomDatabase(context)
                 roomDatabase?.addConversation(conversation)
 
+                DataRepository.addConversation(conversation.id, conversation)
                 PrivateFragment.updateConversation(DataRepository.getConversations())
 
                 var userToCreate: String?
@@ -151,12 +151,14 @@ object FirebaseUtil {
         }
     }
 
-    fun addMessage(context: Context, message: Message){
+    fun addMessageLocal(message: Message){
         val newMessages: MutableList<Message> = mutableListOf()
         newMessages.addAll(ChatActivity.messages)
         newMessages.add(message)
         ChatActivity.updateList(newMessages)
+    }
 
+    fun addMessageFirebase(context: Context, message: Message){
         database.child(FIREBASE_PRIVATE_CHAT_PATH).child(message.ownerId)
             .child(FIREBASE_PRIVATE_MESSAGE_PATH)
             .child(message.timestamp.toString())
@@ -168,6 +170,24 @@ object FirebaseUtil {
             }
             .addOnFailureListener {
                 Log.d(LogUtil.TAG, "Error while sending message")
+            }
+    }
+
+    fun addTranslatedMessage(context: Context, message: Message){
+        val fromLanguage = PreferenceManager.getDefaultSharedPreferences(context).getString("chatLanguage", "ENGLISH")
+        val languageCode = FirebaseTranslator.languageCodeFromString(fromLanguage)
+
+        val translator = DataRepository.toEnglishTranslator
+        translator?.translate(message.body?.fieldOne.toString())
+            ?.addOnSuccessListener {
+                val textInEnglish = it
+                message.body?.fieldTwo = textInEnglish
+                message.body?.fieldThree = languageCode.toString()
+                addMessageFirebase(context, message)
+                Log.d(LogUtil.TAG, "Text translated: $textInEnglish")
+            }
+            ?.addOnFailureListener {
+                Log.d(LogUtil.TAG, "Could not translated text")
             }
     }
 

@@ -1,6 +1,7 @@
 package com.example.tfm.util
 
 import android.app.Activity
+import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -18,6 +19,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.tfm.adapter.EmojiGridViewAdapter
+import com.example.tfm.data.DataRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
@@ -50,6 +52,10 @@ fun SharedPreferences.getCredentials(): Pair<String, String>{
     val password = getString("currentUserPassword","")
 
     return Pair(email, password)
+}
+
+fun SharedPreferences.getLanguage(): String{
+    return getString("chatLanguage", "Default")
 }
 
 fun String.trimBothSides() = this.trimStart().trimEnd()
@@ -127,3 +133,7 @@ fun ImageView.rotate(){
     val bitmapRotated = Bitmap.createBitmap(bitmap, 0,0, bitmap.width, bitmap.height, matrix, true)
     setImageBitmap(bitmapRotated)
 }
+
+fun String.isNotCurrentUser() = !isCurrentUser()
+fun String.isCurrentUser() = this == DataRepository.currentUserEmail
+fun String.isUserLanguagePreference() = toInt() == DataRepository.languagePreferenceCode

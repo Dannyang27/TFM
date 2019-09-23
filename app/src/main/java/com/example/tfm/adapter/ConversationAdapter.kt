@@ -1,7 +1,7 @@
 package com.example.tfm.adapter
 
 import android.content.Intent
-import android.util.Log
+import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -12,13 +12,14 @@ import com.example.tfm.data.DataRepository
 import com.example.tfm.diffUtil.ConversationDiffCallback
 import com.example.tfm.model.Conversation
 import com.example.tfm.room.database.MyRoomDatabase
-import com.example.tfm.util.LogUtil
+import com.example.tfm.util.getLanguage
 import com.example.tfm.util.setTime
 import com.example.tfm.viewHolder.ConversationViewHolder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import org.jetbrains.anko.toast
 
 class ConversationAdapter(private val conversations: MutableList<Conversation>): RecyclerView.Adapter<ConversationViewHolder>(), CoroutineScope{
     private val job = Job()
@@ -43,16 +44,20 @@ class ConversationAdapter(private val conversations: MutableList<Conversation>):
             }
         }
 
-        Log.d(LogUtil.TAG, "Conversation lastMessage : ${conversation.lastMessage}")
         holder.lastMessage.text = if(conversation.lastMessage.toString().isNotEmpty()) conversation.lastMessage else holder.image.context.getString(R.string.bethefirst)
         holder.setTime(holder.lastTime, conversation.timestamp)
 
         holder.itemView.setOnClickListener {
-            val context = holder.itemView.context
-            val intent = Intent(context, ChatActivity::class.java)
-            intent.putExtra("conversationId", conversation.id)
-            intent.putExtra( "receiverEmail", holder.email)
-            context.startActivity(intent)
+            val context = it.context
+            val languagePreference = PreferenceManager.getDefaultSharedPreferences(context).getLanguage()
+            if(languagePreference == "Default"){
+                context.toast(context.getString(R.string.selectLanguagePreference))
+            }else{
+                val intent = Intent(context, ChatActivity::class.java)
+                intent.putExtra("conversationId", conversation.id)
+                intent.putExtra( "receiverEmail", holder.email)
+                context.startActivity(intent)
+            }
         }
     }
 
@@ -61,7 +66,7 @@ class ConversationAdapter(private val conversations: MutableList<Conversation>):
     fun updateList( newConversations : MutableList<Conversation>){
         val diffResult: DiffUtil.DiffResult = DiffUtil.calculateDiff(ConversationDiffCallback(conversations, newConversations))
         conversations.clear()
-        conversations.addAll(newConversations)
+        conversations.addAll(newConversations.sortedBy { it.timestamp })
         diffResult.dispatchUpdatesTo(this)
     }
 }

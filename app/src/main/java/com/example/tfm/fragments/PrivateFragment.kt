@@ -12,7 +12,6 @@ import com.example.tfm.adapter.ConversationAdapter
 import com.example.tfm.data.DataRepository
 import com.example.tfm.divider.HorizontalDivider
 import com.example.tfm.model.Conversation
-import com.example.tfm.room.database.MyRoomDatabase
 
 class PrivateFragment : Fragment(){
 
