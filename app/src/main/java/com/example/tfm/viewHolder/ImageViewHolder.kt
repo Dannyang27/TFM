@@ -1,5 +1,6 @@
 package com.example.tfm.viewHolder
 
+import android.net.Uri
 import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
@@ -10,7 +11,10 @@ import androidx.emoji.widget.EmojiTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.tfm.R
+import com.example.tfm.activity.ImageDisplayActivity
+import com.example.tfm.activity.ImageToolActivity
 import com.example.tfm.data.DataRepository
+import com.example.tfm.enum.MediaSource
 import com.example.tfm.enum.MessageType
 import com.example.tfm.model.Message
 import com.example.tfm.util.setMessageCheckIfSeen
@@ -66,6 +70,11 @@ class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view){
             Glide.with(layout.context)
                 .load(bitmap)
                 .into(media)
+
+            media.setOnClickListener {
+                ImageDisplayActivity.launchBitmap(layout.context, bitmap, MediaSource.GALLERY)
+            }
+
         }else{
             val url = message.body?.fieldOne
             Glide.with(layout.context)
@@ -73,10 +82,10 @@ class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view){
                 .centerCrop()
                 .load(url)
                 .into(media)
-        }
 
-        media.setOnClickListener {
-            layout.context.toast("Image pressed, expanding...")
+            media.setOnClickListener {
+                ImageDisplayActivity.launchGif(layout.context, Uri.parse(url), MediaSource.GIF)
+            }
         }
     }
 
