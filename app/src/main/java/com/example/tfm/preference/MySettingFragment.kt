@@ -8,11 +8,13 @@ import android.util.Log
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreference
 import com.example.tfm.R
 import com.example.tfm.activity.PrivacyPolicyActivity
 import com.example.tfm.enum.LanguageCode
 import com.example.tfm.util.FirebaseTranslator
 import com.example.tfm.util.LogUtil
+import com.example.tfm.util.vibratePhone
 import com.google.firebase.FirebaseApp
 import com.google.firebase.ml.naturallanguage.FirebaseNaturalLanguage
 import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslateModelManager
@@ -34,6 +36,7 @@ class MySettingFragment : PreferenceFragmentCompat(), CoroutineScope{
 
         languagePreference =  findPreference("chatLanguage") as ListPreference
         val deleteModelPreference = findPreference("deleteLanguageModels") as Preference
+        val vibrationMode = findPreference("vibrate") as SwitchPreference
         val privacyPreference = findPreference("termsAndConditions") as Preference
 
         languagePreference.setOnPreferenceChangeListener { _, newValue ->
@@ -46,6 +49,14 @@ class MySettingFragment : PreferenceFragmentCompat(), CoroutineScope{
 
         deleteModelPreference.setOnPreferenceClickListener {
             deleteLanguageModels()
+            true
+        }
+
+        vibrationMode.setOnPreferenceClickListener {
+            if(vibrationMode.isChecked) {
+                vibratePhone()
+            }
+
             true
         }
 

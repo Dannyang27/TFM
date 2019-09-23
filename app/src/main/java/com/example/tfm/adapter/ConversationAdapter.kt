@@ -1,18 +1,17 @@
 package com.example.tfm.adapter
 
-import android.content.Intent
 import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
-import com.example.tfm.activity.ChatActivity
 import com.example.tfm.data.DataRepository
 import com.example.tfm.diffUtil.ConversationDiffCallback
 import com.example.tfm.model.Conversation
 import com.example.tfm.room.database.MyRoomDatabase
 import com.example.tfm.util.getLanguage
+import com.example.tfm.util.launchChatActivity
 import com.example.tfm.util.setTime
 import com.example.tfm.viewHolder.ConversationViewHolder
 import kotlinx.coroutines.CoroutineScope
@@ -53,10 +52,7 @@ class ConversationAdapter(private val conversations: MutableList<Conversation>):
             if(languagePreference == "Default"){
                 context.toast(context.getString(R.string.selectLanguagePreference))
             }else{
-                val intent = Intent(context, ChatActivity::class.java)
-                intent.putExtra("conversationId", conversation.id)
-                intent.putExtra( "receiverEmail", holder.email)
-                context.startActivity(intent)
+                context.launchChatActivity(conversation.id, holder.email, true)
             }
         }
     }

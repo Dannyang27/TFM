@@ -1,13 +1,11 @@
 package com.example.tfm.room.database
 
 import android.content.Context
-import android.content.Intent
 import android.util.Log
 import androidx.emoji.widget.EmojiTextView
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.tfm.activity.ChatActivity
 import com.example.tfm.data.DataRepository
 import com.example.tfm.enum.MessageType
 import com.example.tfm.model.*
@@ -17,6 +15,7 @@ import com.example.tfm.room.dao.UserDAO
 import com.example.tfm.util.FirebaseUtil
 import com.example.tfm.util.LogUtil
 import com.example.tfm.util.addConversation
+import com.example.tfm.util.launchChatActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
@@ -105,12 +104,7 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
             if(conversation != null){
                 Log.d(LogUtil.TAG, "Conversation exists: " + conversation?.id)
                 var receiver = getReceiverUser(conversation?.id.toString())
-
-                val intent = Intent(context, ChatActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                intent.putExtra("conversationId", conversation?.id)
-                intent.putExtra("receiverEmail", receiver)
-                context.startActivity(intent)
+                context.launchChatActivity(conversation?.id.toString(), receiver, false)
             }else{
                 Log.d(LogUtil.TAG, "Conversation does not exist, do some stuff")
                 createNewConversation(context, email, newEmail)
@@ -204,6 +198,7 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
         val hashcode = userOneHash.toString().plus(userTwoHash.toString())
         val conversation = Conversation(hashcode, userOne.email, userTwo.email, mutableListOf(), "",System.currentTimeMillis(), mutableListOf(), true )
 
+        //TODO check if conversation already exist
         firestore.addConversation(context, conversation)
     }
 

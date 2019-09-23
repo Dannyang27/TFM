@@ -97,7 +97,7 @@ object FirebaseUtil {
         val userConversations = MyRoomDatabase.getMyRoomDatabase(context)?.conversationDao()?.getUserConversations(user)!!
 
         if(userConversations.isEmpty()){
-            launchMainActivity(context)
+            context.launchMainActivity()
         }else{
             userConversations.forEach {
                 val conversation = it
@@ -112,7 +112,7 @@ object FirebaseUtil {
                             conversation.messages.add(message)
                         }
                         DataRepository.addConversation(it.id, conversation)
-                        launchMainActivity(context)
+                        context.launchMainActivity()
                     }
                 })
             }
@@ -143,11 +143,7 @@ object FirebaseUtil {
                     Log.d(LogUtil.TAG, "User added to room: ${user.toString()}")
                 }
 
-                val intent = Intent(context, ChatActivity::class.java)
-                intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
-                intent.putExtra("conversationId", conversation.id)
-                intent.putExtra("receiverEmail", userToCreate.toString())
-                context.startActivity(intent)
+                context.launchChatActivity(conversation.id, userToCreate.toString(), false)
         }
     }
 
@@ -269,10 +265,3 @@ fun FirebaseFirestore.updateCurrentUser(context: Context, user: User, input: Str
             Log.d(LogUtil.TAG, "Error while updating user")
         }
 }
-
-private fun launchMainActivity(context: Context){
-    val intent = Intent(context, MainActivity::class.java)
-    intent.flags = FLAG_ACTIVITY_NEW_TASK
-    context.startActivity(intent)
-}
-

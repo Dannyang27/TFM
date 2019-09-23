@@ -34,16 +34,14 @@
             app:allowDividerBelow="false"
             android:layout="@layout/font_layout"/>
 
-    <ListPreference
-            android:defaultValue="1"
-            android:entries="@array/vibrate"
-            android:entryValues="@array/notificationTones"
-            android:key="list_preference_1"
+    <SwitchPreference
+            android:defaultValue="true"
+            android:key="vibrate"
             android:title="@string/vibrateTitle"
-            android:summary="@string/defaultText"
+            android:summary="@string/vibrateSummary"
             app:allowDividerAbove="false"
-            app:allowDividerBelow="false"
-            android:layout="@layout/font_layout"/>
+            app:allowDividerBelow="false"/>
+
     <SwitchPreference
             android:defaultValue="true"
             android:key="popup"

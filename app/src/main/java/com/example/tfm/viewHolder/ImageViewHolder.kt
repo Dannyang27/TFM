@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.tfm.R
 import com.example.tfm.activity.ImageDisplayActivity
-import com.example.tfm.activity.ImageToolActivity
 import com.example.tfm.data.DataRepository
 import com.example.tfm.enum.MediaSource
 import com.example.tfm.enum.MessageType
@@ -22,7 +21,6 @@ import com.example.tfm.util.setTime
 import com.example.tfm.util.showUsernameIfGroup
 import com.example.tfm.util.toBitmap
 import org.jetbrains.anko.displayMetrics
-import org.jetbrains.anko.toast
 
 class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view){
     private val layout: RelativeLayout = view.findViewById(R.id.media_layout)

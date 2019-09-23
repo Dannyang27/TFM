@@ -28,7 +28,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
 import com.example.tfm.adapter.ChatAdapter
 import com.example.tfm.data.DataRepository
-import com.example.tfm.enum.LanguageCode
 import com.example.tfm.enum.MediaSource
 import com.example.tfm.enum.MessageType
 import com.example.tfm.fragments.EmojiFragment

@@ -1,7 +1,6 @@
 package com.example.tfm.viewHolder
 
 import android.preference.PreferenceManager
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.ImageView

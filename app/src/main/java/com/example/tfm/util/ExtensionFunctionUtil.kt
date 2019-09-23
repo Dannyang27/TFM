@@ -8,6 +8,9 @@ import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.provider.MediaStore
 import android.util.Base64
 import android.view.View
@@ -89,6 +92,15 @@ suspend fun Fragment.loadGridview( gridview: GridView, emojiList: ArrayList<Stri
         withContext(Dispatchers.Main) {
             gridview.adapter = adapter
         }
+    }
+}
+
+fun Fragment.vibratePhone(){
+    val vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+    if(Build.VERSION.SDK_INT >= 26){
+        vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))
+    } else {
+        vibrator.vibrate(200)
     }
 }
 
