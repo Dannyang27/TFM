@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.preference.PreferenceManager
 import android.provider.MediaStore
+import android.util.Log
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
@@ -27,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
 import com.example.tfm.adapter.ChatAdapter
 import com.example.tfm.data.DataRepository
+import com.example.tfm.enum.LanguageDrawable
 import com.example.tfm.enum.MediaSource
 import com.example.tfm.enum.MessageType
 import com.example.tfm.fragments.EmojiFragment
@@ -117,8 +119,15 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         bottomNavBar = findViewById(R.id.emoji_navbar)
         flag = findViewById(R.id.chat_flag)
 
-
         translateModel = PreferenceManager.getDefaultSharedPreferences(this).getString("chatLanguage", "Default")
+
+        Log.d(LogUtil.TAG, "TranslatedModel: $translateModel")
+
+        flag.setImageDrawable(getDrawable(translateModel.getDrawable()))
+
+        flag.setOnClickListener {
+            toast(translateModel)
+        }
 
         if(translateModel == "Default"){
             toast("No translation model provided")

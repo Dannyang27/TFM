@@ -21,8 +21,10 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.tfm.R
 import com.example.tfm.adapter.EmojiGridViewAdapter
 import com.example.tfm.data.DataRepository
+import com.example.tfm.enum.LanguageDrawable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
@@ -57,7 +59,7 @@ fun SharedPreferences.getCredentials(): Pair<String, String>{
     return Pair(email, password)
 }
 
-fun SharedPreferences.getLanguage(): String{
+fun SharedPreferences.getLanguage(): String?{
     return getString("chatLanguage", "Default")
 }
 
@@ -97,11 +99,7 @@ suspend fun Fragment.loadGridview( gridview: GridView, emojiList: ArrayList<Stri
 
 fun Fragment.vibratePhone(){
     val vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-    if(Build.VERSION.SDK_INT >= 26){
-        vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))
-    } else {
-        vibrator.vibrate(200)
-    }
+    vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))
 }
 
 fun ProgressBar.start(){
@@ -117,8 +115,8 @@ fun Activity.loadImageFromUri(uri: String?): Bitmap{
     var file = ""
 
     uri?.let{
-        val uri = Uri.parse(it)
-        val cursor = contentResolver.query(uri, filePath, null, null, null)
+        val url = Uri.parse(it)
+        val cursor = contentResolver.query(url, filePath, null, null, null)
         if(cursor!!.moveToFirst()){
             val columnIndex = cursor.getColumnIndex(filePath[0])
             file = cursor.getString(columnIndex)
@@ -155,5 +153,23 @@ fun Long.getConversation(friendId: Long): String{
         return this.toString().plus(friendId)
     }else{
         return friendId.toString().plus(this)
+    }
+}
+
+fun String.getDrawable(): Int{
+    when(this.toUpperCase()){
+        LanguageDrawable.ARABIC.name -> return LanguageDrawable.ARABIC.drawable
+        LanguageDrawable.DUTCH.name -> return LanguageDrawable.DUTCH.drawable
+        LanguageDrawable.CATALAN.name -> return LanguageDrawable.CATALAN.drawable
+        LanguageDrawable.CHINESE.name -> return LanguageDrawable.CHINESE.drawable
+        LanguageDrawable.FRENCH.name -> return LanguageDrawable.FRENCH.drawable
+        LanguageDrawable.GERMANY.name -> return LanguageDrawable.GERMANY.drawable
+        LanguageDrawable.INDIAN.name -> return LanguageDrawable.INDIAN.drawable
+        LanguageDrawable.ITALIAN.name -> return LanguageDrawable.ITALIAN.drawable
+        LanguageDrawable.JAPANESE.name -> return LanguageDrawable.JAPANESE.drawable
+        LanguageDrawable.KOREAN.name -> return LanguageDrawable.KOREAN.drawable
+        LanguageDrawable.RUSSIAN.name -> return LanguageDrawable.RUSSIAN.drawable
+        LanguageDrawable.SPANISH.name -> return LanguageDrawable.SPANISH.drawable
+        else -> { return R.drawable.white_placeholder }
     }
 }
