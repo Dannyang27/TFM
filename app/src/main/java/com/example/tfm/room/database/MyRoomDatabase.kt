@@ -12,13 +12,8 @@ import com.example.tfm.model.*
 import com.example.tfm.room.dao.ConversationDAO
 import com.example.tfm.room.dao.MessageDAO
 import com.example.tfm.room.dao.UserDAO
-import com.example.tfm.util.FirebaseUtil
 import com.example.tfm.util.LogUtil
-import com.example.tfm.util.addConversation
-import com.example.tfm.util.launchChatActivity
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.*
-import kotlinx.coroutines.tasks.await
 
 @Database(entities = [User::class, Conversation::class, Message::class, GifRoomModel::class, ImageRoomModel::class, LocationRoomModel::class], version = 1, exportSchema = false)
 abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{

@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.os.Environment
 import android.preference.PreferenceManager
 import android.provider.MediaStore
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
@@ -153,7 +152,6 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         val pref = PreferenceManager.getDefaultSharedPreferences(this).getLanguage()
         if(pref == "Default"){
             updateList(conversationMessages!!)
-            Log.d(LogUtil.TAG, "default")
         }else{
             val conversationTranslated = mutableListOf<Message>()
 
@@ -276,7 +274,6 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         sendButton.setOnClickListener {
             val fieldText = chat_edittext.text.toString()
             if(fieldText.isNotEmpty()){
-                Log.d(LogUtil.TAG, "chatLanguage: $translateModel")
                 val languageCode = FirebaseTranslator.languageCodeFromString(translateModel)
                 val timestamp = System.currentTimeMillis()
                 val message = Message(timestamp, conversationId, DataRepository.currentUserEmail, receiverUser,
@@ -345,6 +342,8 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         if(container.visibility == View.VISIBLE){
             closeSpecialKeyboard()
         }else{
+            supportFragmentManager.beginTransaction().remove(emojiFragment).commit()
+            supportFragmentManager.beginTransaction().remove(gifFragment).commit()
             startActivity(Intent(this, MainActivity::class.java))
         }
     }

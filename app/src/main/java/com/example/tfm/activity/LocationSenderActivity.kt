@@ -7,6 +7,7 @@ import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.SearchView
 import android.widget.TextView
@@ -48,7 +49,11 @@ class LocationSenderActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMa
         setContentView(R.layout.activity_location_sender)
 
         val toolbar: Toolbar =  findViewById(R.id.location_sender_toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
         toolbarTitle = findViewById(R.id.location_toolbar_title)
+
         val searchView: SearchView = findViewById(R.id.location_searchview)
         val locationSendButton: Button = findViewById(R.id.location_sender_button)
         locationAddressTv = findViewById(R.id.location_sender_address)
@@ -178,5 +183,13 @@ class LocationSenderActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMa
         address = geocoder.getFromLocation(location.latitude, location.longitude, 1)[0]
         locationAddressTv.text = address.getAddressLine(0)
         toolbarTitle.text = address.adminArea
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?) = when(item?.itemId){
+        android.R.id.home -> {
+            finish()
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 }

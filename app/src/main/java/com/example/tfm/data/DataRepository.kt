@@ -35,9 +35,7 @@ object DataRepository{
         }
     }
 
-    fun addMessage(message: Message){
-        conversations[message.ownerId]?.messages?.add(message)
-    }
+    fun addMessage(message: Message) = conversations[message.ownerId]?.messages?.add(message)
 
     fun getConversation(key: String) = conversations[key]
 

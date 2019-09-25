@@ -1,6 +1,5 @@
 package com.example.tfm.viewHolder
 
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.emoji.widget.EmojiTextView
@@ -8,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
 import com.example.tfm.data.DataRepository
 import com.example.tfm.room.database.MyRoomDatabase
-import com.example.tfm.util.LogUtil
 import com.example.tfm.util.createNewConversation
 import com.example.tfm.util.getConversation
 import com.example.tfm.util.launchChatActivity
@@ -33,7 +31,6 @@ class UserSearchViewHolder(view : View) : RecyclerView.ViewHolder(view), Corouti
         view.setOnClickListener {
             val userId = DataRepository.user?.id?.toLong()
             val conversationId = userId?.getConversation(id)
-            username.context.toast(conversationId.toString())
             launch {
                 val firestore = FirebaseFirestore.getInstance()
                 val conversation = firestore.getConversation(conversationId.toString())

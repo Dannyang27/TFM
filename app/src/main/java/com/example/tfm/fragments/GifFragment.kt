@@ -30,7 +30,6 @@ class GifFragment : Fragment(), CoroutineScope{
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_gif, container, false)
-
         val gridview = view.findViewById(R.id.gif_gridview) as GridView
         val searchView = view.findViewById(R.id.gif_searchview) as SearchView
 
