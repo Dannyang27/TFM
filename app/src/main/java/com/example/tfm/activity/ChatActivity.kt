@@ -146,7 +146,6 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         supportFragmentManager.beginTransaction().add(R.id.emoji_container, emojiFragment, "1").commit()
 
         initListeners()
-
         messages.clear()
 
         val conversationMessages = DataRepository.getConversation(conversationId)?.messages
@@ -165,7 +164,6 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
                     it?.forEach { message ->
                         if(MessageType.fromInt(message.messageType) == MessageType.MESSAGE){
                             val isLanguagePreference = message.body?.fieldThree.toString().isUserLanguagePreference()
-
                             if(!isLanguagePreference){
                                 translator?.translate(message.body?.fieldTwo.toString())
                                     ?.addOnSuccessListener { translatedText ->

@@ -97,22 +97,6 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
         }
     }
 
-    fun getMutualConversation(context: Context, email: String, newEmail: String): Conversation?{
-        var conversation: Conversation? = null
-        launch {
-            conversation = conversationDao().getMutualConversation(email, newEmail)
-            if(conversation != null){
-                Log.d(LogUtil.TAG, "Conversation exists: " + conversation?.id)
-                var receiver = getReceiverUser(conversation?.id.toString())
-                context.launchChatActivity(conversation?.id.toString(), receiver, false)
-            }else{
-                Log.d(LogUtil.TAG, "Conversation does not exist, do some stuff")
-                createNewConversation(context, email, newEmail)
-            }
-        }
-        return conversation
-    }
-
     fun deleteConversation(id: String){
         launch {
             conversationDao().deleteConversationById(id)
@@ -175,31 +159,6 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
         }else{
             return conversation.userOne.toString()
         }
-    }
-
-    private suspend fun createNewConversation(context: Context, email: String, newEmail: String){
-        val firestore = FirebaseFirestore.getInstance()
-
-        val taskOne = firestore.collection(FirebaseUtil.FIREBASE_USER_PATH).document(email).get().await()
-        val userOne = taskOne.toObject(User::class.java)
-
-        val taskTwo = firestore.collection(FirebaseUtil.FIREBASE_USER_PATH).document(newEmail).get().await()
-        val userTwo = taskTwo.toObject(User::class.java)
-
-        var userOneHash = userOne?.id?.toLong()!!
-        var userTwoHash = userTwo?.id?.toLong()!!
-
-        if(userOneHash > userTwoHash){
-            val tmp = userOneHash
-            userOneHash = userTwoHash
-            userTwoHash = tmp
-        }
-
-        val hashcode = userOneHash.toString().plus(userTwoHash.toString())
-        val conversation = Conversation(hashcode, userOne.email, userTwo.email, mutableListOf(), "",System.currentTimeMillis(), mutableListOf(), true )
-
-        //TODO check if conversation already exist
-        firestore.addConversation(context, conversation)
     }
 
     fun addGif(gif: GifRoomModel){

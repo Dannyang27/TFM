@@ -123,10 +123,8 @@ object FirebaseUtil {
         database.child(FIREBASE_PRIVATE_CHAT_PATH)
             .child(conversation.id).setValue(conversation)
             .addOnSuccessListener {
-                Log.d(LogUtil.TAG, "Conversation added into FirebaseFirestore")
                 val roomDatabase = MyRoomDatabase.getMyRoomDatabase(context)
                 roomDatabase?.addConversation(conversation)
-
                 DataRepository.addConversation(conversation.id, conversation)
                 PrivateFragment.updateConversation(DataRepository.getConversations())
 
@@ -264,4 +262,37 @@ fun FirebaseFirestore.updateCurrentUser(context: Context, user: User, input: Str
         .addOnFailureListener {
             Log.d(LogUtil.TAG, "Error while updating user")
         }
+}
+
+suspend fun FirebaseFirestore.getConversation(conversationId: String): Conversation?{
+    val task = collection(FirebaseUtil.FIREBASE_PRIVATE_CHAT_PATH)
+        .document(conversationId)
+        .get().await()
+
+    val conversation = task.toObject(Conversation::class.java)
+    return conversation
+}
+
+suspend fun FirebaseFirestore.createNewConversation(context: Context, email: String, newEmail: String){
+    val firestore = FirebaseFirestore.getInstance()
+
+    val taskOne = firestore.collection(FirebaseUtil.FIREBASE_USER_PATH).document(email).get().await()
+    val userOne = taskOne.toObject(User::class.java)
+
+    val taskTwo = firestore.collection(FirebaseUtil.FIREBASE_USER_PATH).document(newEmail).get().await()
+    val userTwo = taskTwo.toObject(User::class.java)
+
+    var userOneHash = userOne?.id?.toLong()!!
+    var userTwoHash = userTwo?.id?.toLong()!!
+
+    if(userOneHash > userTwoHash){
+        val tmp = userOneHash
+        userOneHash = userTwoHash
+        userTwoHash = tmp
+    }
+
+    val hashcode = userOneHash.toString().plus(userTwoHash.toString())
+    val conversation = Conversation(hashcode, userOne.email, userTwo.email, mutableListOf(), "",System.currentTimeMillis(), mutableListOf(), true )
+
+    firestore.addConversation(context, conversation)
 }

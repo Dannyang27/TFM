@@ -149,3 +149,11 @@ fun ImageView.rotate(){
 fun String.isNotCurrentUser() = !isCurrentUser()
 fun String.isCurrentUser() = this == DataRepository.currentUserEmail
 fun String.isUserLanguagePreference() = toInt() == DataRepository.languagePreferenceCode
+
+fun Long.getConversation(friendId: Long): String{
+    if(this < friendId){
+        return this.toString().plus(friendId)
+    }else{
+        return friendId.toString().plus(this)
+    }
+}
