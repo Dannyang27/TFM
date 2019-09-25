@@ -5,11 +5,10 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.RelativeLayout
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.bumptech.glide.Glide
@@ -20,8 +19,11 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.tfm.R
 import com.example.tfm.enum.MediaSource
+import com.example.tfm.util.LogUtil
 import com.example.tfm.util.start
 import com.example.tfm.util.stop
+import com.google.firebase.ml.vision.FirebaseVision
+import com.google.firebase.ml.vision.common.FirebaseVisionImage
 
 class ImageDisplayActivity : AppCompatActivity() {
 
@@ -29,6 +31,15 @@ class ImageDisplayActivity : AppCompatActivity() {
     private lateinit var toolbar: Toolbar
     private lateinit var media: ImageView
     private lateinit var progressBar: ProgressBar
+
+    private lateinit var labelLayout: LinearLayout
+    private lateinit var labelOne: TextView
+    private lateinit var labelTwo: TextView
+    private lateinit var labelThree: TextView
+    private lateinit var confOne: TextView
+    private lateinit var confTwo: TextView
+    private lateinit var confThree: TextView
+
 
     private var isToolbarVisible = true
 
@@ -57,14 +68,23 @@ class ImageDisplayActivity : AppCompatActivity() {
         setContentView(R.layout.activity_image_display)
 
         layout = findViewById(R.id.imagedisplay_layout)
+        labelLayout = findViewById(R.id.imagedisplay_labels)
+        labelOne = findViewById(R.id.labelOne)
+        labelTwo = findViewById(R.id.labelTwo)
+        labelThree = findViewById(R.id.labelThree)
+        confOne = findViewById(R.id.confidenceOne)
+        confTwo = findViewById(R.id.confidenceTwo)
+        confThree = findViewById(R.id.confidenceThree)
 
         layout.setOnClickListener {
             if(isToolbarVisible){
                 isToolbarVisible = false
                 toolbar.visibility = View.INVISIBLE
+                labelLayout.visibility = View.INVISIBLE
             }else{
                 isToolbarVisible = true
                 toolbar.visibility = View.VISIBLE
+                labelLayout.visibility = View.VISIBLE
             }
         }
 
@@ -89,6 +109,28 @@ class ImageDisplayActivity : AppCompatActivity() {
         Glide.with(this)
             .load(bitmap)
             .into(media)
+
+        val image = FirebaseVisionImage.fromBitmap(bitmap!!)
+        val labeler = FirebaseVision.getInstance().getOnDeviceImageLabeler()
+
+        labeler.processImage(image)
+            .addOnSuccessListener {
+                it.forEachIndexed { index, label ->
+                    if(index == 1){
+                        labelOne.text = "${label.text}:"
+                        confOne.text = label.confidence.toString()
+                    }else if(index == 2){
+                        labelTwo.text = "${label.text}:"
+                        confTwo.text = label.confidence.toString()
+                    }else if(index == 3){
+                        labelThree.text = "${label.text}:"
+                        confThree.text = label.confidence.toString()
+                    }
+                }
+            }
+            .addOnFailureListener {
+                Log.d(LogUtil.TAG, "failure")
+            }
 
         progressBar.stop()
     }
