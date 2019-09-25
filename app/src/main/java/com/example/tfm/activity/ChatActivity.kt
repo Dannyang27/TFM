@@ -10,11 +10,11 @@ import android.os.Bundle
 import android.os.Environment
 import android.preference.PreferenceManager
 import android.provider.MediaStore
-import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
@@ -49,13 +49,17 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
     private lateinit var container: FrameLayout
     private lateinit var bottomNavBar: BottomNavigationView
 
+    private val emojiFragment = EmojiFragment.newInstance()
+    private val gifFragment = GifFragment.newInstance()
+    private var activeFragment: Fragment = emojiFragment
+
+    private lateinit var flag: ImageView
+
     private val GALLERY_CODE = 100
     private val CAMERA_MODE = 101
     private val ATTACHMENT_MODE = 102
 
     private var currentPhotoPath: String? = null
-
-
     private var translateModel: String = ""
 
     private val PERMISSION_ALL = 1
@@ -71,9 +75,6 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         lateinit var emojiEditText: EmojiEditText
         lateinit var viewAdapter : ChatAdapter
         lateinit var conversationId: String
-        val emojiFragment = EmojiFragment.newInstance()
-        val gifFragment = GifFragment.newInstance()
-        var activeFragment: Fragment = emojiFragment
         lateinit var receiverUser: String
 
         fun updateList(newMessages: MutableList<Message>){
@@ -109,12 +110,13 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         super.onCreate(savedInstanceState)
         initEmoji()
         setContentView(R.layout.activity_chat)
-        setSupportActionBar(chat_toolbar)
         displayBackArrow()
 
         emojiEditText = findViewById(R.id.chat_edittext)
         container = findViewById(R.id.emoji_container)
         bottomNavBar = findViewById(R.id.emoji_navbar)
+        flag = findViewById(R.id.chat_flag)
+
 
         translateModel = PreferenceManager.getDefaultSharedPreferences(this).getString("chatLanguage", "Default")
 
@@ -143,6 +145,10 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         bottomNavBar.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         supportFragmentManager.beginTransaction().add(R.id.emoji_container, gifFragment, "2").hide(gifFragment).commit()
         supportFragmentManager.beginTransaction().add(R.id.emoji_container, emojiFragment, "1").commit()
+
+
+
+
 
         initListeners()
         messages.clear()
@@ -188,25 +194,9 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         KeyboardUtil.hideKeyboard(this)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.chat_menu, menu)
-        return true
-    }
-
     override fun onOptionsItemSelected(item: MenuItem?) = when(item?.itemId) {
-
         android.R.id.home -> {
             startActivity(Intent(this, MainActivity::class.java))
-            true
-        }
-
-        R.id.call -> {
-            toast("Phonecalling...")
-            true
-        }
-
-        R.id.videocall -> {
-            toast("Videocalling...")
             true
         }
 
@@ -214,6 +204,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
     }
 
     private fun displayBackArrow(){
+        setSupportActionBar(chat_toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
     }

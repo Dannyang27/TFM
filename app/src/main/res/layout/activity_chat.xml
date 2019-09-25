@@ -18,32 +18,41 @@
                     android:background="@color/colorPrimary"
                     android:backgroundTint="@color/colorChatToolbar"
                     android:theme="@style/ToolbarTheme">
-
-                <LinearLayout
+                <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="center_horizontal"
-                        android:layout_marginLeft="?android:attr/actionBarSize" >
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                            android:id="@+id/chat_profile_image"
-                            android:layout_width="76dp"
-                            android:layout_height="76dp"
-                            android:src="@drawable/dwight"
-                            android:padding="10dp"/>
-
-                    <TextView
-                            android:text="@string/username_sample"
-                            android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                    <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/chat_toolbar_title"
-                            android:textSize="@dimen/text_large"
-                            android:textColor="@color/colorPrimaryText"
-                            android:textStyle="bold"
-                            android:paddingBottom="20dp"/>
-                </LinearLayout>
+                            android:orientation="vertical"
+                            android:gravity="center_horizontal"
+                            android:paddingRight="?android:attr/actionBarSize">
 
+                        <de.hdodenhof.circleimageview.CircleImageView
+                                android:id="@+id/chat_profile_image"
+                                android:layout_width="76dp"
+                                android:layout_height="76dp"
+                                android:src="@drawable/dwight"
+                                android:padding="10dp"/>
+
+                        <TextView
+                                android:text="@string/username_sample"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/chat_toolbar_title"
+                                android:textSize="@dimen/text_large"
+                                android:textColor="@color/colorPrimaryText"
+                                android:textStyle="bold"
+                                android:paddingBottom="20dp"/>
+                    </LinearLayout>
+                    <ImageView
+                            android:id="@+id/chat_flag"
+                            android:layout_alignParentRight="true"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_margin="10dp"
+                            android:src="@drawable/es"/>
+                </RelativeLayout>
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
