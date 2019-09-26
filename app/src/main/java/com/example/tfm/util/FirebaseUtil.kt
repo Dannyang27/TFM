@@ -202,7 +202,7 @@ object FirebaseUtil {
             MessageType.GIF -> lastMessage = "[GIF]"
             MessageType.IMAGE -> lastMessage = "[Image]"
             MessageType.ATTACHMENT -> lastMessage = "[Attachment]"
-            MessageType.LOCATION -> lastMessage = message.body?.fieldTwo
+            MessageType.LOCATION -> lastMessage = "[Location]"
         }
 
         database.child(FIREBASE_PRIVATE_CHAT_PATH)
