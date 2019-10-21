@@ -11,14 +11,10 @@ import com.example.tfm.util.EmojiUtil
 import com.example.tfm.util.loadGridview
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 
-class FoodEmojiFragment : Fragment(), CoroutineScope {
-
-    private val job = Job()
-    override val coroutineContext get() = Dispatchers.Default + job
+class FoodEmojiFragment : Fragment() {
 
     companion object {
         fun newInstance(): FoodEmojiFragment = FoodEmojiFragment()
@@ -28,7 +24,7 @@ class FoodEmojiFragment : Fragment(), CoroutineScope {
         val view = inflater.inflate(R.layout.emoji_food, container, false)
         val gridview = view.findViewById(R.id.food_gridview) as GridView
 
-        launch {
+        CoroutineScope(Dispatchers.IO).launch {
             loadGridview(gridview, EmojiUtil.getFoodEmoji())
         }
 

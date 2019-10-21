@@ -8,12 +8,12 @@ import android.widget.BaseAdapter
 import android.widget.Button
 import com.example.tfm.R
 import com.example.tfm.activity.ChatActivity
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class EmojiGridViewAdapter : BaseAdapter, CoroutineScope{
-
-    private val job = Job()
-    override val coroutineContext get() = Dispatchers.Default + job
+class EmojiGridViewAdapter : BaseAdapter{
 
     var emojis = arrayListOf<String>()
     var context : Context? = null
@@ -42,7 +42,7 @@ class EmojiGridViewAdapter : BaseAdapter, CoroutineScope{
 
         val imgBtn = emojiView.findViewById(R.id.emoji_button) as Button
 
-        launch {
+        CoroutineScope(Dispatchers.IO).launch {
             withContext(Dispatchers.IO) {
                 val emoji = emojis[position]
 

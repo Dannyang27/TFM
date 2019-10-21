@@ -14,14 +14,9 @@ import com.example.tfm.retrofit.RetrofitClient
 import com.example.tfm.util.KeyboardUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class GifFragment : Fragment(), CoroutineScope{
-
-    private val job = Job()
-    override val coroutineContext get() = Dispatchers.Default + job
-
+class GifFragment : Fragment(){
     companion object{
         fun newInstance(): GifFragment = GifFragment()
         lateinit var adapter: GifAdapter
@@ -36,14 +31,14 @@ class GifFragment : Fragment(), CoroutineScope{
         adapter = GifAdapter(activity?.applicationContext!!, gifImages)
         gridview.adapter = adapter
 
-        launch {
+        CoroutineScope(Dispatchers.IO).launch {
             RetrofitClient.getGifsFromGiphy()
         }
 
         searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 KeyboardUtil.hideKeyboard(activity!!)
-                launch {
+                CoroutineScope(Dispatchers.IO).launch {
                     RetrofitClient.getSearchGifFromGiphy(query!!)
                 }
                 return true

@@ -16,15 +16,11 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.jetbrains.anko.toast
 
-class LoginActivity : AppCompatActivity(), CoroutineScope {
-    private val job = Job()
-    override val coroutineContext = Dispatchers.Default + job
-
+class LoginActivity : AppCompatActivity() {
     private lateinit var prefs: SharedPreferences
     private var auth: FirebaseAuth? = null
 
@@ -67,7 +63,7 @@ class LoginActivity : AppCompatActivity(), CoroutineScope {
                     Log.d(LogUtil.TAG, "Signed in successfully")
                     prefs.updateCurrentUser(user, password)
 
-                    launch {
+                    CoroutineScope(Dispatchers.IO).launch {
                         DataRepository.initTranslator(this@LoginActivity)
                         FirebaseUtil.loadUserConversation(this@LoginActivity, user)
                         val task = FirebaseFirestore.getInstance().collection(FirebaseUtil.FIREBASE_USER_PATH).document(DataRepository.currentUserEmail).get().await()

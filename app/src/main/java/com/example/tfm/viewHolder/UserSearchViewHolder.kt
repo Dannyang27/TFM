@@ -12,14 +12,10 @@ import com.example.tfm.util.getConversation
 import com.example.tfm.util.launchChatActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.jetbrains.anko.toast
 
-class UserSearchViewHolder(view : View) : RecyclerView.ViewHolder(view), CoroutineScope{
-    private val job = Job()
-    override val coroutineContext = job + Main
+class UserSearchViewHolder(view : View) : RecyclerView.ViewHolder(view){
 
     lateinit var email: String
     var id: Long = -1
@@ -31,7 +27,7 @@ class UserSearchViewHolder(view : View) : RecyclerView.ViewHolder(view), Corouti
         view.setOnClickListener {
             val userId = DataRepository.user?.id?.toLong()
             val conversationId = userId?.getConversation(id)
-            launch {
+            CoroutineScope(Dispatchers.IO).launch {
                 val firestore = FirebaseFirestore.getInstance()
                 val conversation = firestore.getConversation(conversationId.toString())
                 if(conversation != null){

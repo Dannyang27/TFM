@@ -14,7 +14,6 @@ import com.example.tfm.divider.HorizontalDivider
 import com.example.tfm.model.Conversation
 
 class PrivateFragment : Fragment(){
-
     private lateinit var viewManager: RecyclerView.LayoutManager
 
     companion object{

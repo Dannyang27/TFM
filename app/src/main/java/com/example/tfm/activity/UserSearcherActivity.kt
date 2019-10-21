@@ -11,13 +11,8 @@ import com.example.tfm.divider.HorizontalDivider
 import com.example.tfm.model.User
 import com.example.tfm.util.FirebaseUtil
 import kotlinx.android.synthetic.main.activity_user_searcher.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 
-class UserSearcherActivity : AppCompatActivity(), CoroutineScope {
-    private val job = Job()
-    override val coroutineContext get() = Dispatchers.Default + job
+class UserSearcherActivity : AppCompatActivity() {
 
     private lateinit var viewManager: RecyclerView.LayoutManager
 

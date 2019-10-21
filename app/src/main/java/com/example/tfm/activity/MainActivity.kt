@@ -18,14 +18,9 @@ import com.example.tfm.util.clearCredential
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import org.jetbrains.anko.toast
 
-class MainActivity : AppCompatActivity(), CoroutineScope {
-    private val job = Job()
-    override val coroutineContext = Dispatchers.IO + job
+class MainActivity : AppCompatActivity() {
 
     private val privateFragment = PrivateFragment.newInstance()
     private val groupChatFragment = GroupChatFragment.newInstance()

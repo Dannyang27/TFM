@@ -41,8 +41,7 @@ import java.io.File
 import java.io.IOException
 import java.util.*
 
-class ChatActivity : AppCompatActivity(), CoroutineScope {
-    override val coroutineContext get() = Dispatchers.Default + Job()
+class ChatActivity : AppCompatActivity(){
 
     private lateinit var viewManager: RecyclerView.LayoutManager
 
@@ -158,7 +157,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
 
             val translator = DataRepository.fromEnglishTranslator
 
-            launch {
+            CoroutineScope(Dispatchers.IO).launch {
                 conversationMessages.let{
                     it?.forEach { message ->
                         if(MessageType.fromInt(message.messageType) == MessageType.MESSAGE){
@@ -342,7 +341,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
     private fun showSpecialKeyboard(){
         KeyboardUtil.hideKeyboard(this)
 
-        launch {
+        CoroutineScope(Dispatchers.IO).launch {
             // avoids overslapping from soft keyboard and emoji keyboard
             delay(50L)
             withContext(Dispatchers.Main) {

@@ -16,14 +16,10 @@ import com.example.tfm.util.setTime
 import com.example.tfm.viewHolder.ConversationViewHolder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.toast
 
-class ConversationAdapter(private val conversations: MutableList<Conversation>): RecyclerView.Adapter<ConversationViewHolder>(), CoroutineScope{
-    private val job = Job()
-    override val coroutineContext = Dispatchers.IO + job
-
+class ConversationAdapter(private val conversations: MutableList<Conversation>): RecyclerView.Adapter<ConversationViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConversationViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.viewholder_conversation, parent, false)
         return ConversationViewHolder(view)
@@ -33,7 +29,7 @@ class ConversationAdapter(private val conversations: MutableList<Conversation>):
         val conversation = conversations[position]
         val roomDatabase =  MyRoomDatabase.getMyRoomDatabase(holder.name.context)
 
-        launch {
+        CoroutineScope(Dispatchers.IO).launch {
             if(conversation.userOne == DataRepository.currentUserEmail){
                 roomDatabase?.getUserNameByEmail(holder.name, conversation.userTwo.toString())
                 holder.email = conversation.userTwo.toString()

@@ -11,13 +11,9 @@ import com.example.tfm.util.EmojiUtil
 import com.example.tfm.util.loadGridview
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class AnimalEmojiFragment : Fragment(), CoroutineScope {
-
-    private val job = Job()
-    override val coroutineContext get() = Dispatchers.Default + job
+class AnimalEmojiFragment : Fragment() {
 
     companion object {
         fun newInstance(): AnimalEmojiFragment = AnimalEmojiFragment()
@@ -27,7 +23,7 @@ class AnimalEmojiFragment : Fragment(), CoroutineScope {
         val view = inflater.inflate(R.layout.emoji_animal, container, false)
         val gridview = view.findViewById(R.id.animal_gridview) as GridView
 
-        launch {
+        CoroutineScope(Dispatchers.IO).launch {
             loadGridview(gridview, EmojiUtil.getEmojiAnimals())
         }
 

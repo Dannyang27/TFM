@@ -20,13 +20,11 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_user_profile.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.jetbrains.anko.toast
 
-class UserProfileActivity : AppCompatActivity(), CoroutineScope {
-    override val coroutineContext = Dispatchers.Default + Job()
+class UserProfileActivity : AppCompatActivity() {
 
     private lateinit var firestore: FirebaseFirestore
 
@@ -54,7 +52,7 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
         }
 
         displayArrowBack(toolbar)
-        launch { initUserProfile() }
+        CoroutineScope(Dispatchers.IO).launch { initUserProfile() }
     }
 
     private fun displayArrowBack(toolbar: Toolbar){
@@ -99,7 +97,7 @@ class UserProfileActivity : AppCompatActivity(), CoroutineScope {
 
         acceptBtn.setOnClickListener {
             if(input.text.isNotEmpty()){
-                launch{
+                CoroutineScope(Dispatchers.IO).launch{
                     val task = firestore.collection(FirebaseUtil.FIREBASE_USER_PATH).document(DataRepository.currentUserEmail).get().await()
 
                     if(isUsername){

@@ -11,13 +11,9 @@ import com.example.tfm.util.EmojiUtil
 import com.example.tfm.util.loadGridview
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class SportEmojiFragment : Fragment(), CoroutineScope {
-
-    private val job = Job()
-    override val coroutineContext get() = Dispatchers.Default + job
+class SportEmojiFragment : Fragment() {
 
     companion object {
         fun newInstance(): SportEmojiFragment = SportEmojiFragment()
@@ -27,7 +23,7 @@ class SportEmojiFragment : Fragment(), CoroutineScope {
         val view = inflater.inflate(R.layout.emoji_sport, container, false)
         val gridview = view.findViewById(R.id.sport_gridview) as GridView
 
-        launch {
+        CoroutineScope(Dispatchers.IO).launch {
             loadGridview(gridview, EmojiUtil.getSportEmoji())
         }
 
