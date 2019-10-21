@@ -18,7 +18,6 @@ class EmojiGridViewAdapter : BaseAdapter, CoroutineScope{
     var emojis = arrayListOf<String>()
     var context : Context? = null
 
-
     constructor(context: Context, emojis: ArrayList<String>){
         this.context = context
         this.emojis = emojis

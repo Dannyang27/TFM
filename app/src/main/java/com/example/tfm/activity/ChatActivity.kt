@@ -14,8 +14,6 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
-import android.widget.FrameLayout
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
@@ -28,7 +26,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
 import com.example.tfm.adapter.ChatAdapter
 import com.example.tfm.data.DataRepository
-import com.example.tfm.enum.LanguageDrawable
 import com.example.tfm.enum.MediaSource
 import com.example.tfm.enum.MessageType
 import com.example.tfm.fragments.EmojiFragment
@@ -48,21 +45,17 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
     override val coroutineContext get() = Dispatchers.Default + Job()
 
     private lateinit var viewManager: RecyclerView.LayoutManager
-    private lateinit var container: FrameLayout
-    private lateinit var bottomNavBar: BottomNavigationView
 
     private val emojiFragment = EmojiFragment.newInstance()
     private val gifFragment = GifFragment.newInstance()
     private var activeFragment: Fragment = emojiFragment
-
-    private lateinit var flag: ImageView
 
     private val GALLERY_CODE = 100
     private val CAMERA_MODE = 101
     private val ATTACHMENT_MODE = 102
 
     private var currentPhotoPath: String? = null
-    private var translateModel: String = ""
+    private var translateModel: String? = null
 
     private val PERMISSION_ALL = 1
     private val PERMISSIONS = arrayOf(
@@ -73,8 +66,8 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
 
     companion object{
         var messages = mutableListOf<Message>()
-        lateinit var messagesRecyclerView: RecyclerView
         lateinit var emojiEditText: EmojiEditText
+        lateinit var messagesRecyclerView: RecyclerView
         lateinit var viewAdapter : ChatAdapter
         lateinit var conversationId: String
         lateinit var receiverUser: String
@@ -115,18 +108,15 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         displayBackArrow()
 
         emojiEditText = findViewById(R.id.chat_edittext)
-        container = findViewById(R.id.emoji_container)
-        bottomNavBar = findViewById(R.id.emoji_navbar)
-        flag = findViewById(R.id.chat_flag)
 
         translateModel = PreferenceManager.getDefaultSharedPreferences(this).getString("chatLanguage", "Default")
 
         Log.d(LogUtil.TAG, "TranslatedModel: $translateModel")
 
-        flag.setImageDrawable(getDrawable(translateModel.getDrawable()))
+        chat_flag.setImageDrawable(getDrawable(translateModel?.getDrawable()!!))
 
-        flag.setOnClickListener {
-            toast(translateModel)
+        chat_flag.setOnClickListener {
+            toast(translateModel!!)
         }
 
         if(translateModel == "Default"){
@@ -151,13 +141,9 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
             }
         }
 
-        bottomNavBar.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        emoji_navbar.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         supportFragmentManager.beginTransaction().add(R.id.emoji_container, gifFragment, "2").hide(gifFragment).commit()
         supportFragmentManager.beginTransaction().add(R.id.emoji_container, emojiFragment, "1").commit()
-
-
-
-
 
         initListeners()
         messages.clear()
@@ -274,7 +260,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
         sendButton.setOnClickListener {
             val fieldText = chat_edittext.text.toString()
             if(fieldText.isNotEmpty()){
-                val languageCode = FirebaseTranslator.languageCodeFromString(translateModel)
+                val languageCode = FirebaseTranslator.languageCodeFromString(translateModel!!)
                 val timestamp = System.currentTimeMillis()
                 val message = Message(timestamp, conversationId, DataRepository.currentUserEmail, receiverUser,
                     MessageType.MESSAGE.value, MessageContent(fieldOne = fieldText, fieldThree = languageCode.toString()), timestamp )
@@ -339,7 +325,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
     }
 
     override fun onBackPressed() {
-        if(container.visibility == View.VISIBLE){
+        if(emoji_container.visibility == View.VISIBLE){
             closeSpecialKeyboard()
         }else{
             supportFragmentManager.beginTransaction().remove(emojiFragment).commit()
@@ -349,8 +335,8 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
     }
 
     private fun closeSpecialKeyboard(){
-        container.visibility = View.GONE
-        bottomNavBar.visibility = View.GONE
+        emoji_container.visibility = View.GONE
+        emoji_navbar.visibility = View.GONE
     }
 
     private fun showSpecialKeyboard(){
@@ -360,8 +346,8 @@ class ChatActivity : AppCompatActivity(), CoroutineScope {
             // avoids overslapping from soft keyboard and emoji keyboard
             delay(50L)
             withContext(Dispatchers.Main) {
-                container.visibility = View.VISIBLE
-                bottomNavBar.visibility = View.VISIBLE
+                emoji_container.visibility = View.VISIBLE
+                emoji_navbar.visibility = View.VISIBLE
             }
         }
     }

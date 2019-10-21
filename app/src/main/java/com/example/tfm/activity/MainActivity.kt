@@ -6,9 +6,7 @@ import android.preference.PreferenceManager
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.SearchView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.emoji.bundled.BundledEmojiCompatConfig
 import androidx.emoji.text.EmojiCompat
 import androidx.fragment.app.Fragment
@@ -18,8 +16,8 @@ import com.example.tfm.fragments.PrivateFragment
 import com.example.tfm.room.database.MyRoomDatabase
 import com.example.tfm.util.clearCredential
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -32,9 +30,6 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     private val privateFragment = PrivateFragment.newInstance()
     private val groupChatFragment = GroupChatFragment.newInstance()
     private var activeFragment: Fragment = privateFragment
-    private lateinit var toolbar: Toolbar
-    private lateinit var searchView: SearchView
-    private lateinit var fab: FloatingActionButton
 
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -62,12 +57,9 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         initEmoji()
         setContentView(R.layout.activity_main)
 
-        toolbar = findViewById(R.id.my_toolbar)
-        val toolbarTitle = findViewById<TextView>(R.id.toolbar_title)
-        toolbarTitle.text = getString(R.string.messages)
-        setSupportActionBar(toolbar)
+        toolbar_title.text = getString(R.string.messages)
+        setSupportActionBar(my_toolbar)
 
-        fab = findViewById(R.id.fab)
         fab.setOnClickListener {
             if(activeFragment is PrivateFragment){
                 val intent = Intent(this, UserSearcherActivity::class.java)
@@ -77,8 +69,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             }
         }
 
-        searchView = findViewById(R.id.search_chat)
-        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+        search_chat.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return true
             }

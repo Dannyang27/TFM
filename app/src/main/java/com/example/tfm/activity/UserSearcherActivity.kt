@@ -10,6 +10,7 @@ import com.example.tfm.adapter.UserSearchAdapter
 import com.example.tfm.divider.HorizontalDivider
 import com.example.tfm.model.User
 import com.example.tfm.util.FirebaseUtil
+import kotlinx.android.synthetic.main.activity_user_searcher.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -18,8 +19,6 @@ class UserSearcherActivity : AppCompatActivity(), CoroutineScope {
     private val job = Job()
     override val coroutineContext get() = Dispatchers.Default + job
 
-    private lateinit var searchView: SearchView
-    private lateinit var recyclerview: RecyclerView
     private lateinit var viewManager: RecyclerView.LayoutManager
 
     private val cacheUserList = mutableListOf<User>()
@@ -37,8 +36,7 @@ class UserSearcherActivity : AppCompatActivity(), CoroutineScope {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_searcher)
 
-        searchView = findViewById(R.id.search_user)
-        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+        search_user.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return true
             }
@@ -56,7 +54,7 @@ class UserSearcherActivity : AppCompatActivity(), CoroutineScope {
         users = mutableListOf()
         viewAdapter = UserSearchAdapter(users)
 
-        recyclerview = findViewById<RecyclerView>(R.id.seach_recyclerview).apply {
+        seach_recyclerview.apply {
             setHasFixedSize(true)
             addItemDecoration(HorizontalDivider(this.context))
             layoutManager = viewManager
