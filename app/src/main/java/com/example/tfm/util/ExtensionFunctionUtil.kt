@@ -13,7 +13,6 @@ import android.os.Vibrator
 import android.provider.MediaStore
 import android.util.Base64
 import android.view.View
-import android.widget.GridView
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -21,11 +20,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.tfm.R
-import com.example.tfm.adapter.EmojiGridViewAdapter
 import com.example.tfm.data.DataRepository
 import com.example.tfm.enum.LanguageDrawable
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 
 fun TextView.showUsernameIfGroup( isPrivateChat: Boolean, username: String){
@@ -84,15 +80,6 @@ fun RecyclerView.ViewHolder.setTime(time: TextView, timestamp: Long){
 fun RecyclerView.ViewHolder.setMessageCheckIfSeen(time: TextView, isSent: Boolean){
     if(isSent){
         time.text.toString().addCheck()
-    }
-}
-
-suspend fun Fragment.loadGridview( gridview: GridView, emojiList: ArrayList<String>){
-    withContext(Dispatchers.IO) {
-        val adapter = EmojiGridViewAdapter(activity?.applicationContext!!, emojiList)
-        withContext(Dispatchers.Main) {
-            gridview.adapter = adapter
-        }
     }
 }
 

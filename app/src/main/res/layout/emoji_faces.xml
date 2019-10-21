@@ -3,13 +3,9 @@
         android:layout_width="match_parent"
         android:layout_height="268dp">
 
-    <GridView
-            android:id="@+id/face_gridview"
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/face_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:numColumns="9"
-            android:horizontalSpacing="0dp"
-            android:verticalSpacing="0dp"
             android:stretchMode="columnWidth"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
