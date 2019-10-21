@@ -1,5 +1,7 @@
 package com.example.tfm.util
 
+import com.example.tfm.enum.EmojiTab
+
 object EmojiUtil {
 
     private val faceRaw = arrayListOf(
@@ -91,13 +93,25 @@ object EmojiUtil {
         "🇦🇪","🇬🇧","🏴󠁧󠁢󠁥󠁮󠁧󠁿","🏴󠁧󠁢󠁳󠁣󠁴󠁿","🏴󠁧󠁢󠁷󠁬󠁳󠁿","🇺🇳","🇺🇸","🇺🇾","🇺🇿","🇻🇺","🇻🇦","🇻🇪","🇻🇳","🇼🇫","🇪🇭",
         "🇾🇪","🇿🇲","🇿🇼")
 
-    fun getEmojiMostUsed() = arrayListOf<String>()
-    fun getEmojiFaces() = faceRaw
-    fun getEmojiAnimals() = animalRaw
-    fun getFoodEmoji() = foodRaw
-    fun getSportEmoji() = sportRaw
-    fun getVehicleEmoji() = vehicleRaw
-    fun getIdeaEmoji() = ideaRaw
-    fun getCharacterEmoji() = characterRaw
-    fun getFlagEmoji() = flagRaw
+    private fun getEmojiMostUsed() = arrayListOf<String>()
+    private fun getEmojiFaces() = faceRaw
+    private fun getEmojiAnimals() = animalRaw
+    private fun getFoodEmoji() = foodRaw
+    private fun getSportEmoji() = sportRaw
+    private fun getVehicleEmoji() = vehicleRaw
+    private fun getIdeaEmoji() = ideaRaw
+    private fun getCharacterEmoji() = characterRaw
+    private fun getFlagEmoji() = flagRaw
+
+    fun getEmojiByName(emojiTab: EmojiTab): ArrayList<String> = when(emojiTab){
+        EmojiTab.MOST_USED ->  getEmojiMostUsed()
+        EmojiTab.FACE -> getEmojiFaces()
+        EmojiTab.ANIMAL -> getEmojiAnimals()
+        EmojiTab.FOOD -> getFoodEmoji()
+        EmojiTab.SPORT-> getSportEmoji()
+        EmojiTab.VEHICLE -> getVehicleEmoji()
+        EmojiTab.IDEA -> getIdeaEmoji()
+        EmojiTab.CHARACTER -> getCharacterEmoji()
+        EmojiTab.FLAG -> getFlagEmoji()
+    }
 }
