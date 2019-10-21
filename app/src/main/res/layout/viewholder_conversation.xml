@@ -45,6 +45,7 @@
                 android:id="@+id/last_message_chat"
                 android:ellipsize="end"
                 android:maxLines="2"
+                android:textColor="#ff000000"
                 android:textSize="@dimen/text_medium"/>
     </LinearLayout>
 </LinearLayout>
