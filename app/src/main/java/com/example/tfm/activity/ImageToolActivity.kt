@@ -8,12 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -27,18 +22,12 @@ import com.example.tfm.enum.MessageType
 import com.example.tfm.model.Message
 import com.example.tfm.model.MessageContent
 import com.example.tfm.util.*
+import kotlinx.android.synthetic.main.activity_image_tool.*
 import org.jetbrains.anko.toast
 
 class ImageToolActivity : AppCompatActivity() {
 
-    private lateinit var toolbar: Toolbar
-    private lateinit var image: ImageView
-    private lateinit var cancelBtn: Button
-    private lateinit var rotateBtn: ImageButton
-    private lateinit var acceptBtn: Button
-    private lateinit var progressBar: ProgressBar
     private lateinit var bitmap: Bitmap
-
     private lateinit var content: String
     private var isProfilePhoto = false
 
@@ -67,14 +56,7 @@ class ImageToolActivity : AppCompatActivity() {
         val uri = intent.getStringExtra("imageUrl")
         isProfilePhoto = intent.getBooleanExtra("isProfilePhoto", false)
 
-        toolbar = findViewById(R.id.tool_toolbar)
-        image = findViewById(R.id.tool_image)
-        cancelBtn = findViewById(R.id.tool_cancel)
-        rotateBtn = findViewById(R.id.tool_rotate)
-        acceptBtn = findViewById(R.id.tool_accept)
-        progressBar = findViewById(R.id.tool_progressbar)
-
-        setSupportActionBar(toolbar)
+        setSupportActionBar(tool_toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
@@ -82,19 +64,22 @@ class ImageToolActivity : AppCompatActivity() {
 
         when(source){
             MediaSource.GALLERY -> {
+                if(isProfilePhoto){
+                    //TODO show placeholder to match
+                }
                 bitmap = loadImageFromUri(uri)
-                setBitmapToImageView(image, bitmap)
+                tool_image.setImageBitmap(bitmap)
                 content = bitmap.toBase64()
             }
 
             MediaSource.CAMERA -> {
                 bitmap = BitmapFactory.decodeFile(uri)
-                setBitmapToImageView(image, bitmap)
+                tool_image.setImageBitmap(bitmap)
                 content = bitmap.toBase64()
             }
 
             MediaSource.GIF -> {
-                rotateBtn.visibility = View.GONE
+                tool_rotate.visibility = View.GONE
                 loadGif(uri)
                 typeValue = MessageType.GIF.value
                 content = uri
@@ -105,35 +90,35 @@ class ImageToolActivity : AppCompatActivity() {
 
         initAcceptButton(typeValue, content)
 
-        cancelBtn.setOnClickListener {
+        tool_cancel.setOnClickListener {
             finish()
         }
 
-        rotateBtn.setOnClickListener {
-            image.rotate()
+        tool_rotate.setOnClickListener {
+            tool_image.rotate()
         }
     }
 
     private fun loadGif(gifUrl: String?) {
-        progressBar.start()
+        tool_progressbar.start()
         gifUrl?.let {
-            Glide.with(image)
+            Glide.with(tool_image)
                 .asGif()
                 .load(it)
-                .override(image.width, image.width / 2)
+                .override(tool_image.width, tool_image.width / 2)
                 .listener(object : RequestListener<GifDrawable> {
                     override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<GifDrawable>?, isFirstRes: Boolean) = false
 
                     override fun onResourceReady(res: GifDrawable?, model: Any?, target: Target<GifDrawable>?, source: DataSource?, isFirstRes: Boolean): Boolean {
-                        progressBar.stop()
+                        tool_progressbar.stop()
                         return false                    }
                 })
-                .into(image)
+                .into(tool_image)
         }
     }
 
     private fun initAcceptButton(typeValue: Int, content: String){
-        acceptBtn.setOnClickListener {
+        tool_accept.setOnClickListener {
 
             if( isProfilePhoto ){
                 toast("Setting profile photo")

@@ -5,8 +5,6 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
-import android.widget.Button
-import android.widget.EditText
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import com.example.tfm.R
@@ -15,6 +13,7 @@ import com.example.tfm.model.User
 import com.example.tfm.util.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -25,11 +24,6 @@ import org.jetbrains.anko.toast
 class LoginActivity : AppCompatActivity(), CoroutineScope {
     private val job = Job()
     override val coroutineContext = Dispatchers.Default + job
-
-    private lateinit var email: EditText
-    private lateinit var password: EditText
-    private lateinit var signupBtn: Button
-    private lateinit var loginBtn: Button
 
     private lateinit var prefs: SharedPreferences
     private var auth: FirebaseAuth? = null
@@ -42,10 +36,6 @@ class LoginActivity : AppCompatActivity(), CoroutineScope {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        email = findViewById(R.id.login_email)
-        password = findViewById(R.id.login_password)
-        signupBtn = findViewById(R.id.login_signup_button)
-        loginBtn = findViewById(R.id.login_button)
         progressBar = findViewById(R.id.login_progressbar)
 
         auth = FirebaseAuth.getInstance()
@@ -57,13 +47,13 @@ class LoginActivity : AppCompatActivity(), CoroutineScope {
             loginUser(emailPref.trimBothSides(), passwordPref)
         }
 
-        signupBtn.setOnClickListener {
+        login_signup_button.setOnClickListener {
             startActivity(Intent(this, SignupActivity::class.java))
         }
 
-        loginBtn.setOnClickListener {
-            if(email.text.isNotEmpty() && password.text.isNotEmpty()){
-                loginUser( email.text.toString().trimBothSides(), password.text.toString())
+        login_button.setOnClickListener {
+            if(login_email.text.isNotEmpty() && login_password.text.isNotEmpty()){
+                loginUser( login_email.text.toString().trimBothSides(), login_password.text.toString())
             }
         }
     }
@@ -93,17 +83,17 @@ class LoginActivity : AppCompatActivity(), CoroutineScope {
     }
 
     private fun disableViews(){
-        this.email.isEnabled = false
-        this.password.isEnabled = false
-        this.signupBtn.isEnabled = false
-        this.loginBtn.isEnabled = false
+        login_email.isEnabled = false
+        login_password.isEnabled = false
+        login_signup_button.isEnabled = false
+        login_button.isEnabled = false
     }
 
     private fun enableViews(){
-        this.email.isEnabled = true
-        this.password.isEnabled = true
-        this.signupBtn.isEnabled = true
-        this.loginBtn.isEnabled = true
+        login_email.isEnabled = true
+        login_password.isEnabled = true
+        login_signup_button.isEnabled = true
+        login_button.isEnabled = true
     }
 }
 

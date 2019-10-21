@@ -8,11 +8,8 @@ import android.location.Location
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.view.MenuItem
-import android.widget.Button
 import android.widget.SearchView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import com.example.tfm.R
 import com.example.tfm.data.DataRepository
@@ -29,6 +26,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.android.synthetic.main.activity_location_sender.*
 import org.jetbrains.anko.toast
 import java.util.*
 
@@ -38,8 +36,6 @@ class LocationSenderActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMa
     private var googleMap: GoogleMap? = null
     private val MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey"
     private lateinit var  fusedLocationClient: FusedLocationProviderClient
-    private lateinit var locationAddressTv: TextView
-    private lateinit var toolbarTitle: TextView
     private lateinit var address: Address
 
     private lateinit var currentLocation: LatLng
@@ -48,17 +44,11 @@ class LocationSenderActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMa
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_location_sender)
 
-        val toolbar: Toolbar =  findViewById(R.id.location_sender_toolbar)
-        setSupportActionBar(toolbar)
+        setSupportActionBar(location_sender_toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        toolbarTitle = findViewById(R.id.location_toolbar_title)
 
-        val searchView: SearchView = findViewById(R.id.location_searchview)
-        val locationSendButton: Button = findViewById(R.id.location_sender_button)
-        locationAddressTv = findViewById(R.id.location_sender_address)
-
-        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+        location_searchview.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 val address = Geocoder(this@LocationSenderActivity, Locale.getDefault())
                     .getFromLocationName(query, 1)
@@ -69,19 +59,19 @@ class LocationSenderActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMa
                     toast("Could not find place")
                 }
 
-                searchView.clearFocus()
+                location_searchview.clearFocus()
                 return true
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
                 if(newText.isEmpty()){
-                    searchView.clearFocus()
+                    location_searchview.clearFocus()
                 }
                 return true
             }
         })
 
-        locationSendButton.setOnClickListener {
+        location_sender_button.setOnClickListener {
             val timestamp = System.currentTimeMillis()
             val message = Message(timestamp, ChatActivity.conversationId, DataRepository.currentUserEmail, ChatActivity.receiverUser, MessageType.LOCATION.value,
                 MessageContent(address.latitude.toString(), address.longitude.toString(), address.getAddressLine(0)), timestamp)
@@ -92,11 +82,7 @@ class LocationSenderActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMa
             finish()
         }
 
-        searchView.queryHint = getString(R.string.search_title)
-
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
+        location_searchview.queryHint = getString(R.string.search_title)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
@@ -181,8 +167,8 @@ class LocationSenderActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMa
 
         val geocoder = Geocoder(this, Locale.getDefault())
         address = geocoder.getFromLocation(location.latitude, location.longitude, 1)[0]
-        locationAddressTv.text = address.getAddressLine(0)
-        toolbarTitle.text = address.adminArea
+        location_sender_address.text = address.getAddressLine(0)
+        location_toolbar_title.text = address.adminArea
     }
 
     override fun onOptionsItemSelected(item: MenuItem?) = when(item?.itemId){

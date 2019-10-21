@@ -2,11 +2,8 @@ package com.example.tfm.activity
 
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.Button
-import android.widget.EditText
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import com.example.tfm.R
 import com.example.tfm.model.User
 import com.example.tfm.util.addUser
@@ -15,15 +12,10 @@ import com.example.tfm.util.stop
 import com.example.tfm.util.trimBothSides
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.activity_signup.*
 import org.jetbrains.anko.toast
 
 class SignupActivity : AppCompatActivity() {
-
-    private lateinit var toolbar: Toolbar
-    private lateinit var user : EditText
-    private lateinit var email: EditText
-    private lateinit var password: EditText
-    private lateinit var joinusBtn: Button
 
     companion object{
         lateinit var currentUserEmail: String
@@ -35,24 +27,19 @@ class SignupActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
 
-        toolbar = findViewById(R.id.signup_toolbar)
-        toolbar.title = ""
-        setSupportActionBar(toolbar)
+        signup_toolbar.title = ""
+        setSupportActionBar(signup_toolbar)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
-        user = findViewById(R.id.signup_user)
-        email = findViewById(R.id.signup_email)
-        password = findViewById(R.id.signup_password)
-        joinusBtn = findViewById(R.id.signup_joinus)
         progressbar = findViewById(R.id.signup_progressbar)
 
-        joinusBtn.setOnClickListener {
+        signup_joinus.setOnClickListener {
             if(isFormNotEmpty()){
                 progressbar.start()
                 disableViews()
-                val user = User("", email.text.toString().trimBothSides(), user.text.toString().trimBothSides(), "", "")
+                val user = User("", signup_email.text.toString().trimBothSides(), signup_user.text.toString().trimBothSides(), "", "")
                 val hashcode = user.hashCode().toString()
                 user.id = hashcode
 
@@ -73,11 +60,11 @@ class SignupActivity : AppCompatActivity() {
 
     private fun addUserToFirestore(user: User){
         val auth = FirebaseAuth.getInstance()
-        auth.createUserWithEmailAndPassword(email.text.toString(), password.text.toString())
+        auth.createUserWithEmailAndPassword(signup_email.text.toString(), signup_password.text.toString())
             .addOnSuccessListener{
                 FirebaseFirestore.getInstance().addUser(this, user)
-                currentUserEmail = email.text.toString()
-                currentUserPassword = password.text.toString()
+                currentUserEmail = signup_email.text.toString()
+                currentUserPassword = signup_password.text.toString()
             }
             .addOnFailureListener {
                 enableViews()
@@ -86,18 +73,18 @@ class SignupActivity : AppCompatActivity() {
             }
     }
 
-    private fun isFormNotEmpty() = user.text.isNotEmpty() && email.text.isNotEmpty() && password.text.isNotEmpty()
+    private fun isFormNotEmpty() = signup_user.text.isNotEmpty() && signup_email.text.isNotEmpty() && signup_password.text.isNotEmpty()
     private fun disableViews(){
-        user.isEnabled = false
-        email.isEnabled = false
-        password.isEnabled = false
-        joinusBtn.isEnabled = false
+        signup_user.isEnabled = false
+        signup_email.isEnabled = false
+        signup_password.isEnabled = false
+        signup_joinus.isEnabled = false
     }
     private fun enableViews(){
-        user.isEnabled = true
-        email.isEnabled = true
-        password.isEnabled = true
-        joinusBtn.isEnabled = true
+        signup_user.isEnabled = true
+        signup_email.isEnabled = true
+        signup_password.isEnabled = true
+        signup_joinus.isEnabled = true
     }
 }
 
