@@ -11,10 +11,10 @@ interface ConversationDAO {
     @Query("SELECT * FROM Conversation WHERE id = :id")
     fun getById( id: String) : Conversation
 
-    @Query("SELECT * FROM Conversation where userOne = :email or userTwo = :email")
+    @Query("SELECT * FROM Conversation where userOneEmail = :email or userTwoEmail = :email")
     fun getUserConversations(email: String): MutableList<Conversation>
 
-    @Query("SELECT * FROM Conversation where (userOne = :email or userTwo = :email )AND (userOne = :newEmail or userTwo = :newEmail)")
+    @Query("SELECT * FROM Conversation where (userOneEmail = :email or userTwoEmail = :email )AND (userOneEmail = :newEmail or userTwoEmail = :newEmail)")
     fun getMutualConversation(email: String, newEmail: String) : Conversation
 
     @Query("SELECT COUNT(*) FROM Conversation")

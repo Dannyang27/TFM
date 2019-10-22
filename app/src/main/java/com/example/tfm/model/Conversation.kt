@@ -8,8 +8,12 @@ import org.jetbrains.annotations.NotNull
 @Entity(tableName = "Conversation")
 class Conversation (@PrimaryKey
                     @NotNull var id: String = "",
-                    var userOne: String? = "",
-                    var userTwo : String? = "",
+                    var userOneEmail: String = "",
+                    var userOneUsername: String = "",
+                    var userOnePhoto: String = "",
+                    var userTwoEmail : String = "",
+                    var userTwoUsername: String = "",
+                    var userTwoPhoto: String = "",
                     @Ignore
                     var messages: MutableList<Message> = mutableListOf(),
                     var lastMessage: String? = "",

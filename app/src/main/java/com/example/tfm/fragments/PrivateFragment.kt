@@ -5,50 +5,45 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
 import com.example.tfm.adapter.ConversationAdapter
-import com.example.tfm.data.DataRepository
 import com.example.tfm.divider.HorizontalDivider
-import com.example.tfm.model.Conversation
+import com.example.tfm.viewmodel.ConversationViewModel
 
 class PrivateFragment : Fragment(){
     private lateinit var viewManager: RecyclerView.LayoutManager
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var conversationViewModel: ConversationViewModel
+    private lateinit var viewAdapter : ConversationAdapter
 
     companion object{
         fun newInstance(): PrivateFragment = PrivateFragment()
-        lateinit var conversationRecyclerView: RecyclerView
-        lateinit var viewAdapter : ConversationAdapter
-        lateinit var conversations : MutableList<Conversation>
-
-        fun addConversation( conversation: Conversation){
-            conversations.add(conversation)
-            viewAdapter.notifyDataSetChanged()
-        }
-
-        fun updateConversation(newConversations: MutableList<Conversation>){
-            viewAdapter.updateList(newConversations)
-        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_private_chat, container, false)
 
+        conversationViewModel = ViewModelProviders.of(activity!!).get(ConversationViewModel::class.java)
+
         viewManager = LinearLayoutManager(this.activity)
+        viewAdapter = ConversationAdapter(mutableListOf())
 
-        conversations = mutableListOf()
-        viewAdapter = ConversationAdapter(conversations)
+        conversationViewModel.getConversations().observe(activity!!, Observer {
+            viewAdapter.updateList(it)
+        })
 
-        conversationRecyclerView = view.findViewById<RecyclerView>(R.id.private_recyclerview).apply {
+        recyclerView = view.findViewById<RecyclerView>(R.id.private_recyclerview).apply {
             setHasFixedSize(true)
             addItemDecoration(HorizontalDivider(this.context))
             layoutManager = viewManager
             adapter = viewAdapter
         }
 
-        updateConversation(DataRepository.getConversations())
-
+        conversationViewModel.initConversations()
         return view
     }
 }

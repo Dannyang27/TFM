@@ -113,6 +113,11 @@ fun Activity.loadImageFromUri(uri: String?): Bitmap{
     return BitmapFactory.decodeFile(file)
 }
 
+fun Bitmap.createNewBitmap(): Bitmap {
+    val proportion: Double = (this.height).toDouble() / this.width
+    return Bitmap.createScaledBitmap(this, 500, (500 * proportion).toInt(), false)
+}
+
 fun Activity.setBitmapToImageView(placeholder: ImageView, bitmap: Bitmap){
     val imageAspectRatio = bitmap.height / bitmap.width
     Glide.with(this)
