@@ -24,14 +24,23 @@
             android:layout_above="@id/tool_button_layout">
 
         <com.ortiz.touchview.TouchImageView
+                android:id="@+id/tool_touchimage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/white_placeholder"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:visibility="gone"/>
+
+        <ImageView
                 android:id="@+id/tool_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitCenter"
-                android:src="@drawable/test"
-                app:srcCompat="@drawable/white_placeholder"
+                android:src="@drawable/white_placeholder"
                 android:layout_centerVertical="true"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center" />
 
         <ProgressBar
                 android:id="@+id/tool_progressbar"

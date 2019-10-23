@@ -22,18 +22,18 @@ data class Message (@PrimaryKey(autoGenerate = true)
                     var isReceived: Boolean = false)
 
 @Entity(tableName = "Gif")
-class GifRoomModel(@PrimaryKey
+data class GifRoomModel(@PrimaryKey
                    var id: Long = -1,
                    var url: String = "",
                    var caption: String = "")
 
 @Entity(tableName = "Image")
-class ImageRoomModel(@PrimaryKey
+data class ImageRoomModel(@PrimaryKey
                      var id: Long = -1,
                      var encodedImage: String = "")
 
 @Entity(tableName = "Location")
-class LocationRoomModel(@PrimaryKey
+data class LocationRoomModel(@PrimaryKey
                         var id: Long = -1,
                         var latitude: Double = -1.0,
                         var longitude: Double = -1.0,

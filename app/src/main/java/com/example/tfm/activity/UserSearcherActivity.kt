@@ -24,7 +24,6 @@ class UserSearcherActivity : AppCompatActivity() {
         setContentView(R.layout.activity_user_searcher)
 
         userSearcherViewModel = ViewModelProviders.of(this).get(UserSearcherViewModel::class.java)
-
         userSearcherViewModel.getUsers().observe(this, Observer {
             viewAdapter.updateList(it)
         })

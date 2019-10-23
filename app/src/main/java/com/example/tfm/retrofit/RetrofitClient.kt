@@ -1,11 +1,6 @@
 package com.example.tfm.retrofit
 
-import android.util.Log
-import com.example.tfm.fragments.GifFragment
-import com.example.tfm.model.giphy.GiphyPojo
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.example.tfm.model.giphy.Gifs
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -15,50 +10,45 @@ object RetrofitClient {
     private const val limit = 26
     private const val rating = "G"
 
-    val retrofit = Retrofit.Builder()
+    private val retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    val service = retrofit.create(GithubService::class.java)
+    private val service = retrofit.create(GithubService::class.java)
 
-    fun getGifsFromGiphy(limit: Int = this.limit, rating: String = this.rating){
-        val call = service.getGifFromGiphy(token, limit, rating)
+    suspend fun getGifsFromGiphy(limit: Int = this.limit, rating: String = this.rating): MutableList<Gifs>{
+        val response = service.getGifFromGiphy(token, limit, rating)
+        val gifList = mutableListOf<Gifs>()
 
-        call.enqueue(object: Callback<GiphyPojo> {
-            override fun onResponse(call: Call<GiphyPojo>, response: Response<GiphyPojo>) {
+        try{
+            if(response.isSuccessful){
                 val gifs = response.body()
                 gifs?.data?.forEach {
-                    GifFragment.gifImages.add(it.gifs)
+                    gifList.add(it.gifs)
                 }
             }
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
 
-            override fun onFailure(call: Call<GiphyPojo>, t: Throwable) {
-                Log.d("DEBUG", "Could not get gifs")
-            }
-        })
+        return gifList
     }
 
-    fun getSearchGifFromGiphy(searchQuery: String, limit: Int = this.limit, rating: String = this.rating){
-        val call = service.getSearchGifFromGiphy(token, searchQuery, limit, 0, rating, "en")
-        call.enqueue(object: Callback<GiphyPojo> {
+    suspend fun getSearchGifFromGiphy(searchQuery: String, limit: Int = this.limit, rating: String = this.rating): MutableList<Gifs>{
+        val response = service.getSearchGifFromGiphy(token, searchQuery, limit, 0, rating, "en")
+        val gifList = mutableListOf<Gifs>()
 
-            override fun onResponse(call: Call<GiphyPojo>, response: Response<GiphyPojo>) {
+        try{
+            if(response.isSuccessful){
                 val gifs = response.body()
-
-                if(gifs?.data?.size != 0){
-                    GifFragment.gifImages.clear()
-                    gifs?.data?.forEach {
-                        GifFragment.gifImages.add(it.gifs)
-                    }.also {
-                        GifFragment.adapter.notifyDataSetChanged()
-                    }
+                gifs?.data?.forEach {
+                    gifList.add(it.gifs)
                 }
             }
-
-            override fun onFailure(call: Call<GiphyPojo>, t: Throwable) {
-                Log.d("DEBUG", "Could not get gifs")
-            }
-        })
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
+        return gifList
     }
 }

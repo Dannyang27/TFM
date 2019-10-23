@@ -18,5 +18,9 @@ class ConversationViewModel : ViewModel(){
     fun initConversations(){
         val user = DataRepository.user
         FirebaseUtil.loadUserConversation(conversationList, user?.id.toString())
+//        CoroutineScope(Dispatchers.IO).launch {
+//            val list = FirebaseFirestore.getInstance().loadUserConversation(user?.id.toString())
+//            conversationList.postValue(list)
+//        }
     }
 }

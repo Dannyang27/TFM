@@ -1,6 +1,7 @@
 package com.example.tfm.viewmodel
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,6 +16,7 @@ class LoginViewModel : ViewModel(){
 
     fun startLogin(context: Context, user: String, password: String){
         isLoading.postValue(true)
+        Log.d("TFM", "User: $user | pass: $password")
         FirebaseUtil.login(context, user, password)
     }
 

@@ -27,7 +27,7 @@
                     android:id="@+id/user_profile"
                     android:layout_width="180dp"
                     android:layout_height="180dp"
-                    android:src="@drawable/dwight"
+                    android:src="@drawable/white_placeholder"
                     android:layout_margin="50dp" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton

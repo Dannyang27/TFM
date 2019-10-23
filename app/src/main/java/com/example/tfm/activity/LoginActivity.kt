@@ -1,7 +1,6 @@
 package com.example.tfm.activity
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +12,6 @@ import com.example.tfm.viewmodel.LoginViewModel
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
-    private lateinit var prefs: SharedPreferences
     private lateinit var loginViewModel: LoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,8 +19,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         loginViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
-
-        prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        val (emailPref, passwordPref) = PreferenceManager.getDefaultSharedPreferences(this).getCredentials()
 
         loginViewModel.getIsLoading().observe(this, Observer { isLoading ->
             if(isLoading){
@@ -39,7 +36,6 @@ class LoginActivity : AppCompatActivity() {
             }
         })
 
-        val (emailPref, passwordPref) = prefs.getCredentials()
 
         if( isFormNotEmpty(emailPref, passwordPref) ){
             login(emailPref.trimBothSides(), passwordPref)
@@ -84,4 +80,3 @@ class LoginActivity : AppCompatActivity() {
         login_button.isEnabled = true
     }
 }
-

@@ -48,7 +48,11 @@ class UserProfileActivity : AppCompatActivity() {
 
         userProfileViewModel.initProfile()
         userProfileViewModel.getUser().observe(this, Observer {
-            Glide.with(this).load(it.profilePhoto.toBitmap()).into(user_profile)
+
+            if(!it.profilePhoto.isNullOrEmpty()){
+                Glide.with(this).load(it.profilePhoto.toBitmap()).into(user_profile)
+            }
+
             profile_username.text = it.name
             profile_status.text = it.status
             profile_email.text = it.email
