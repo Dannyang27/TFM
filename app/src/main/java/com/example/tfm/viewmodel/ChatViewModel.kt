@@ -25,7 +25,6 @@ class ChatViewModel : ViewModel(){
 
             FirebaseUtil.addMessageFirebase(message)
         }
-
     }
 
     fun getChatMessages(): LiveData<MutableList<Message>> = chatMessages

@@ -50,6 +50,8 @@ class ChatActivity : AppCompatActivity(){
 
     private lateinit var chatViewModel: ChatViewModel
     private lateinit var viewManager: RecyclerView.LayoutManager
+    private lateinit var messagesRecyclerView: RecyclerView
+    private lateinit var viewAdapter : ChatAdapter
 
     private val emojiFragment = EmojiFragment.newInstance()
     private val gifFragment = GifFragment.newInstance()
@@ -71,14 +73,8 @@ class ChatActivity : AppCompatActivity(){
 
     companion object{
         lateinit var emojiEditText: EmojiEditText
-        lateinit var messagesRecyclerView: RecyclerView
-        lateinit var viewAdapter : ChatAdapter
         lateinit var conversationId: String
         lateinit var receiverUser: String
-
-        private fun scrollToBottom(){
-            messagesRecyclerView.scrollToPosition(viewAdapter.itemCount - 1)
-        }
     }
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -133,6 +129,7 @@ class ChatActivity : AppCompatActivity(){
 
         chatViewModel.getChatMessages().observe(this, Observer {
             viewAdapter.updateList(it)
+            scrollToBottom()
         })
 
         viewManager = LinearLayoutManager(this)
@@ -209,14 +206,14 @@ class ChatActivity : AppCompatActivity(){
         else -> super.onOptionsItemSelected(item)
     }
 
-    private fun setToolbar(username: String, photo: String){
+    private fun setToolbar(username: String?, photo: String?){
         setSupportActionBar(chat_toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         chat_toolbar_title.text = username
 
         try{
-            Glide.with(this).load(photo.toBitmap()).into(chat_profile_image)
+            Glide.with(this).load(photo?.toBitmap()).into(chat_profile_image)
         }catch (e: Exception){
             Log.d("TFM", "Error while loading profile photo, maybe theres no photo")
         }
@@ -394,5 +391,9 @@ class ChatActivity : AppCompatActivity(){
         return File.createTempFile("JPEG_${timeStamp}_", ".jpg", storageDir).apply {
             currentPhotoPath = absolutePath
         }
+    }
+
+    private fun scrollToBottom(){
+        messagesRecyclerView.scrollToPosition(viewAdapter.itemCount - 1)
     }
 }

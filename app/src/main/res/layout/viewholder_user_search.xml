@@ -8,7 +8,7 @@
             android:id="@+id/user_photo"
             android:layout_width="76dp"
             android:layout_height="76dp"
-            android:src="@drawable/dwight"
+            android:src="@drawable/white_placeholder"
             android:padding="10dp"/>
     <LinearLayout
             android:orientation="vertical"
@@ -23,7 +23,6 @@
                 android:layout_height="wrap_content">
             <androidx.emoji.widget.EmojiTextView
                     android:id="@+id/user_username"
-                    android:text="@string/username_sample"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/text_medium"
@@ -37,6 +36,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="2"
+                android:textColor="#FF000000"
                 android:textSize="@dimen/text_medium"/>
     </LinearLayout>
 </LinearLayout>

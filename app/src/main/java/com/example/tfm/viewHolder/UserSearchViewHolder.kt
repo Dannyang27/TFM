@@ -6,7 +6,6 @@ import androidx.emoji.widget.EmojiTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
 import com.example.tfm.data.DataRepository
-import com.example.tfm.room.database.MyRoomDatabase
 import com.example.tfm.util.createNewConversation
 import com.example.tfm.util.getConversation
 import com.example.tfm.util.launchChatActivity
@@ -18,6 +17,9 @@ import kotlinx.coroutines.launch
 class UserSearchViewHolder(view : View) : RecyclerView.ViewHolder(view){
 
     lateinit var email: String
+    lateinit var user: String
+    lateinit var photoBase64: String
+
     var id: Long = -1
     val photo: ImageView = view.findViewById(R.id.user_photo)
     val username: EmojiTextView = view.findViewById(R.id.user_username)
@@ -31,9 +33,9 @@ class UserSearchViewHolder(view : View) : RecyclerView.ViewHolder(view){
                 val firestore = FirebaseFirestore.getInstance()
                 val conversation = firestore.getConversation(conversationId.toString())
                 if(conversation != null){
-                    val roomDatabase = MyRoomDatabase.getMyRoomDatabase(username.context)
-                    roomDatabase?.addConversation(conversation)
-                    username.context.launchChatActivity(conversationId.toString(), email, false)
+//                    val roomDatabase = MyRoomDatabase.getMyRoomDatabase(username.context)
+//                    roomDatabase?.addConversation(conversation)
+                    it.context.launchChatActivity(conversationId.toString(), email, user, photoBase64, false)
                 }else{
                     firestore.createNewConversation(username.context, DataRepository.currentUserEmail, email)
                 }

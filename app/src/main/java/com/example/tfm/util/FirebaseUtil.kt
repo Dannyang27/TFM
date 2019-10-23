@@ -224,28 +224,29 @@ object FirebaseUtil {
 
     fun addPrivateChat(context: Context, conversation: Conversation){
         database.child(FIREBASE_PRIVATE_CHAT_PATH)
-            .child(conversation.id).setValue(conversation)
-            .addOnSuccessListener {
-                val roomDatabase = MyRoomDatabase.getMyRoomDatabase(context)
-                roomDatabase?.addConversation(conversation)
-                DataRepository.addConversation(conversation.id, conversation)
+            .child(conversation.id)
+            .setValue(conversation)
+//            .addOnSuccessListener {
+//                val roomDatabase = MyRoomDatabase.getMyRoomDatabase(context)
+//                roomDatabase?.addConversation(conversation)
+//                DataRepository.addConversation(conversation.id, conversation)
 //                PrivateFragment.updateConversation(DataRepository.getConversations())
-
-                var userToCreate: String?
-                if(conversation.userOneEmail.equals(DataRepository.currentUserEmail)){
-                    userToCreate = conversation.userTwoEmail
-                }else{
-                    userToCreate = conversation.userOneEmail
-                }
-
-                CoroutineScope(Dispatchers.IO).launch {
-                    val user = FirebaseFirestore.getInstance().createRoomUser(userToCreate)
-                    roomDatabase?.addUser(user!!)
-                    Log.d(LogUtil.TAG, "User added to room: ${user.toString()}")
-                }
-
-                context.launchChatActivity(conversation.id, userToCreate.toString(), false)
-        }
+//
+//                var userToCreate: String?
+//                if(conversation.userOneEmail.equals(DataRepository.currentUserEmail)){
+//                    userToCreate = conversation.userTwoEmail
+//                }else{
+//                    userToCreate = conversation.userOneEmail
+//                }
+//
+//                CoroutineScope(Dispatchers.IO).launch {
+//                    val user = FirebaseFirestore.getInstance().createRoomUser(userToCreate)
+//                    roomDatabase?.addUser(user!!)
+//                    Log.d(LogUtil.TAG, "User added to room: ${user.toString()}")
+//                }
+//
+//                context.launchChatActivity(conversation.id, userToCreate.toString(), false)
+//        }
     }
 
 //    fun addMessageLocal(message: Message){

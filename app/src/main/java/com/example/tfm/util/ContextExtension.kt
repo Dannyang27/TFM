@@ -11,7 +11,7 @@ fun Context.launchMainActivity(){
     startActivity(intent)
 }
 
-fun Context.launchChatActivity(id: String, user: String, fromActivity: Boolean){
+fun Context.launchChatActivity(id: String, email: String, username: String, photo: String, fromActivity: Boolean){
     val intent = Intent(this, ChatActivity::class.java)
 
     if(!fromActivity){
@@ -19,6 +19,8 @@ fun Context.launchChatActivity(id: String, user: String, fromActivity: Boolean){
     }
 
     intent.putExtra("conversationId", id)
-    intent.putExtra("receiverEmail", user)
+    intent.putExtra("receiverEmail", email)
+    intent.putExtra("receiverName", username)
+    intent.putExtra("profilePhoto", photo)
     startActivity(intent)
 }
