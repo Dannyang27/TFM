@@ -47,6 +47,10 @@ class ChatViewModel : ViewModel(){
         }
     }
 
+    fun clearMessages(){
+        chatMessages.postValue(mutableListOf())
+    }
+
     fun initMessages(conversationId: String){
         FirebaseUtil.loadMessageFromConversation(chatMessages, conversationId)
     }

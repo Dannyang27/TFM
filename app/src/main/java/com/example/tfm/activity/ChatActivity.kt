@@ -110,6 +110,7 @@ class ChatActivity : AppCompatActivity(){
         val photo = intent.getStringExtra("profilePhoto")
 
         setToolbar(username, photo)
+        chatViewModel.clearMessages()
 
         chatViewModel.getLanguageFlag().observe(this, Observer {drawable ->
             chat_flag.setImageDrawable(getDrawable(drawable))
