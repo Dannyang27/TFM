@@ -13,16 +13,15 @@ class UserSearcherViewModel : ViewModel(){
 
     private var roomDatabase: MyRoomDatabase? = null
     private val users = MutableLiveData<MutableList<User>>()
+    private var allUsers: MutableList<User> = mutableListOf()
 
     fun getUsers(): LiveData<MutableList<User>> {
         return users
     }
 
     fun searchUsersInCache(text: String?){
-        val listFiltered = users.value!!
-            .filter {
-                it.name.contains(text.toString(), ignoreCase = true)
-            }
+        val listFiltered = allUsers
+            .filter{ it.name.contains(text.toString(), ignoreCase = true) }
             .toMutableList()
 
         users.postValue(listFiltered)
@@ -32,7 +31,8 @@ class UserSearcherViewModel : ViewModel(){
         roomDatabase = MyRoomDatabase.getMyRoomDatabase(activity)
         roomDatabase?.userDao()?.getAll()?.observe(activity, Observer {
             it.remove(DataRepository.user)
-            users.postValue(it)
+            allUsers.addAll(it)
+            users.postValue(allUsers)
         })
     }
 }

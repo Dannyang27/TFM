@@ -11,6 +11,7 @@ import com.example.tfm.model.User
 import com.example.tfm.room.database.MyRoomDatabase
 import com.example.tfm.util.FirebaseUtil
 import com.example.tfm.util.FirebaseUtil.FIREBASE_USER_PATH
+import com.example.tfm.util.removeAfter
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +21,7 @@ import kotlinx.coroutines.tasks.await
 class ConversationViewModel : ViewModel(){
     private var roomDatabase: MyRoomDatabase? = null
     private val conversationList: MutableLiveData<MutableList<Conversation>> = MutableLiveData()
+    private val conversations = mutableListOf<Conversation>()
 
     companion object{
         val dataDownloaded: MutableLiveData<Boolean> = MutableLiveData()
@@ -45,9 +47,19 @@ class ConversationViewModel : ViewModel(){
         }
     }
 
+    fun filterList(text: String?){
+        val list = conversations
+            .filter { it.userOneEmail.removeAfter('@').contains(text.toString(), ignoreCase = true) ||
+                    it.userTwoEmail.removeAfter('@').contains(text.toString(), ignoreCase = true)}
+            .toMutableList()
+
+        conversationList.postValue(list)
+    }
+
     fun initRoomObserver(activity: FragmentActivity){
         roomDatabase = MyRoomDatabase.getMyRoomDatabase(activity)
         roomDatabase?.conversationDao()?.getUserConversations(DataRepository.currentUserEmail)?.observe(activity, Observer {
+            conversations.addAll(it)
             conversationList.postValue(it)
         })
     }

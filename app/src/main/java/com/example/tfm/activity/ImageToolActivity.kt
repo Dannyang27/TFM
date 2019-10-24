@@ -21,11 +21,11 @@ import com.example.tfm.enum.MediaSource
 import com.example.tfm.enum.MessageType
 import com.example.tfm.model.Message
 import com.example.tfm.model.MessageContent
+import com.example.tfm.room.database.MyRoomDatabase
 import com.example.tfm.util.rotate
 import com.example.tfm.util.start
 import com.example.tfm.util.stop
 import com.example.tfm.util.toBase64
-import com.example.tfm.viewmodel.ChatViewModel
 import com.example.tfm.viewmodel.ImageToolViewModel
 import kotlinx.android.synthetic.main.activity_image_tool.*
 
@@ -112,7 +112,8 @@ class ImageToolActivity : AppCompatActivity() {
             val message = Message(timestamp, ChatActivity.conversationId, DataRepository.currentUserEmail,
                 ChatActivity.receiverUser, typeValue, MessageContent(fieldOne = content), timestamp)
 
-            ChatViewModel.addMessage(message)
+            val roomDatabase = MyRoomDatabase.getMyRoomDatabase(this)
+            roomDatabase?.addMessage(message)
             finish()
         }
     }

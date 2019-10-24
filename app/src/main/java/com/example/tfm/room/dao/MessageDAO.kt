@@ -1,5 +1,6 @@
 package com.example.tfm.room.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.tfm.model.*
 
@@ -18,7 +19,7 @@ interface MessageDAO {
     fun getReceivedMessages( name: String) : MutableList<Message>
 
     @Query("SELECT * FROM Message WHERE ownerId = :conversationId ORDER BY timestamp")
-    fun getConversationMessages(conversationId: String): MutableList<Message>
+    fun getConversationMessages(conversationId: String): LiveData<MutableList<Message>>
 
     @Query("SELECT COUNT(*) FROM Message")
     fun getSize(): Int

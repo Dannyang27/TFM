@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.view.Window
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
@@ -109,11 +110,18 @@ class UserProfileActivity : AppCompatActivity() {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.dialog_enter_input)
 
-        val input = dialog.findViewById<EditText>(R.id.dialog_input).apply {
-            text.append(if (isUsername) profile_username.text else profile_status.text)
-        }
+        val input = dialog.findViewById<EditText>(R.id.dialog_input)
+        val titleText = dialog.findViewById<TextView>(R.id.enter_text)
         val acceptBtn = dialog.findViewById<Button>(R.id.dialog_accept)
         val cancelBtn = dialog.findViewById<Button>(R.id.dialog_cancel)
+
+        if(isUsername){
+            input.text.append(profile_username.text)
+            titleText.text = getString(R.string.enter_username)
+        }else{
+            input.text.append(profile_status.text)
+            titleText.text = getString(R.string.enter_status)
+        }
 
         acceptBtn.setOnClickListener {
             if(input.text.isNotEmpty()){

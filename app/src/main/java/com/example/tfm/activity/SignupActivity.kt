@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.tfm.R
+import com.example.tfm.data.DataRepository
 import com.example.tfm.util.launchMainActivity
 import com.example.tfm.util.start
 import com.example.tfm.util.stop
@@ -31,6 +32,7 @@ class SignupActivity : AppCompatActivity() {
 
         signupViewModel.getIsJoinSuccessful().observe(this, Observer {isSuccess ->
             if(isSuccess){
+                DataRepository.currentUserEmail = signup_email.text.toString().trimBothSides()
                 launchMainActivity(false)
             }else{
                 enableViews()

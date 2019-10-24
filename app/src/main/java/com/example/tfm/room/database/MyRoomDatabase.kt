@@ -10,6 +10,7 @@ import com.example.tfm.model.*
 import com.example.tfm.room.dao.ConversationDAO
 import com.example.tfm.room.dao.MessageDAO
 import com.example.tfm.room.dao.UserDAO
+import com.example.tfm.util.FirebaseUtil
 import com.example.tfm.util.LogUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -95,14 +96,36 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
         launch {
             messageDao().add(message)
             val content = message.body as MessageContent
+            var lastMessage = ""
             when(MessageType.fromInt(message.messageType)) {
-                MessageType.MESSAGE -> addPlainMessage(message.id, content)
-                MessageType.GIF -> addGif(message.id, content)
-                MessageType.IMAGE -> addImage(message.id, content)
-                MessageType.LOCATION -> addLocation(message.id, content)
-                MessageType.ATTACHMENT -> {}
+                MessageType.MESSAGE -> {
+                    addPlainMessage(message.id, content)
+                    lastMessage = content.fieldOne
+                }
+                MessageType.GIF -> {
+                    addGif(message.id, content)
+                    lastMessage = "[GIF]"
+                }
+                MessageType.IMAGE -> {
+                    addImage(message.id, content)
+                    lastMessage = "[Image]"
+                }
+                MessageType.LOCATION -> {
+                    addLocation(message.id, content)
+                    lastMessage = "[Location]"
+                }
+                MessageType.ATTACHMENT -> {
+                    lastMessage = "[Attachment]"
+                }
             }
+
+            val conversation = conversationDao().getById(message.ownerId)
+            conversation.lastMessage = lastMessage
+            conversation.timestamp = message.timestamp
+            conversationDao().update(conversation)
         }
+
+        FirebaseUtil.addMessageFirebase(message)
     }
 
 

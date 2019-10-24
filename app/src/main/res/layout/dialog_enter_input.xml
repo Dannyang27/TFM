@@ -13,9 +13,9 @@
             android:padding="30dp"
             android:elevation="4dp">
         <TextView
+                android:id="@+id/enter_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/enter_text"
                 android:fontFamily="@font/robotobold"
                 android:textSize="@dimen/text_large"/>
 
@@ -23,7 +23,6 @@
                 android:id="@+id/dialog_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/user_hint"
                 android:inputType="textPersonName|textCapSentences"
                 android:maxLines="1"/>
 

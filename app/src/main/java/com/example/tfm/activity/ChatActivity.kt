@@ -153,9 +153,8 @@ class ChatActivity : AppCompatActivity(){
         supportFragmentManager.beginTransaction().add(R.id.emoji_container, emojiFragment, "1").commit()
 
         chatViewModel.initLanguageFlag(this)
-        chatViewModel.initMessages(conversationId)
+        chatViewModel.initRoomObserver(this, conversationId)
         initListeners()
-//        messages.clear()
 
 //        val conversationMessages = DataRepository.getConversation(conversationId)?.messages
 //
@@ -281,7 +280,7 @@ class ChatActivity : AppCompatActivity(){
                 val message = Message(timestamp, conversationId, DataRepository.currentUserEmail, receiverUser,
                     MessageType.MESSAGE.value, MessageContent(fieldOne = fieldText, fieldThree = languageCode.toString()), timestamp )
 
-                ChatViewModel.addMessage(message)
+                chatViewModel.saveMessage(message)
                 chat_edittext.text.clear()
             }
         }

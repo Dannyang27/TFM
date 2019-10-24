@@ -95,6 +95,11 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
+                if(newText.isNullOrEmpty()){
+                    search_chat.clearFocus()
+                }
+
+                conversationViewModel.filterList(newText)
                 return true
             }
         })

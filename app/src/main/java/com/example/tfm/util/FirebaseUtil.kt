@@ -245,37 +245,23 @@ object FirebaseUtil {
         database.child(FIREBASE_PRIVATE_CHAT_PATH)
             .child(conversation.id)
             .setValue(conversation)
+            .addOnSuccessListener {
+                var email: String
+                var username: String
+                var photo: String
 
-        context.toast("Private chat added")
-//            .addOnSuccessListener {
-//                val roomDatabase = MyRoomDatabase.getMyRoomDatabase(context)
-//                roomDatabase?.addConversation(conversation)
-//                DataRepository.addConversation(conversation.id, conversation)
-//                PrivateFragment.updateConversation(DataRepository.getConversations())
-//
-//                var userToCreate: String?
-//                if(conversation.userOneEmail.equals(DataRepository.currentUserEmail)){
-//                    userToCreate = conversation.userTwoEmail
-//                }else{
-//                    userToCreate = conversation.userOneEmail
-//                }
-//
-//                CoroutineScope(Dispatchers.IO).launch {
-//                    val user = FirebaseFirestore.getInstance().createRoomUser(userToCreate)
-//                    roomDatabase?.addUser(user!!)
-//                    Log.d(LogUtil.TAG, "User added to room: ${user.toString()}")
-//                }
-//
-//                context.launchChatActivity(conversation.id, userToCreate.toString(), false)
-//        }
+                if(conversation.userOneEmail == DataRepository.currentUserEmail){
+                    email = conversation.userTwoEmail
+                    username = conversation.userTwoUsername
+                    photo = conversation.userTwoPhoto
+                }else{
+                    email = conversation.userOneEmail
+                    username = conversation.userOneUsername
+                    photo = conversation.userOnePhoto
+                }
+                context.launchChatActivity(conversation.id, email, username, photo, false)
+            }
     }
-
-//    fun addMessageLocal(message: Message){
-//        val newMessages: MutableList<Message> = mutableListOf()
-//        newMessages.addAll(ChatActivity.messages)
-//        newMessages.add(message)
-//        ChatActivity.updateList(newMessages)
-//    }
 
     fun addMessageFirebase(message: Message){
         database.child(FIREBASE_PRIVATE_CHAT_PATH).child(message.ownerId)

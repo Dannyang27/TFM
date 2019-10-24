@@ -94,4 +94,7 @@
     <string name="label_sample">label</string>
     <string name="image_transition">image_transition</string>
     <string name="download_user_data">Downloading user data</string>
+    <string name="enter_status">Status</string>
+    <string name="enter_username">Username</string>
+    <string name="modelsdownloaded">Model downloaded</string>
 </resources>
