@@ -1,6 +1,5 @@
 package com.example.tfm.viewmodel
 
-import android.content.Context
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,24 +7,42 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import com.example.tfm.data.DataRepository
 import com.example.tfm.model.Conversation
+import com.example.tfm.model.User
 import com.example.tfm.room.database.MyRoomDatabase
 import com.example.tfm.util.FirebaseUtil
+import com.example.tfm.util.FirebaseUtil.FIREBASE_USER_PATH
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class ConversationViewModel : ViewModel(){
     private var roomDatabase: MyRoomDatabase? = null
     private val conversationList: MutableLiveData<MutableList<Conversation>> = MutableLiveData()
 
+    companion object{
+        val dataDownloaded: MutableLiveData<Boolean> = MutableLiveData()
+    }
+
+    fun updateUser(email: String){
+        CoroutineScope(Dispatchers.IO).launch {
+            val loginTask = FirebaseFirestore.getInstance().collection(FIREBASE_USER_PATH).document(email).get().await()
+            val user = loginTask.toObject(User::class.java)
+            DataRepository.user = user
+        }
+    }
+
     fun getConversations(): LiveData<MutableList<Conversation>>{
         return conversationList
     }
 
-    fun initConversations(context: Context){
-        val user = DataRepository.user
-        FirebaseUtil.loadUserConversation(context, user?.id.toString())
-//        CoroutineScope(Dispatchers.IO).launch {
-//            val list = FirebaseFirestore.getInstance().loadUserConversation(user?.id.toString())
-//            conversationList.postValue(list)
-//        }
+    fun getDataDownloaded(): LiveData<Boolean> = dataDownloaded
+
+    fun initDownloadUserData(){
+        CoroutineScope(Dispatchers.IO).launch{
+            FirebaseUtil.loadUsers()
+        }
     }
 
     fun initRoomObserver(activity: FragmentActivity){

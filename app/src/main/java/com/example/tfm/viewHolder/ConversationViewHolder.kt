@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.ActivityOptions
 import android.content.Intent
 import android.preference.PreferenceManager
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.emoji.widget.EmojiTextView
@@ -69,7 +68,6 @@ class ConversationViewHolder(view: View) : RecyclerView.ViewHolder(view){
         }
 
         if(!imageBase64.isNullOrEmpty()){
-            Log.d("TFM", imageBase64)
             Glide.with(itemView.context).load(imageBase64.toBitmap()).into(image)
         }
 

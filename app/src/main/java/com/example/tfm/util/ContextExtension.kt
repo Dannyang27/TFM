@@ -5,9 +5,9 @@ import android.content.Intent
 import com.example.tfm.activity.ChatActivity
 import com.example.tfm.activity.MainActivity
 
-fun Context.launchMainActivity(){
+fun Context.launchMainActivity(fromLogin: Boolean){
     val intent = Intent(this, MainActivity::class.java)
-    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+    intent.putExtra("fromLogin", fromLogin)
     startActivity(intent)
 }
 

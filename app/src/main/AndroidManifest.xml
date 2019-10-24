@@ -22,13 +22,21 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
+        <activity android:name=".activity.SplashActivity"
+                android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <service
                 android:name=".service.FirebaseListenerService"
                 android:enabled="true"
                 android:exported="true" />
 
-        <activity android:name=".activity.ImageDisplayActivity"/>
+        <activity android:name=".activity.ImageDisplayActivity" />
         <activity android:name=".activity.PrivacyPolicyActivity" />
         <activity
                 android:name=".activity.MySettingActivity"
@@ -43,17 +51,11 @@
         <activity
                 android:name=".activity.LoginActivity"
                 android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <meta-data
                 android:name="com.google.android.geo.API_KEY"
                 android:value="AIzaSyDonzV1O6YpOHKE0QwNLhzKqMmlwKkm9ng" />
-
         <meta-data
                 android:name="com.google.android.gms.vision.DEPENDENCIES"
                 android:value="label" />

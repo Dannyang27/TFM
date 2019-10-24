@@ -3,8 +3,6 @@ package com.example.tfm.data
 import android.content.Context
 import android.preference.PreferenceManager
 import android.util.Log
-import com.example.tfm.model.Conversation
-import com.example.tfm.model.Message
 import com.example.tfm.model.User
 import com.example.tfm.util.LogUtil
 import com.google.firebase.FirebaseApp
@@ -18,26 +16,8 @@ object DataRepository{
 
     var languagePreferenceCode: Int? = null
 
-    private val conversations: MutableMap<String, Conversation> = mutableMapOf()
     var user: User? = null
     var currentUserEmail = FirebaseAuth.getInstance().currentUser?.email.toString()
-
-    fun addConversation(key: String, conversation: Conversation){
-        conversations.putIfAbsent(key, conversation)
-    }
-
-    fun getConversations() = conversations.values.toMutableList()
-
-    fun updateConversation(message: Message, content: String){
-        conversations[message.ownerId].apply {
-            this?.lastMessage = content
-            this?.timestamp = message.timestamp
-        }
-    }
-
-    fun addMessage(message: Message) = conversations[message.ownerId]?.messages?.add(message)
-
-    fun getConversation(key: String) = conversations[key]
 
     fun initTranslator(context: Context){
         val language  = PreferenceManager.getDefaultSharedPreferences(context).getString("chatLanguage", "Default")!!
