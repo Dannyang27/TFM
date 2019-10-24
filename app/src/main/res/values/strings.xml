@@ -92,5 +92,5 @@
     <string name="selectLanguagePreference"><![CDATA[Select your language preference in Settings > Language Preferences]]></string>
     <string name="vibrateSummary">Phone will vibrate after message is received</string>
     <string name="label_sample">label</string>
-
+    <string name="image_transition">image_transition</string>
 </resources>

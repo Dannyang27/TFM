@@ -18,7 +18,6 @@ import com.example.tfm.util.clearCredential
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
-import org.jetbrains.anko.toast
 
 class MainActivity : AppCompatActivity() {
 
@@ -70,7 +69,6 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-
                 return true
             }
         })
@@ -101,7 +99,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         R.id.settings -> {
-            toast("Settings Clicked")
             startActivity(Intent(this, MySettingActivity::class.java))
             true
         }

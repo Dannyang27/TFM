@@ -3,19 +3,23 @@ package com.example.tfm.activity
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.MenuItem
 import android.view.Window
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import com.bumptech.glide.Glide
 import com.example.tfm.R
 import com.example.tfm.data.DataRepository
-import com.example.tfm.enum.MediaSource
 import com.example.tfm.model.User
-import com.example.tfm.util.FirebaseUtil
-import com.example.tfm.util.updateCurrentUser
+import com.example.tfm.util.*
+import com.example.tfm.viewmodel.UserProfileViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_user_profile.*
 import kotlinx.coroutines.CoroutineScope
@@ -27,6 +31,7 @@ import org.jetbrains.anko.toast
 class UserProfileActivity : AppCompatActivity() {
 
     private lateinit var firestore: FirebaseFirestore
+    private lateinit var userProfileViewModel: UserProfileViewModel
 
     private val GALLERY_REQUEST_CODE = 100
 
@@ -34,12 +39,28 @@ class UserProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_profile)
+        userProfileViewModel = ViewModelProviders.of(this).get(UserProfileViewModel::class.java)
+
         firestore = FirebaseFirestore.getInstance()
         toolbar = findViewById(R.id.profile_toolbar)
         toolbar.title = getString(R.string.profile)
+        displayArrowBack(toolbar)
+
+        userProfileViewModel.initProfile()
+        userProfileViewModel.getUser().observe(this, Observer {
+
+            if(!it.profilePhoto.isNullOrEmpty()){
+                Glide.with(this).load(it.profilePhoto.toBitmap()).into(user_profile)
+            }
+
+            profile_username.text = it.name
+            profile_status.text = it.status
+            profile_email.text = it.email
+            DataRepository.user = it
+        })
+
 
         profile_fab.setOnClickListener {
-            toast("Changing profile photo...")
             loadImage()
         }
 
@@ -50,9 +71,6 @@ class UserProfileActivity : AppCompatActivity() {
         profile_status_layout.setOnClickListener {
             showDialog(this, false)
         }
-
-        displayArrowBack(toolbar)
-        CoroutineScope(Dispatchers.IO).launch { initUserProfile() }
     }
 
     private fun displayArrowBack(toolbar: Toolbar){
@@ -72,16 +90,18 @@ class UserProfileActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when(requestCode){
             GALLERY_REQUEST_CODE -> {
-                data?.let {ImageToolActivity.launchImageTool(this, it.data, MediaSource.GALLERY, true) }
+                if(data != null && resultCode == Activity.RESULT_OK){
+                    val originalBitmap = MediaStore.Images.Media.getBitmap(contentResolver, data?.data) as Bitmap
+                    val bitmap = originalBitmap.createNewBitmap()
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val task = firestore.collection(FirebaseUtil.FIREBASE_USER_PATH).document(DataRepository.currentUserEmail).get().await()
+                        var user = task.toObject(User::class.java)?.copy(profilePhoto = bitmap.toBase64())!!
+                        firestore.updateCurrentUser(this@UserProfileActivity, user)
+                        userProfileViewModel.updateUser(user)
+                    }
+                }
             }
         }
-    }
-
-    private fun initUserProfile(){
-        val user = DataRepository.user
-        profile_username.text = user?.name ?: "N?A"
-        profile_status.text = user?.status ?: "N/A"
-        profile_email.text = user?.email ?: "N/A"
     }
 
     private fun showDialog(activity: Activity, isUsername: Boolean){
@@ -99,14 +119,15 @@ class UserProfileActivity : AppCompatActivity() {
             if(input.text.isNotEmpty()){
                 CoroutineScope(Dispatchers.IO).launch{
                     val task = firestore.collection(FirebaseUtil.FIREBASE_USER_PATH).document(DataRepository.currentUserEmail).get().await()
-
+                    var user: User
                     if(isUsername){
-                        var user = task.toObject(User::class.java)?.copy(name = input.text.toString())!!
-                        firestore.updateCurrentUser(activity, user, input.text.toString(), profile_username)
+                        user = task.toObject(User::class.java)?.copy(name = input.text.toString())!!
                     }else{
-                        var user = task.toObject(User::class.java)?.copy(status = input.text.toString())!!
-                        firestore.updateCurrentUser(activity, user, input.text.toString(), profile_status)
+                        user = task.toObject(User::class.java)?.copy(status = input.text.toString())!!
                     }
+
+                    firestore.updateCurrentUser(activity, user)
+                    userProfileViewModel.updateUser(user)
                 }
 
                 dialog.dismiss()

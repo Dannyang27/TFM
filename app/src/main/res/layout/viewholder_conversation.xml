@@ -9,8 +9,9 @@
             android:id="@+id/profile_image"
             android:layout_width="76dp"
             android:layout_height="76dp"
-            android:src="@drawable/dwight"
-            android:padding="10dp"/>
+            android:src="@drawable/white_placeholder"
+            android:padding="10dp"
+            android:transitionName="@string/image_transition"/>
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"

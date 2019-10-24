@@ -40,7 +40,7 @@ class ImageDisplayActivity : AppCompatActivity() {
             context.startActivity(intent)
         }
 
-        fun launchGif(context: Context, uri: Uri?, source: MediaSource){
+        fun launchGif(context: Context, uri: Uri?, source: MediaSource) {
             this.source = source
             this.uri = uri
             val intent = Intent(context, ImageDisplayActivity::class.java)
@@ -53,11 +53,11 @@ class ImageDisplayActivity : AppCompatActivity() {
         setContentView(R.layout.activity_image_display)
 
         imagedisplay_layout.setOnClickListener {
-            if(isToolbarVisible){
+            if (isToolbarVisible) {
                 isToolbarVisible = false
                 imagedisplay_toolbar.visibility = View.INVISIBLE
                 imagedisplay_labels.visibility = View.INVISIBLE
-            }else{
+            } else {
                 isToolbarVisible = true
                 imagedisplay_toolbar.visibility = View.VISIBLE
                 imagedisplay_labels.visibility = View.VISIBLE
@@ -68,14 +68,14 @@ class ImageDisplayActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
-        if(source == MediaSource.GALLERY){
+        if (source == MediaSource.GALLERY) {
             loadBitmap(bitmap)
-        }else{
+        } else {
             loadGif(uri)
         }
     }
 
-    private fun loadBitmap(bitmap: Bitmap?){
+    private fun loadBitmap(bitmap: Bitmap?) {
         imagedisplay_progressbar.start()
 
         Glide.with(this)
@@ -88,13 +88,13 @@ class ImageDisplayActivity : AppCompatActivity() {
         labeler.processImage(image)
             .addOnSuccessListener {
                 it.forEachIndexed { index, label ->
-                    if(index == 1){
+                    if (index == 1) {
                         labelOne.text = "${label.text}:"
                         confidenceOne.text = label.confidence.toString()
-                    }else if(index == 2){
+                    } else if (index == 2) {
                         labelTwo.text = "${label.text}:"
                         confidenceTwo.text = label.confidence.toString()
-                    }else if(index == 3){
+                    } else if (index == 3) {
                         labelThree.text = "${label.text}:"
                         confidenceThree.text = label.confidence.toString()
                     }
@@ -107,7 +107,7 @@ class ImageDisplayActivity : AppCompatActivity() {
         imagedisplay_progressbar.stop()
     }
 
-    private fun loadGif(uri: Uri?){
+    private fun loadGif(uri: Uri?) {
         imagedisplay_progressbar.start()
 
         Glide.with(this)
@@ -115,16 +115,28 @@ class ImageDisplayActivity : AppCompatActivity() {
             .load(uri)
             .override(imagedisplay_image.width, imagedisplay_image.width / 2)
             .listener(object : RequestListener<GifDrawable> {
-                override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<GifDrawable>?, isFirstRes: Boolean) = false
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<GifDrawable>?,
+                    isFirstRes: Boolean
+                ) = false
 
-                override fun onResourceReady(res: GifDrawable?, model: Any?, target: Target<GifDrawable>?, source: DataSource?, isFirstRes: Boolean): Boolean {
+                override fun onResourceReady(
+                    res: GifDrawable?,
+                    model: Any?,
+                    target: Target<GifDrawable>?,
+                    source: DataSource?,
+                    isFirstRes: Boolean
+                ): Boolean {
                     imagedisplay_progressbar.stop()
-                    return false                    }
+                    return false
+                }
             })
             .into(imagedisplay_image)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?) = when(item?.itemId){
+    override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
         android.R.id.home -> {
             finish()
             true

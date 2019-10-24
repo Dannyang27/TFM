@@ -12,7 +12,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
 import com.example.tfm.data.DataRepository
 import com.example.tfm.model.Message
-import com.example.tfm.util.*
+import com.example.tfm.util.getLanguage
+import com.example.tfm.util.setMessageCheckIfSeen
+import com.example.tfm.util.setTime
+import com.example.tfm.util.showUsernameIfGroup
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -83,20 +86,21 @@ class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view), CoroutineSc
         val pref = PreferenceManager.getDefaultSharedPreferences(layout.context).getLanguage()
         val log = message.body?.fieldThree.toString()
 
-        if( pref == "Default" || log.isUserLanguagePreference()){
-            this.body.text = message.body?.fieldOne
-        }else{
-            this.body.text = message.body?.fieldTwo
-
-            itemView.setOnClickListener {
-                if(isOriginalText){
-                    this.body.text = message.body?.fieldTwo
-                }else{
-                    this.body.text = message.body?.fieldOne
-                }
-                isOriginalText = !isOriginalText
-            }
-        }
+        this.body.text = message.body?.fieldOne
+//        if( pref == "Default" || log.isUserLanguagePreference()){
+//            this.body.text = message.body?.fieldOne
+//        }else{
+//            this.body.text = message.body?.fieldTwo
+//
+//            itemView.setOnClickListener {
+//                if(isOriginalText){
+//                    this.body.text = message.body?.fieldTwo
+//                }else{
+//                    this.body.text = message.body?.fieldOne
+//                }
+//                isOriginalText = !isOriginalText
+//            }
+//        }
     }
 
     private fun getDpValue(dpValue: Int): Int = (dpValue * layout.context.displayMetrics.density).toInt()

@@ -20,7 +20,7 @@ object DataRepository{
 
     private val conversations: MutableMap<String, Conversation> = mutableMapOf()
     var user: User? = null
-    val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email.toString()
+    var currentUserEmail = FirebaseAuth.getInstance().currentUser?.email.toString()
 
     fun addConversation(key: String, conversation: Conversation){
         conversations.putIfAbsent(key, conversation)

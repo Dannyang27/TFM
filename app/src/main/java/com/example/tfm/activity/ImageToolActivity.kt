@@ -2,13 +2,13 @@ package com.example.tfm.activity
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -21,25 +21,27 @@ import com.example.tfm.enum.MediaSource
 import com.example.tfm.enum.MessageType
 import com.example.tfm.model.Message
 import com.example.tfm.model.MessageContent
-import com.example.tfm.util.*
+import com.example.tfm.util.rotate
+import com.example.tfm.util.start
+import com.example.tfm.util.stop
+import com.example.tfm.util.toBase64
+import com.example.tfm.viewmodel.ChatViewModel
+import com.example.tfm.viewmodel.ImageToolViewModel
 import kotlinx.android.synthetic.main.activity_image_tool.*
-import org.jetbrains.anko.toast
 
 class ImageToolActivity : AppCompatActivity() {
 
-    private lateinit var bitmap: Bitmap
     private lateinit var content: String
-    private var isProfilePhoto = false
+    private lateinit var imageToolViewModel: ImageToolViewModel
 
     companion object {
         var source = MediaSource.NONE
 
-        fun launchImageTool(context: Context, uri: Uri?, source: MediaSource, isProfilePhoto: Boolean) {
+        fun launchImageTool(context: Context, uri: Uri?, source: MediaSource) {
             this.source = source
 
             val intent = Intent(context, ImageToolActivity::class.java)
             intent.putExtra("imageUrl", uri?.toString())
-            intent.putExtra("isProfilePhoto", isProfilePhoto)
 
             if(source == MediaSource.GIF){
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
@@ -54,7 +56,6 @@ class ImageToolActivity : AppCompatActivity() {
         setContentView(R.layout.activity_image_tool)
 
         val uri = intent.getStringExtra("imageUrl")
-        isProfilePhoto = intent.getBooleanExtra("isProfilePhoto", false)
 
         setSupportActionBar(tool_toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -62,47 +63,33 @@ class ImageToolActivity : AppCompatActivity() {
 
         var typeValue = MessageType.IMAGE.value
 
-        when(source){
-            MediaSource.GALLERY -> {
-                if(isProfilePhoto){
-                    //TODO show placeholder to match
-                }
-                bitmap = loadImageFromUri(uri)
-                tool_image.setImageBitmap(bitmap)
+        if(source != MediaSource.GIF){
+            imageToolViewModel = ViewModelProviders.of(this).get(ImageToolViewModel::class.java)
+
+            imageToolViewModel.getImage().observe(this, Observer {bitmap ->
+                tool_touchimage.setImageBitmap(bitmap)
+                tool_image.visibility = View.GONE
+                tool_touchimage.visibility = View.VISIBLE
                 content = bitmap.toBase64()
-            }
+            })
 
-            MediaSource.CAMERA -> {
-                bitmap = BitmapFactory.decodeFile(uri)
-                tool_image.setImageBitmap(bitmap)
-                content = bitmap.toBase64()
-            }
+            imageToolViewModel.initImageBySource(this, uri, source)
 
-            MediaSource.GIF -> {
-                tool_rotate.visibility = View.GONE
-                loadGif(uri)
-                typeValue = MessageType.GIF.value
-                content = uri
-            }
-
-            else -> {}
+        }else {
+            tool_rotate.visibility = View.GONE
+            loadGif(uri)
+            typeValue = MessageType.GIF.value
+            content = uri
         }
 
-        initAcceptButton(typeValue, content)
-
-        tool_cancel.setOnClickListener {
-            finish()
-        }
-
-        tool_rotate.setOnClickListener {
-            tool_image.rotate()
-        }
+        initAcceptButton(typeValue)
+        initButtonListeners()
     }
 
     private fun loadGif(gifUrl: String?) {
         tool_progressbar.start()
         gifUrl?.let {
-            Glide.with(tool_image)
+            Glide.with(this)
                 .asGif()
                 .load(it)
                 .override(tool_image.width, tool_image.width / 2)
@@ -111,27 +98,32 @@ class ImageToolActivity : AppCompatActivity() {
 
                     override fun onResourceReady(res: GifDrawable?, model: Any?, target: Target<GifDrawable>?, source: DataSource?, isFirstRes: Boolean): Boolean {
                         tool_progressbar.stop()
-                        return false                    }
+                        tool_image.visibility = View.VISIBLE
+                        return false
+                    }
                 })
                 .into(tool_image)
         }
     }
 
-    private fun initAcceptButton(typeValue: Int, content: String){
+    private fun initAcceptButton(typeValue: Int){
         tool_accept.setOnClickListener {
+            val timestamp = System.currentTimeMillis()
+            val message = Message(timestamp, ChatActivity.conversationId, DataRepository.currentUserEmail,
+                ChatActivity.receiverUser, typeValue, MessageContent(fieldOne = content), timestamp)
 
-            if( isProfilePhoto ){
-                toast("Setting profile photo")
-            }else{
-                val timestamp = System.currentTimeMillis()
-                val message = Message(timestamp, ChatActivity.conversationId, DataRepository.currentUserEmail,
-                    ChatActivity.receiverUser, typeValue, MessageContent(fieldOne = content), timestamp)
-
-                FirebaseUtil.addMessageLocal(message)
-                FirebaseUtil.addMessageFirebase(this, message)
-            }
-
+            ChatViewModel.addMessage(message)
             finish()
+        }
+    }
+
+    private fun initButtonListeners(){
+        tool_cancel.setOnClickListener {
+            finish()
+        }
+
+        tool_rotate.setOnClickListener {
+            tool_touchimage.rotate()
         }
     }
 

@@ -1,12 +1,15 @@
 package com.example.tfm.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.tfm.R
 import com.example.tfm.diffUtil.UserDiffCallback
 import com.example.tfm.model.User
+import com.example.tfm.util.toBitmap
 import com.example.tfm.viewHolder.UserSearchViewHolder
 
 class UserSearchAdapter (private var users: MutableList<User>): RecyclerView.Adapter<UserSearchViewHolder>(){
@@ -19,9 +22,19 @@ class UserSearchAdapter (private var users: MutableList<User>): RecyclerView.Ada
     override fun onBindViewHolder(holder: UserSearchViewHolder, position: Int) {
         val user = users[position]
         holder.email = user.email
+        holder.user = user.name
+        holder.photoBase64 = user.profilePhoto
+
         holder.id = user.id.toLong()
         holder.username.text = user.name
         holder.status.text = user.status
+        holder.photo
+
+        try{
+            Glide.with(holder.itemView.context).load(user.profilePhoto.toBitmap()).into(holder.photo)
+        }catch (e: Exception){
+            Log.d("TFM", "Image null or empty")
+        }
     }
 
     override fun getItemCount() = users.size

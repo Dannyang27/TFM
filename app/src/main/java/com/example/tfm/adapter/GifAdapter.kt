@@ -39,7 +39,7 @@ class GifAdapter : BaseAdapter{
         Glide.with(context).asGif().load(gif.previewGif.url).centerCrop().into(gifImage)
 
         gifImage.setOnClickListener {
-            ImageToolActivity.launchImageTool(context, Uri.parse(gif.original.url), MediaSource.GIF, false)
+            ImageToolActivity.launchImageTool(context, Uri.parse(gif.original.url), MediaSource.GIF)
         }
 
         return gifView

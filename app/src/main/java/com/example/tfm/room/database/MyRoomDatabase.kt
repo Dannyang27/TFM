@@ -104,7 +104,7 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
         launch {
             Log.d(LogUtil.TAG, "Id: | UserOne: | UserTwo: ")
             conversationDao().getAll().forEach {
-                Log.d(LogUtil.TAG, "${it.id} | ${it.userOne} | ${it.userTwo}")
+                Log.d(LogUtil.TAG, "${it.id} | ${it.userOneEmail} | ${it.userTwoEmail}")
             }
         }
     }
@@ -149,10 +149,10 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
     fun getReceiverUser(conversationId: String): String{
         val conversation = conversationDao().getById(conversationId)
 
-        if(conversation.userOne == DataRepository.currentUserEmail){
-            return conversation.userTwo.toString()
+        if(conversation.userOneEmail == DataRepository.currentUserEmail){
+            return conversation.userTwoEmail
         }else{
-            return conversation.userOne.toString()
+            return conversation.userOneEmail
         }
     }
 
