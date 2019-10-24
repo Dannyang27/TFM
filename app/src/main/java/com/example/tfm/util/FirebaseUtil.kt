@@ -13,9 +13,9 @@ import com.example.tfm.model.Conversation
 import com.example.tfm.model.Message
 import com.example.tfm.model.User
 import com.example.tfm.room.database.MyRoomDatabase
+import com.example.tfm.viewmodel.ConversationViewModel
 import com.example.tfm.viewmodel.LoginViewModel
 import com.example.tfm.viewmodel.SignupViewModel
-import com.example.tfm.viewmodel.UserSearcherViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -24,6 +24,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.jetbrains.anko.toast
@@ -38,6 +39,11 @@ object FirebaseUtil {
     private val firebaseAuth: FirebaseAuth? = FirebaseAuth.getInstance()
     private lateinit var prefs: SharedPreferences
     private val database = FirebaseDatabase.getInstance().reference
+    private lateinit var roomDatabase: MyRoomDatabase
+
+    fun initRoomDatabase(context: Context){
+        roomDatabase = MyRoomDatabase.getMyRoomDatabase(context)!!
+    }
 
     fun login(context: Context, user: String, password: String){
         firebaseAuth?.signInWithEmailAndPassword(user, password)
@@ -50,7 +56,6 @@ object FirebaseUtil {
                         val loginTask = FirebaseFirestore.getInstance().collection(FIREBASE_USER_PATH).document(user).get().await()
                         DataRepository.user = loginTask.toObject(User::class.java)
                         DataRepository.currentUserEmail = user
-                        Log.d("TFM", "CurrentUserEmail: $user")
                         LoginViewModel.isSuccessful.postValue(true)
                     }
 
@@ -97,86 +102,125 @@ object FirebaseUtil {
             }
     }
 
-    fun loadUserConversation(context: Context, userHash: String){
-
-        val roomDatabase = MyRoomDatabase.getMyRoomDatabase(context)
-
-        database.child(FIREBASE_PRIVATE_CHAT_PATH)
+    fun loadUsers(){
+        database.child(FIREBASE_USER_PATH)
             .addListenerForSingleValueEvent(object: ValueEventListener{
                 override fun onCancelled(@NonNull p0: DatabaseError) {}
 
                 override fun onDataChange(@NonNull dataSnapshot: DataSnapshot) {
-                    dataSnapshot.children.forEach{
-                        val conv = it.getValue(Conversation::class.java)!!
-                        if(conv.id.contains(userHash)){
-                            CoroutineScope(Dispatchers.IO).launch {
-                                val jobOne = launch {
-                                    val taskOne = FirebaseFirestore.getInstance()
-                                        .collection(FIREBASE_USER_PATH)
-                                        .document(conv.userOneEmail).get().await()
-                                    val user = taskOne.toObject(User::class.java)
-                                    conv.userOneUsername = user?.name.toString()
-                                    conv.userOnePhoto = user?.profilePhoto.toString()
-                                }
-                                val jobTwo = launch {
-                                    val taskTwo = FirebaseFirestore.getInstance()
-                                        .collection(FIREBASE_USER_PATH)
-                                        .document(conv.userTwoEmail).get().await()
-
-                                    val user = taskTwo.toObject(User::class.java)
-                                    conv.userTwoUsername = user?.name.toString()
-                                    conv.userTwoPhoto = user?.profilePhoto.toString()
-                                }
-
-                                jobOne.join()
-                                jobTwo.join()
-                                roomDatabase?.addConversation(conv)
-                            }
+                    dataSnapshot.children.forEach {
+                        val user = it.getValue(User::class.java)
+                        user?.let {
+                            roomDatabase.addUser(it)
                         }
                     }
+
+                    loadUserConversations(DataRepository.user?.id)
                 }
             })
     }
-
-
-//    fun conversationServiceListener(userHash: String){
+//
+//    fun loadUserConversation(userId: String?){
 //        database.child(FIREBASE_PRIVATE_CHAT_PATH)
 //            .addListenerForSingleValueEvent(object: ValueEventListener{
 //                override fun onCancelled(@NonNull p0: DatabaseError) {}
 //
 //                override fun onDataChange(@NonNull dataSnapshot: DataSnapshot) {
-//                    val list = mutableListOf<Conversation>()
 //                    dataSnapshot.children.forEach{
-//                        val conv = it.getValue(Conversation::class.java)!!
-//                        if(conv.id.contains(userHash)){
-//                            CoroutineScope(Dispatchers.IO).launch {
-//                                val jobOne = launch {
-//                                    val taskOne = FirebaseFirestore.getInstance()
-//                                        .collection(FIREBASE_USER_PATH)
-//                                        .document(conv.userOneEmail).get().await()
-//                                    val user = taskOne.toObject(User::class.java)
-//                                    conv.userOneUsername = user?.name.toString()
-//                                    conv.userOnePhoto = user?.profilePhoto.toString()
-//                                }
-//                                val jobTwo = launch {
-//                                    val taskTwo = FirebaseFirestore.getInstance()
-//                                        .collection(FIREBASE_USER_PATH)
-//                                        .document(conv.userTwoEmail).get().await()
+//                        val conv = it.getValue(Conversation::class.java)
 //
-//                                    val user = taskTwo.toObject(User::class.java)
-//                                    conv.userTwoUsername = user?.name.toString()
-//                                    conv.userTwoPhoto = user?.profilePhoto.toString()
-//                                }
+//                        conv?.let {
+//                            if(conv.id.contains(userId.toString())){
+//                                CoroutineScope(Dispatchers.IO).launch {
+//                                    val jobOne = async {
+//                                        val userOne = roomDatabase.getUserByEmail(conv.userOneEmail)
+//                                        conv.userOneUsername = userOne.name
+//                                        conv.userOnePhoto = userOne.profilePhoto
+//                                    }
 //
-//                                jobOne.join()
-//                                jobTwo.join()
-//                                list.add(conv)
+//                                    val jobTwo = async {
+//                                        val userTwo = roomDatabase.getUserByEmail(conv.userTwoEmail)
+//                                        conv.userTwoUsername = userTwo.name
+//                                        conv.userTwoPhoto = userTwo.profilePhoto
+//                                    }
+//
+//                                    jobOne.await()
+//                                    jobTwo.await()
+//                                    async{ roomDatabase.addConversation(conv) }.await()
+//                                }
 //                            }
 //                        }
 //                    }
 //                }
 //            })
 //    }
+
+    fun loadUserConversations(userId: String?){
+        database.child(FIREBASE_PRIVATE_CHAT_PATH)
+            .addListenerForSingleValueEvent(object: ValueEventListener{
+                override fun onCancelled(@NonNull p0: DatabaseError) {}
+
+                override fun onDataChange(@NonNull dataSnapshot: DataSnapshot) {
+                    dataSnapshot.children.forEach{
+                        val conv = it.getValue(Conversation::class.java)
+
+                        conv?.let {
+                            if(conv.id.contains(userId.toString())){
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    launch {
+                                        loadConversationMessages(conv.id)
+                                    }
+
+                                    val jobOne = async {
+                                        val userOne = roomDatabase.getUserByEmail(conv.userOneEmail)
+                                        conv.userOneUsername = userOne.name
+                                        conv.userOnePhoto = userOne.profilePhoto
+                                        roomDatabase.addUser(userOne)
+
+                                    }
+
+                                    val jobTwo = async {
+                                        val userTwo = roomDatabase.getUserByEmail(conv.userTwoEmail)
+                                        conv.userTwoUsername = userTwo.name
+                                        conv.userTwoPhoto = userTwo.profilePhoto
+                                        roomDatabase.addUser(userTwo)
+                                    }
+
+                                    jobOne.await()
+                                    jobTwo.await()
+                                    async{ roomDatabase.addConversation(conv) }.await()
+                                }
+                            }
+                        }
+                    }
+
+                    ConversationViewModel.dataDownloaded.postValue(true)
+                }
+            })
+    }
+
+    fun loadConversationMessages(conversationId: String){
+        Log.d(LogUtil.TAG, "Conversation id: $conversationId")
+
+        database.child(FIREBASE_PRIVATE_CHAT_PATH)
+            .child(conversationId)
+            .child(FIREBASE_PRIVATE_MESSAGE_PATH)
+            .addListenerForSingleValueEvent(object: ValueEventListener{
+                override fun onCancelled(@NonNull p0: DatabaseError) {}
+
+                override fun onDataChange(@NonNull dataSnapshot: DataSnapshot) {
+                    Log.d(LogUtil.TAG, "Conversation id: $conversationId")
+
+                    dataSnapshot.children.forEach { mess ->
+                        val message = mess.getValue(Message::class.java)
+                        message?.let {
+                            roomDatabase.addMessage(message)
+                            Log.d(LogUtil.TAG, "Message ID: ${message.id} | MessageType: ${message.messageType}")
+                        }
+                    }
+                }
+            })
+    }
 
     fun loadMessageFromConversation(messages: MutableLiveData<MutableList<Message>>, conversationId: String){
         database.child(FIREBASE_PRIVATE_CHAT_PATH)
@@ -195,22 +239,6 @@ object FirebaseUtil {
                     messages.postValue(messageList)
                 }
             })
-    }
-
-    fun loadAllUsers( users: MutableLiveData<MutableList<User>>, filterText: String?){
-        database.child(FIREBASE_USER_PATH).addListenerForSingleValueEvent(object: ValueEventListener{
-            override fun onCancelled(p0: DatabaseError) {}
-
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                dataSnapshot.children.forEach {
-                    val user = it.getValue(User::class.java)
-                    if(user?.email != DataRepository.currentUserEmail && user?.name?.contains(filterText.toString(), ignoreCase = true)!!){
-                        UserSearcherViewModel.allUserList.add(user)
-                    }
-                }
-                users.postValue(UserSearcherViewModel.allUserList)
-            }
-        })
     }
 
     fun addPrivateChat(context: Context, conversation: Conversation){

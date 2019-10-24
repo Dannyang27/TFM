@@ -31,7 +31,7 @@ class SignupActivity : AppCompatActivity() {
 
         signupViewModel.getIsJoinSuccessful().observe(this, Observer {isSuccess ->
             if(isSuccess){
-                launchMainActivity()
+                launchMainActivity(false)
             }else{
                 enableViews()
             }

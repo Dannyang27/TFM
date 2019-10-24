@@ -38,7 +38,7 @@ class UserSearcherActivity : AppCompatActivity() {
             adapter = viewAdapter
         }
 
-        userSearcherViewModel.searchUsers("")
+        userSearcherViewModel.initRoomObserver(this)
 
         search_user.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {

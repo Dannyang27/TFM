@@ -21,11 +21,17 @@ data class Message (@PrimaryKey(autoGenerate = true)
                     var isSent: Boolean = false,
                     var isReceived: Boolean = false)
 
+@Entity(tableName = "PlainMessage")
+data class PlainMessageRoomModel(@PrimaryKey
+                                 var id: Long = -1,
+                                 var originalText: String = "",
+                                 var englishText: String = "",
+                                 var language: String = "")
+
 @Entity(tableName = "Gif")
 data class GifRoomModel(@PrimaryKey
                    var id: Long = -1,
-                   var url: String = "",
-                   var caption: String = "")
+                   var url: String = "")
 
 @Entity(tableName = "Image")
 data class ImageRoomModel(@PrimaryKey
