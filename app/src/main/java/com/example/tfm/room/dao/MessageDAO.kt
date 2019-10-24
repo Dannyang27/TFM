@@ -26,7 +26,7 @@ interface MessageDAO {
     @Query("SELECT COUNT(*) FROM Message")
     fun getSize(): Int
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun add(message: Message)
 
     @Update
@@ -43,7 +43,7 @@ interface MessageDAO {
     @Query("SELECT * FROM Gif WHERE id= :id")
     fun getGifById(id: Long) : GifRoomModel
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun addGif(gif: GifRoomModel)
 
     @Update
@@ -61,7 +61,7 @@ interface MessageDAO {
     @Query("SELECT * FROM Image WHERE id = :id")
     fun getImageById(id: Long) : ImageRoomModel
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun addImage(image: ImageRoomModel)
 
     @Update
@@ -79,7 +79,7 @@ interface MessageDAO {
     @Query("SELECT * FROM Location WHERE id = :id")
     fun getLocationById( id: Long) : LocationRoomModel
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun addLocation(location: LocationRoomModel)
 
     @Update

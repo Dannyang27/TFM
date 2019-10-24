@@ -1,7 +1,6 @@
 package com.example.tfm.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,13 +43,13 @@ class PrivateFragment : Fragment(){
             adapter = viewAdapter
         }
 
-        conversationViewModel.initConversations()
+        conversationViewModel.initConversations(activity?.applicationContext!!)
+        conversationViewModel.initRoomObserver(activity!!)
         return view
     }
 
     override fun onResume() {
         super.onResume()
-        Log.d("TFM", "onResume() de private fragment")
         //TODO actualizar
     }
 }

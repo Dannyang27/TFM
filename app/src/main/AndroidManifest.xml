@@ -23,7 +23,12 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
 
-        <activity android:name=".activity.ImageDisplayActivity"></activity>
+        <service
+                android:name=".service.FirebaseListenerService"
+                android:enabled="true"
+                android:exported="true" />
+
+        <activity android:name=".activity.ImageDisplayActivity"/>
         <activity android:name=".activity.PrivacyPolicyActivity" />
         <activity
                 android:name=".activity.MySettingActivity"
