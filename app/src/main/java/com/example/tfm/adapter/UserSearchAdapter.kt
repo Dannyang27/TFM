@@ -1,5 +1,6 @@
 package com.example.tfm.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -32,7 +33,7 @@ class UserSearchAdapter (private var users: MutableList<User>): RecyclerView.Ada
         try{
             Glide.with(holder.itemView.context).load(user.profilePhoto.toBitmap()).into(holder.photo)
         }catch (e: Exception){
-            //TODO nothing
+            Log.d("TFM", "Image null or empty")
         }
     }
 

@@ -16,7 +16,6 @@ import com.example.tfm.util.KeyboardUtil
 import com.example.tfm.viewmodel.GifViewModel
 
 class GifFragment : Fragment(){
-
     private lateinit var adapter: GifAdapter
     private lateinit var gifViewModel: GifViewModel
     private val gifs = mutableListOf<Gifs>()
