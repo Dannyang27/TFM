@@ -57,7 +57,7 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
                     }
                     MessageType.IMAGE -> {
                         val image = messageDao().getImageById(it.id)
-                        Log.d(LogUtil.TAG, "FieldOne: ${image.encodedImage}")
+                        Log.d(LogUtil.TAG, "FieldOne: ${image.encodedImage.take(10)}")
                     }
                     MessageType.LOCATION -> {
                         val location = messageDao().getLocationById(it.id)
