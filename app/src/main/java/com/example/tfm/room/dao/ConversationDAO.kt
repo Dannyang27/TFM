@@ -1,18 +1,19 @@
 package com.example.tfm.room.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.tfm.model.Conversation
 
 @Dao
 interface ConversationDAO {
-    @Query("SELECT * FROM Conversation")
-    fun getAll() : MutableList<Conversation>
+    @Query("SELECT * FROM Conversation ORDER BY timestamp DESC")
+    fun getAll() : LiveData<MutableList<Conversation>>
 
     @Query("SELECT * FROM Conversation WHERE id = :id")
     fun getById( id: String) : Conversation
 
-    @Query("SELECT * FROM Conversation where userOneEmail = :email or userTwoEmail = :email")
-    fun getUserConversations(email: String): MutableList<Conversation>
+    @Query("SELECT * FROM Conversation where userOneEmail = :email or userTwoEmail = :email ORDER BY timestamp DESC")
+    fun getUserConversations(email: String): LiveData<MutableList<Conversation>>
 
     @Query("SELECT * FROM Conversation where (userOneEmail = :email or userTwoEmail = :email )AND (userOneEmail = :newEmail or userTwoEmail = :newEmail)")
     fun getMutualConversation(email: String, newEmail: String) : Conversation
@@ -20,7 +21,7 @@ interface ConversationDAO {
     @Query("SELECT COUNT(*) FROM Conversation")
     fun getSize(): Int
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun add(conversation: Conversation)
 
     @Update

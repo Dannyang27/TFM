@@ -7,7 +7,6 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.tfm.data.DataRepository
-import com.example.tfm.enum.MessageType
 import com.example.tfm.model.*
 import com.example.tfm.room.dao.ConversationDAO
 import com.example.tfm.room.dao.MessageDAO
@@ -75,39 +74,26 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
         }
     }
 
-    fun showAllUserInLog(){
-        launch {
-                Log.d(LogUtil.TAG, "Email: | Name: | Status: | PhotoPath: ")
-                userDao().getAll().forEach {
-                    Log.d(LogUtil.TAG, "${it.email} | ${it.name} | ${it.status} | ${it.profilePhoto}")
-                }
-        }
-    }
-
     fun addConversation(conversation: Conversation){
         launch {
             conversationDao().add(conversation)
-        }.also {
-            Log.d(LogUtil.TAG, "Conversation ${conversation.id} has been added into database")
         }
     }
 
     fun deleteConversation(id: String){
         launch {
             conversationDao().deleteConversationById(id)
-        }.also {
-            Log.d(LogUtil.TAG, "Conversation id: $id is deleted and all its messages")
         }
     }
 
-    fun showAllConversationInLog(){
-        launch {
-            Log.d(LogUtil.TAG, "Id: | UserOne: | UserTwo: ")
-            conversationDao().getAll().forEach {
-                Log.d(LogUtil.TAG, "${it.id} | ${it.userOneEmail} | ${it.userTwoEmail}")
-            }
-        }
-    }
+//    fun showAllConversationInLog(){
+//        launch {
+//            Log.d(LogUtil.TAG, "Id: | UserOne: | UserTwo: ")
+//            conversationDao().getAll().forEach {
+//                Log.d(LogUtil.TAG, "${it.id} | ${it.userOneEmail} | ${it.userTwoEmail}")
+//            }
+//        }
+//    }
 
     fun updateConversation( message: Message, content: String){
         launch {
@@ -127,24 +113,24 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
             Log.d(LogUtil.TAG, "All conversations removed also its messages")
         }
     }
-
-    fun addMessage(message: Message){
-        launch {
-            messageDao().add(message)
-            when(MessageType.fromInt(message.messageType)) {
-                MessageType.GIF -> addGif(message.body as GifRoomModel)
-                MessageType.IMAGE -> addImage(message.body as ImageRoomModel)
-                MessageType.LOCATION -> addLocation(message.body as LocationRoomModel)
-                MessageType.ATTACHMENT -> {}
-                else -> {
-                    Log.d(LogUtil.TAG, "MessageType not specified")
-                }
-            }
-
-        }.also {
-            Log.d(LogUtil.TAG, "Message id: ${message.ownerId} added in Room and MessageType ${message.body} ")
-        }
-    }
+//
+//    fun addMessage(message: Message){
+//        launch {
+//            messageDao().add(message)
+//            when(MessageType.fromInt(message.messageType)) {
+//                MessageType.GIF -> addGif(message.body as GifRoomModel)
+//                MessageType.IMAGE -> addImage(message.body as ImageRoomModel)
+//                MessageType.LOCATION -> addLocation(message.body as LocationRoomModel)
+//                MessageType.ATTACHMENT -> {}
+//                else -> {
+//                    Log.d(LogUtil.TAG, "MessageType not specified")
+//                }
+//            }
+//
+//        }.also {
+//            Log.d(LogUtil.TAG, "Message id: ${message.ownerId} added in Room and MessageType ${message.body} ")
+//        }
+//    }
 
     fun getReceiverUser(conversationId: String): String{
         val conversation = conversationDao().getById(conversationId)
