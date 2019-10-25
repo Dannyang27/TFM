@@ -1,13 +1,11 @@
 package com.example.tfm.activity
 
-import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.SearchView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.emoji.bundled.BundledEmojiCompatConfig
 import androidx.emoji.text.EmojiCompat
@@ -33,7 +31,6 @@ class MainActivity : AppCompatActivity() {
     private var activeFragment: Fragment = privateFragment
     private lateinit var roomDatabase: MyRoomDatabase
     private lateinit var conversationViewModel: ConversationViewModel
-    private lateinit var dialog: Dialog
 
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -68,12 +65,6 @@ class MainActivity : AppCompatActivity() {
         conversationViewModel = ViewModelProviders.of(this).get(ConversationViewModel::class.java)
         conversationViewModel.getConversations().observe(this, Observer {
             privateFragment.updateList(it)
-        })
-
-        conversationViewModel.getDataDownloaded().observe(this, Observer {downloaded ->
-            if(downloaded) {
-                dialog.dismiss()
-            }
         })
 
         conversationViewModel.initRoomObserver(this)
@@ -118,7 +109,6 @@ class MainActivity : AppCompatActivity() {
 
         val fromLoginActivity = intent.getBooleanExtra("fromLogin", false)
         if(fromLoginActivity){
-            showDialog()
             conversationViewModel.initDownloadUserData()
         }
     }
@@ -145,6 +135,7 @@ class MainActivity : AppCompatActivity() {
             PreferenceManager.getDefaultSharedPreferences(this).clearCredential()
 
             startActivity(Intent(this, LoginActivity::class.java))
+            finish()
             true
         }
 
@@ -156,15 +147,5 @@ class MainActivity : AppCompatActivity() {
     private fun initEmoji(){
         val config = BundledEmojiCompatConfig(this)
         EmojiCompat.init(config)
-    }
-
-    private fun showDialog(){
-        dialog = Dialog(this)
-        dialog.setContentView(R.layout.dialog_progressbar)
-        val dialogText = dialog.findViewById<TextView>(R.id.dialog_text)
-        dialogText.text = getString(R.string.download_user_data)
-        dialog.setCancelable(false)
-        dialog.setCanceledOnTouchOutside(false)
-        dialog.show()
     }
 }

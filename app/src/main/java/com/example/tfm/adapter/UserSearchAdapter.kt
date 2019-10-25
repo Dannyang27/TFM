@@ -1,6 +1,7 @@
 package com.example.tfm.adapter
 
 import android.content.Context
+import android.preference.PreferenceManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -22,6 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.jetbrains.anko.toast
 
 class UserSearchAdapter (private var users: MutableList<User>): RecyclerView.Adapter<UserSearchViewHolder>(){
 
@@ -48,7 +50,14 @@ class UserSearchAdapter (private var users: MutableList<User>): RecyclerView.Ada
         }
 
         holder.itemView.setOnClickListener {
-            createConversationIfNone(it.context, holder)
+            val pref = PreferenceManager.getDefaultSharedPreferences(it.context)
+            val hasLanguagePref = pref.getString("chatLanguage", "Default") != "Default"
+
+            if(hasLanguagePref){
+                createConversationIfNone(it.context, holder)
+            }else{
+                it.context.toast(it.context.getString(R.string.selectLanguagePreference))
+            }
         }
     }
 

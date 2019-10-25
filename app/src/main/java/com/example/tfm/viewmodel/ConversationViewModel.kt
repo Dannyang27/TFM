@@ -23,10 +23,6 @@ class ConversationViewModel : ViewModel(){
     private val conversationList: MutableLiveData<MutableList<Conversation>> = MutableLiveData()
     private val conversations = mutableListOf<Conversation>()
 
-    companion object{
-        val dataDownloaded: MutableLiveData<Boolean> = MutableLiveData()
-    }
-
     fun updateUser(email: String){
         CoroutineScope(Dispatchers.IO).launch {
             val loginTask = FirebaseFirestore.getInstance().collection(FIREBASE_USER_PATH).document(email).get().await()
@@ -38,8 +34,6 @@ class ConversationViewModel : ViewModel(){
     fun getConversations(): LiveData<MutableList<Conversation>>{
         return conversationList
     }
-
-    fun getDataDownloaded(): LiveData<Boolean> = dataDownloaded
 
     fun initDownloadUserData(){
         CoroutineScope(Dispatchers.IO).launch{

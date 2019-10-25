@@ -33,7 +33,7 @@ class ConversationViewHolder(view: View) : RecyclerView.ViewHolder(view){
             val pref = PreferenceManager.getDefaultSharedPreferences(it.context)
             val language = pref.getString("chatLanguage", "Default")
             if(language == "Default"){
-                it.context.toast("Please select a language Settings > Download Model")
+                it.context.toast(it.context.getString(R.string.selectLanguagePreference))
             }else{
                 val ctx = it.context
 

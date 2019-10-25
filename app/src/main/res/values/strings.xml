@@ -89,7 +89,7 @@
         This policy is effective as of 27 September 2019.
     </string>
     <string name="privacypolicyTitle">Privacy Policy</string>
-    <string name="selectLanguagePreference"><![CDATA[Select your language preference in Settings > Language Preferences]]></string>
+    <string name="selectLanguagePreference">Please select a language Settings > Download Model</string>
     <string name="vibrateSummary">Phone will vibrate after message is received</string>
     <string name="label_sample">label</string>
     <string name="image_transition">image_transition</string>

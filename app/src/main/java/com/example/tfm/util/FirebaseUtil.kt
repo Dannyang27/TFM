@@ -13,7 +13,6 @@ import com.example.tfm.model.Conversation
 import com.example.tfm.model.Message
 import com.example.tfm.model.User
 import com.example.tfm.room.database.MyRoomDatabase
-import com.example.tfm.viewmodel.ConversationViewModel
 import com.example.tfm.viewmodel.LoginViewModel
 import com.example.tfm.viewmodel.SignupViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -193,8 +192,6 @@ object FirebaseUtil {
                             }
                         }
                     }
-
-                    ConversationViewModel.dataDownloaded.postValue(true)
                 }
             })
     }
