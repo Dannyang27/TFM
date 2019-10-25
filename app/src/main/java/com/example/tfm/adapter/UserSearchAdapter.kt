@@ -14,10 +14,7 @@ import com.example.tfm.diffUtil.UserDiffCallback
 import com.example.tfm.model.Conversation
 import com.example.tfm.model.User
 import com.example.tfm.room.database.MyRoomDatabase
-import com.example.tfm.util.addConversation
-import com.example.tfm.util.getConversation
-import com.example.tfm.util.launchChatActivity
-import com.example.tfm.util.toBitmap
+import com.example.tfm.util.*
 import com.example.tfm.viewHolder.UserSearchViewHolder
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
@@ -47,6 +44,10 @@ class UserSearchAdapter (private var users: MutableList<User>): RecyclerView.Ada
             Glide.with(holder.itemView.context).load(user.profilePhoto.toBitmap()).into(holder.photo)
         }catch (e: Exception){
             Log.d("TFM", "Image null or empty")
+        }
+
+        holder.photo.setOnClickListener {
+            holder.photo.showDialog(it.context, user.profilePhoto)
         }
 
         holder.itemView.setOnClickListener {

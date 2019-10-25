@@ -1,6 +1,7 @@
 package com.example.tfm.util
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Bitmap
@@ -21,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.tfm.R
 import com.example.tfm.enum.LanguageDrawable
+import de.hdodenhof.circleimageview.CircleImageView
 import java.io.ByteArrayOutputStream
 
 fun TextView.showUsernameIfGroup( isPrivateChat: Boolean, username: String){
@@ -132,6 +134,20 @@ fun ImageView.rotate(){
     val bitmap = (drawable as BitmapDrawable).bitmap
     val bitmapRotated = Bitmap.createBitmap(bitmap, 0,0, bitmap.width, bitmap.height, matrix, true)
     setImageBitmap(bitmapRotated)
+}
+
+fun CircleImageView.showDialog(context: Context, imageBase64: String?){
+    try{
+        imageBase64?.let {
+            val dialog  = Dialog(context)
+            dialog.setContentView(R.layout.dialog_imagedisplay)
+            val dialogPhoto = dialog.findViewById<ImageView>(R.id.dialog_imagedisplay)
+            Glide.with(context).load(imageBase64.toBitmap()).into(dialogPhoto)
+            dialog.show()
+        }
+    }catch (e: Exception){
+        e.printStackTrace()
+    }
 }
 
 fun String.removeAfter(letter: Char): String{

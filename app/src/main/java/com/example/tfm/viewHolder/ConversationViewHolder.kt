@@ -2,12 +2,9 @@ package com.example.tfm.viewHolder
 
 import android.app.Activity
 import android.app.ActivityOptions
-import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import android.preference.PreferenceManager
 import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.emoji.widget.EmojiTextView
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +14,7 @@ import com.example.tfm.activity.ChatActivity
 import com.example.tfm.data.DataRepository
 import com.example.tfm.model.Conversation
 import com.example.tfm.util.setTime
+import com.example.tfm.util.showDialog
 import com.example.tfm.util.toBitmap
 import de.hdodenhof.circleimageview.CircleImageView
 import org.jetbrains.anko.toast
@@ -34,7 +32,7 @@ class ConversationViewHolder(view: View) : RecyclerView.ViewHolder(view){
     init {
 
         image.setOnClickListener {
-            showDialog(it.context)
+            image.showDialog(it.context, imageBase64)
         }
 
         view.setOnClickListener {
@@ -81,17 +79,5 @@ class ConversationViewHolder(view: View) : RecyclerView.ViewHolder(view){
 
         lastMessage.text = if(conversation.lastMessage.toString().isNotEmpty()) conversation.lastMessage else image.context.getString(R.string.bethefirst)
         setTime(lastTime, conversation.timestamp)
-    }
-
-    private fun showDialog(context: Context){
-        try{
-            val dialog  = Dialog(context)
-            dialog.setContentView(R.layout.dialog_imagedisplay)
-            val dialogPhoto = dialog.findViewById<ImageView>(R.id.dialog_imagedisplay)
-            Glide.with(context).load(imageBase64.toBitmap()).into(dialogPhoto)
-            dialog.show()
-        }catch (e: Exception){
-            e.printStackTrace()
-        }
     }
 }

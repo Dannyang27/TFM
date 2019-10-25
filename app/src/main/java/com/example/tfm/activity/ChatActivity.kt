@@ -1,7 +1,6 @@
 package com.example.tfm.activity
 
 import android.Manifest
-import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -14,7 +13,6 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
@@ -38,6 +36,7 @@ import com.example.tfm.model.Message
 import com.example.tfm.model.MessageContent
 import com.example.tfm.util.FirebaseTranslator
 import com.example.tfm.util.KeyboardUtil
+import com.example.tfm.util.showDialog
 import com.example.tfm.util.toBitmap
 import com.example.tfm.viewmodel.ChatViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -218,7 +217,7 @@ class ChatActivity : AppCompatActivity(){
             Glide.with(this).load(photo?.toBitmap()).into(chat_profile_image)
 
             chat_profile_image.setOnClickListener {
-                showDialog(this, photo)
+                chat_profile_image.showDialog(this, photo)
             }
 
         }catch (e: Exception){
@@ -402,19 +401,5 @@ class ChatActivity : AppCompatActivity(){
 
     private fun scrollToBottom(){
         messagesRecyclerView.scrollToPosition(viewAdapter.itemCount - 1)
-    }
-
-    private fun showDialog(context: Context, imageBase64: String?){
-        try{
-            imageBase64?.let {
-                val dialog  = Dialog(context)
-                dialog.setContentView(R.layout.dialog_imagedisplay)
-                val dialogPhoto = dialog.findViewById<ImageView>(R.id.dialog_imagedisplay)
-                Glide.with(context).load(imageBase64.toBitmap()).into(dialogPhoto)
-                dialog.show()
-            }
-        }catch (e: Exception){
-            e.printStackTrace()
-        }
     }
 }
