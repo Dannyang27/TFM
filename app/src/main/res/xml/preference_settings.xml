@@ -24,7 +24,7 @@
 
 
     <ListPreference
-            android:defaultValue="1"
+            android:defaultValue="Default"
             android:entries="@array/notificationTones"
             android:entryValues="@array/notificationTones"
             android:key="notificationTone"

@@ -2,9 +2,12 @@ package com.example.tfm.viewHolder
 
 import android.app.Activity
 import android.app.ActivityOptions
+import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.preference.PreferenceManager
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.emoji.widget.EmojiTextView
 import androidx.recyclerview.widget.RecyclerView
@@ -29,6 +32,11 @@ class ConversationViewHolder(view: View) : RecyclerView.ViewHolder(view){
     private val lastMessage :EmojiTextView = view.findViewById(R.id.last_message_chat)
 
     init {
+
+        image.setOnClickListener {
+            showDialog(it.context)
+        }
+
         view.setOnClickListener {
             val pref = PreferenceManager.getDefaultSharedPreferences(it.context)
             val language = pref.getString("chatLanguage", "Default")
@@ -73,5 +81,17 @@ class ConversationViewHolder(view: View) : RecyclerView.ViewHolder(view){
 
         lastMessage.text = if(conversation.lastMessage.toString().isNotEmpty()) conversation.lastMessage else image.context.getString(R.string.bethefirst)
         setTime(lastTime, conversation.timestamp)
+    }
+
+    private fun showDialog(context: Context){
+        try{
+            val dialog  = Dialog(context)
+            dialog.setContentView(R.layout.dialog_imagedisplay)
+            val dialogPhoto = dialog.findViewById<ImageView>(R.id.dialog_imagedisplay)
+            Glide.with(context).load(imageBase64.toBitmap()).into(dialogPhoto)
+            dialog.show()
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
     }
 }

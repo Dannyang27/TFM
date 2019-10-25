@@ -43,6 +43,15 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
         }
     }
 
+    fun getAllConversations(email: String){
+        launch{
+            val conversations = conversationDao().getConvesationDataFromEmail(email)
+            conversations.forEach {
+                Log.d(LogUtil.TAG, "Conversation: ${it.id} | timestamp: ${it.timestamp}")
+            }
+        }
+    }
+
     fun getAllMessages(){
         launch {
             val messages = messageDao().getAll()

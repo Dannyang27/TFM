@@ -4,15 +4,13 @@ import android.app.Service
 import android.content.Intent
 import android.os.Handler
 import android.os.IBinder
-import android.util.Log
-import com.example.tfm.data.DataRepository
+import com.example.tfm.util.FirebaseUtil
 import org.jetbrains.anko.toast
 
 class FirebaseListenerService : Service(){
 
     private lateinit var mHandler: Handler
     private lateinit var mRunnable: Runnable
-    private val user = DataRepository.user
 
     override fun onBind(intent: Intent?): IBinder? {
         throw UnsupportedOperationException("Not yet implemented")
@@ -21,10 +19,11 @@ class FirebaseListenerService : Service(){
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         toast("Service started")
 
+
         mHandler = Handler()
         mRunnable = Runnable {
-            Log.d("TFM", "User id: ${user?.id}")
-            startListeningConversation()
+//            startListeningConversation()
+            FirebaseUtil.startConversationListener()
         }
 
         mHandler.postDelayed(mRunnable, 1000)
@@ -38,7 +37,7 @@ class FirebaseListenerService : Service(){
     }
 
     private fun startListeningConversation() {
-//        FirebaseUtil.conversationServiceListener(user?.id.toString())
-        mHandler.postDelayed(mRunnable, 8000)
+//        FirebaseUtil.startConversationListener()
+//        mHandler.postDelayed(mRunnable, 8000)
     }
 }

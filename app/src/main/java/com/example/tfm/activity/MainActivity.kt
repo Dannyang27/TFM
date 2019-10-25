@@ -17,7 +17,7 @@ import com.example.tfm.data.DataRepository
 import com.example.tfm.fragments.GroupChatFragment
 import com.example.tfm.fragments.PrivateFragment
 import com.example.tfm.room.database.MyRoomDatabase
-import com.example.tfm.util.FirebaseUtil
+import com.example.tfm.service.FirebaseListenerService
 import com.example.tfm.util.clearCredential
 import com.example.tfm.viewmodel.ConversationViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -31,6 +31,8 @@ class MainActivity : AppCompatActivity() {
     private var activeFragment: Fragment = privateFragment
     private lateinit var roomDatabase: MyRoomDatabase
     private lateinit var conversationViewModel: ConversationViewModel
+    private lateinit var firebaseService: Intent
+    private var conversationIds = mutableListOf<String>()
 
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -59,12 +61,24 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         toolbar_title.text = getString(R.string.messages)
         setSupportActionBar(my_toolbar)
-
-        FirebaseUtil.initRoomDatabase(this)
+        firebaseService = Intent(this, FirebaseListenerService::class.java)
 
         conversationViewModel = ViewModelProviders.of(this).get(ConversationViewModel::class.java)
-        conversationViewModel.getConversations().observe(this, Observer {
-            privateFragment.updateList(it)
+        conversationViewModel.getConversations().observe(this, Observer { list ->
+            privateFragment.updateList(list)
+            var hasListChanged = false
+
+            list.forEach {
+                if(!conversationIds.contains(it.id)){
+                    conversationIds.add(it.id)
+                    hasListChanged = true
+                }
+            }
+
+            if(hasListChanged){
+                stopService(firebaseService)
+                startService(firebaseService)
+            }
         })
 
         conversationViewModel.initRoomObserver(this)
@@ -76,7 +90,8 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }else{
                 roomDatabase = MyRoomDatabase.getMyRoomDatabase(this)!!
-                roomDatabase.getAllMessages()
+//                roomDatabase.getAllMessages()
+                roomDatabase.getAllConversations(DataRepository.currentUserEmail)
             }
         }
 

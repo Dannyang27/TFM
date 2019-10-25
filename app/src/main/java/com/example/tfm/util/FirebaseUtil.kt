@@ -5,21 +5,18 @@ import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import android.util.Log
 import androidx.annotation.NonNull
-import androidx.lifecycle.MutableLiveData
 import com.example.tfm.activity.SignupActivity
 import com.example.tfm.data.DataRepository
 import com.example.tfm.enum.MessageType
 import com.example.tfm.model.Conversation
+import com.example.tfm.model.ConversationTuple
 import com.example.tfm.model.Message
 import com.example.tfm.model.User
 import com.example.tfm.room.database.MyRoomDatabase
 import com.example.tfm.viewmodel.LoginViewModel
 import com.example.tfm.viewmodel.SignupViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -40,39 +37,41 @@ object FirebaseUtil {
     private val database = FirebaseDatabase.getInstance().reference
     private lateinit var roomDatabase: MyRoomDatabase
 
-    fun initRoomDatabase(context: Context){
+    fun initRoomDatabase(context: Context) {
         roomDatabase = MyRoomDatabase.getMyRoomDatabase(context)!!
     }
 
-    fun login(context: Context, user: String, password: String){
+    fun login(context: Context, user: String, password: String) {
         firebaseAuth?.signInWithEmailAndPassword(user, password)
             ?.addOnCompleteListener { task ->
-                if(task.isSuccessful){
+                if (task.isSuccessful) {
                     prefs = PreferenceManager.getDefaultSharedPreferences(context)
                     prefs.updateCurrentUser(user, password)
 
                     CoroutineScope(Dispatchers.IO).launch {
-                        val loginTask = FirebaseFirestore.getInstance().collection(FIREBASE_USER_PATH).document(user).get().await()
+                        val loginTask =
+                            FirebaseFirestore.getInstance().collection(FIREBASE_USER_PATH)
+                                .document(user).get().await()
                         DataRepository.user = loginTask.toObject(User::class.java)
                         DataRepository.currentUserEmail = user
                         LoginViewModel.isSuccessful.postValue(true)
                     }
 
-                }else{
+                } else {
                     context.toast("Wrong user/password")
                     LoginViewModel.isLoading.postValue(false)
                 }
             }
     }
 
-    fun createNewUser(context: Context, username: String, email: String, password: String){
+    fun createNewUser(context: Context, username: String, email: String, password: String) {
         val user = User("", email, username, "", "")
         val hashcode = user.hashCode().toString()
         user.id = hashcode
 
         val auth = FirebaseAuth.getInstance()
         auth.createUserWithEmailAndPassword(email, password)
-            .addOnSuccessListener{
+            .addOnSuccessListener {
                 FirebaseFirestore.getInstance().addUser(context, user)
                 SignupActivity.currentUserEmail = email
                 SignupActivity.currentUserPassword = password
@@ -83,14 +82,17 @@ object FirebaseUtil {
     }
 
 
-    fun addUser(context: Context, user: User){
+    fun addUser(context: Context, user: User) {
         database.child(FIREBASE_USER_PATH)
             .child(user.id).setValue(user)
             .addOnSuccessListener {
                 Log.d(LogUtil.TAG, "FirebaseDatabase user added successfully")
 
                 val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-                prefs.updateCurrentUser(SignupActivity.currentUserEmail, SignupActivity.currentUserPassword)
+                prefs.updateCurrentUser(
+                    SignupActivity.currentUserEmail,
+                    SignupActivity.currentUserPassword
+                )
 
                 val roomDatabase = MyRoomDatabase.getMyRoomDatabase(context)
                 roomDatabase?.addUser(user)
@@ -101,9 +103,9 @@ object FirebaseUtil {
             }
     }
 
-    fun loadUsers(){
+    fun loadUsers() {
         database.child(FIREBASE_USER_PATH)
-            .addListenerForSingleValueEvent(object: ValueEventListener{
+            .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onCancelled(@NonNull p0: DatabaseError) {}
 
                 override fun onDataChange(@NonNull dataSnapshot: DataSnapshot) {
@@ -118,53 +120,18 @@ object FirebaseUtil {
                 }
             })
     }
-//
-//    fun loadUserConversation(userId: String?){
-//        database.child(FIREBASE_PRIVATE_CHAT_PATH)
-//            .addListenerForSingleValueEvent(object: ValueEventListener{
-//                override fun onCancelled(@NonNull p0: DatabaseError) {}
-//
-//                override fun onDataChange(@NonNull dataSnapshot: DataSnapshot) {
-//                    dataSnapshot.children.forEach{
-//                        val conv = it.getValue(Conversation::class.java)
-//
-//                        conv?.let {
-//                            if(conv.id.contains(userId.toString())){
-//                                CoroutineScope(Dispatchers.IO).launch {
-//                                    val jobOne = async {
-//                                        val userOne = roomDatabase.getUserByEmail(conv.userOneEmail)
-//                                        conv.userOneUsername = userOne.name
-//                                        conv.userOnePhoto = userOne.profilePhoto
-//                                    }
-//
-//                                    val jobTwo = async {
-//                                        val userTwo = roomDatabase.getUserByEmail(conv.userTwoEmail)
-//                                        conv.userTwoUsername = userTwo.name
-//                                        conv.userTwoPhoto = userTwo.profilePhoto
-//                                    }
-//
-//                                    jobOne.await()
-//                                    jobTwo.await()
-//                                    async{ roomDatabase.addConversation(conv) }.await()
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            })
-//    }
 
-    fun loadUserConversations(userId: String?){
+    fun loadUserConversations(userId: String?) {
         database.child(FIREBASE_PRIVATE_CHAT_PATH)
-            .addListenerForSingleValueEvent(object: ValueEventListener{
+            .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onCancelled(@NonNull p0: DatabaseError) {}
 
                 override fun onDataChange(@NonNull dataSnapshot: DataSnapshot) {
-                    dataSnapshot.children.forEach{
+                    dataSnapshot.children.forEach {
                         val conv = it.getValue(Conversation::class.java)
 
                         conv?.let {
-                            if(conv.id.contains(userId.toString())){
+                            if (conv.id.contains(userId.toString())) {
                                 CoroutineScope(Dispatchers.IO).launch {
                                     launch {
                                         loadConversationMessages(conv.id)
@@ -187,7 +154,7 @@ object FirebaseUtil {
 
                                     jobOne.await()
                                     jobTwo.await()
-                                    async{ roomDatabase.addConversation(conv) }.await()
+                                    async { roomDatabase.addConversation(conv) }.await()
                                 }
                             }
                         }
@@ -196,13 +163,13 @@ object FirebaseUtil {
             })
     }
 
-    fun loadConversationMessages(conversationId: String){
+    fun loadConversationMessages(conversationId: String) {
         Log.d(LogUtil.TAG, "Conversation id: $conversationId")
 
         database.child(FIREBASE_PRIVATE_CHAT_PATH)
             .child(conversationId)
             .child(FIREBASE_PRIVATE_MESSAGE_PATH)
-            .addListenerForSingleValueEvent(object: ValueEventListener{
+            .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onCancelled(@NonNull p0: DatabaseError) {}
 
                 override fun onDataChange(@NonNull dataSnapshot: DataSnapshot) {
@@ -212,33 +179,17 @@ object FirebaseUtil {
                         val message = mess.getValue(Message::class.java)
                         message?.let {
                             roomDatabase.addMessage(message)
-                            Log.d(LogUtil.TAG, "Message ID: ${message.id} | MessageType: ${message.messageType}")
+                            Log.d(
+                                LogUtil.TAG,
+                                "Message ID: ${message.id} | MessageType: ${message.messageType}"
+                            )
                         }
                     }
                 }
             })
     }
 
-    fun loadMessageFromConversation(messages: MutableLiveData<MutableList<Message>>, conversationId: String){
-        database.child(FIREBASE_PRIVATE_CHAT_PATH)
-            .child(conversationId)
-            .child(FIREBASE_PRIVATE_MESSAGE_PATH)
-            .addListenerForSingleValueEvent(object: ValueEventListener{
-                override fun onCancelled(p0: DatabaseError) {}
-
-                override fun onDataChange(snapShot: DataSnapshot) {
-                    val messageList = mutableListOf<Message>()
-                    snapShot.children.forEach{
-                        val message = it.getValue(Message::class.java)!!
-                        messageList.add(message)
-                    }
-
-                    messages.postValue(messageList)
-                }
-            })
-    }
-
-    fun addPrivateChat(context: Context, conversation: Conversation){
+    fun addPrivateChat(context: Context, conversation: Conversation) {
         database.child(FIREBASE_PRIVATE_CHAT_PATH)
             .child(conversation.id)
             .setValue(conversation)
@@ -247,11 +198,11 @@ object FirebaseUtil {
                 var username: String
                 var photo: String
 
-                if(conversation.userOneEmail == DataRepository.currentUserEmail){
+                if (conversation.userOneEmail == DataRepository.currentUserEmail) {
                     email = conversation.userTwoEmail
                     username = conversation.userTwoUsername
                     photo = conversation.userTwoPhoto
-                }else{
+                } else {
                     email = conversation.userOneEmail
                     username = conversation.userOneUsername
                     photo = conversation.userOnePhoto
@@ -260,23 +211,24 @@ object FirebaseUtil {
             }
     }
 
-    fun addMessageFirebase(message: Message){
+    fun addMessageFirebase(message: Message) {
         database.child(FIREBASE_PRIVATE_CHAT_PATH).child(message.ownerId)
             .child(FIREBASE_PRIVATE_MESSAGE_PATH)
             .child(message.timestamp.toString())
             .setValue(message)
             .addOnSuccessListener {
-//                DataRepository.addMessage(message)
                 updateConversation(message)
-
             }
             .addOnFailureListener {
                 Log.d(LogUtil.TAG, "Error while sending message")
             }
     }
 
-    fun addTranslatedMessage(context: Context, message: Message){
-        val fromLanguage: String = PreferenceManager.getDefaultSharedPreferences(context).getString("chatLanguage", "ENGLISH")!!
+    fun addTranslatedMessage(context: Context, message: Message) {
+        val fromLanguage: String = PreferenceManager.getDefaultSharedPreferences(context).getString(
+            "chatLanguage",
+            "ENGLISH"
+        )!!
         val languageCode = FirebaseTranslator.languageCodeFromString(fromLanguage)
 
         val translator = DataRepository.toEnglishTranslator
@@ -293,7 +245,7 @@ object FirebaseUtil {
             }
     }
 
-    fun updateUser(user: User){
+    fun updateUser(user: User) {
         database.child(FIREBASE_USER_PATH)
             .child(user.id)
             .setValue(user)
@@ -302,10 +254,10 @@ object FirebaseUtil {
             }
     }
 
-    private fun updateConversation(message: Message){
+    private fun updateConversation(message: Message) {
 
         var lastMessage: String?
-        when(MessageType.fromInt(message.messageType)){
+        when (MessageType.fromInt(message.messageType)) {
             MessageType.MESSAGE -> lastMessage = message.body?.fieldOne
             MessageType.GIF -> lastMessage = "[GIF]"
             MessageType.IMAGE -> lastMessage = "[Image]"
@@ -322,15 +274,41 @@ object FirebaseUtil {
             .child(message.ownerId)
             .child(FIREBASE_TIMESTAMP)
             .setValue(message.timestamp)
-
-//        MyRoomDatabase.getMyRoomDatabase(context)?.updateConversation(message, lastMessage.toString())
-//        DataRepository.updateConversation(message, lastMessage.toString())
-//        PrivateFragment.updateConversation(DataRepository.getConversations())
     }
-}
 
-suspend fun FirebaseFirestore.createRoomUser(email: String?): User?{
-    return collection(FirebaseUtil.FIREBASE_USER_PATH).document(email.toString()).get().await().toObject(User::class.java)
+    fun startConversationListener() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val data = roomDatabase.conversationDao()
+                .getConvesationDataFromEmail(DataRepository.currentUserEmail)
+            data.forEach {
+                launchListener(it)
+            }
+        }
+    }
+
+    private fun launchListener(conversationTuple: ConversationTuple) {
+        database.child(FIREBASE_PRIVATE_CHAT_PATH)
+            .child(conversationTuple.id)
+            .child(FIREBASE_PRIVATE_MESSAGE_PATH)
+            .orderByChild("timestamp")
+            .startAt(conversationTuple.timestamp.toDouble() + 1)
+            .addChildEventListener(object : ChildEventListener {
+                override fun onCancelled(p0: DatabaseError) {}
+                override fun onChildMoved(p0: DataSnapshot, p1: String?) {}
+                override fun onChildChanged(p0: DataSnapshot, p1: String?) {}
+                override fun onChildRemoved(p0: DataSnapshot) {}
+                override fun onChildAdded(dataSnapshot: DataSnapshot, p1: String?) {
+                    val message = dataSnapshot.getValue(Message::class.java)
+                    Log.d(
+                        LogUtil.TAG,
+                        "ConvId: ${conversationTuple.id} -> Message ID: ${message?.id}"
+                    )
+                    message?.let {
+                        roomDatabase.addMessage(it)
+                    }
+                }
+            })
+    }
 }
 
 fun FirebaseFirestore.addUser(context: Context, user: User){
@@ -369,77 +347,4 @@ fun FirebaseFirestore.updateCurrentUser(context: Context, user: User){
         .addOnFailureListener {
             Log.d(LogUtil.TAG, "Error while updating user")
         }
-}
-
-suspend fun FirebaseFirestore.getConversation(conversationId: String): Conversation?{
-    val task = collection(FirebaseUtil.FIREBASE_PRIVATE_CHAT_PATH)
-        .document(conversationId)
-        .get().await()
-
-    val conversation = task.toObject(Conversation::class.java)
-    return conversation
-}
-
-suspend fun FirebaseFirestore.createNewConversation(context: Context, email: String, newEmail: String){
-    val firestore = FirebaseFirestore.getInstance()
-
-    val taskOne = firestore.collection(FirebaseUtil.FIREBASE_USER_PATH).document(email).get().await()
-    val userOne = taskOne.toObject(User::class.java)
-
-    val taskTwo = firestore.collection(FirebaseUtil.FIREBASE_USER_PATH).document(newEmail).get().await()
-    val userTwo = taskTwo.toObject(User::class.java)
-
-    var userOneHash = userOne?.id?.toLong()!!
-    var userTwoHash = userTwo?.id?.toLong()!!
-
-    if(userOneHash > userTwoHash){
-        val tmp = userOneHash
-        userOneHash = userTwoHash
-        userTwoHash = tmp
-    }
-
-    val hashcode = userOneHash.toString().plus(userTwoHash.toString())
-    val conversation = Conversation(hashcode, userOne.email, "", "", userTwo.email, "","",
-        mutableListOf(), "",System.currentTimeMillis(), mutableListOf(), true )
-
-    firestore.addConversation(context, conversation)
-}
-
-suspend fun FirebaseFirestore.loadUserConversation(userHash: String): MutableList<Conversation>{
-    val conversationList = mutableListOf<Conversation>()
-    collection(FirebaseUtil.FIREBASE_PRIVATE_CHAT_PATH)
-        .get()
-        .addOnSuccessListener { chats ->
-            for(chat in chats){
-                val conv = chat.toObject(Conversation::class.java)
-                Log.d("TFM", "Chat id: $conv.id}")
-                if(conv.id.contains(userHash)){
-                    CoroutineScope(Dispatchers.IO).launch {
-                        val jobOne = launch {
-                            val taskOne = collection(FirebaseUtil.FIREBASE_USER_PATH)
-                                .document(conv.userOneEmail).get().await()
-                            val user = taskOne.toObject(User::class.java)
-                            conv.userOneUsername = user?.name.toString()
-                            conv.userOnePhoto = user?.profilePhoto.toString()
-                        }
-                        val jobTwo = launch {
-                            val taskTwo = collection(FirebaseUtil.FIREBASE_USER_PATH)
-                                .document(conv.userTwoEmail).get().await()
-
-                            val user = taskTwo.toObject(User::class.java)
-                            conv.userTwoUsername = user?.name.toString()
-                            conv.userTwoPhoto = user?.profilePhoto.toString()
-                        }
-
-                        jobOne.join()
-                        jobTwo.join()
-                        conversationList.add(conv)
-//                        conversations.postValue(list)
-                    }
-                }
-            }
-        }.await()
-
-    Log.d("TFM", "Finished")
-    return conversationList
 }

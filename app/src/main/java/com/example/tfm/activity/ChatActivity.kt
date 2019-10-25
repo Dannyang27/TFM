@@ -1,6 +1,7 @@
 package com.example.tfm.activity
 
 import android.Manifest
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -13,6 +14,7 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
@@ -214,6 +216,11 @@ class ChatActivity : AppCompatActivity(){
 
         try{
             Glide.with(this).load(photo?.toBitmap()).into(chat_profile_image)
+
+            chat_profile_image.setOnClickListener {
+                showDialog(this, photo)
+            }
+
         }catch (e: Exception){
             Log.d("TFM", "Error while loading profile photo, maybe theres no photo")
         }
@@ -395,5 +402,19 @@ class ChatActivity : AppCompatActivity(){
 
     private fun scrollToBottom(){
         messagesRecyclerView.scrollToPosition(viewAdapter.itemCount - 1)
+    }
+
+    private fun showDialog(context: Context, imageBase64: String?){
+        try{
+            imageBase64?.let {
+                val dialog  = Dialog(context)
+                dialog.setContentView(R.layout.dialog_imagedisplay)
+                val dialogPhoto = dialog.findViewById<ImageView>(R.id.dialog_imagedisplay)
+                Glide.with(context).load(imageBase64.toBitmap()).into(dialogPhoto)
+                dialog.show()
+            }
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
     }
 }
