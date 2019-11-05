@@ -179,10 +179,6 @@ object FirebaseUtil {
                         val message = mess.getValue(Message::class.java)
                         message?.let {
                             roomDatabase.addMessage(message)
-                            Log.d(
-                                LogUtil.TAG,
-                                "Message ID: ${message.id} | MessageType: ${message.messageType}"
-                            )
                         }
                     }
                 }
@@ -224,27 +220,6 @@ object FirebaseUtil {
             }
     }
 
-    fun addTranslatedMessage(context: Context, message: Message) {
-        val fromLanguage: String = PreferenceManager.getDefaultSharedPreferences(context).getString(
-            "chatLanguage",
-            "ENGLISH"
-        )!!
-        val languageCode = FirebaseTranslator.languageCodeFromString(fromLanguage)
-
-        val translator = DataRepository.toEnglishTranslator
-        translator?.translate(message.body?.fieldOne.toString())
-            ?.addOnSuccessListener {
-                val textInEnglish = it
-                message.body?.fieldTwo = textInEnglish
-                message.body?.fieldThree = languageCode.toString()
-                addMessageFirebase(message)
-                Log.d(LogUtil.TAG, "Text translated: $textInEnglish")
-            }
-            ?.addOnFailureListener {
-                Log.d(LogUtil.TAG, "Could not translated text")
-            }
-    }
-
     fun updateUser(user: User) {
         database.child(FIREBASE_USER_PATH)
             .child(user.id)
@@ -255,7 +230,6 @@ object FirebaseUtil {
     }
 
     private fun updateConversation(message: Message) {
-
         var lastMessage: String?
         when (MessageType.fromInt(message.messageType)) {
             MessageType.MESSAGE -> lastMessage = message.body?.fieldOne
@@ -280,6 +254,7 @@ object FirebaseUtil {
         CoroutineScope(Dispatchers.IO).launch {
             val data = roomDatabase.conversationDao()
                 .getConvesationDataFromEmail(DataRepository.currentUserEmail)
+
             data.forEach {
                 launchListener(it)
             }
@@ -297,17 +272,49 @@ object FirebaseUtil {
                 override fun onChildMoved(p0: DataSnapshot, p1: String?) {}
                 override fun onChildChanged(p0: DataSnapshot, p1: String?) {}
                 override fun onChildRemoved(p0: DataSnapshot) {}
+
                 override fun onChildAdded(dataSnapshot: DataSnapshot, p1: String?) {
                     val message = dataSnapshot.getValue(Message::class.java)
-                    Log.d(
-                        LogUtil.TAG,
-                        "ConvId: ${conversationTuple.id} -> Message ID: ${message?.id}"
-                    )
                     message?.let {
                         roomDatabase.addMessage(it)
                     }
                 }
             })
+    }
+
+    fun launchUserListener(){
+        database.child(FIREBASE_USER_PATH)
+            .addChildEventListener(object: ChildEventListener{
+                override fun onCancelled(p0: DatabaseError) {}
+                override fun onChildMoved(p0: DataSnapshot, p1: String?) {}
+                override fun onChildRemoved(p0: DataSnapshot) {}
+                override fun onChildAdded(dataSnapshot: DataSnapshot, p1: String?) {}
+                override fun onChildChanged(dataSnapshot: DataSnapshot, p1: String?) {
+                    val user = dataSnapshot.getValue(User::class.java)
+                    user?.let {
+                        updateConversation(it)
+                        roomDatabase.updateUser(user)
+                    }
+                }
+            })
+    }
+
+    private fun updateConversation( user: User){
+        CoroutineScope(Dispatchers.IO).launch {
+            val conversation = roomDatabase.conversationDao().getConversationByUserEmail(user.email)
+
+            conversation?.let {
+                if(conversation.userOneEmail == user.email){
+                    conversation.userOneUsername = user.name
+                    conversation.userOnePhoto = user.profilePhoto
+                }else{
+                    conversation.userTwoUsername = user.name
+                    conversation.userTwoPhoto = user.profilePhoto
+                }
+
+                roomDatabase.conversationDao().update(conversation)
+            }
+        }
     }
 }
 
@@ -341,7 +348,6 @@ fun FirebaseFirestore.updateCurrentUser(context: Context, user: User){
         .addOnSuccessListener {
             MyRoomDatabase.getMyRoomDatabase(context)?.updateUser(user)
             context.toast("User updated")
-
             FirebaseUtil.updateUser(user)
         }
         .addOnFailureListener {

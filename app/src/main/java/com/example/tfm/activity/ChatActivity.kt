@@ -283,11 +283,20 @@ class ChatActivity : AppCompatActivity(){
             if(fieldText.isNotEmpty()){
                 val languageCode = FirebaseTranslator.languageCodeFromString(translateModel.toString())
                 val timestamp = System.currentTimeMillis()
-                val message = Message(timestamp, conversationId, DataRepository.currentUserEmail, receiverUser,
-                    MessageType.MESSAGE.value, MessageContent(fieldOne = fieldText, fieldThree = languageCode.toString()), timestamp )
 
-                chatViewModel.saveMessage(message)
-                chat_edittext.text.clear()
+                val translator = DataRepository.toEnglishTranslator
+                translator?.let { translator ->
+                    translator.translate(fieldText).addOnSuccessListener {translatedText ->
+                        val message = Message(timestamp, conversationId, DataRepository.currentUserEmail, receiverUser,
+                            MessageType.MESSAGE.value, MessageContent(fieldText, translatedText, languageCode.toString()), timestamp )
+
+                        chatViewModel.saveMessage(message)
+                        chat_edittext.text.clear()
+
+                    }.addOnFailureListener {
+                        Log.d("TFM", "Cannot translate")
+                    }
+                }
             }
         }
     }

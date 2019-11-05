@@ -20,7 +20,7 @@ object DataRepository{
     var currentUserEmail = FirebaseAuth.getInstance().currentUser?.email.toString()
 
     fun initTranslator(context: Context){
-        val language  = PreferenceManager.getDefaultSharedPreferences(context).getString("chatLanguage", "Default")!!
+        val language  = PreferenceManager.getDefaultSharedPreferences(context).getString("chatLanguage", "Default").toString()
         val code = com.example.tfm.util.FirebaseTranslator.languageCodeFromString(language)
         val model = FirebaseTranslateRemoteModel.Builder(code).build()
 

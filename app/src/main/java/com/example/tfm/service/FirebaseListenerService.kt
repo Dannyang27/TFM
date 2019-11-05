@@ -19,11 +19,10 @@ class FirebaseListenerService : Service(){
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         toast("Service started")
 
-
         mHandler = Handler()
         mRunnable = Runnable {
-//            startListeningConversation()
             FirebaseUtil.startConversationListener()
+            FirebaseUtil.launchUserListener()
         }
 
         mHandler.postDelayed(mRunnable, 1000)
@@ -34,10 +33,5 @@ class FirebaseListenerService : Service(){
         super.onDestroy()
         toast("Service destroyed.")
         mHandler.removeCallbacks(mRunnable)
-    }
-
-    private fun startListeningConversation() {
-//        FirebaseUtil.startConversationListener()
-//        mHandler.postDelayed(mRunnable, 8000)
     }
 }

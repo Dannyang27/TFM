@@ -1,6 +1,5 @@
 package com.example.tfm.viewHolder
 
-import android.preference.PreferenceManager
 import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
@@ -12,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tfm.R
 import com.example.tfm.data.DataRepository
 import com.example.tfm.model.Message
-import com.example.tfm.util.getLanguage
 import com.example.tfm.util.setMessageCheckIfSeen
 import com.example.tfm.util.setTime
 import com.example.tfm.util.showUsernameIfGroup
@@ -83,24 +81,19 @@ class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view), CoroutineSc
     }
 
     private fun initLayout(message: Message){
-        val pref = PreferenceManager.getDefaultSharedPreferences(layout.context).getLanguage()
-        val log = message.body?.fieldThree.toString()
+        val code = message.body?.fieldThree?.toInt()
 
-        this.body.text = message.body?.fieldOne
-//        if( pref == "Default" || log.isUserLanguagePreference()){
-//            this.body.text = message.body?.fieldOne
-//        }else{
-//            this.body.text = message.body?.fieldTwo
-//
-//            itemView.setOnClickListener {
-//                if(isOriginalText){
-//                    this.body.text = message.body?.fieldTwo
-//                }else{
-//                    this.body.text = message.body?.fieldOne
-//                }
-//                isOriginalText = !isOriginalText
-//            }
-//        }
+        if(message.senderName == DataRepository.currentUserEmail || code == DataRepository.languagePreferenceCode){
+            body.text = message.body?.fieldOne
+        }else{
+            val translator = DataRepository.fromEnglishTranslator
+            translator?.let {
+                translator.translate(message.body?.fieldTwo.toString())
+                    .addOnSuccessListener { translatedText ->
+                        body.text = translatedText
+                    }
+            }
+        }
     }
 
     private fun getDpValue(dpValue: Int): Int = (dpValue * layout.context.displayMetrics.density).toInt()

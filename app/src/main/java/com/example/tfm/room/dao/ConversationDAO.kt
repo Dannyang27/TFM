@@ -25,6 +25,9 @@ interface ConversationDAO {
     @Query("SELECT * FROM Conversation where (userOneEmail = :email or userTwoEmail = :email )AND (userOneEmail = :newEmail or userTwoEmail = :newEmail)")
     fun getMutualConversation(email: String, newEmail: String) : Conversation
 
+    @Query("SELECT * FROM Conversation where (userOneEmail = :email or userTwoEmail = :email )")
+    fun getConversationByUserEmail(email: String) : Conversation?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun add(conversation: Conversation)
 

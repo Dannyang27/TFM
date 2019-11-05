@@ -96,10 +96,11 @@ class MySettingFragment : PreferenceFragmentCompat(), CoroutineScope{
             .addOnSuccessListener {
                 if(isModelDownloaded){
                     dialog.dismiss()
-                    activity?.toast(getString(R.string.modelsdownloaded))
                 }else{
                     isModelDownloaded = true
                 }
+
+                activity?.toast(getString(R.string.restartapp))
             }
             .addOnFailureListener {
                 Log.d(LogUtil.TAG, "Failed model")

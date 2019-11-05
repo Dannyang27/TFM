@@ -31,6 +31,7 @@ class UserSearcherViewModel : ViewModel(){
         roomDatabase = MyRoomDatabase.getMyRoomDatabase(activity)
         roomDatabase?.userDao()?.getAll()?.observe(activity, Observer {
             it.remove(DataRepository.user)
+            allUsers.clear()
             allUsers.addAll(it)
             users.postValue(allUsers)
         })

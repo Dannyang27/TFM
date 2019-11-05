@@ -1,5 +1,7 @@
 package com.example.tfm.activity
 
+import android.app.ActivityManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
@@ -32,6 +34,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var roomDatabase: MyRoomDatabase
     private lateinit var conversationViewModel: ConversationViewModel
     private lateinit var firebaseService: Intent
+
     private var conversationIds = mutableListOf<String>()
 
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -66,18 +69,11 @@ class MainActivity : AppCompatActivity() {
         conversationViewModel = ViewModelProviders.of(this).get(ConversationViewModel::class.java)
         conversationViewModel.getConversations().observe(this, Observer { list ->
             privateFragment.updateList(list)
-            var hasListChanged = false
 
             list.forEach {
                 if(!conversationIds.contains(it.id)){
                     conversationIds.add(it.id)
-                    hasListChanged = true
                 }
-            }
-
-            if(hasListChanged){
-                stopService(firebaseService)
-                startService(firebaseService)
             }
         })
 
@@ -90,7 +86,6 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }else{
                 roomDatabase = MyRoomDatabase.getMyRoomDatabase(this)!!
-//                roomDatabase.getAllMessages()
                 roomDatabase.getAllConversations(DataRepository.currentUserEmail)
             }
         }
@@ -125,6 +120,8 @@ class MainActivity : AppCompatActivity() {
         val fromLoginActivity = intent.getBooleanExtra("fromLogin", false)
         if(fromLoginActivity){
             conversationViewModel.initDownloadUserData()
+        }else{
+            DataRepository.initTranslator(this)
         }
     }
 
@@ -162,5 +159,28 @@ class MainActivity : AppCompatActivity() {
     private fun initEmoji(){
         val config = BundledEmojiCompatConfig(this)
         EmojiCompat.init(config)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(!isServiceRunning()) {
+            startService(firebaseService)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        stopService(firebaseService)
+    }
+
+    private fun isServiceRunning(): Boolean{
+        val manager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        manager.getRunningServices(Integer.MAX_VALUE).forEach { serv ->
+            if("com.example.tfm.service.FirebaseListenerService" == serv.service.className){
+                return true
+            }
+        }
+
+        return false
     }
 }

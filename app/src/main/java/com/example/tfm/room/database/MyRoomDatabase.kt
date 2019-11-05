@@ -156,8 +156,6 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
         launch {
             val image = ImageRoomModel(id, content.fieldOne)
             messageDao().addImage(image)
-        }.also{
-            Log.d(LogUtil.TAG, "Image added to Room")
         }
     }
 
@@ -165,8 +163,6 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
         launch {
             val location = LocationRoomModel(id, content.fieldOne.toDouble(), content.fieldTwo.toDouble(), content.fieldThree)
             messageDao().addLocation(location)
-        }.also{
-            Log.d(LogUtil.TAG, "Location added to Room")
         }
     }
 }
