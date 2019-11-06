@@ -23,6 +23,7 @@ class FirebaseListenerService : Service(){
         mRunnable = Runnable {
             FirebaseUtil.startConversationListener()
             FirebaseUtil.launchUserListener()
+            FirebaseUtil.launchConversationListener()
         }
 
         mHandler.postDelayed(mRunnable, 1000)

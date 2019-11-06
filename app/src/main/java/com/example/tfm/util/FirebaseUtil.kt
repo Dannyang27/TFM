@@ -224,9 +224,6 @@ object FirebaseUtil {
         database.child(FIREBASE_USER_PATH)
             .child(user.id)
             .setValue(user)
-            .addOnSuccessListener {
-                Log.d(LogUtil.TAG, "User ${user.email} has been updated in RealtimeDatabase")
-            }
     }
 
     private fun updateConversation(message: Message) {
@@ -284,19 +281,47 @@ object FirebaseUtil {
 
     fun launchUserListener(){
         database.child(FIREBASE_USER_PATH)
-            .addChildEventListener(object: ChildEventListener{
+            .addValueEventListener( object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError) {}
-                override fun onChildMoved(p0: DataSnapshot, p1: String?) {}
-                override fun onChildRemoved(p0: DataSnapshot) {}
-                override fun onChildAdded(dataSnapshot: DataSnapshot, p1: String?) {}
-                override fun onChildChanged(dataSnapshot: DataSnapshot, p1: String?) {
-                    val user = dataSnapshot.getValue(User::class.java)
-                    user?.let {
-                        updateConversation(it)
-                        roomDatabase.updateUser(user)
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    dataSnapshot.children.forEach { userSnapshot ->
+                        val user = userSnapshot.getValue(User::class.java)
+                        user?.let {
+                            roomDatabase.addUser(user)
+                            updateConversation(user)
+                        }
                     }
                 }
             })
+    }
+
+    fun launchConversationListener(){
+        CoroutineScope(Dispatchers.IO).launch {
+            val email = DataRepository.currentUserEmail
+            val userConversations = roomDatabase.conversationDao()
+                .getUserConversationsId(email)
+
+            database.child(FIREBASE_PRIVATE_CHAT_PATH)
+                .addValueEventListener( object : ValueEventListener {
+                    override fun onCancelled(p0: DatabaseError) {}
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        dataSnapshot.children.forEach { convSnapshot ->
+                            val conversation = convSnapshot.getValue(Conversation::class.java)
+                            userConversations.let {
+                                conversation?.let {
+                                    if( conversation.id !in userConversations && isUserConversation(it, email)){
+                                        roomDatabase.addConversation(conversation)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                })
+        }
+    }
+
+    private fun isUserConversation(conversation: Conversation, email: String): Boolean {
+        return conversation.userOneEmail == email || conversation.userTwoEmail == email
     }
 
     private fun updateConversation( user: User){

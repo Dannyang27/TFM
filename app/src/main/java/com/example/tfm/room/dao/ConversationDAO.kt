@@ -20,7 +20,10 @@ interface ConversationDAO {
     fun getConvesationDataFromEmail( email: String) : MutableList<ConversationTuple>
 
     @Query("SELECT * FROM Conversation where userOneEmail = :email or userTwoEmail = :email ORDER BY timestamp DESC")
-    fun getUserConversations(email: String): LiveData<MutableList<Conversation>>
+    fun getUserLiveConversations(email: String): LiveData<MutableList<Conversation>>
+
+    @Query("SELECT id FROM Conversation where userOneEmail = :email or userTwoEmail = :email ORDER BY timestamp DESC")
+    fun getUserConversationsId(email: String): MutableList<String>
 
     @Query("SELECT * FROM Conversation where (userOneEmail = :email or userTwoEmail = :email )AND (userOneEmail = :newEmail or userTwoEmail = :newEmail)")
     fun getMutualConversation(email: String, newEmail: String) : Conversation

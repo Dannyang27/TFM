@@ -2,7 +2,6 @@ package com.example.tfm.viewHolder
 
 import android.view.Gravity
 import android.view.View
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -13,21 +12,11 @@ import com.example.tfm.data.DataRepository
 import com.example.tfm.model.Message
 import com.example.tfm.util.setMessageCheckIfSeen
 import com.example.tfm.util.setTime
-import com.example.tfm.util.showUsernameIfGroup
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import org.jetbrains.anko.displayMetrics
 
-class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view), CoroutineScope{
-    override val coroutineContext = Dispatchers.Default + Job()
-
-    private var isOriginalText = false
-
-    private val username: EmojiTextView = view.findViewById(R.id.message_username)
+class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
     private val layout : RelativeLayout = view.findViewById(R.id.message_layout)
     private val placeholder: LinearLayout = view.findViewById(R.id.message_placeholder)
-    private val userPhoto: ImageView = view.findViewById(R.id.message_image)
     private val body: EmojiTextView = view.findViewById(R.id.message_body)
     private val time: TextView = view.findViewById(R.id.message_time)
 
@@ -38,7 +27,6 @@ class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view), CoroutineSc
         }else{
             setReceiverViewHolder()
             initLayout(message)
-            username.showUsernameIfGroup(true, message.senderName)
         }
 
         setTime(time, message.timestamp)
@@ -56,11 +44,9 @@ class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view), CoroutineSc
         layout.gravity = Gravity.END
         placeholder.background = context.getDrawable(R.drawable.sender_message)
         layout.setPadding(0,getDpValue(10),getDpValue(15), getDpValue(10))
-        userPhoto.visibility = View.GONE
         body.setTextColor(context.getColor(R.color.colorWhite))
         body.gravity = Gravity.END
         time.gravity = Gravity.END
-        username.visibility = View.GONE
     }
 
     private fun setReceiverViewHolder(){
@@ -74,7 +60,6 @@ class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view), CoroutineSc
         layout.gravity = Gravity.START
         placeholder.background = context.getDrawable(R.drawable.receiver_message)
         layout.setPadding(getDpValue(15),getDpValue(10), 0, getDpValue(10))
-        userPhoto.visibility = View.VISIBLE
         body.setTextColor(context.getColor(R.color.colorPrimaryText))
         body.gravity  = Gravity.START
         time.gravity = Gravity.START

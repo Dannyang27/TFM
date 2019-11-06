@@ -52,7 +52,7 @@ class ConversationViewModel : ViewModel(){
 
     fun initRoomObserver(activity: FragmentActivity){
         roomDatabase = MyRoomDatabase.getMyRoomDatabase(activity)
-        roomDatabase?.conversationDao()?.getUserConversations(DataRepository.currentUserEmail)?.observe(activity, Observer {
+        roomDatabase?.conversationDao()?.getUserLiveConversations(DataRepository.currentUserEmail)?.observe(activity, Observer {
             conversations.addAll(it)
             conversationList.postValue(it)
         })

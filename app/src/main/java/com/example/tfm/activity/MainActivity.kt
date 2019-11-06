@@ -70,10 +70,18 @@ class MainActivity : AppCompatActivity() {
         conversationViewModel.getConversations().observe(this, Observer { list ->
             privateFragment.updateList(list)
 
+            var hasListChanged = false
+
             list.forEach {
-                if(!conversationIds.contains(it.id)){
+                if(it.id !in conversationIds){
                     conversationIds.add(it.id)
+                    hasListChanged = true
                 }
+            }
+
+            if(hasListChanged){
+                stopService(firebaseService)
+                startService(firebaseService)
             }
         })
 

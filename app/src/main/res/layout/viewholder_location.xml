@@ -8,28 +8,11 @@
         android:gravity="left"
         android:paddingVertical="10dp"
         android:paddingLeft="15dp">
-    <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/location_image"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:src="@drawable/dwight"/>
-    <androidx.emoji.widget.EmojiTextView
-            android:id="@+id/location_username"
-            android:text="@string/username_sample"
-            android:textStyle="bold"
-            android:textColor="@color/colorPrimaryText"
-            android:textSize="@dimen/text_medium"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:gravity="bottom"
-            android:padding="5dp"
-            android:visibility="gone"
-            android:layout_toRightOf="@id/location_image"/>
+
     <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_below="@id/location_image"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="10dp">
         <androidx.cardview.widget.CardView
