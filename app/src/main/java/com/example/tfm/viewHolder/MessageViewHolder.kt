@@ -5,23 +5,31 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
-import androidx.emoji.widget.EmojiTextView
 import androidx.recyclerview.widget.RecyclerView
+import butterknife.BindView
+import butterknife.ButterKnife
 import com.example.tfm.R
 import com.example.tfm.data.DataRepository
+import com.example.tfm.data.DataRepository.currentUserEmail
+import com.example.tfm.data.DataRepository.languagePreferenceCode
 import com.example.tfm.model.Message
 import com.example.tfm.util.setMessageCheckIfSeen
 import com.example.tfm.util.setTime
 import org.jetbrains.anko.displayMetrics
 
 class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
-    private val layout : RelativeLayout = view.findViewById(R.id.message_layout)
-    private val placeholder: LinearLayout = view.findViewById(R.id.message_placeholder)
-    private val body: EmojiTextView = view.findViewById(R.id.message_body)
-    private val time: TextView = view.findViewById(R.id.message_time)
+
+    @BindView(R.id.message_layout) lateinit var layout: RelativeLayout
+    @BindView(R.id.message_placeholder) lateinit var placeholder: LinearLayout
+    @BindView(R.id.message_body) lateinit var body: TextView
+    @BindView(R.id.message_time) lateinit var time: TextView
+
+    init {
+        ButterKnife.bind(this, view)
+    }
 
     fun initMessageViewHolder(message: Message){
-        if(message.senderName == DataRepository.currentUserEmail){
+        if(message.senderName == currentUserEmail){
             setSenderViewHolder()
             initLayout(message)
         }else{
@@ -30,7 +38,7 @@ class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
         }
 
         setTime(time, message.timestamp)
-        setMessageCheckIfSeen(time, message.isSent)
+        setMessageCheckIfSeen(time, message.senderName == currentUserEmail, message.isSent)
     }
 
     private fun setSenderViewHolder(){
@@ -68,7 +76,7 @@ class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
     private fun initLayout(message: Message){
         val code = message.body?.fieldThree?.toInt()
 
-        if(message.senderName == DataRepository.currentUserEmail || code == DataRepository.languagePreferenceCode){
+        if(message.senderName == currentUserEmail || code == languagePreferenceCode){
             body.text = message.body?.fieldOne
         }else{
             val translator = DataRepository.fromEnglishTranslator

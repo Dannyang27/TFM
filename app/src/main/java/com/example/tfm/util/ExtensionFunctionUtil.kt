@@ -78,9 +78,9 @@ fun RecyclerView.ViewHolder.setTime(time: TextView, timestamp: Long){
     time.text = TimeUtil.setTimeFromTimeStamp(timestamp)
 }
 
-fun RecyclerView.ViewHolder.setMessageCheckIfSeen(time: TextView, isSent: Boolean){
-    if(isSent){
-        time.text.toString().addCheck()
+fun RecyclerView.ViewHolder.setMessageCheckIfSeen(time: TextView, isYourMessage: Boolean,  isSent: Boolean){
+    if(isSent && isYourMessage){
+        time.text = time.text.toString().addCheck()
     }
 }
 

@@ -14,19 +14,27 @@ import androidx.emoji.text.EmojiCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import butterknife.BindView
+import butterknife.ButterKnife
+import butterknife.OnClick
 import com.example.tfm.R
 import com.example.tfm.data.DataRepository
 import com.example.tfm.fragments.GroupChatFragment
 import com.example.tfm.fragments.PrivateFragment
+import com.example.tfm.model.Conversation
 import com.example.tfm.room.database.MyRoomDatabase
 import com.example.tfm.service.FirebaseListenerService
 import com.example.tfm.util.clearCredential
 import com.example.tfm.viewmodel.ConversationViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+
+    @BindView(R.id.search_chat) lateinit var searcher: SearchView
+    @BindView(R.id.fab) lateinit var fab: FloatingActionButton
 
     private val privateFragment = PrivateFragment.newInstance()
     private val groupChatFragment = GroupChatFragment.newInstance()
@@ -62,46 +70,26 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         initEmoji()
         setContentView(R.layout.activity_main)
+        ButterKnife.bind(this)
+
         toolbar_title.text = getString(R.string.messages)
         setSupportActionBar(my_toolbar)
-        firebaseService = Intent(this, FirebaseListenerService::class.java)
+        firebaseService = Intent(applicationContext, FirebaseListenerService::class.java)
 
         conversationViewModel = ViewModelProviders.of(this).get(ConversationViewModel::class.java)
         conversationViewModel.getConversations().observe(this, Observer { list ->
             privateFragment.updateList(list)
+            restartServiceIfChanged(list)
 
-            var hasListChanged = false
-
-            list.forEach {
-                if(it.id !in conversationIds){
-                    conversationIds.add(it.id)
-                    hasListChanged = true
-                }
-            }
-
-            if(hasListChanged){
-                stopService(firebaseService)
-                startService(firebaseService)
-            }
         })
 
         conversationViewModel.initRoomObserver(this)
-        conversationViewModel.updateUser(DataRepository.currentUserEmail)
+        createFragments()
+        downloadUserDataIfNew()
+        DataRepository.initTranslator(applicationContext)
 
-        fab.setOnClickListener {
-            if(activeFragment is PrivateFragment){
-                val intent = Intent(this, UserSearcherActivity::class.java)
-                startActivity(intent)
-            }else{
-                roomDatabase = MyRoomDatabase.getMyRoomDatabase(this)!!
-                roomDatabase.getAllConversations(DataRepository.currentUserEmail)
-            }
-        }
-
-        search_chat.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return true
-            }
+        searcher.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?) = true
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if(newText.isNullOrEmpty()){
@@ -112,7 +100,25 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
         })
+    }
 
+    private fun restartServiceIfChanged(list: MutableList<Conversation>){
+        var hasListChanged = false
+
+        list.forEach {
+            if(it.id !in conversationIds){
+                conversationIds.add(it.id)
+                hasListChanged = true
+            }
+        }
+
+        if(hasListChanged){
+            stopService(firebaseService)
+            startService(firebaseService)
+        }
+    }
+
+    private fun createFragments(){
         val navView: BottomNavigationView = findViewById(R.id.navigation)
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
 
@@ -124,12 +130,12 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .add(R.id.container, privateFragment, "1")
             .commit()
+    }
 
+    private fun downloadUserDataIfNew(){
         val fromLoginActivity = intent.getBooleanExtra("fromLogin", false)
         if(fromLoginActivity){
             conversationViewModel.initDownloadUserData()
-        }else{
-            DataRepository.initTranslator(this)
         }
     }
 
@@ -152,7 +158,7 @@ class MainActivity : AppCompatActivity() {
 
         R.id.signout -> {
             FirebaseAuth.getInstance().signOut()
-            PreferenceManager.getDefaultSharedPreferences(this).clearCredential()
+            PreferenceManager.getDefaultSharedPreferences(applicationContext).clearCredential()
 
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
@@ -164,10 +170,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {}
 
-    private fun initEmoji(){
-        val config = BundledEmojiCompatConfig(this)
-        EmojiCompat.init(config)
-    }
+    private fun initEmoji() = EmojiCompat.init(BundledEmojiCompatConfig(applicationContext))
 
     override fun onResume() {
         super.onResume()
@@ -190,5 +193,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         return false
+    }
+
+    @OnClick(R.id.fab)
+    fun fabClick(){
+        if(activeFragment is PrivateFragment){
+            val intent = Intent(this, UserSearcherActivity::class.java)
+            startActivity(intent)
+        }else{
+            roomDatabase = MyRoomDatabase.getMyRoomDatabase(applicationContext)!!
+            roomDatabase.getAllConversations(DataRepository.currentUserEmail)
+        }
     }
 }

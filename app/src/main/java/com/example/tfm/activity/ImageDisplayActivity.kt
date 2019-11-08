@@ -8,7 +8,15 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import butterknife.BindView
+import butterknife.ButterKnife
+import butterknife.OnClick
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -25,6 +33,17 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import kotlinx.android.synthetic.main.activity_image_display.*
 
 class ImageDisplayActivity : AppCompatActivity() {
+
+    @BindView(R.id.imagedisplay_toolbar) lateinit var toolbar: Toolbar
+    @BindView(R.id.imagedisplay_image) lateinit var image: ImageView
+    @BindView(R.id.imagedisplay_progressbar) lateinit var progressBar: ProgressBar
+    @BindView(R.id.imagedisplay_labels) lateinit var layout: LinearLayout
+    @BindView(R.id.labelOne) lateinit var labelOne: TextView
+    @BindView(R.id.confidenceOne) lateinit var confOne: TextView
+    @BindView(R.id.labelTwo) lateinit var labelTwo: TextView
+    @BindView(R.id.confidenceTwo) lateinit var confTwo: TextView
+    @BindView(R.id.labelThree) lateinit var labelThree: TextView
+    @BindView(R.id.confidenceThree) lateinit var confThree: TextView
 
     private var isToolbarVisible = true
 
@@ -51,20 +70,9 @@ class ImageDisplayActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_image_display)
+        ButterKnife.bind(this)
 
-        imagedisplay_layout.setOnClickListener {
-            if (isToolbarVisible) {
-                isToolbarVisible = false
-                imagedisplay_toolbar.visibility = View.INVISIBLE
-                imagedisplay_labels.visibility = View.INVISIBLE
-            } else {
-                isToolbarVisible = true
-                imagedisplay_toolbar.visibility = View.VISIBLE
-                imagedisplay_labels.visibility = View.VISIBLE
-            }
-        }
-
-        setSupportActionBar(imagedisplay_toolbar)
+        setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
@@ -76,27 +84,25 @@ class ImageDisplayActivity : AppCompatActivity() {
     }
 
     private fun loadBitmap(bitmap: Bitmap?) {
-        imagedisplay_progressbar.start()
+        progressBar.start()
 
         Glide.with(this)
             .load(bitmap)
-            .into(imagedisplay_image)
+            .into(image)
 
         val image = FirebaseVisionImage.fromBitmap(bitmap!!)
-        val labeler = FirebaseVision.getInstance().getOnDeviceImageLabeler()
+        val labeler = FirebaseVision.getInstance().onDeviceImageLabeler
 
         labeler.processImage(image)
             .addOnSuccessListener {
                 it.forEachIndexed { index, label ->
-                    if (index == 1) {
-                        labelOne.text = "${label.text}:"
-                        confidenceOne.text = label.confidence.toString()
-                    } else if (index == 2) {
-                        labelTwo.text = "${label.text}:"
-                        confidenceTwo.text = label.confidence.toString()
-                    } else if (index == 3) {
-                        labelThree.text = "${label.text}:"
-                        confidenceThree.text = label.confidence.toString()
+                    when(index){
+                        1 -> {  labelOne.text = "${label.text}:"
+                                confidenceOne.text = label.confidence.toString() }
+                        2 -> {  labelTwo.text = "${label.text}:"
+                                confidenceTwo.text = label.confidence.toString() }
+                        3 -> {  labelThree.text = "${label.text}:"
+                                confidenceThree.text = label.confidence.toString() }
                     }
                 }
             }
@@ -104,36 +110,26 @@ class ImageDisplayActivity : AppCompatActivity() {
                 Log.d(LogUtil.TAG, "failure")
             }
 
-        imagedisplay_progressbar.stop()
+        progressBar.stop()
     }
 
     private fun loadGif(uri: Uri?) {
-        imagedisplay_progressbar.start()
+        progressBar.start()
 
         Glide.with(this)
             .asGif()
             .load(uri)
             .override(imagedisplay_image.width, imagedisplay_image.width / 2)
             .listener(object : RequestListener<GifDrawable> {
-                override fun onLoadFailed(
-                    e: GlideException?,
-                    model: Any?,
-                    target: Target<GifDrawable>?,
-                    isFirstRes: Boolean
-                ) = false
+                override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<GifDrawable>?, isFirstRes: Boolean) = false
 
-                override fun onResourceReady(
-                    res: GifDrawable?,
-                    model: Any?,
-                    target: Target<GifDrawable>?,
-                    source: DataSource?,
-                    isFirstRes: Boolean
-                ): Boolean {
-                    imagedisplay_progressbar.stop()
+                override fun onResourceReady(res: GifDrawable?, model: Any?, target: Target<GifDrawable>?,
+                    source: DataSource?, isFirstRes: Boolean): Boolean {
+                    progressBar.stop()
                     return false
                 }
             })
-            .into(imagedisplay_image)
+            .into(image)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
@@ -142,5 +138,18 @@ class ImageDisplayActivity : AppCompatActivity() {
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    @OnClick(R.id.imagedisplay_image)
+    fun showAIInfo(){
+        if (isToolbarVisible) {
+            toolbar.visibility = View.INVISIBLE
+            layout.visibility = View.INVISIBLE
+        } else {
+            toolbar.visibility = View.VISIBLE
+            layout.visibility = View.VISIBLE
+        }
+
+        isToolbarVisible = !isToolbarVisible
     }
 }

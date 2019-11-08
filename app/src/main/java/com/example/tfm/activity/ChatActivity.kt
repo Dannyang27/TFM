@@ -13,7 +13,11 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import androidx.emoji.bundled.BundledEmojiCompatConfig
@@ -24,6 +28,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import butterknife.BindView
+import butterknife.ButterKnife
+import butterknife.OnClick
+import butterknife.OnTouch
 import com.bumptech.glide.Glide
 import com.example.tfm.R
 import com.example.tfm.adapter.ChatAdapter
@@ -40,6 +48,7 @@ import com.example.tfm.util.showDialog
 import com.example.tfm.util.toBitmap
 import com.example.tfm.viewmodel.ChatViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.coroutines.*
 import org.jetbrains.anko.toast
@@ -49,11 +58,24 @@ import java.util.*
 
 class ChatActivity : AppCompatActivity(){
 
+    @BindView(R.id.chat_toolbar) lateinit var toolbar: Toolbar
+    @BindView(R.id.chat_toolbar_title) lateinit var tvToolbar: TextView
+    @BindView(R.id.chat_profile_image) lateinit var profileImg: CircleImageView
+    @BindView(R.id.chat_flag) lateinit var flag: ImageView
+    @BindView(R.id.chat_recyclerview) lateinit var rvMessages: RecyclerView
+    @BindView(R.id.chat_sendButton) lateinit var bSend: ImageButton
+    @BindView(R.id.emojiButton) lateinit var bEmoji: ImageButton
+    @BindView(R.id.pictureButton) lateinit var bPicture: ImageButton
+    @BindView(R.id.cameraButton) lateinit var bCamera: ImageButton
+    @BindView(R.id.micButton) lateinit var bMic: ImageButton
+    @BindView(R.id.locationButton) lateinit var bLocation: ImageButton
+    @BindView(R.id.attachmentButton) lateinit var bAttachment: ImageButton
+    @BindView(R.id.codeButton) lateinit var bCode: ImageButton
+    @BindView(R.id.emoji_navbar) lateinit var navbar: BottomNavigationView
+
     private lateinit var chatViewModel: ChatViewModel
     private lateinit var viewManager: RecyclerView.LayoutManager
-    private lateinit var messagesRecyclerView: RecyclerView
     private lateinit var viewAdapter : ChatAdapter
-
     private val emojiFragment = EmojiFragment.newInstance()
     private val gifFragment = GifFragment.newInstance()
     private var activeFragment: Fragment = emojiFragment
@@ -101,6 +123,7 @@ class ChatActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         initEmoji()
         setContentView(R.layout.activity_chat)
+        ButterKnife.bind(this)
 
         emojiEditText = findViewById(R.id.chat_edittext)
         chatViewModel = ViewModelProviders.of(this).get(ChatViewModel::class.java)
@@ -111,10 +134,9 @@ class ChatActivity : AppCompatActivity(){
         val photo = intent.getStringExtra("profilePhoto")
 
         setToolbar(username, photo)
-        chatViewModel.clearMessages()
 
         chatViewModel.getLanguageFlag().observe(this, Observer {drawable ->
-            chat_flag.setImageDrawable(getDrawable(drawable))
+            flag.setImageDrawable(getDrawable(drawable))
         })
 
         chatViewModel.getTranslatedModel().observe(this, Observer {model->
@@ -122,11 +144,8 @@ class ChatActivity : AppCompatActivity(){
         })
 
         chatViewModel.getShowEmojiKeyboard().observe(this, Observer { showKeyboard ->
-            if(showKeyboard){
-                showSpecialKeyboard()
-            }else{
-                closeSpecialKeyboard()
-            }
+            if(showKeyboard){ showSpecialKeyboard()
+            }else{ closeSpecialKeyboard() }
         })
 
         chatViewModel.getChatMessages().observe(this, Observer {
@@ -137,7 +156,11 @@ class ChatActivity : AppCompatActivity(){
         viewManager = LinearLayoutManager(this)
         viewAdapter = ChatAdapter(mutableListOf(), this)
 
-        messagesRecyclerView = findViewById<RecyclerView>(R.id.chat_recyclerview).apply {
+        setFragments()
+        chatViewModel.initLanguageFlag(this)
+        chatViewModel.initRoomObserver(this, conversationId)
+
+        rvMessages.apply {
             setHasFixedSize(true)
             layoutManager = viewManager
             adapter = viewAdapter
@@ -148,49 +171,6 @@ class ChatActivity : AppCompatActivity(){
                 }
             }
         }
-
-        emoji_navbar.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        supportFragmentManager.beginTransaction().add(R.id.emoji_container, gifFragment, "2").hide(gifFragment).commit()
-        supportFragmentManager.beginTransaction().add(R.id.emoji_container, emojiFragment, "1").commit()
-
-        chatViewModel.initLanguageFlag(this)
-        chatViewModel.initRoomObserver(this, conversationId)
-        initListeners()
-
-//        val conversationMessages = DataRepository.getConversation(conversationId)?.messages
-//
-//        val pref = PreferenceManager.getDefaultSharedPreferences(this).getLanguage()
-//        if(pref == "Default"){
-//            updateList(conversationMessages!!)
-//        }else{
-//            val conversationTranslated = mutableListOf<Message>()
-//
-//            val translator = DataRepository.fromEnglishTranslator
-//
-//            CoroutineScope(Dispatchers.IO).launch {
-//                conversationMessages.let{
-//                    it?.forEach { message ->
-//                        if(MessageType.fromInt(message.messageType) == MessageType.MESSAGE){
-//                            val isLanguagePreference = message.body?.fieldThree.toString().isUserLanguagePreference()
-//                            if(!isLanguagePreference){
-//                                translator?.translate(message.body?.fieldTwo.toString())
-//                                    ?.addOnSuccessListener { translatedText ->
-//                                        val m = message.copy( body = MessageContent(message.body?.fieldOne.toString(), translatedText, message.body?.fieldThree.toString()))
-//                                        conversationTranslated.add(m)
-//                                        updateList(conversationTranslated)
-//                                    }
-//                            }else{
-//                                conversationTranslated.add(message)
-//                                updateList(conversationTranslated)
-//                            }
-//                        }else{
-//                            conversationTranslated.add(message)
-//                            updateList(conversationTranslated)
-//                        }
-//                    }
-//                }
-//            }
-//        }
     }
 
     override fun onResume() {
@@ -207,16 +187,22 @@ class ChatActivity : AppCompatActivity(){
         else -> super.onOptionsItemSelected(item)
     }
 
+    private fun setFragments(){
+        navbar.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        supportFragmentManager.beginTransaction().add(R.id.emoji_container, gifFragment, "2").hide(gifFragment).commit()
+        supportFragmentManager.beginTransaction().add(R.id.emoji_container, emojiFragment, "1").commit()
+    }
+
     private fun setToolbar(username: String?, photo: String?){
-        setSupportActionBar(chat_toolbar)
+        setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        chat_toolbar_title.text = username
+        tvToolbar.text = username
 
         try{
-            Glide.with(this).load(photo?.toBitmap()).into(chat_profile_image)
+            Glide.with(this).load(photo?.toBitmap()).into(profileImg)
 
-            chat_profile_image.setOnClickListener {
+            profileImg.setOnClickListener {
                 chat_profile_image.showDialog(this, photo)
             }
 
@@ -233,72 +219,6 @@ class ChatActivity : AppCompatActivity(){
     private fun initEmoji(){
         val config = BundledEmojiCompatConfig(this)
         EmojiCompat.init(config)
-    }
-
-    private fun initListeners(){
-        emojiEditText.setOnTouchListener { view , event ->
-            when(event?.action){
-                MotionEvent.ACTION_UP -> {
-                    chatViewModel.showKeyboard(false)
-                    KeyboardUtil.showKeyboard(this@ChatActivity)
-                }
-            }
-            view?.onTouchEvent(event ) ?: true
-        }
-
-        emojiButton.setOnClickListener {
-            chatViewModel.showKeyboard(true)
-        }
-        pictureButton.setOnClickListener {
-            chatViewModel.showKeyboard(false)
-            openGallery()
-        }
-        cameraButton.setOnClickListener {
-            if(!hasPermissions(this, PERMISSIONS)){
-                ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL)
-            }else{
-                chatViewModel.showKeyboard(false)
-                dispatchCameraIntent()
-            }
-        }
-        micButton.setOnClickListener {
-            toast("Microphone")
-            chatViewModel.showKeyboard(false)
-        }
-        locationButton.setOnClickListener {
-            chatViewModel.showKeyboard(false)
-            startActivity(Intent(this, LocationSenderActivity::class.java))
-        }
-        attachmentButton.setOnClickListener {
-            openAttachment()
-            chatViewModel.showKeyboard(false)
-        }
-        codeButton.setOnClickListener {
-            toast("Code")
-            chatViewModel.showKeyboard(false)
-        }
-
-        sendButton.setOnClickListener {
-            val fieldText = chat_edittext.text.toString()
-            if(fieldText.isNotEmpty()){
-                val languageCode = FirebaseTranslator.languageCodeFromString(translateModel.toString())
-                val timestamp = System.currentTimeMillis()
-
-                val translator = DataRepository.toEnglishTranslator
-                translator?.let { translator ->
-                    translator.translate(fieldText).addOnSuccessListener {translatedText ->
-                        val message = Message(timestamp, conversationId, DataRepository.currentUserEmail, receiverUser,
-                            MessageType.MESSAGE.value, MessageContent(fieldText, translatedText, languageCode.toString()), timestamp )
-
-                        chatViewModel.saveMessage(message)
-                        chat_edittext.text.clear()
-
-                    }.addOnFailureListener {
-                        Log.d("TFM", "Cannot translate")
-                    }
-                }
-            }
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -326,26 +246,6 @@ class ChatActivity : AppCompatActivity(){
 
                 else -> toast("Other")
             }
-        }
-    }
-
-    private fun openGallery(){
-        if(!hasPermissions(this, PERMISSIONS)){
-            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL)
-        }else{
-            val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            galleryIntent.type = "image/*"
-            startActivityForResult(galleryIntent, GALLERY_CODE)
-        }
-    }
-
-    private fun openAttachment(){
-        if(!hasPermissions(this, PERMISSIONS)){
-            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL)
-        }else{
-            val attachIntent = Intent(Intent.ACTION_GET_CONTENT)
-            attachIntent.type = "*/*"
-            startActivityForResult(Intent.createChooser(attachIntent, "Select file"), ATTACHMENT_MODE)
         }
     }
 
@@ -409,6 +309,98 @@ class ChatActivity : AppCompatActivity(){
     }
 
     private fun scrollToBottom(){
-        messagesRecyclerView.scrollToPosition(viewAdapter.itemCount - 1)
+        rvMessages.scrollToPosition(viewAdapter.itemCount - 1)
+    }
+
+    @OnClick(R.id.chat_sendButton)
+    fun sendMessage(){
+        val fieldText = chat_edittext.text.toString()
+        if(fieldText.isNotEmpty()){
+            val languageCode = FirebaseTranslator.languageCodeFromString(translateModel.toString())
+            val timestamp = System.currentTimeMillis()
+
+            val translator = DataRepository.toEnglishTranslator
+            translator?.let { it ->
+                it.translate(fieldText).addOnSuccessListener {translatedText ->
+                    val message = Message(timestamp, conversationId, DataRepository.currentUserEmail, receiverUser,
+                        MessageType.MESSAGE.value, MessageContent(fieldText, translatedText, languageCode.toString()), timestamp )
+
+                    chatViewModel.saveMessage(message)
+                    chat_edittext.text.clear()
+
+                }.addOnFailureListener {
+                    Log.d("TFM", "Cannot translate")
+                }
+            }
+        }
+    }
+
+    @OnClick(R.id.emojiButton)
+    fun openEmoji(){
+        chatViewModel.showKeyboard(true)
+    }
+
+    @OnClick(R.id.pictureButton)
+    fun operImages(){
+        chatViewModel.showKeyboard(false)
+        if(!hasPermissions(this, PERMISSIONS)){
+            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL)
+        }else{
+            val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            galleryIntent.type = "image/*"
+            startActivityForResult(galleryIntent, GALLERY_CODE)
+        }
+    }
+
+    @OnClick(R.id.cameraButton)
+    fun openCamera(){
+        if(!hasPermissions(this, PERMISSIONS)){
+            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL)
+        }else{
+            chatViewModel.showKeyboard(false)
+            dispatchCameraIntent()
+        }
+    }
+
+    @OnClick(R.id.micButton)
+    fun openMic(){
+        toast("Microphone")
+        chatViewModel.showKeyboard(false)
+    }
+
+    @OnClick(R.id.locationButton)
+    fun openLocation(){
+        chatViewModel.showKeyboard(false)
+        startActivity(Intent(this, LocationSenderActivity::class.java))
+    }
+
+    @OnClick(R.id.attachmentButton)
+    fun openAttachment(){
+        if(!hasPermissions(this, PERMISSIONS)){
+            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL)
+        }else{
+            val attachIntent = Intent(Intent.ACTION_GET_CONTENT)
+            attachIntent.type = "*/*"
+            startActivityForResult(Intent.createChooser(attachIntent, "Select file"), ATTACHMENT_MODE)
+        }
+
+        chatViewModel.showKeyboard(false)
+    }
+
+    @OnClick(R.id.codeButton)
+    fun openCode(){
+        toast("Code")
+        chatViewModel.showKeyboard(false)
+    }
+
+    @OnTouch(R.id.chat_edittext)
+    fun touched(view: View?, event: MotionEvent?){
+        when(event?.action){
+            MotionEvent.ACTION_UP -> {
+                chatViewModel.showKeyboard(false)
+                KeyboardUtil.showKeyboard(this@ChatActivity)
+            }
+        }
+        view?.onTouchEvent(event )
     }
 }

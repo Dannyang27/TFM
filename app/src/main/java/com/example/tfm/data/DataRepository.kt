@@ -11,16 +11,21 @@ import com.google.firebase.ml.naturallanguage.FirebaseNaturalLanguage
 import com.google.firebase.ml.naturallanguage.translate.*
 
 object DataRepository{
+    
     var fromEnglishTranslator: FirebaseTranslator? = null
     var toEnglishTranslator: FirebaseTranslator? = null
-
     var languagePreferenceCode: Int? = null
-
     var user: User? = null
     var currentUserEmail = FirebaseAuth.getInstance().currentUser?.email.toString()
 
     fun initTranslator(context: Context){
         val language  = PreferenceManager.getDefaultSharedPreferences(context).getString("chatLanguage", "Default").toString()
+
+        //if default, do not start creating models
+        if(language == "Default"){
+            return
+        }
+
         val code = com.example.tfm.util.FirebaseTranslator.languageCodeFromString(language)
         val model = FirebaseTranslateRemoteModel.Builder(code).build()
 

@@ -25,6 +25,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        targetCompatibility = "8"
+        sourceCompatibility = "8"
+    }
 }
 
 dependencies {
@@ -91,6 +96,10 @@ dependencies {
     implementation group: 'androidx.preference', name: 'preference', version: '1.0.0-alpha1'
     implementation 'com.google.firebase:firebase-ml-vision:23.0.0'
     implementation 'com.google.firebase:firebase-ml-vision-image-label-model:18.0.0'
+
+    //butter knife
+    implementation 'com.jakewharton:butterknife:10.2.0'
+    kapt 'com.jakewharton:butterknife-compiler:10.2.0'
 
     implementation 'com.github.MikeOrtiz:TouchImageView:2.2.0'
 }

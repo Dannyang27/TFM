@@ -3,24 +3,35 @@ package com.example.tfm.activity
 import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import butterknife.BindView
+import butterknife.ButterKnife
+import butterknife.OnClick
 import com.example.tfm.R
 import com.example.tfm.util.*
 import com.example.tfm.viewmodel.LoginViewModel
-import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
+
+    @BindView(R.id.login_email) lateinit var eEmail: EditText
+    @BindView(R.id.login_password) lateinit var ePassword: EditText
+    @BindView(R.id.login_signup_button) lateinit var bSignup: Button
+    @BindView(R.id.login_button) lateinit var bLogin: Button
+    @BindView(R.id.login_progressbar) lateinit var progressBar: ProgressBar
+
     private lateinit var loginViewModel: LoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        ButterKnife.bind(this)
 
         loginViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
-        val (emailPref, passwordPref) = PreferenceManager.getDefaultSharedPreferences(this).getCredentials()
-
         loginViewModel.getIsLoading().observe(this, Observer { isLoading ->
             if(isLoading){
                 disableViews()
@@ -36,23 +47,22 @@ class LoginActivity : AppCompatActivity() {
             }
         })
 
+        val (emailPref, passwordPref) = PreferenceManager.getDefaultSharedPreferences(this).getCredentials()
 
         if( isFormNotEmpty(emailPref, passwordPref) ){
             login(emailPref.trimBothSides(), passwordPref)
         }
-
-        initListeners()
     }
 
-    private fun initListeners(){
-        login_signup_button.setOnClickListener {
-            startActivity(Intent(this, SignupActivity::class.java))
-        }
+    @OnClick(R.id.login_signup_button)
+    fun launchSignup(){
+        startActivity(Intent(this, SignupActivity::class.java))
+    }
 
-        login_button.setOnClickListener {
-            if(login_email.text.isNotEmpty() && login_password.text.isNotEmpty()){
-                login(login_email.text.toString().trimBothSides(), login_password.text.toString())
-            }
+    @OnClick(R.id.login_button)
+    fun login(){
+        if(eEmail.text.isNotEmpty() && ePassword.text.isNotEmpty()){
+            login(eEmail.text.toString().trimBothSides(), ePassword.text.toString())
         }
     }
 
@@ -65,18 +75,18 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun disableViews(){
-        login_progressbar.start()
-        login_email.isEnabled = false
-        login_password.isEnabled = false
-        login_signup_button.isEnabled = false
-        login_button.isEnabled = false
+        progressBar.start()
+        eEmail.isEnabled = false
+        ePassword.isEnabled = false
+        bSignup.isEnabled = false
+        bLogin.isEnabled = false
     }
 
     private fun enableViews(){
-        login_progressbar.stop()
-        login_email.isEnabled = true
-        login_password.isEnabled = true
-        login_signup_button.isEnabled = true
-        login_button.isEnabled = true
+        progressBar.stop()
+        eEmail.isEnabled = true
+        ePassword.isEnabled = true
+        bSignup.isEnabled = true
+        bLogin.isEnabled = true
     }
 }

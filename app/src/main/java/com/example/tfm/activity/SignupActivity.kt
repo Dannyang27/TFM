@@ -2,9 +2,16 @@ package com.example.tfm.activity
 
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import butterknife.BindView
+import butterknife.ButterKnife
+import butterknife.OnClick
 import com.example.tfm.R
 import com.example.tfm.data.DataRepository
 import com.example.tfm.util.launchMainActivity
@@ -12,10 +19,16 @@ import com.example.tfm.util.start
 import com.example.tfm.util.stop
 import com.example.tfm.util.trimBothSides
 import com.example.tfm.viewmodel.SignupViewModel
-import kotlinx.android.synthetic.main.activity_signup.*
 import org.jetbrains.anko.toast
 
 class SignupActivity : AppCompatActivity() {
+
+    @BindView(R.id.signup_toolbar) lateinit var toolbar: Toolbar
+    @BindView(R.id.signup_user) lateinit var eUser: EditText
+    @BindView(R.id.signup_email) lateinit var eEmail: EditText
+    @BindView(R.id.signup_password) lateinit var ePassword: EditText
+    @BindView(R.id.signup_joinus) lateinit var bJoinus: Button
+    @BindView(R.id.signup_progressbar) lateinit var progressBar: ProgressBar
 
     companion object{
         lateinit var currentUserEmail: String
@@ -27,35 +40,22 @@ class SignupActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
+        ButterKnife.bind(this)
 
         signupViewModel = ViewModelProviders.of(this).get(SignupViewModel::class.java)
-
         signupViewModel.getIsJoinSuccessful().observe(this, Observer {isSuccess ->
             if(isSuccess){
-                DataRepository.currentUserEmail = signup_email.text.toString().trimBothSides()
+                DataRepository.currentUserEmail = eEmail.text.toString().trimBothSides()
                 launchMainActivity(false)
             }else{
                 enableViews()
             }
         })
 
-        signup_toolbar.title = ""
-        setSupportActionBar(signup_toolbar)
-
+        toolbar.title = ""
+        setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-
-        signup_joinus.setOnClickListener {
-            if(isFormNotEmpty()){
-                disableViews()
-                val username = signup_user.text.toString().trimBothSides()
-                val email = signup_email.text.toString().trimBothSides()
-                val password = signup_password.text.toString().trimBothSides()
-                signupViewModel.joinNewUser(this, username, email, password)
-            }else{
-                toast("Form cannot be empty")
-            }
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?) = when(item?.itemId){
@@ -67,23 +67,32 @@ class SignupActivity : AppCompatActivity() {
     }
 
     private fun disableViews(){
-        signup_progressbar.start()
-        signup_user.isEnabled = false
-        signup_email.isEnabled = false
-        signup_password.isEnabled = false
-        signup_joinus.isEnabled = false
+        progressBar.start()
+        eUser.isEnabled = false
+        eEmail.isEnabled = false
+        ePassword.isEnabled = false
+        bJoinus.isEnabled = false
     }
     private fun enableViews(){
-        signup_progressbar.stop()
-        signup_user.isEnabled = true
-        signup_email.isEnabled = true
-        signup_password.isEnabled = true
-        signup_joinus.isEnabled = true
+        progressBar.stop()
+        eUser.isEnabled = true
+        eEmail.isEnabled = true
+        ePassword.isEnabled = true
+        bJoinus.isEnabled = true
     }
 
-    private fun isFormNotEmpty(): Boolean{
-        return signup_user.text.isNotEmpty()
-                && signup_email.text.isNotEmpty()
-                && signup_password.text.isNotEmpty()
+    private fun isFormNotEmpty() = eUser.text.isNotEmpty() && eEmail.text.isNotEmpty() && ePassword.text.isNotEmpty()
+
+    @OnClick(R.id.signup_joinus)
+    fun signup(){
+        if(isFormNotEmpty()){
+            disableViews()
+            val username = eUser.text.toString().trimBothSides()
+            val email = eEmail.text.toString().trimBothSides()
+            val password = ePassword.text.toString().trimBothSides()
+            signupViewModel.joinNewUser(this, username, email, password)
+        }else{
+            toast("Form cannot be empty")
+        }
     }
 }

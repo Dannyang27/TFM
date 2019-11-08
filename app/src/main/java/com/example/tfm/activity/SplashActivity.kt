@@ -13,17 +13,18 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-
         FirebaseUtil.initRoomDatabase(this)
-        val (email, password) = PreferenceManager.getDefaultSharedPreferences(this).getCredentials()
-        var intent: Intent?
+        loginIfUnregistered()
+    }
 
-        if(email.isNotEmpty() && password.isNotEmpty()){
-            intent = Intent(this, MainActivity::class.java)
-        }else{
-            intent = Intent(this, LoginActivity::class.java)
-        }
+    private fun loginIfUnregistered(){
+        val (email, password) = PreferenceManager.getDefaultSharedPreferences(this).getCredentials()
+        var intent = if(userNotEmpty(email, password)) {
+            Intent(this, MainActivity::class.java)
+        }else { Intent(this, LoginActivity::class.java) }
 
         startActivity(intent)
     }
+
+    private fun userNotEmpty(email: String, password: String) = email.isNotEmpty() && password.isNotEmpty()
 }

@@ -8,10 +8,13 @@ import android.view.View
 import android.widget.TextView
 import androidx.emoji.widget.EmojiTextView
 import androidx.recyclerview.widget.RecyclerView
+import butterknife.BindView
+import butterknife.ButterKnife
+import butterknife.OnClick
 import com.bumptech.glide.Glide
 import com.example.tfm.R
 import com.example.tfm.activity.ChatActivity
-import com.example.tfm.data.DataRepository
+import com.example.tfm.data.DataRepository.currentUserEmail
 import com.example.tfm.model.Conversation
 import com.example.tfm.util.setTime
 import com.example.tfm.util.showDialog
@@ -20,20 +23,19 @@ import de.hdodenhof.circleimageview.CircleImageView
 import org.jetbrains.anko.toast
 
 class ConversationViewHolder(view: View) : RecyclerView.ViewHolder(view){
-    private var id: String = ""
-    private var email: String = ""
+
+    @BindView(R.id.profile_image) lateinit var image: CircleImageView
+    @BindView(R.id.name_chat) lateinit var name: EmojiTextView
+    @BindView(R.id.last_message_time_chat) lateinit var lastTime: TextView
+    @BindView(R.id.last_message_chat) lateinit var lastMessage: EmojiTextView
+
+    private var id = ""
+    private var email = ""
     private var imageBase64 = ""
     private var username = ""
-    private val image: CircleImageView = view.findViewById(R.id.profile_image)
-    private val name :EmojiTextView= view.findViewById(R.id.name_chat)
-    private val lastTime: TextView = view.findViewById(R.id.last_message_time_chat)
-    private val lastMessage :EmojiTextView = view.findViewById(R.id.last_message_chat)
 
     init {
-
-        image.setOnClickListener {
-            image.showDialog(it.context, imageBase64)
-        }
+        ButterKnife.bind(this, view)
 
         view.setOnClickListener {
             val pref = PreferenceManager.getDefaultSharedPreferences(it.context)
@@ -61,7 +63,7 @@ class ConversationViewHolder(view: View) : RecyclerView.ViewHolder(view){
     fun bindViewHolder(conversation: Conversation){
         id = conversation.id
 
-        if(conversation.userOneEmail.contains(DataRepository.currentUserEmail)){
+        if(conversation.userOneEmail.contains(currentUserEmail)){
             email = conversation.userTwoEmail
             username = conversation.userTwoUsername
             name.text = username
@@ -79,5 +81,10 @@ class ConversationViewHolder(view: View) : RecyclerView.ViewHolder(view){
 
         lastMessage.text = if(conversation.lastMessage.toString().isNotEmpty()) conversation.lastMessage else image.context.getString(R.string.bethefirst)
         setTime(lastTime, conversation.timestamp)
+    }
+
+    @OnClick(R.id.profile_image)
+    fun imageClick(){
+        image.showDialog( image.context, imageBase64)
     }
 }

@@ -9,6 +9,10 @@ import com.example.tfm.model.User
 class UserProfileViewModel : ViewModel(){
     private val user = MutableLiveData<User>()
 
+    init{
+        initProfile()
+    }
+
     fun initProfile(){
         user.postValue(DataRepository.user)
     }

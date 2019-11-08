@@ -7,10 +7,16 @@ import android.location.Location
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.view.MenuItem
+import android.widget.Button
 import android.widget.SearchView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
+import butterknife.BindView
+import butterknife.ButterKnife
+import butterknife.OnClick
 import com.example.tfm.R
 import com.example.tfm.viewmodel.LocationViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -26,8 +32,14 @@ import kotlinx.android.synthetic.main.activity_location_sender.*
 
 class LocationSenderActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapLongClickListener {
 
+    @BindView(R.id.location_sender_toolbar) lateinit var toolbar: Toolbar
+    @BindView(R.id.location_toolbar_title) lateinit var toolbarTitle: TextView
+    @BindView(R.id.location_mapview) lateinit var mapview: MapView
+    @BindView(R.id.location_searchview) lateinit var searcher: SearchView
+    @BindView(R.id.location_sender_address) lateinit var currentLocation: TextView
+    @BindView(R.id.location_sender_button) lateinit var bSend: Button
+
     private lateinit var locationViewModel: LocationViewModel
-    private lateinit var mapview: MapView
     private var googleMap: GoogleMap? = null
     private val MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey"
     private lateinit var  fusedLocationClient: FusedLocationProviderClient
@@ -36,13 +48,14 @@ class LocationSenderActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMa
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_location_sender)
+        ButterKnife.bind(this)
 
         setSupportActionBar(location_sender_toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         mapview = findViewById(R.id.location_mapview)
 
-        location_searchview.queryHint = getString(R.string.search_title)
+        searcher.queryHint = getString(R.string.search_title)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         mapview.onCreate(savedInstanceState)
         mapview.getMapAsync(this)
@@ -55,29 +68,24 @@ class LocationSenderActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMa
 
         locationViewModel.getAddress().observe(this, androidx.lifecycle.Observer {
             address = it
-            location_sender_address.text = address.getAddressLine(0)
-            location_toolbar_title.text = address.adminArea
+            currentLocation.text = address.getAddressLine(0)
+            toolbarTitle.text = address.adminArea
         })
 
-        location_searchview.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+        searcher.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
-                locationViewModel.searchLocation(this@LocationSenderActivity, query)
-                location_searchview.clearFocus()
+                locationViewModel.searchLocation(applicationContext, query)
+                searcher.clearFocus()
                 return true
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
                 if(newText.isEmpty()){
-                    location_searchview.clearFocus()
+                    searcher.clearFocus()
                 }
                 return true
             }
         })
-
-        location_sender_button.setOnClickListener {
-            locationViewModel.sendLocation(this)
-            finish()
-        }
 
         val locationPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
 
@@ -98,7 +106,7 @@ class LocationSenderActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMa
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)))
         }
 
-        locationViewModel.setNewLocation(this)
+        locationViewModel.setNewLocation(applicationContext)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?) = when(item?.itemId){
@@ -159,5 +167,11 @@ class LocationSenderActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMa
 
     override fun onMapLongClick(newPoint: LatLng) {
         locationViewModel.setLatLng(newPoint)
+    }
+
+    @OnClick(R.id.location_sender_button)
+    fun sendLocation(){
+        locationViewModel.sendLocation(applicationContext)
+        finish()
     }
 }

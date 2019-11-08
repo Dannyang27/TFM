@@ -8,10 +8,12 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import butterknife.BindView
+import butterknife.ButterKnife
 import com.bumptech.glide.Glide
 import com.example.tfm.R
 import com.example.tfm.activity.ImageDisplayActivity
-import com.example.tfm.data.DataRepository
+import com.example.tfm.data.DataRepository.currentUserEmail
 import com.example.tfm.enum.MediaSource
 import com.example.tfm.enum.MessageType
 import com.example.tfm.model.Message
@@ -21,13 +23,18 @@ import com.example.tfm.util.toBitmap
 import org.jetbrains.anko.displayMetrics
 
 class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view){
-    private val layout: RelativeLayout = view.findViewById(R.id.media_layout)
-    private val placeholder: LinearLayout = view.findViewById(R.id.media_placeholder)
-    private val media: ImageView = view.findViewById(R.id.media_image)
-    private val time: TextView = view.findViewById(R.id.media_time)
+
+    @BindView(R.id.media_layout) lateinit var layout: RelativeLayout
+    @BindView(R.id.media_placeholder) lateinit var placeholder: LinearLayout
+    @BindView(R.id.media_image) lateinit var media: ImageView
+    @BindView(R.id.media_time) lateinit var time: TextView
+
+    init{
+        ButterKnife.bind(this, view)
+    }
 
     fun initImageViewHolder(message: Message){
-        if(message.senderName == DataRepository.currentUserEmail){
+        if(message.senderName == currentUserEmail){
             setSenderViewHolder()
         }else {
             setReceiverViewHolder()
@@ -35,7 +42,7 @@ class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view){
 
         setImageOrGif(message)
         setTime(time, message.timestamp)
-        setMessageCheckIfSeen(time, message.isSent)
+        setMessageCheckIfSeen(time, message.senderName == currentUserEmail, message.isSent)
     }
 
     private fun setSenderViewHolder(){

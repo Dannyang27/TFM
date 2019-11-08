@@ -236,6 +236,8 @@ object FirebaseUtil {
             MessageType.LOCATION -> lastMessage = "[Location]"
         }
 
+        message.isSent = true
+
         database.child(FIREBASE_PRIVATE_CHAT_PATH)
             .child(message.ownerId)
             .child(FIREBASE_LAST_MESSAGE)
@@ -245,6 +247,20 @@ object FirebaseUtil {
             .child(message.ownerId)
             .child(FIREBASE_TIMESTAMP)
             .setValue(message.timestamp)
+
+        updateFirebaseMessage(message)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            roomDatabase.messageDao().update(message)
+        }
+    }
+
+    fun updateFirebaseMessage(message: Message){
+        database.child(FIREBASE_PRIVATE_CHAT_PATH)
+            .child(message.ownerId)
+            .child(FIREBASE_PRIVATE_MESSAGE_PATH)
+            .child(message.timestamp.toString())
+            .setValue(message)
     }
 
     fun startConversationListener() {

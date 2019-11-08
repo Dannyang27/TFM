@@ -24,6 +24,10 @@ class ChatViewModel : ViewModel(){
     private val showEmojiKeyboard = MutableLiveData<Boolean>()
     private val chatMessages = MutableLiveData<MutableList<Message>>()
 
+    init{
+        clearMessages()
+    }
+
     fun getChatMessages(): LiveData<MutableList<Message>> = chatMessages
     fun getLanguageFlag(): LiveData<Int> = languageFlag
     fun getTranslatedModel(): LiveData<String> = translatedModel
@@ -47,7 +51,7 @@ class ChatViewModel : ViewModel(){
         }
     }
 
-    fun clearMessages(){
+    private fun clearMessages(){
         chatMessages.postValue(mutableListOf())
     }
 

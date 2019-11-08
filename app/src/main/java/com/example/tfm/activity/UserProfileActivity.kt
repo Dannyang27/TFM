@@ -10,18 +10,24 @@ import android.view.MenuItem
 import android.view.Window
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import butterknife.BindView
+import butterknife.ButterKnife
+import butterknife.OnClick
 import com.bumptech.glide.Glide
 import com.example.tfm.R
 import com.example.tfm.data.DataRepository
 import com.example.tfm.model.User
 import com.example.tfm.util.*
 import com.example.tfm.viewmodel.UserProfileViewModel
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.FirebaseFirestore
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_user_profile.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,47 +37,40 @@ import org.jetbrains.anko.toast
 
 class UserProfileActivity : AppCompatActivity() {
 
+    @BindView(R.id.profile_toolbar) lateinit var toolbar: Toolbar
+    @BindView(R.id.user_profile) lateinit var profilePhoto: CircleImageView
+    @BindView(R.id.profile_fab) lateinit var fab: FloatingActionButton
+    @BindView(R.id.profile_username_layout) lateinit var usernameLayout: LinearLayout
+    @BindView(R.id.profile_username) lateinit var username: TextView
+    @BindView(R.id.profile_status_layout) lateinit var statusLayout: LinearLayout
+    @BindView(R.id.profile_status) lateinit var status: TextView
+    @BindView(R.id.profile_email) lateinit var email: TextView
+
     private lateinit var firestore: FirebaseFirestore
     private lateinit var userProfileViewModel: UserProfileViewModel
-
     private val GALLERY_REQUEST_CODE = 100
 
-    private lateinit var toolbar: Toolbar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_profile)
+        ButterKnife.bind(this)
+
         userProfileViewModel = ViewModelProviders.of(this).get(UserProfileViewModel::class.java)
 
         firestore = FirebaseFirestore.getInstance()
-        toolbar = findViewById(R.id.profile_toolbar)
         toolbar.title = getString(R.string.profile)
         displayArrowBack(toolbar)
 
-        userProfileViewModel.initProfile()
-        userProfileViewModel.getUser().observe(this, Observer {
-
-            if(!it.profilePhoto.isNullOrEmpty()){
-                Glide.with(this).load(it.profilePhoto.toBitmap()).into(user_profile)
+        userProfileViewModel.getUser().observe(this, Observer { user ->
+            if(!user.profilePhoto.isNullOrEmpty()){
+                Glide.with(this).load(user.profilePhoto.toBitmap()).into(profilePhoto)
             }
 
-            profile_username.text = it.name
-            profile_status.text = it.status
-            profile_email.text = it.email
-            DataRepository.user = it
+            username.text = user.name
+            status.text = user.status
+            email.text = user.email
+            DataRepository.user = user
         })
-
-
-        profile_fab.setOnClickListener {
-            loadImage()
-        }
-
-        profile_username_layout.setOnClickListener {
-            showDialog(this, true)
-        }
-
-        profile_status_layout.setOnClickListener {
-            showDialog(this, false)
-        }
     }
 
     private fun displayArrowBack(toolbar: Toolbar){
@@ -92,8 +91,9 @@ class UserProfileActivity : AppCompatActivity() {
         when(requestCode){
             GALLERY_REQUEST_CODE -> {
                 if(data != null && resultCode == Activity.RESULT_OK){
-                    val originalBitmap = MediaStore.Images.Media.getBitmap(contentResolver, data?.data) as Bitmap
+                    val originalBitmap = MediaStore.Images.Media.getBitmap(contentResolver, data.data) as Bitmap
                     val bitmap = originalBitmap.createNewBitmap()
+
                     CoroutineScope(Dispatchers.IO).launch {
                         val task = firestore.collection(FirebaseUtil.FIREBASE_USER_PATH).document(DataRepository.currentUserEmail).get().await()
                         var user = task.toObject(User::class.java)?.copy(profilePhoto = bitmap.toBase64())!!
@@ -157,5 +157,18 @@ class UserProfileActivity : AppCompatActivity() {
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    @OnClick(R.id.profile_fab)
+    fun fabClick(){ loadImage() }
+
+    @OnClick(R.id.profile_username_layout)
+    fun usernameClick(){
+        showDialog(this, true)
+    }
+
+    @OnClick(R.id.profile_status_layout)
+    fun statusClick(){
+        showDialog(this, false)
     }
 }

@@ -6,6 +6,8 @@ import android.view.View
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import butterknife.BindView
+import butterknife.ButterKnife
 import com.example.tfm.R
 import com.example.tfm.data.DataRepository
 import com.example.tfm.model.Location
@@ -19,13 +21,19 @@ import com.google.android.gms.maps.model.MarkerOptions
 import org.jetbrains.anko.displayMetrics
 
 class LocationViewHolder(view: View) : RecyclerView.ViewHolder(view), OnMapReadyCallback {
-    lateinit var context: Context
+
+    @BindView(R.id.location_layout) lateinit var locationLayout: RelativeLayout
+    @BindView(R.id.mapview_location_viewholder) lateinit var mapView: MapView
+    @BindView(R.id.place_location_viewholder) lateinit var place: TextView
+    @BindView(R.id.time_location_viewholder) lateinit var time: TextView
+
+    private lateinit var context: Context
     private lateinit var googleMap: GoogleMap
     private var latLng: LatLng? = null
-    private val locationLayout: RelativeLayout = view.findViewById(R.id.location_layout)
-    private val mapView: MapView = view.findViewById(R.id.mapview_location_viewholder)
-    private val place: TextView = view.findViewById(R.id.place_location_viewholder)
-    private val time: TextView = view.findViewById(R.id.time_location_viewholder)
+
+    init {
+        ButterKnife.bind(this, view)
+    }
 
     override fun onMapReady(gMap: GoogleMap) {
         MapsInitializer.initialize(context)
@@ -60,7 +68,7 @@ class LocationViewHolder(view: View) : RecyclerView.ViewHolder(view), OnMapReady
 
         setAddress(address.addressLine)
         setTime(time, message.timestamp)
-        setMessageCheckIfSeen(time, message.isSent)
+        setMessageCheckIfSeen(time, message.senderName == DataRepository.currentUserEmail, message.isSent)
     }
 
     private fun setSenderViewHolder(){
