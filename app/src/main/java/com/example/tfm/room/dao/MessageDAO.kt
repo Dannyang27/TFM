@@ -21,6 +21,12 @@ interface MessageDAO {
     @Query("SELECT * FROM Message WHERE ownerId = :conversationId ORDER BY timestamp")
     fun getConversationMessages(conversationId: String): LiveData<MutableList<Message>>
 
+    @Query("SELECT * FROM (SELECT * FROM Message WHERE ownerId = :conversationId ORDER BY timestamp DESC LIMIT :limit) ORDER BY timestamp ASC")
+    fun getConversationMessagesWithLimit(conversationId: String, limit: Int = 20): LiveData<MutableList<Message>>
+
+    @Query("SELECT COUNT(*) FROM Message WHERE (ownerId = :conversationId AND isRead = :unread) ")
+    fun getUnreadMessagesFromConversation(conversationId: String, unread: Boolean = false): Int
+
     @Query("SELECT COUNT(*) FROM Message")
     fun getSize(): Int
 

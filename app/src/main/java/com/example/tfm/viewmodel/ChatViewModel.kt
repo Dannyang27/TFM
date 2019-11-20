@@ -57,37 +57,47 @@ class ChatViewModel : ViewModel(){
 
     fun initRoomObserver(activity: FragmentActivity, conversationId: String){
         roomDatabase = MyRoomDatabase.getMyRoomDatabase(activity)
-        roomDatabase?.messageDao()?.getConversationMessages(conversationId)?.observe(activity, Observer { messages ->
+        roomDatabase?.messageDao()?.getConversationMessagesWithLimit(conversationId)?.observe(activity, Observer { messages ->
             CoroutineScope(Dispatchers.IO).launch {
                 val messageList = mutableListOf<Message>()
-                messages.forEach {
+                messages.forEach {msg ->
                     var content: MessageContent? = null
-                    when(MessageType.fromInt(it.messageType)){
+
+                    when(MessageType.fromInt(msg.messageType)){
                         MessageType.MESSAGE -> {
-                            val plainMessage = roomDatabase?.messageDao()?.getPlainMessageById(it.id)
+                            val plainMessage = roomDatabase?.messageDao()?.getPlainMessageById(msg.id)
                             content = MessageContent(plainMessage?.originalText.toString(), plainMessage?.englishText.toString(), plainMessage?.language.toString())
                         }
                         MessageType.IMAGE -> {
-                            val image = roomDatabase?.messageDao()?.getImageById(it.id)
+                            val image = roomDatabase?.messageDao()?.getImageById(msg.id)
                             content = MessageContent(image?.encodedImage.toString())
                         }
                         MessageType.GIF -> {
-                            val gif = roomDatabase?.messageDao()?.getGifById(it.id)
+                            val gif = roomDatabase?.messageDao()?.getGifById(msg.id)
                             content = MessageContent(gif?.url.toString())
                         }
                         MessageType.LOCATION -> {
-                            val location = roomDatabase?.messageDao()?.getLocationById(it.id)
+                            val location = roomDatabase?.messageDao()?.getLocationById(msg.id)
                             content = MessageContent(location?.latitude.toString(), location?.longitude.toString(), location?.addressLine.toString())
                         }
                         MessageType.ATTACHMENT -> { }
                     }
 
-                    it.body = content
-                    messageList.add(it)
+                    msg.body = content
+                    setMessageToRead(msg)
+
+                    messageList.add(msg)
                 }
 
                 chatMessages.postValue(messageList)
             }
         })
+    }
+
+    private fun setMessageToRead(message: Message){
+        if(!message.isRead){
+            message.isRead = true
+            roomDatabase?.messageDao()?.update(message)
+        }
     }
 }

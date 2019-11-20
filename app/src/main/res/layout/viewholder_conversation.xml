@@ -14,39 +14,52 @@
             android:transitionName="@string/image_transition"/>
     <LinearLayout
             android:orientation="vertical"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="4"
             android:padding="8dp">
-        <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            <androidx.emoji.widget.EmojiTextView
-                    android:text="@string/username_sample"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/name_chat"
-                    android:textSize="@dimen/text_medium"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorPrimaryText"/>
-            <TextView
-                    android:text="@string/time_sample"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/last_message_time_chat"
-                    android:gravity="right"
-                    android:fontFamily="@font/robotoregularitalic"
-                    android:paddingHorizontal="20dp"/>
-        </LinearLayout>
+        <androidx.emoji.widget.EmojiTextView
+                android:text="@string/username_sample"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/name_chat"
+                android:textSize="@dimen/text_medium"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimaryText"/>
         <androidx.emoji.widget.EmojiTextView
                 android:text="@string/text_sample"
-                android:layout_width="300dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/last_message_chat"
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:textColor="#ff000000"
                 android:textSize="@dimen/text_medium"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="8dp">
+
+        <TextView
+                android:id="@+id/last_message_time_chat"
+                android:text="@string/time_sample"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:fontFamily="@font/robotoregularitalic"/>
+
+        <TextView
+                android:id="@+id/unread_message_number"
+                android:text="@string/unread_message_sample"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:background="@drawable/rounded_textview"
+                android:textColor="@android:color/white"
+                android:layout_gravity="center"
+                android:gravity="center"/>
     </LinearLayout>
 </LinearLayout>

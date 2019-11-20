@@ -19,7 +19,7 @@ data class Message (@PrimaryKey(autoGenerate = true)
                     var body: MessageContent? = null,
                     var timestamp: Long = -1,
                     var isSent: Boolean = false,
-                    var isReceived: Boolean = false)
+                    var isRead: Boolean = false)
 
 @Entity(tableName = "PlainMessage")
 data class PlainMessageRoomModel(@PrimaryKey

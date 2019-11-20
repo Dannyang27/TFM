@@ -97,4 +97,5 @@
     <string name="enter_status">Status</string>
     <string name="enter_username">Username</string>
     <string name="modelsdownloaded">Model downloaded</string>
+    <string name="unread_message_sample">3</string>
 </resources>

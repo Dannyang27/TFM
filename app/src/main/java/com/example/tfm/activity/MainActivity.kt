@@ -19,6 +19,7 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import com.example.tfm.R
 import com.example.tfm.data.DataRepository
+import com.example.tfm.data.DataRepository.conversationPositionClicked
 import com.example.tfm.fragments.GroupChatFragment
 import com.example.tfm.fragments.PrivateFragment
 import com.example.tfm.model.Conversation
@@ -176,6 +177,10 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         if(!isServiceRunning()) {
             startService(firebaseService)
+        }
+
+        if(conversationPositionClicked != -1){
+            privateFragment.updateAdapter(conversationPositionClicked)
         }
     }
 

@@ -18,6 +18,8 @@ object DataRepository{
     var user: User? = null
     var currentUserEmail = FirebaseAuth.getInstance().currentUser?.email.toString()
 
+    var conversationPositionClicked: Int = -1
+
     fun initTranslator(context: Context){
         val language  = PreferenceManager.getDefaultSharedPreferences(context).getString("chatLanguage", "Default").toString()
 
