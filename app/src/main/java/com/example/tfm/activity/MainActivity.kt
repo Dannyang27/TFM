@@ -23,6 +23,7 @@ import com.example.tfm.data.DataRepository.conversationPositionClicked
 import com.example.tfm.fragments.GroupChatFragment
 import com.example.tfm.fragments.PrivateFragment
 import com.example.tfm.model.Conversation
+import com.example.tfm.notification.MyNotificationManager
 import com.example.tfm.room.database.MyRoomDatabase
 import com.example.tfm.service.FirebaseListenerService
 import com.example.tfm.util.clearCredential
@@ -88,6 +89,8 @@ class MainActivity : AppCompatActivity() {
         createFragments()
         downloadUserDataIfNew()
         DataRepository.initTranslator(applicationContext)
+        //creating notification channel
+        MyNotificationManager.createNotificationChannel(this)
 
         searcher.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?) = true

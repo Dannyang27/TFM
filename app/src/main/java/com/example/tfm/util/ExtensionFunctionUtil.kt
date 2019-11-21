@@ -4,9 +4,7 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.SharedPreferences
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Matrix
+import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.VibrationEffect
@@ -62,6 +60,23 @@ fun SharedPreferences.getLanguage(): String?{
 fun String.trimBothSides() = this.trimStart().trimEnd()
 
 fun String.addCheck() = this.plus("✓")
+
+fun Bitmap.toRoundBitmap(): Bitmap{
+    val roundBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+    val canvas = Canvas(roundBitmap)
+
+    val color = 0xff424242
+    val paint = Paint()
+    val rect = Rect(0,0, width, height)
+    paint.isAntiAlias = true
+    canvas.drawARGB(0,0,0,0)
+    paint.color = color.toInt()
+    canvas.drawCircle(width.toFloat() / 2, height.toFloat() / 2, width.toFloat() / 2, paint)
+    paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
+    canvas.drawBitmap(this, rect, rect, paint)
+
+    return roundBitmap
+}
 
 fun Bitmap.toBase64() : String{
     val outputStream = ByteArrayOutputStream()

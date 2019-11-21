@@ -83,7 +83,7 @@ class ConversationViewHolder(view: View) : RecyclerView.ViewHolder(view){
             imageBase64 = conversation.userOnePhoto
         }
 
-        if(!imageBase64.isNullOrEmpty()){
+        if(imageBase64.isNotEmpty() && imageBase64.isNotBlank()){
             Glide.with(itemView.context).load(imageBase64.toBitmap()).into(image)
         }
 
