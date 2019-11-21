@@ -5,7 +5,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.preference.*
+import androidx.preference.ListPreference
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreference
 import com.example.tfm.R
 import com.example.tfm.activity.PrivacyPolicyActivity
 import com.example.tfm.enum.LanguageCode
@@ -25,7 +28,6 @@ import org.jetbrains.anko.toast
 class MySettingFragment : PreferenceFragmentCompat(), CoroutineScope{
     override val coroutineContext = Dispatchers.Default + Job()
     private lateinit var languagePreference: ListPreference
-    private lateinit var notificationTone: ListPreference
     private lateinit var dialog: Dialog
     private var isModelDownloaded = false
 
@@ -33,20 +35,10 @@ class MySettingFragment : PreferenceFragmentCompat(), CoroutineScope{
         setPreferencesFromResource(R.xml.preference_settings, rootKey)
 
         languagePreference =  findPreference("chatLanguage") as ListPreference
-        notificationTone =  findPreference("notificationTone") as ListPreference
 
         val deleteModelPreference = findPreference("deleteLanguageModels") as Preference
         val vibrationMode = findPreference("vibrate") as SwitchPreference
         val privacyPreference = findPreference("termsAndConditions") as Preference
-
-        val pref = PreferenceManager.getDefaultSharedPreferences(context)
-        notificationTone.summary = pref.getString("notificationTone", "Default")
-
-        notificationTone.setOnPreferenceChangeListener { _, newValue ->
-            context?.toast("$newValue")
-            notificationTone.summary = newValue.toString()
-            true
-        }
 
         languagePreference.setOnPreferenceChangeListener { _, newValue ->
             showDialog(languagePreference.context)

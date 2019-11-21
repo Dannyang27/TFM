@@ -1,5 +1,6 @@
 package com.example.tfm.data
 
+import android.app.ActivityManager
 import android.content.Context
 import android.preference.PreferenceManager
 import android.util.Log
@@ -57,5 +58,11 @@ object DataRepository{
             .addOnFailureListener {
                 Log.d(LogUtil.TAG, "Failed while initialising model")
             }
+    }
+
+    fun appIsInBackground(): Boolean {
+        val myProcess = ActivityManager.RunningAppProcessInfo()
+        ActivityManager.getMyMemoryState(myProcess)
+        return myProcess.importance != ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND
     }
 }

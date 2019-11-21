@@ -22,18 +22,6 @@
             app:allowDividerBelow="false"
             android:layout="@layout/font_layout"/>
 
-
-    <ListPreference
-            android:defaultValue="Default"
-            android:entries="@array/notificationTones"
-            android:entryValues="@array/notificationTones"
-            android:key="notificationTone"
-            android:title="@string/notificationToneTitle"
-            android:summary="@string/defaultText"
-            app:allowDividerAbove="false"
-            app:allowDividerBelow="false"
-            android:layout="@layout/font_layout"/>
-
     <SwitchPreference
             android:defaultValue="true"
             android:key="vibrate"

@@ -21,7 +21,7 @@ class FirebaseListenerService : Service(){
 
         mHandler = Handler()
         mRunnable = Runnable {
-            FirebaseUtil.startConversationListener()
+            FirebaseUtil.startConversationListener(applicationContext)
             FirebaseUtil.launchUserListener()
             FirebaseUtil.launchConversationListener()
         }

@@ -12,6 +12,7 @@ import com.example.tfm.model.Conversation
 import com.example.tfm.model.ConversationTuple
 import com.example.tfm.model.Message
 import com.example.tfm.model.User
+import com.example.tfm.notification.MyNotificationManager
 import com.example.tfm.room.database.MyRoomDatabase
 import com.example.tfm.viewmodel.LoginViewModel
 import com.example.tfm.viewmodel.SignupViewModel
@@ -263,18 +264,18 @@ object FirebaseUtil {
             .setValue(message)
     }
 
-    fun startConversationListener() {
+    fun startConversationListener(appContext: Context) {
         CoroutineScope(Dispatchers.IO).launch {
             val data = roomDatabase.conversationDao()
                 .getConvesationDataFromEmail(DataRepository.currentUserEmail)
 
             data.forEach {
-                launchListener(it)
+                launchListener(appContext, it)
             }
         }
     }
 
-    private fun launchListener(conversationTuple: ConversationTuple) {
+    private fun launchListener(appContext: Context, conversationTuple: ConversationTuple) {
         database.child(FIREBASE_PRIVATE_CHAT_PATH)
             .child(conversationTuple.id)
             .child(FIREBASE_PRIVATE_MESSAGE_PATH)
@@ -290,6 +291,10 @@ object FirebaseUtil {
                     val message = dataSnapshot.getValue(Message::class.java)
                     message?.let {
                         roomDatabase.addMessage(it)
+
+                        if(DataRepository.appIsInBackground()){
+                            MyNotificationManager.displayNotification(appContext, 1, message)
+                        }
                     }
                 }
             })
