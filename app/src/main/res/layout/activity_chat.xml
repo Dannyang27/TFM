@@ -60,49 +60,65 @@
         <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-            <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/chat_recyclerview"
+            <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_above="@+id/field"/>
-            <LinearLayout
-                    android:id="@+id/field"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_margin="8dp"
-                    android:layout_above="@+id/shortcuts">
-                <androidx.emoji.widget.EmojiEditText
-                        android:id="@+id/chat_edittext"
-                        android:layout_width="0dp"
+                    android:layout_above="@id/shortcuts">
+
+                <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/whatsappbackground"
+                        android:scaleType="centerCrop"
+                        android:isScrollContainer="false"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/chat_recyclerview"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_above="@+id/field"/>
+                <LinearLayout
+                        android:id="@+id/field"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:minHeight="40dp"
-                        android:inputType="textMultiLine|textShortMessage|textCapSentences"
-                        android:hint="@string/chat_hint"
-                        android:gravity="center_vertical"
-                        android:ems="10"
-                        android:background="@drawable/roundcorner"
-                        android:paddingVertical="10dp"
-                        android:paddingHorizontal="20dp"
-                        android:layout_weight="16" />
-                <ImageButton
-                        android:id="@+id/chat_sendButton"
-                        android:layout_width="20dp"
-                        android:layout_height="40dp"
-                        app:srcCompat="@drawable/send"
-                        android:layout_weight="1"
-                        android:scaleType="fitXY"
-                        android:padding="8dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_gravity="bottom"
-                        android:background="@drawable/round_button"/>
-            </LinearLayout>
+                        android:orientation="horizontal"
+                        android:layout_margin="8dp"
+                        android:layout_alignParentBottom="true">
+                    <androidx.emoji.widget.EmojiEditText
+                            android:id="@+id/chat_edittext"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:minHeight="40dp"
+                            android:inputType="textMultiLine|textShortMessage|textCapSentences"
+                            android:hint="@string/chat_hint"
+                            android:gravity="center_vertical"
+                            android:ems="10"
+                            android:background="@drawable/roundcorner"
+                            android:paddingVertical="10dp"
+                            android:paddingHorizontal="20dp"
+                            android:layout_weight="16" />
+                    <ImageButton
+                            android:id="@+id/chat_sendButton"
+                            android:layout_width="20dp"
+                            android:layout_height="40dp"
+                            app:srcCompat="@drawable/send"
+                            android:layout_weight="1"
+                            android:scaleType="fitXY"
+                            android:padding="8dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_gravity="bottom"
+                            android:background="@drawable/round_button"/>
+                </LinearLayout>
+
+            </RelativeLayout>
+
+
             <LinearLayout
                     android:id="@+id/shortcuts"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="40dp"
                     android:orientation="horizontal"
-                    android:gravity="center"
+                    android:gravity="center_horizontal|center_vertical"
                     android:layout_above="@+id/viewContainer">
 
                 <ImageButton
