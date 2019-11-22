@@ -52,6 +52,15 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
         }
     }
 
+    fun getAllUsers(){
+        launch{
+            val users = userDao().getAllTest()
+            users.forEach {
+                Log.d(LogUtil.TAG, "User name: ${it.name}")
+            }
+        }
+    }
+
     fun getAllMessages(){
         launch {
             val messages = messageDao().getAll()

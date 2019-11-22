@@ -7,6 +7,9 @@ import com.example.tfm.model.User
 @Dao
 interface UserDAO {
     @Query("SELECT * FROM User")
+    fun getAllTest() : MutableList<User>
+
+    @Query("SELECT * FROM User")
     fun getAll() : LiveData<MutableList<User>>
 
     @Query("SELECT * FROM User WHERE email = :email")

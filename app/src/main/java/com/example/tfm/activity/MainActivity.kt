@@ -89,7 +89,6 @@ class MainActivity : AppCompatActivity() {
         createFragments()
         downloadUserDataIfNew()
         DataRepository.initTranslator(applicationContext)
-        //creating notification channel
         MyNotificationManager.createNotificationChannel(this)
 
         searcher.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
@@ -210,7 +209,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }else{
             roomDatabase = MyRoomDatabase.getMyRoomDatabase(applicationContext)!!
-            roomDatabase.getAllConversations(DataRepository.currentUserEmail)
+            roomDatabase.getAllUsers()
         }
     }
 }

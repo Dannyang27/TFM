@@ -17,6 +17,7 @@ import com.example.tfm.activity.ChatActivity
 import com.example.tfm.data.DataRepository.conversationPositionClicked
 import com.example.tfm.data.DataRepository.currentUserEmail
 import com.example.tfm.model.Conversation
+import com.example.tfm.model.User
 import com.example.tfm.room.database.MyRoomDatabase
 import com.example.tfm.util.setTime
 import com.example.tfm.util.showDialog
@@ -71,39 +72,56 @@ class ConversationViewHolder(view: View) : RecyclerView.ViewHolder(view){
     fun bindViewHolder(conversation: Conversation){
         id = conversation.id
 
-        if(conversation.userOneEmail.contains(currentUserEmail)){
-            email = conversation.userTwoEmail
-            username = conversation.userTwoUsername
-            name.text = username
-            imageBase64 = conversation.userTwoPhoto
-        }else{
-            email = conversation.userOneEmail
-            username = conversation.userOneUsername
-            name.text = username
-            imageBase64 = conversation.userOnePhoto
-        }
-
-        if(imageBase64.isNotEmpty() && imageBase64.isNotBlank()){
-            Glide.with(itemView.context).load(imageBase64.toBitmap()).into(image)
-        }
-
-        lastMessage.text = if(conversation.lastMessage.toString().isNotEmpty()) conversation.lastMessage else image.context.getString(R.string.bethefirst)
-        setTime(lastTime, conversation.timestamp)
-
         CoroutineScope(Dispatchers.IO).launch {
-            val unreadMsgs = MyRoomDatabase.INSTANCE?.messageDao()?.getUnreadMessagesFromConversation(id)
-            withContext(Dispatchers.Main){
-                if(unreadMsgs == 0){
-                    unreadMessages.visibility = View.GONE
-                }else {
-                    unreadMessages.text = unreadMsgs.toString()
-                }
-            }
+            bindUpdatedUser(conversation)
+            getUnreadMessages(id)
         }
     }
 
     @OnClick(R.id.profile_image)
     fun imageClick(){
         image.showDialog( image.context, imageBase64)
+    }
+
+    private suspend fun bindUpdatedUser(conversation: Conversation){
+        var user: User?
+
+        if(conversation.userOneEmail.contains(currentUserEmail)){
+            user = MyRoomDatabase.INSTANCE?.userDao()?.getByEmail(conversation.userTwoEmail)
+            user?.let {
+                email = conversation.userTwoEmail
+                username = it.name
+                imageBase64 = it.profilePhoto
+            }
+
+        }else{
+            user = MyRoomDatabase.INSTANCE?.userDao()?.getByEmail(conversation.userOneEmail)
+            user?.let {
+                email = conversation.userTwoEmail
+                username = it.name
+                imageBase64 = it.profilePhoto
+            }
+        }
+
+        withContext(Dispatchers.Main){
+            name.text = username
+            lastMessage.text = if(conversation.lastMessage.toString().isNotEmpty()) conversation.lastMessage else image.context.getString(R.string.bethefirst)
+            setTime(lastTime, conversation.timestamp)
+
+            if(imageBase64.isNotEmpty() && imageBase64.isNotBlank()){
+                Glide.with(itemView.context).load(imageBase64.toBitmap()).into(image)
+            }
+        }
+    }
+
+    private suspend fun getUnreadMessages(id: String){
+        val unreadMsgs = MyRoomDatabase.INSTANCE?.messageDao()?.getUnreadMessagesFromConversation(id)
+        withContext(Dispatchers.Main){
+            if(unreadMsgs == 0){
+                unreadMessages.visibility = View.GONE
+            }else {
+                unreadMessages.text = unreadMsgs.toString()
+            }
+        }
     }
 }

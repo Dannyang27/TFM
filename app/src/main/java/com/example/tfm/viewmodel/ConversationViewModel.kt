@@ -47,8 +47,13 @@ class ConversationViewModel : ViewModel(){
         updateUser(currentUserEmail)
         roomDatabase = MyRoomDatabase.getMyRoomDatabase(activity)
         roomDatabase?.conversationDao()?.getUserLiveConversations(currentUserEmail)?.observe(activity, Observer {
-            conversations.addAll(it)
-            conversationList.postValue(it)
+            CoroutineScope(Dispatchers.IO).launch {
+                it.forEach { conversation ->
+                    conversations.add(setUpdatedConversation(conversation))
+                }
+
+                conversationList.postValue(it)
+            }
         })
     }
 
@@ -58,5 +63,21 @@ class ConversationViewModel : ViewModel(){
             val user = loginTask.toObject(User::class.java)
             DataRepository.user = user
         }
+    }
+
+    private fun setUpdatedConversation(conversation: Conversation): Conversation{
+        var user: User?
+        var newConversation: Conversation?
+
+        if(conversation.userOneEmail == currentUserEmail){
+            user = roomDatabase?.getUserByEmail(conversation.userTwoEmail)
+            newConversation = conversation.copy(userTwoPhoto = user?.profilePhoto!!, userTwoUsername = user.name)
+        }else{
+            user = roomDatabase?.getUserByEmail(conversation.userOneEmail)
+            newConversation = conversation.copy(userOnePhoto = user?.profilePhoto!!, userOneUsername = user.name)
+
+        }
+
+        return newConversation
     }
 }
