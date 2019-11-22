@@ -12,6 +12,7 @@ import com.example.tfm.model.User
 import com.example.tfm.room.database.MyRoomDatabase
 import com.example.tfm.util.FirebaseUtil
 import com.example.tfm.util.FirebaseUtil.FIREBASE_USER_PATH
+import com.example.tfm.util.removeAfter
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -35,12 +36,12 @@ class ConversationViewModel : ViewModel(){
 
     fun filterList(text: String?){
         //TODO not working
-//        val list = conversations
-//            .filter { it.userOneEmail.removeAfter('@').contains(text.toString(), ignoreCase = true) ||
-//                    it.userTwoEmail.removeAfter('@').contains(text.toString(), ignoreCase = true)}
-//            .toMutableList()
-//
-//        conversationList.postValue(list)
+        val list = conversations
+            .filter { it.userOneEmail.removeAfter('@').contains(text.toString(), ignoreCase = true) ||
+                    it.userTwoEmail.removeAfter('@').contains(text.toString(), ignoreCase = true)}
+            .toMutableList()
+
+        conversationList.postValue(list)
     }
 
     fun initRoomObserver(activity: FragmentActivity){
@@ -48,11 +49,13 @@ class ConversationViewModel : ViewModel(){
         roomDatabase = MyRoomDatabase.getMyRoomDatabase(activity)
         roomDatabase?.conversationDao()?.getUserLiveConversations(currentUserEmail)?.observe(activity, Observer {
             CoroutineScope(Dispatchers.IO).launch {
+                conversations.clear()
+
                 it.forEach { conversation ->
                     conversations.add(setUpdatedConversation(conversation))
                 }
 
-                conversationList.postValue(it)
+                conversationList.postValue(conversations)
             }
         })
     }

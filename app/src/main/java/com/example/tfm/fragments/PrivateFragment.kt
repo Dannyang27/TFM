@@ -23,7 +23,6 @@ class PrivateFragment : Fragment(){
 
     fun updateList(conversations: MutableList<Conversation>){
         viewAdapter.updateList(conversations)
-        viewAdapter.notifyDataSetChanged()
     }
 
     fun updateAdapter(position: Int){
