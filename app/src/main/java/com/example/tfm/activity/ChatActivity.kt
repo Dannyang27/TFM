@@ -239,10 +239,6 @@ class ChatActivity : AppCompatActivity(){
         }
     }
 
-//    private fun hasPermissions(context: Context, permissions: Array<String>): Boolean = permissions.all {
-//        ActivityCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
-//    }
-
     override fun onBackPressed() {
         if(emoji_container.visibility == View.VISIBLE){
             chatViewModel.showKeyboard(false)
@@ -360,8 +356,12 @@ class ChatActivity : AppCompatActivity(){
 
     @OnClick(R.id.locationButton)
     fun openLocation(){
-        chatViewModel.showKeyboard(false)
-        startActivity(Intent(this, LocationSenderActivity::class.java))
+        if(!checkPermissions(PERMISSIONS)){
+            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL)
+        }else{
+            chatViewModel.showKeyboard(false)
+            startActivity(Intent(this, LocationSenderActivity::class.java))
+        }
     }
 
     @OnClick(R.id.attachmentButton)
