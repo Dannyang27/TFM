@@ -1,9 +1,6 @@
 package com.example.tfm.activity
 
-import android.Manifest
-import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.icu.text.SimpleDateFormat
 import android.net.Uri
 import android.os.Bundle
@@ -36,16 +33,14 @@ import com.bumptech.glide.Glide
 import com.example.tfm.R
 import com.example.tfm.adapter.ChatAdapter
 import com.example.tfm.data.DataRepository
+import com.example.tfm.data.DataRepository.PERMISSIONS
 import com.example.tfm.enum.MediaSource
 import com.example.tfm.enum.MessageType
 import com.example.tfm.fragments.EmojiFragment
 import com.example.tfm.fragments.GifFragment
 import com.example.tfm.model.Message
 import com.example.tfm.model.MessageContent
-import com.example.tfm.util.FirebaseTranslator
-import com.example.tfm.util.KeyboardUtil
-import com.example.tfm.util.showDialog
-import com.example.tfm.util.toBitmap
+import com.example.tfm.util.*
 import com.example.tfm.viewmodel.ChatViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import de.hdodenhof.circleimageview.CircleImageView
@@ -88,11 +83,6 @@ class ChatActivity : AppCompatActivity(){
     private var translateModel: String? = null
 
     private val PERMISSION_ALL = 1
-    private val PERMISSIONS = arrayOf(
-        Manifest.permission.CAMERA,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.RECORD_AUDIO)
 
     companion object{
         lateinit var emojiEditText: EmojiEditText
@@ -249,9 +239,9 @@ class ChatActivity : AppCompatActivity(){
         }
     }
 
-    private fun hasPermissions(context: Context, permissions: Array<String>): Boolean = permissions.all {
-        ActivityCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
-    }
+//    private fun hasPermissions(context: Context, permissions: Array<String>): Boolean = permissions.all {
+//        ActivityCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
+//    }
 
     override fun onBackPressed() {
         if(emoji_container.visibility == View.VISIBLE){
@@ -343,7 +333,7 @@ class ChatActivity : AppCompatActivity(){
     @OnClick(R.id.pictureButton)
     fun operImages(){
         chatViewModel.showKeyboard(false)
-        if(!hasPermissions(this, PERMISSIONS)){
+        if(!checkPermissions(PERMISSIONS)){
             ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL)
         }else{
             val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
@@ -354,7 +344,7 @@ class ChatActivity : AppCompatActivity(){
 
     @OnClick(R.id.cameraButton)
     fun openCamera(){
-        if(!hasPermissions(this, PERMISSIONS)){
+        if(!checkPermissions(PERMISSIONS)){
             ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL)
         }else{
             chatViewModel.showKeyboard(false)
@@ -376,7 +366,7 @@ class ChatActivity : AppCompatActivity(){
 
     @OnClick(R.id.attachmentButton)
     fun openAttachment(){
-        if(!hasPermissions(this, PERMISSIONS)){
+        if(!checkPermissions(PERMISSIONS)){
             ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL)
         }else{
             val attachIntent = Intent(Intent.ACTION_GET_CONTENT)

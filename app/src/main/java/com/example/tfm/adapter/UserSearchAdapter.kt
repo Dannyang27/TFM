@@ -12,6 +12,7 @@ import com.example.tfm.R
 import com.example.tfm.data.DataRepository
 import com.example.tfm.diffUtil.UserDiffCallback
 import com.example.tfm.model.Conversation
+import com.example.tfm.model.ConversationTuple
 import com.example.tfm.model.User
 import com.example.tfm.room.database.MyRoomDatabase
 import com.example.tfm.util.*
@@ -99,6 +100,7 @@ class UserSearchAdapter (private var users: MutableList<User>): RecyclerView.Ada
 
                 roomDatabase.addConversation(conversation)
                 FirebaseFirestore.getInstance().addConversation(context, conversation)
+                FirebaseUtil.launchListener(context, ConversationTuple(conversationId.toString(), 0))
             }
         }
     }

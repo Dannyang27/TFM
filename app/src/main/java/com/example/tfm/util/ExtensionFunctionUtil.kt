@@ -84,9 +84,14 @@ fun Bitmap.toBase64() : String{
     return Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT)
 }
 
-fun String.toBitmap() : Bitmap {
+fun String.toBitmap() : Bitmap? {
     val bitmap = Base64.decode(this, Base64.DEFAULT)
-    return BitmapFactory.decodeByteArray(bitmap, 0 , bitmap.size)
+
+    bitmap?.let {
+        return BitmapFactory.decodeByteArray(bitmap, 0 , bitmap.size)
+    }
+
+    return null
 }
 
 fun RecyclerView.ViewHolder.setTime(time: TextView, timestamp: Long){

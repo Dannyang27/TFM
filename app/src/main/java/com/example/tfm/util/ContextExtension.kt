@@ -2,6 +2,8 @@ package com.example.tfm.util
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import androidx.core.app.ActivityCompat
 import com.example.tfm.activity.ChatActivity
 import com.example.tfm.activity.MainActivity
 
@@ -23,4 +25,8 @@ fun Context.launchChatActivity(id: String, email: String, username: String, phot
     intent.putExtra("receiverName", username)
     intent.putExtra("profilePhoto", photo)
     startActivity(intent)
+}
+
+fun Context.checkPermissions(permissions: Array<String>): Boolean = permissions.all {
+    ActivityCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
 }

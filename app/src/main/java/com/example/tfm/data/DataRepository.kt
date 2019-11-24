@@ -1,5 +1,6 @@
 package com.example.tfm.data
 
+import android.Manifest
 import android.app.ActivityManager
 import android.content.Context
 import android.preference.PreferenceManager
@@ -20,6 +21,12 @@ object DataRepository{
     var currentUserEmail = FirebaseAuth.getInstance().currentUser?.email.toString()
 
     var conversationPositionClicked: Int = -1
+
+    val PERMISSIONS = arrayOf(
+        Manifest.permission.CAMERA,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.RECORD_AUDIO)
 
     fun initTranslator(context: Context){
         val language  = PreferenceManager.getDefaultSharedPreferences(context).getString("chatLanguage", "Default").toString()

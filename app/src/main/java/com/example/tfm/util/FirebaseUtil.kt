@@ -275,7 +275,7 @@ object FirebaseUtil {
         }
     }
 
-    private fun launchListener(appContext: Context, conversationTuple: ConversationTuple) {
+    fun launchListener(appContext: Context, conversationTuple: ConversationTuple) {
         database.child(FIREBASE_PRIVATE_CHAT_PATH)
             .child(conversationTuple.id)
             .child(FIREBASE_PRIVATE_MESSAGE_PATH)

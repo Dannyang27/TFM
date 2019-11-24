@@ -46,6 +46,7 @@
                                 android:textStyle="bold"
                                 android:paddingBottom="20dp"/>
                     </LinearLayout>
+
                     <ImageView
                             android:id="@+id/chat_flag"
                             android:layout_alignParentRight="true"
