@@ -43,12 +43,10 @@ class ChatViewModel : ViewModel(){
 
     fun initLanguageFlag(context: Context){
         val tModel = PreferenceManager.getDefaultSharedPreferences(context)
-            .getString("chatLanguage", "Default")
+            .getString("chatLanguage", "English")
 
-        tModel?.let{
-            translatedModel.postValue(tModel)
-            languageFlag.postValue(it.getDrawable())
-        }
+        translatedModel.postValue(tModel)
+        languageFlag.postValue(tModel.getDrawable())
     }
 
     private fun clearMessages(){

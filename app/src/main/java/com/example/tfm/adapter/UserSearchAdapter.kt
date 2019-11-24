@@ -53,7 +53,7 @@ class UserSearchAdapter (private var users: MutableList<User>): RecyclerView.Ada
 
         holder.itemView.setOnClickListener {
             val pref = PreferenceManager.getDefaultSharedPreferences(it.context)
-            val hasLanguagePref = pref.getString("chatLanguage", "Default") != "Default"
+            val hasLanguagePref = pref.getString("chatLanguage", "English") != "English"
 
             if(hasLanguagePref){
                 createConversationIfNone(it.context, holder)

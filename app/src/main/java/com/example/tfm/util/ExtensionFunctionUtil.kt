@@ -54,7 +54,7 @@ fun SharedPreferences.getCredentials(): Pair<String, String>{
 }
 
 fun SharedPreferences.getLanguage(): String?{
-    return getString("chatLanguage", "Default")
+    return getString("chatLanguage", "English")
 }
 
 fun String.trimBothSides() = this.trimStart().trimEnd()
@@ -196,6 +196,6 @@ fun String.getDrawable(): Int{
         LanguageDrawable.KOREAN.name -> return LanguageDrawable.KOREAN.drawable
         LanguageDrawable.RUSSIAN.name -> return LanguageDrawable.RUSSIAN.drawable
         LanguageDrawable.SPANISH.name -> return LanguageDrawable.SPANISH.drawable
-        else -> { return R.drawable.white_placeholder }
+        else -> { return LanguageDrawable.ENGLISH.drawable }
     }
 }

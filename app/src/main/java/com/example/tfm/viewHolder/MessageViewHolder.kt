@@ -12,6 +12,7 @@ import com.example.tfm.R
 import com.example.tfm.data.DataRepository
 import com.example.tfm.data.DataRepository.currentUserEmail
 import com.example.tfm.data.DataRepository.languagePreferenceCode
+import com.example.tfm.enum.LanguageCode
 import com.example.tfm.model.Message
 import com.example.tfm.util.setMessageCheckIfSeen
 import com.example.tfm.util.setTime
@@ -31,11 +32,11 @@ class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
     fun initMessageViewHolder(message: Message){
         if(message.senderName == currentUserEmail){
             setSenderViewHolder()
-            initLayout(message)
         }else{
             setReceiverViewHolder()
-            initLayout(message)
         }
+
+        initLayout(message)
 
         setTime(time, message.timestamp)
         setMessageCheckIfSeen(time, message.senderName == currentUserEmail, message.isSent)
@@ -76,12 +77,20 @@ class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
     private fun initLayout(message: Message){
         val code = message.body?.fieldThree?.toInt()
 
-        if(message.senderName == currentUserEmail || code == languagePreferenceCode){
+        if(code == languagePreferenceCode || languagePreferenceCode == null){
             body.text = message.body?.fieldOne
+        }else if(code != LanguageCode.ENGLISH.code && (languagePreferenceCode == LanguageCode.ENGLISH.code || languagePreferenceCode == null)){
+            body.text = message.body?.fieldTwo
         }else{
             val translator = DataRepository.fromEnglishTranslator
             translator?.let {
-                translator.translate(message.body?.fieldTwo.toString())
+                var textToTranslate = if(message.body?.fieldThree?.toInt() == LanguageCode.ENGLISH.code){
+                    message.body?.fieldOne
+                }else{
+                    message.body?.fieldTwo
+                }
+
+                translator.translate(textToTranslate.toString())
                     .addOnSuccessListener { translatedText ->
                         body.text = translatedText
                     }

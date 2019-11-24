@@ -11,6 +11,10 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
 import com.example.tfm.R
 import com.example.tfm.activity.PrivacyPolicyActivity
+import com.example.tfm.data.DataRepository
+import com.example.tfm.data.DataRepository.fromEnglishTranslator
+import com.example.tfm.data.DataRepository.languagePreferenceCode
+import com.example.tfm.data.DataRepository.toEnglishTranslator
 import com.example.tfm.enum.LanguageCode
 import com.example.tfm.util.FirebaseTranslator
 import com.example.tfm.util.LogUtil
@@ -41,9 +45,14 @@ class MySettingFragment : PreferenceFragmentCompat(), CoroutineScope{
         val privacyPreference = findPreference("termsAndConditions") as Preference
 
         languagePreference.setOnPreferenceChangeListener { _, newValue ->
-            showDialog(languagePreference.context)
-            isModelDownloaded = false
-            downloadLanguageModels(newValue.toString())
+            if(newValue != "English"){
+                showDialog(languagePreference.context)
+                isModelDownloaded = false
+                downloadLanguageModels(newValue.toString())
+            }else{
+                setTranslationModelToDefault()
+            }
+
             true
         }
 
@@ -92,7 +101,7 @@ class MySettingFragment : PreferenceFragmentCompat(), CoroutineScope{
                     isModelDownloaded = true
                 }
 
-                activity?.toast(getString(R.string.restartapp))
+                DataRepository.initTranslator(context?.applicationContext!!)
             }
             .addOnFailureListener {
                 Log.d(LogUtil.TAG, "Failed model")
@@ -128,5 +137,11 @@ class MySettingFragment : PreferenceFragmentCompat(), CoroutineScope{
         dialog.setCancelable(false)
         dialog.setCanceledOnTouchOutside(false)
         dialog.show()
+    }
+
+    private fun setTranslationModelToDefault(){
+        languagePreferenceCode = FirebaseTranslator.languageCodeFromString("English")
+        fromEnglishTranslator = null
+        toEnglishTranslator = null
     }
 }

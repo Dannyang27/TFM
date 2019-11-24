@@ -3,6 +3,7 @@ package com.example.tfm.enum
 import com.example.tfm.R
 
 enum class LanguageDrawable constructor(val drawable: Int) {
+    ENGLISH(R.drawable.uk),
     ARABIC(R.drawable.ar),
     DUTCH(R.drawable.nl),
     CATALAN(R.drawable.catalan),

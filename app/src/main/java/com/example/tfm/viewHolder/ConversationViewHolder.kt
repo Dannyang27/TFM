@@ -3,7 +3,6 @@ package com.example.tfm.viewHolder
 import android.app.Activity
 import android.app.ActivityOptions
 import android.content.Intent
-import android.preference.PreferenceManager
 import android.view.View
 import android.widget.TextView
 import androidx.emoji.widget.EmojiTextView
@@ -27,7 +26,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.jetbrains.anko.toast
 
 class ConversationViewHolder(view: View) : RecyclerView.ViewHolder(view){
 
@@ -46,26 +44,20 @@ class ConversationViewHolder(view: View) : RecyclerView.ViewHolder(view){
         ButterKnife.bind(this, view)
 
         view.setOnClickListener {
-            val pref = PreferenceManager.getDefaultSharedPreferences(it.context)
-            val language = pref.getString("chatLanguage", "Default")
-            if(language == "Default"){
-                it.context.toast(it.context.getString(R.string.selectLanguagePreference))
-            }else{
-                conversationPositionClicked = adapterPosition
+            conversationPositionClicked = adapterPosition
 
-                val ctx = it.context
-                val intent = Intent(ctx, ChatActivity::class.java)
-                intent.putExtra("conversationId", id)
-                intent.putExtra("receiverEmail", email)
-                intent.putExtra("receiverName", username)
-                intent.putExtra("profilePhoto", imageBase64)
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            val ctx = it.context
+            val intent = Intent(ctx, ChatActivity::class.java)
+            intent.putExtra("conversationId", id)
+            intent.putExtra("receiverEmail", email)
+            intent.putExtra("receiverName", username)
+            intent.putExtra("profilePhoto", imageBase64)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
-                val options = ActivityOptions.makeSceneTransitionAnimation(
-                    ctx as Activity, image as View, ctx.getString(R.string.image_transition))
+            val options = ActivityOptions.makeSceneTransitionAnimation(
+                ctx as Activity, image as View, ctx.getString(R.string.image_transition))
 
-                ctx.startActivity(intent, options.toBundle())
-            }
+            ctx.startActivity(intent, options.toBundle())
         }
     }
 
@@ -97,7 +89,7 @@ class ConversationViewHolder(view: View) : RecyclerView.ViewHolder(view){
         }else{
             user = MyRoomDatabase.INSTANCE?.userDao()?.getByEmail(conversation.userOneEmail)
             user?.let {
-                email = conversation.userTwoEmail
+                email = conversation.userOneEmail
                 username = it.name
                 imageBase64 = it.profilePhoto
             }

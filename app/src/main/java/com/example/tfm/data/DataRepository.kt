@@ -29,10 +29,10 @@ object DataRepository{
         Manifest.permission.RECORD_AUDIO)
 
     fun initTranslator(context: Context){
-        val language  = PreferenceManager.getDefaultSharedPreferences(context).getString("chatLanguage", "Default").toString()
+        val language  = PreferenceManager.getDefaultSharedPreferences(context).getString("chatLanguage", "English").toString()
 
         //if default, do not start creating models
-        if(language == "Default"){
+        if(language == "English"){
             return
         }
 

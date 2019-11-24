@@ -34,6 +34,7 @@ import com.example.tfm.R
 import com.example.tfm.adapter.ChatAdapter
 import com.example.tfm.data.DataRepository
 import com.example.tfm.data.DataRepository.PERMISSIONS
+import com.example.tfm.enum.LanguageCode
 import com.example.tfm.enum.MediaSource
 import com.example.tfm.enum.MessageType
 import com.example.tfm.fragments.EmojiFragment
@@ -305,19 +306,28 @@ class ChatActivity : AppCompatActivity(){
             val languageCode = FirebaseTranslator.languageCodeFromString(translateModel.toString())
             val timestamp = System.currentTimeMillis()
 
-            val translator = DataRepository.toEnglishTranslator
-            translator?.let { it ->
-                it.translate(fieldText).addOnSuccessListener {translatedText ->
-                    val message = Message(timestamp, conversationId, DataRepository.currentUserEmail, receiverUser,
-                        MessageType.MESSAGE.value, MessageContent(fieldText, translatedText, languageCode.toString()), timestamp )
+            val message = Message(timestamp, conversationId, DataRepository.currentUserEmail, receiverUser,
+                MessageType.MESSAGE.value, null, timestamp )
 
+            if(languageCode == LanguageCode.ENGLISH.code){
+                message.body = MessageContent(fieldText, "", languageCode.toString())
+                chatViewModel.saveMessage(message)
+
+            }else{
+                val translator = DataRepository.toEnglishTranslator
+
+                translator?.let{
+                    it.translate(fieldText).addOnSuccessListener {translatedText ->
+                    message.body = MessageContent(fieldText, translatedText, languageCode.toString())
                     chatViewModel.saveMessage(message)
-                    chat_edittext.text.clear()
 
                 }.addOnFailureListener {
                     Log.d("TFM", "Cannot translate")
                 }
+                }
             }
+
+            chat_edittext.text.clear()
         }
     }
 
