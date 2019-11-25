@@ -5,13 +5,11 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import butterknife.BindView
@@ -31,19 +29,21 @@ import com.example.tfm.util.stop
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import kotlinx.android.synthetic.main.activity_image_display.*
+import org.jetbrains.anko.toast
 
 class ImageDisplayActivity : AppCompatActivity() {
 
     @BindView(R.id.imagedisplay_toolbar) lateinit var toolbar: Toolbar
     @BindView(R.id.imagedisplay_image) lateinit var image: ImageView
     @BindView(R.id.imagedisplay_progressbar) lateinit var progressBar: ProgressBar
-    @BindView(R.id.imagedisplay_labels) lateinit var layout: LinearLayout
+    @BindView(R.id.imagedisplay_labels) lateinit var layout: RelativeLayout
     @BindView(R.id.labelOne) lateinit var labelOne: TextView
     @BindView(R.id.confidenceOne) lateinit var confOne: TextView
     @BindView(R.id.labelTwo) lateinit var labelTwo: TextView
     @BindView(R.id.confidenceTwo) lateinit var confTwo: TextView
     @BindView(R.id.labelThree) lateinit var labelThree: TextView
     @BindView(R.id.confidenceThree) lateinit var confThree: TextView
+    @BindView(R.id.imagedisplay_download) lateinit var downloadBtn: ImageButton
 
     private var isToolbarVisible = true
 
@@ -78,8 +78,10 @@ class ImageDisplayActivity : AppCompatActivity() {
 
         if (source == MediaSource.GALLERY) {
             loadBitmap(bitmap)
+            downloadBtn.visibility = View.VISIBLE
         } else {
             loadGif(uri)
+            downloadBtn.visibility = View.GONE
         }
     }
 
@@ -151,5 +153,17 @@ class ImageDisplayActivity : AppCompatActivity() {
         }
 
         isToolbarVisible = !isToolbarVisible
+    }
+
+    @OnClick(R.id.imagedisplay_download)
+    fun downloadImage(){
+        val randomNum = (Math.random() * 100000 + 1).toInt()
+        bitmap?.let {
+            val path = MediaStore.Images.Media.insertImage(contentResolver, bitmap, "IMAGE${randomNum}", "")
+            Uri.parse(path)
+            toast("Image path: $path")
+        }
+
+        finish()
     }
 }
