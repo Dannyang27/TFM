@@ -24,13 +24,23 @@
             android:layout_below="@id/imagedisplay_toolbar"
             android:layout_marginBottom="50dp">
 
+        <com.ortiz.touchview.TouchImageView
+                android:id="@+id/imagedisplay_touchimage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/white_placeholder"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center" />
+
         <ImageView
                 android:id="@+id/imagedisplay_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:srcCompat="@drawable/white_placeholder"
                 android:layout_centerVertical="true"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:visibility="gone"/>
 
         <ProgressBar
                 android:id="@+id/imagedisplay_progressbar"

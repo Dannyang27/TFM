@@ -28,6 +28,7 @@ import com.example.tfm.util.start
 import com.example.tfm.util.stop
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
+import com.ortiz.touchview.TouchImageView
 import kotlinx.android.synthetic.main.activity_image_display.*
 import org.jetbrains.anko.toast
 
@@ -35,6 +36,7 @@ class ImageDisplayActivity : AppCompatActivity() {
 
     @BindView(R.id.imagedisplay_toolbar) lateinit var toolbar: Toolbar
     @BindView(R.id.imagedisplay_image) lateinit var image: ImageView
+    @BindView(R.id.imagedisplay_touchimage) lateinit var touchImage: TouchImageView
     @BindView(R.id.imagedisplay_progressbar) lateinit var progressBar: ProgressBar
     @BindView(R.id.imagedisplay_labels) lateinit var layout: RelativeLayout
     @BindView(R.id.labelOne) lateinit var labelOne: TextView
@@ -77,20 +79,22 @@ class ImageDisplayActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
         if (source == MediaSource.GALLERY) {
+            touchImage.visibility = View.VISIBLE
             loadBitmap(bitmap)
             downloadBtn.visibility = View.VISIBLE
+            image.visibility = View.GONE
         } else {
+            image.visibility = View.VISIBLE
             loadGif(uri)
             downloadBtn.visibility = View.GONE
+            touchImage.visibility = View.GONE
         }
     }
 
     private fun loadBitmap(bitmap: Bitmap?) {
         progressBar.start()
 
-        Glide.with(this)
-            .load(bitmap)
-            .into(image)
+        touchImage.setImageBitmap(bitmap)
 
         val image = FirebaseVisionImage.fromBitmap(bitmap!!)
         val labeler = FirebaseVision.getInstance().onDeviceImageLabeler
