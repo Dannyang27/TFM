@@ -143,6 +143,6 @@ class ImageToolActivity : AppCompatActivity() {
 
     @OnClick(R.id.tool_rotate)
     fun rotate(){
-        touchImage.rotate()
+        content = touchImage.rotate()
     }
 }

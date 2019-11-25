@@ -147,13 +147,15 @@ fun Activity.setBitmapToImageView(placeholder: ImageView, bitmap: Bitmap){
         .into(placeholder)
 }
 
-fun ImageView.rotate(){
+fun ImageView.rotate(): String{
     val matrix = Matrix().apply {
         postRotate(-90F)
     }
     val bitmap = (drawable as BitmapDrawable).bitmap
-    val bitmapRotated = Bitmap.createBitmap(bitmap, 0,0, bitmap.width, bitmap.height, matrix, true)
-    setImageBitmap(bitmapRotated)
+    val rotatedBitmap = Bitmap.createBitmap(bitmap, 0,0, bitmap.width, bitmap.height, matrix, true)
+    setImageBitmap(rotatedBitmap)
+
+    return rotatedBitmap.toBase64()
 }
 
 fun CircleImageView.showDialog(context: Context, imageBase64: String?){
