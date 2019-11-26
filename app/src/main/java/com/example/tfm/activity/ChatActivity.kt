@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.speech.SpeechRecognizer
 import android.util.Log
 import android.view.MenuItem
 import android.view.MotionEvent
@@ -41,6 +42,8 @@ import com.example.tfm.fragments.EmojiFragment
 import com.example.tfm.fragments.GifFragment
 import com.example.tfm.model.Message
 import com.example.tfm.model.MessageContent
+import com.example.tfm.speechrecognizer.MyRecognitionListener
+import com.example.tfm.speechrecognizer.VoiceRecognitionFactory
 import com.example.tfm.util.*
 import com.example.tfm.viewmodel.ChatViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -76,9 +79,13 @@ class ChatActivity : AppCompatActivity(){
     private val gifFragment = GifFragment.newInstance()
     private var activeFragment: Fragment = emojiFragment
 
+    private lateinit var speaker: SpeechRecognizer
+    private lateinit var recognizerIntent: Intent
+
     private val GALLERY_CODE = 100
     private val CAMERA_MODE = 101
     private val ATTACHMENT_MODE = 102
+    private var isSpeakerInit = false
 
     private var currentPhotoPath: String? = null
     private var translateModel: String? = null
@@ -299,6 +306,15 @@ class ChatActivity : AppCompatActivity(){
         rvMessages.scrollToPosition(viewAdapter.itemCount - 1)
     }
 
+    private fun initSpeaker(){
+        speaker = SpeechRecognizer.createSpeechRecognizer(this)
+        speaker.setRecognitionListener(MyRecognitionListener())
+        val userLanguageCode = LanguageCode.getLanguageBCP47Code(DataRepository.languagePreferenceCode)
+        recognizerIntent = VoiceRecognitionFactory.createSpeechRecognizer(userLanguageCode)
+
+        isSpeakerInit = !isSpeakerInit
+    }
+
     @OnClick(R.id.chat_sendButton)
     fun sendMessage(){
         val fieldText = chat_edittext.text.toString()
@@ -362,6 +378,12 @@ class ChatActivity : AppCompatActivity(){
     fun openMic(){
         toast("Microphone")
         chatViewModel.showKeyboard(false)
+
+        if(!isSpeakerInit){
+            initSpeaker()
+        }
+
+        speaker.startListening(recognizerIntent)
     }
 
     @OnClick(R.id.locationButton)
