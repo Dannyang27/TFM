@@ -98,4 +98,5 @@
     <string name="enter_username">Username</string>
     <string name="modelsdownloaded">Model downloaded</string>
     <string name="unread_message_sample">3</string>
+    <string name="media_transition">media_transition</string>
 </resources>

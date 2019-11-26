@@ -1,5 +1,7 @@
 package com.example.tfm.activity
 
+import android.app.Activity
+import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -54,17 +56,22 @@ class ImageDisplayActivity : AppCompatActivity() {
         var bitmap: Bitmap? = null
         var uri: Uri? = null
 
-        fun launchBitmap(context: Context, bitmap: Bitmap?, source: MediaSource) {
+        fun launchBitmap(context: Context, bitmap: Bitmap?, source: MediaSource, view: View) {
             this.source = source
             this.bitmap = bitmap
             val intent = Intent(context, ImageDisplayActivity::class.java)
-            context.startActivity(intent)
+
+            val options = ActivityOptions.makeSceneTransitionAnimation(
+                context as Activity,  view, context.getString(R.string.media_transition))
+
+            context.startActivity(intent, options.toBundle())
         }
 
-        fun launchGif(context: Context, uri: Uri?, source: MediaSource) {
+        fun launchGif(context: Context, uri: Uri?, source: MediaSource, view: View) {
             this.source = source
             this.uri = uri
             val intent = Intent(context, ImageDisplayActivity::class.java)
+
             context.startActivity(intent)
         }
     }
@@ -165,7 +172,8 @@ class ImageDisplayActivity : AppCompatActivity() {
         bitmap?.let {
             val path = MediaStore.Images.Media.insertImage(contentResolver, bitmap, "IMAGE${randomNum}", "")
             Uri.parse(path)
-            toast("Image path: $path")
+
+            toast("Image saved")
         }
 
         finish()

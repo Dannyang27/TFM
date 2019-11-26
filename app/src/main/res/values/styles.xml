@@ -9,6 +9,8 @@
         <item name="android:fontFamily">@font/robotoregular</item>
         <item name="fontFamily">@font/robotoregular</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+
+        <item name="android:windowContentTransitions">true</item>
     </style>
 
     <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">

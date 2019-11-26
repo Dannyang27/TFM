@@ -20,6 +20,10 @@ import com.example.tfm.model.Message
 import com.example.tfm.util.setMessageCheckIfSeen
 import com.example.tfm.util.setTime
 import com.example.tfm.util.toBitmap
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.jetbrains.anko.displayMetrics
 
 class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view){
@@ -62,26 +66,37 @@ class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view){
     }
 
     private fun setImageOrGif(message: Message){
-        if(MessageType.fromInt(message.messageType) == MessageType.IMAGE){
-            val bitmap = message.body?.fieldOne?.toBitmap()
-            Glide.with(layout.context)
-                .load(bitmap)
-                .into(media)
+        CoroutineScope(Dispatchers.IO).launch {
+            if(MessageType.fromInt(message.messageType) == MessageType.IMAGE){
+                val bitmap = message.body?.fieldOne?.toBitmap()
 
-            media.setOnClickListener {
-                ImageDisplayActivity.launchBitmap(layout.context, bitmap, MediaSource.GALLERY)
-            }
+                withContext(Dispatchers.Main){
+                    Glide.with(layout.context)
+                        .load(bitmap)
+                        .override(getDpValue(200), getDpValue(200))
+                        .into(media)
 
-        }else{
-            val url = message.body?.fieldOne
-            Glide.with(layout.context)
-                .asGif()
-                .centerCrop()
-                .load(url)
-                .into(media)
+                    media.setOnClickListener {
+                        ImageDisplayActivity.launchBitmap(layout.context, bitmap, MediaSource.GALLERY, media)
+                    }
+                }
 
-            media.setOnClickListener {
-                ImageDisplayActivity.launchGif(layout.context, Uri.parse(url), MediaSource.GIF)
+            }else{
+                val url = message.body?.fieldOne
+
+                withContext(Dispatchers.Main){
+                    Glide.with(layout.context)
+                        .asGif()
+                        .centerCrop()
+                        .load(url)
+                        .override(getDpValue(200), getDpValue(200))
+                        .into(media)
+
+                    media.setOnClickListener {
+                        ImageDisplayActivity.launchGif(layout.context, Uri.parse(url), MediaSource.GIF, media)
+                    }
+                }
+
             }
         }
     }

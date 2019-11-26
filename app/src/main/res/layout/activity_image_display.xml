@@ -31,7 +31,8 @@
                 android:scaleType="fitCenter"
                 app:srcCompat="@drawable/white_placeholder"
                 android:layout_centerVertical="true"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:transitionName="@string/media_transition"/>
 
         <ImageView
                 android:id="@+id/imagedisplay_image"
