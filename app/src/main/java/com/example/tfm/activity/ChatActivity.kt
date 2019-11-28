@@ -1,6 +1,8 @@
 package com.example.tfm.activity
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.icu.text.SimpleDateFormat
 import android.net.Uri
 import android.os.Bundle
@@ -17,6 +19,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.emoji.bundled.BundledEmojiCompatConfig
 import androidx.emoji.text.EmojiCompat
@@ -168,6 +171,14 @@ class ChatActivity : AppCompatActivity(){
                     postDelayed({ scrollToPosition(viewAdapter.itemCount - 1) }, 0)
                 }
             }
+
+            addOnScrollListener(object: RecyclerView.OnScrollListener(){
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    if(!canScrollVertically(0)){
+                        Log.d(LogUtil.TAG, "Top reached, load more messages...")
+                    }
+                }
+            })
         }
     }
 
@@ -333,13 +344,12 @@ class ChatActivity : AppCompatActivity(){
                 val translator = DataRepository.toEnglishTranslator
 
                 translator?.let{
-                    it.translate(fieldText).addOnSuccessListener {translatedText ->
-                    message.body = MessageContent(fieldText, translatedText, languageCode.toString())
-                    chatViewModel.saveMessage(message)
-
-                }.addOnFailureListener {
-                    Log.d("TFM", "Cannot translate")
-                }
+                        it.translate(fieldText).addOnSuccessListener {translatedText ->
+                        message.body = MessageContent(fieldText, translatedText, languageCode.toString())
+                        chatViewModel.saveMessage(message)
+                    }.addOnFailureListener {
+                        Log.d("TFM", "Cannot translate")
+                    }
                 }
             }
 
@@ -353,46 +363,53 @@ class ChatActivity : AppCompatActivity(){
     }
 
     @OnClick(R.id.pictureButton)
-    fun operImages(){
-        chatViewModel.showKeyboard(false)
-        if(!checkPermissions(PERMISSIONS)){
-            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL)
+    fun galleryBtn(){
+
+        if(ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,
+                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                DataRepository.STORAGE_PERMISSION)
         }else{
-            val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            galleryIntent.type = "image/*"
-            startActivityForResult(galleryIntent, GALLERY_CODE)
+            openGallery()
         }
     }
 
     @OnClick(R.id.cameraButton)
-    fun openCamera(){
-        if(!checkPermissions(PERMISSIONS)){
-            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL)
+    fun cameraBtn(){
+
+        if(ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,
+                arrayOf(Manifest.permission.CAMERA),
+                DataRepository.CAMERA_PERMISSION)
         }else{
-            chatViewModel.showKeyboard(false)
-            dispatchCameraIntent()
+            openCamera()
         }
     }
 
     @OnClick(R.id.micButton)
-    fun openMic(){
-        toast("Microphone")
-        chatViewModel.showKeyboard(false)
+    fun micBtn(){
 
-        if(!isSpeakerInit){
-            initSpeaker()
+        if(ContextCompat.checkSelfPermission(this,
+                Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,
+                arrayOf(Manifest.permission.RECORD_AUDIO),
+                DataRepository.AUDIO_PERMISSION)
+        }else{
+            openMic()
         }
-
-        speaker.startListening(recognizerIntent)
     }
 
     @OnClick(R.id.locationButton)
-    fun openLocation(){
-        if(!checkPermissions(PERMISSIONS)){
-            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL)
+    fun locationBtn(){
+        if(ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                DataRepository.LOCATION_PERMISSION)
         }else{
-            chatViewModel.showKeyboard(false)
-            startActivity(Intent(this, LocationSenderActivity::class.java))
+            openLocation()
         }
     }
 
@@ -424,5 +441,55 @@ class ChatActivity : AppCompatActivity(){
             }
         }
         view?.onTouchEvent(event )
+    }
+
+    private fun openGallery(){
+        chatViewModel.showKeyboard(false)
+        val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        galleryIntent.type = "image/*"
+        startActivityForResult(galleryIntent, GALLERY_CODE)
+    }
+
+    private fun openCamera(){
+        chatViewModel.showKeyboard(false)
+        dispatchCameraIntent()
+    }
+
+    private fun openMic(){
+        chatViewModel.showKeyboard(false)
+
+        if(!isSpeakerInit){
+            initSpeaker()
+        }
+
+        speaker.startListening(recognizerIntent)
+    }
+
+    private fun openLocation(){
+        chatViewModel.showKeyboard(false)
+        startActivity(Intent(this, LocationSenderActivity::class.java))
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+
+        if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+            when(requestCode){
+                DataRepository.CAMERA_PERMISSION -> {
+                    openCamera()
+                }
+
+                DataRepository.STORAGE_PERMISSION -> {
+                    openGallery()
+                }
+
+                DataRepository.LOCATION_PERMISSION -> {
+                    openLocation()
+                }
+
+                DataRepository.AUDIO_PERMISSION -> {
+                    openMic()
+                }
+            }
+        }
     }
 }

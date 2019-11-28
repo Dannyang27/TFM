@@ -28,6 +28,11 @@ object DataRepository{
         Manifest.permission.ACCESS_FINE_LOCATION,
         Manifest.permission.RECORD_AUDIO)
 
+    const val CAMERA_PERMISSION = 1
+    const val STORAGE_PERMISSION = 2
+    const val LOCATION_PERMISSION = 3
+    const val AUDIO_PERMISSION = 4
+
     fun initTranslator(context: Context){
         val language  = PreferenceManager.getDefaultSharedPreferences(context).getString("chatLanguage", "English").toString()
 

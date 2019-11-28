@@ -1,8 +1,10 @@
 package com.example.tfm.activity
 
+import android.Manifest
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
@@ -14,6 +16,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import butterknife.BindView
@@ -160,7 +164,16 @@ class UserProfileActivity : AppCompatActivity() {
     }
 
     @OnClick(R.id.profile_fab)
-    fun fabClick(){ loadImage() }
+    fun fabClick(){
+        if(ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,
+                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                DataRepository.STORAGE_PERMISSION)
+        }else{
+            loadImage()
+        }
+    }
 
     @OnClick(R.id.profile_username_layout)
     fun usernameClick(){
@@ -170,5 +183,13 @@ class UserProfileActivity : AppCompatActivity() {
     @OnClick(R.id.profile_status_layout)
     fun statusClick(){
         showDialog(this, false)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if(requestCode == DataRepository.STORAGE_PERMISSION){
+            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                loadImage()
+            }
+        }
     }
 }

@@ -10,7 +10,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.emoji.bundled.BundledEmojiCompatConfig
 import androidx.emoji.text.EmojiCompat
 import androidx.fragment.app.Fragment
@@ -21,7 +20,6 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import com.example.tfm.R
 import com.example.tfm.data.DataRepository
-import com.example.tfm.data.DataRepository.PERMISSIONS
 import com.example.tfm.data.DataRepository.conversationPositionClicked
 import com.example.tfm.fragments.GroupChatFragment
 import com.example.tfm.fragments.PrivateFragment
@@ -30,7 +28,6 @@ import com.example.tfm.notification.MyNotificationManager
 import com.example.tfm.room.database.MyRoomDatabase
 import com.example.tfm.service.FirebaseListenerService
 import com.example.tfm.util.LogUtil
-import com.example.tfm.util.checkPermissions
 import com.example.tfm.util.clearCredential
 import com.example.tfm.viewmodel.ConversationViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -92,7 +89,6 @@ class MainActivity : AppCompatActivity() {
         conversationViewModel.initRoomObserver(this)
         createFragments()
         downloadUserDataIfNew()
-        askPermissions()
         DataRepository.initTranslator(applicationContext)
         MyNotificationManager.createNotificationChannel(this)
 
@@ -145,12 +141,6 @@ class MainActivity : AppCompatActivity() {
         val fromLoginActivity = intent.getBooleanExtra("fromLogin", false)
         if (fromLoginActivity) {
             conversationViewModel.initDownloadUserData()
-        }
-    }
-
-    private fun askPermissions(){
-        if(!checkPermissions(PERMISSIONS)){
-            ActivityCompat.requestPermissions(this, PERMISSIONS, 1)
         }
     }
 
