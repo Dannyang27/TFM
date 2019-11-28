@@ -8,6 +8,7 @@ import androidx.room.RoomDatabase
 import com.example.tfm.enum.MessageType
 import com.example.tfm.model.*
 import com.example.tfm.room.dao.ConversationDAO
+import com.example.tfm.room.dao.EmojiDAO
 import com.example.tfm.room.dao.MessageDAO
 import com.example.tfm.room.dao.UserDAO
 import com.example.tfm.util.FirebaseUtil
@@ -17,7 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-@Database(entities = [User::class, Conversation::class, Message::class, PlainMessageRoomModel::class, GifRoomModel::class, ImageRoomModel::class, LocationRoomModel::class], version = 1, exportSchema = false)
+@Database(entities = [User::class, Conversation::class, Message::class, PlainMessageRoomModel::class, GifRoomModel::class, ImageRoomModel::class, LocationRoomModel::class, EmojiFrequency::class], version = 1, exportSchema = false)
 abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
     private val job = Job()
     override val coroutineContext = Dispatchers.IO + job
@@ -25,6 +26,7 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
     abstract fun userDao(): UserDAO
     abstract fun conversationDao(): ConversationDAO
     abstract fun messageDao(): MessageDAO
+    abstract fun emojiDao(): EmojiDAO
 
     companion object{
         var INSTANCE: MyRoomDatabase? = null
