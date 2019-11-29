@@ -1,5 +1,6 @@
 package com.example.tfm.preference
 
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -57,7 +58,7 @@ class MySettingFragment : PreferenceFragmentCompat(), CoroutineScope{
         }
 
         deleteModelPreference.setOnPreferenceClickListener {
-            deleteLanguageModels()
+            createDeleteModelDialog().show()
             true
         }
 
@@ -143,5 +144,19 @@ class MySettingFragment : PreferenceFragmentCompat(), CoroutineScope{
         languagePreferenceCode = FirebaseTranslator.languageCodeFromString("English")
         fromEnglishTranslator = null
         toEnglishTranslator = null
+    }
+
+    private fun createDeleteModelDialog(): AlertDialog {
+        return AlertDialog.Builder(activity)
+            .setTitle(R.string.deleteModel)
+            .setMessage(R.string.deleteModelMessage)
+            .setPositiveButton(R.string.sure) { _, _ ->
+                deleteLanguageModels()
+            }
+            .setNegativeButton(R.string.cancel) { dialog, _ ->
+                dialog.dismiss()
+            }
+
+            .create()
     }
 }

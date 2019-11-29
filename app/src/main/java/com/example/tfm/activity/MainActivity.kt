@@ -1,6 +1,7 @@
 package com.example.tfm.activity
 
 import android.app.ActivityManager
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -21,6 +22,7 @@ import butterknife.OnClick
 import com.example.tfm.R
 import com.example.tfm.data.DataRepository
 import com.example.tfm.data.DataRepository.conversationPositionClicked
+import com.example.tfm.dialog.WarningDialog
 import com.example.tfm.fragments.GroupChatFragment
 import com.example.tfm.fragments.PrivateFragment
 import com.example.tfm.model.Conversation
@@ -46,7 +48,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var roomDatabase: MyRoomDatabase
     private lateinit var conversationViewModel: ConversationViewModel
     private lateinit var firebaseService: Intent
-
     private var conversationIds = mutableListOf<String>()
 
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -162,15 +163,33 @@ class MainActivity : AppCompatActivity() {
         }
 
         R.id.signout -> {
-            FirebaseAuth.getInstance().signOut()
-            PreferenceManager.getDefaultSharedPreferences(applicationContext).clearCredential()
-
-            startActivity(Intent(this, LoginActivity::class.java))
-            finish()
+            createSignoutDialog().show()
             true
         }
 
         else -> super.onOptionsItemSelected(item)
+    }
+
+    private fun createSignoutDialog(): AlertDialog{
+        return AlertDialog.Builder(this)
+            .setTitle(R.string.signout)
+            .setMessage(R.string.signout_alert)
+            .setPositiveButton(R.string.sure) { _, _ ->
+                signout()
+            }
+            .setNegativeButton(R.string.cancel) { dialog, _ ->
+                dialog.dismiss()
+            }
+
+            .create()
+    }
+
+    private fun signout(){
+        FirebaseAuth.getInstance().signOut()
+        PreferenceManager.getDefaultSharedPreferences(applicationContext).clearCredential()
+
+        startActivity(Intent(this, LoginActivity::class.java))
+        finish()
     }
 
     override fun onBackPressed() {}

@@ -99,4 +99,8 @@
     <string name="modelsdownloaded">Model downloaded</string>
     <string name="unread_message_sample">3</string>
     <string name="media_transition">media_transition</string>
+    <string name="signout_alert">If signed out, all messages will be removed locally</string>
+    <string name="sure">Sign out</string>
+    <string name="deleteModel">Delete language models</string>
+    <string name="deleteModelMessage">Language models will be deleted. You can download them again later.</string>
 </resources>

@@ -231,10 +231,10 @@ object FirebaseUtil {
         var lastMessage: String?
         when (MessageType.fromInt(message.messageType)) {
             MessageType.MESSAGE -> lastMessage = message.body?.fieldOne
-            MessageType.GIF -> lastMessage = "[GIF]"
-            MessageType.IMAGE -> lastMessage = "[Image]"
-            MessageType.ATTACHMENT -> lastMessage = "[Attachment]"
-            MessageType.LOCATION -> lastMessage = "[Location]"
+            MessageType.GIF -> lastMessage = "GIF"
+            MessageType.IMAGE -> lastMessage = "Image"
+            MessageType.ATTACHMENT -> lastMessage = "Attachment"
+            MessageType.LOCATION -> lastMessage = "Location"
         }
 
         message.isSent = true
