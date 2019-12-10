@@ -92,7 +92,7 @@ class SignupActivity : AppCompatActivity() {
             val password = ePassword.text.toString().trimBothSides()
             signupViewModel.joinNewUser(this, username, email, password)
         }else{
-            toast("Form cannot be empty")
+            toast(R.string.field_not_empty)
         }
     }
 }

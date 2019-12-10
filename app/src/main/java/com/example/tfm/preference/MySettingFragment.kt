@@ -45,6 +45,8 @@ class MySettingFragment : PreferenceFragmentCompat(), CoroutineScope{
         val vibrationMode = findPreference("vibrate") as SwitchPreference
         val privacyPreference = findPreference("termsAndConditions") as Preference
 
+        setLanguagePreferenceDefaultIfNone()
+
         languagePreference.setOnPreferenceChangeListener { _, newValue ->
             if(newValue != "English"){
                 showDialog(languagePreference.context)
@@ -73,6 +75,12 @@ class MySettingFragment : PreferenceFragmentCompat(), CoroutineScope{
         privacyPreference.setOnPreferenceClickListener {
             activity?.startActivity(Intent(activity, PrivacyPolicyActivity::class.java))
             true
+        }
+    }
+
+    private fun setLanguagePreferenceDefaultIfNone() {
+        if(languagePreference.value == null){
+            languagePreference.setValueIndex(0)
         }
     }
 

@@ -15,6 +15,7 @@ import butterknife.OnClick
 import com.example.tfm.R
 import com.example.tfm.util.*
 import com.example.tfm.viewmodel.LoginViewModel
+import org.jetbrains.anko.toast
 
 class LoginActivity : AppCompatActivity() {
 
@@ -63,6 +64,8 @@ class LoginActivity : AppCompatActivity() {
     fun login(){
         if(eEmail.text.isNotEmpty() && ePassword.text.isNotEmpty()){
             login(eEmail.text.toString().trimBothSides(), ePassword.text.toString())
+        }else{
+            toast(R.string.field_not_empty)
         }
     }
 

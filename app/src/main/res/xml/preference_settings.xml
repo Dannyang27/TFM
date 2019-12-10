@@ -4,7 +4,6 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ListPreference
-            android:defaultValue="1"
             android:entries="@array/languages"
             android:entryValues="@array/languages"
             android:key="chatLanguage"

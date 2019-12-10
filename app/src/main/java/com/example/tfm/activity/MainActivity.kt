@@ -22,7 +22,6 @@ import butterknife.OnClick
 import com.example.tfm.R
 import com.example.tfm.data.DataRepository
 import com.example.tfm.data.DataRepository.conversationPositionClicked
-import com.example.tfm.dialog.WarningDialog
 import com.example.tfm.fragments.GroupChatFragment
 import com.example.tfm.fragments.PrivateFragment
 import com.example.tfm.model.Conversation
