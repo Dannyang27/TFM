@@ -77,4 +77,15 @@ object DataRepository{
         ActivityManager.getMyMemoryState(myProcess)
         return myProcess.importance != ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND
     }
+
+    fun isServiceRunning(context: Context): Boolean{
+        val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        manager.getRunningServices(Integer.MAX_VALUE).forEach { serv ->
+            if("com.example.tfm.service.FirebaseListenerService" == serv.service.className){
+                return true
+            }
+        }
+
+        return false
+    }
 }

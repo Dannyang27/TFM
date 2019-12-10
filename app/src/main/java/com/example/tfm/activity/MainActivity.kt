@@ -1,8 +1,6 @@
 package com.example.tfm.activity
 
-import android.app.ActivityManager
 import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
@@ -13,17 +11,18 @@ import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.emoji.bundled.BundledEmojiCompatConfig
 import androidx.emoji.text.EmojiCompat
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import com.example.tfm.R
+import com.example.tfm.adapter.ConversationAdapter
 import com.example.tfm.data.DataRepository
-import com.example.tfm.data.DataRepository.conversationPositionClicked
-import com.example.tfm.fragments.GroupChatFragment
-import com.example.tfm.fragments.PrivateFragment
+import com.example.tfm.data.DataRepository.isServiceRunning
+import com.example.tfm.divider.HorizontalDivider
 import com.example.tfm.model.Conversation
 import com.example.tfm.notification.MyNotificationManager
 import com.example.tfm.room.database.MyRoomDatabase
@@ -31,7 +30,6 @@ import com.example.tfm.service.FirebaseListenerService
 import com.example.tfm.util.LogUtil
 import com.example.tfm.util.clearCredential
 import com.example.tfm.viewmodel.ConversationViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
@@ -40,41 +38,20 @@ class MainActivity : AppCompatActivity() {
 
     @BindView(R.id.search_chat) lateinit var searcher: SearchView
     @BindView(R.id.fab) lateinit var fab: FloatingActionButton
+    @BindView(R.id.conversations_recyclerview) lateinit var conversations: RecyclerView
 
-    private val privateFragment = PrivateFragment.newInstance()
-    private val groupChatFragment = GroupChatFragment.newInstance()
-    private var activeFragment: Fragment = privateFragment
-    private lateinit var roomDatabase: MyRoomDatabase
     private lateinit var conversationViewModel: ConversationViewModel
     private lateinit var firebaseService: Intent
     private var conversationIds = mutableListOf<String>()
 
-    private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        when (item.itemId) {
-            R.id.navigation_chat -> {
-                fab.setImageDrawable(getDrawable(R.drawable.add_user))
-                openFragment(privateFragment)
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_groupchat -> {
-                fab.setImageDrawable(getDrawable(R.drawable.add_group))
-                openFragment(groupChatFragment)
-                return@OnNavigationItemSelectedListener true
-            }
-        }
-        false
-    }
-
-    private fun openFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction().hide(activeFragment).show(fragment).commit()
-        activeFragment = fragment
-    }
+    private lateinit var viewManager: RecyclerView.LayoutManager
+    private lateinit var viewAdapter : ConversationAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initEmoji()
         setContentView(R.layout.activity_main)
         ButterKnife.bind(this)
+        setupInitialiser()
 
         toolbar_title.text = getString(R.string.messages)
         setSupportActionBar(my_toolbar)
@@ -82,15 +59,12 @@ class MainActivity : AppCompatActivity() {
 
         conversationViewModel = ViewModelProviders.of(this).get(ConversationViewModel::class.java)
         conversationViewModel.getConversations().observe(this, Observer { list ->
-            privateFragment.updateList(list)
+            viewAdapter.updateList(list)
             restartServiceIfChanged(list)
         })
 
         conversationViewModel.initRoomObserver(this)
-        createFragments()
         downloadUserDataIfNew()
-        DataRepository.initTranslator(applicationContext)
-        MyNotificationManager.createNotificationChannel(this)
 
         searcher.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?) = true
@@ -104,6 +78,27 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
         })
+
+        initRecyclerView()
+    }
+
+    private fun setupInitialiser(){
+        initEmoji()
+        initDatabase()
+        DataRepository.initTranslator(applicationContext)
+        MyNotificationManager.createNotificationChannel(this)
+    }
+
+    private fun initRecyclerView(){
+        viewManager = LinearLayoutManager(this)
+        viewAdapter = ConversationAdapter(mutableListOf())
+
+        conversations.apply {
+            setHasFixedSize(true)
+            addItemDecoration(HorizontalDivider(this.context))
+            layoutManager = viewManager
+            adapter = viewAdapter
+        }
     }
 
     private fun restartServiceIfChanged(list: MutableList<Conversation>){
@@ -121,20 +116,6 @@ class MainActivity : AppCompatActivity() {
             startService(firebaseService)
             Log.d(LogUtil.TAG, "Restarting service...")
         }
-    }
-
-    private fun createFragments(){
-        val navView: BottomNavigationView = findViewById(R.id.navigation)
-        navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
-
-        supportFragmentManager.beginTransaction()
-            .add(R.id.container, groupChatFragment, "2")
-            .hide(groupChatFragment)
-            .commit()
-
-        supportFragmentManager.beginTransaction()
-            .add(R.id.container, privateFragment, "1")
-            .commit()
     }
 
     private fun downloadUserDataIfNew() {
@@ -186,7 +167,6 @@ class MainActivity : AppCompatActivity() {
     private fun signout(){
         FirebaseAuth.getInstance().signOut()
         PreferenceManager.getDefaultSharedPreferences(applicationContext).clearCredential()
-
         startActivity(Intent(this, LoginActivity::class.java))
         finish()
     }
@@ -195,14 +175,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun initEmoji() = EmojiCompat.init(BundledEmojiCompatConfig(applicationContext))
 
+    private fun initDatabase() = MyRoomDatabase.getMyRoomDatabase(this)
+
     override fun onResume() {
         super.onResume()
-        if(!isServiceRunning()) {
+        if(!isServiceRunning(this)) {
             startService(firebaseService)
-        }
-
-        if(conversationPositionClicked != -1){
-            privateFragment.updateAdapter(conversationPositionClicked)
         }
     }
 
@@ -211,25 +189,8 @@ class MainActivity : AppCompatActivity() {
         stopService(firebaseService)
     }
 
-    private fun isServiceRunning(): Boolean{
-        val manager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-        manager.getRunningServices(Integer.MAX_VALUE).forEach { serv ->
-            if("com.example.tfm.service.FirebaseListenerService" == serv.service.className){
-                return true
-            }
-        }
-
-        return false
-    }
-
     @OnClick(R.id.fab)
     fun fabClick(){
-        if(activeFragment is PrivateFragment){
-            val intent = Intent(this, UserSearcherActivity::class.java)
-            startActivity(intent)
-        }else{
-            roomDatabase = MyRoomDatabase.getMyRoomDatabase(applicationContext)!!
-            roomDatabase.getAllUsers()
-        }
+        startActivity(Intent(this, UserSearcherActivity::class.java))
     }
 }
