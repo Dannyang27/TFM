@@ -21,5 +21,4 @@ enum class LanguageDrawable constructor(val drawable: Int) {
         private val map = values().associateBy(LanguageDrawable::drawable)
         fun fromInt(type: Int) : LanguageDrawable = map[type]!!
     }
-
 }
