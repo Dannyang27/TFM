@@ -19,7 +19,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.tfm.R
-import com.example.tfm.enum.LanguageDrawable
 import de.hdodenhof.circleimageview.CircleImageView
 import java.io.ByteArrayOutputStream
 
@@ -177,27 +176,9 @@ fun String.removeAfter(letter: Char): String{
 }
 
 fun Long.getConversation(friendId: Long): String{
-    if(this < friendId){
-        return this.toString().plus(friendId)
+    return if(this < friendId){
+        this.toString().plus(friendId)
     }else{
-        return friendId.toString().plus(this)
-    }
-}
-
-fun String.getDrawable(): Int{
-    when(this.toUpperCase()){
-        LanguageDrawable.ARABIC.name -> return LanguageDrawable.ARABIC.drawable
-        LanguageDrawable.DUTCH.name -> return LanguageDrawable.DUTCH.drawable
-        LanguageDrawable.CATALAN.name -> return LanguageDrawable.CATALAN.drawable
-        LanguageDrawable.CHINESE.name -> return LanguageDrawable.CHINESE.drawable
-        LanguageDrawable.FRENCH.name -> return LanguageDrawable.FRENCH.drawable
-        LanguageDrawable.GERMANY.name -> return LanguageDrawable.GERMANY.drawable
-        LanguageDrawable.INDIAN.name -> return LanguageDrawable.INDIAN.drawable
-        LanguageDrawable.ITALIAN.name -> return LanguageDrawable.ITALIAN.drawable
-        LanguageDrawable.JAPANESE.name -> return LanguageDrawable.JAPANESE.drawable
-        LanguageDrawable.KOREAN.name -> return LanguageDrawable.KOREAN.drawable
-        LanguageDrawable.RUSSIAN.name -> return LanguageDrawable.RUSSIAN.drawable
-        LanguageDrawable.SPANISH.name -> return LanguageDrawable.SPANISH.drawable
-        else -> { return LanguageDrawable.ENGLISH.drawable }
+        friendId.toString().plus(this)
     }
 }

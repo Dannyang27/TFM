@@ -50,7 +50,6 @@
                             android:id="@+id/place_location_viewholder"
                             android:textColor="@color/colorPrimaryText"
                             android:textStyle="bold"
-                            android:text="@string/pinned_location_sample"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>
                 </LinearLayout>
@@ -58,7 +57,6 @@
         </androidx.cardview.widget.CardView>
         <TextView
                 android:id="@+id/time_location_viewholder"
-                android:text="@string/time_sample"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"

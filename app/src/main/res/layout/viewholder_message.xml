@@ -32,7 +32,6 @@
         </LinearLayout>
         <TextView
                 android:id="@+id/message_time"
-                android:text="@string/time_sample"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minWidth="30dp"

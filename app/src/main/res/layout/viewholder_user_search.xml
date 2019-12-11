@@ -31,7 +31,6 @@
         </LinearLayout>
         <androidx.emoji.widget.EmojiTextView
                 android:id="@+id/user_status"
-                android:text="@string/no_status_sample"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"

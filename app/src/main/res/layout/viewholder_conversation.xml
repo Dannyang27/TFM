@@ -19,7 +19,6 @@
             android:layout_weight="4"
             android:padding="8dp">
         <androidx.emoji.widget.EmojiTextView
-                android:text="@string/username_sample"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/name_chat"
@@ -27,7 +26,6 @@
                 android:textStyle="bold"
                 android:textColor="@color/colorPrimaryText"/>
         <androidx.emoji.widget.EmojiTextView
-                android:text="@string/text_sample"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/last_message_chat"
@@ -46,7 +44,6 @@
 
         <TextView
                 android:id="@+id/last_message_time_chat"
-                android:text="@string/time_sample"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
@@ -54,7 +51,6 @@
 
         <TextView
                 android:id="@+id/unread_message_number"
-                android:text="@string/unread_message_sample"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:background="@drawable/rounded_textview"

@@ -14,7 +14,6 @@ import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -63,7 +62,7 @@ class ChatActivity : AppCompatActivity(){
     @BindView(R.id.chat_toolbar) lateinit var toolbar: Toolbar
     @BindView(R.id.chat_toolbar_title) lateinit var tvToolbar: TextView
     @BindView(R.id.chat_profile_image) lateinit var profileImg: CircleImageView
-    @BindView(R.id.chat_flag) lateinit var flag: ImageView
+    @BindView(R.id.chat_flag) lateinit var flag: TextView
     @BindView(R.id.chat_recyclerview) lateinit var rvMessages: RecyclerView
     @BindView(R.id.chat_sendButton) lateinit var bSend: ImageButton
     @BindView(R.id.emojiButton) lateinit var bEmoji: ImageButton
@@ -136,8 +135,8 @@ class ChatActivity : AppCompatActivity(){
 
         setToolbar(username, photo)
 
-        chatViewModel.getLanguageFlag().observe(this, Observer {drawable ->
-            flag.setImageDrawable(getDrawable(drawable))
+        chatViewModel.getLanguageFlag().observe(this, Observer { flagCode ->
+            flag.text = flagCode.toUpperCase()
         })
 
         chatViewModel.getTranslatedModel().observe(this, Observer {model->
@@ -339,16 +338,15 @@ class ChatActivity : AppCompatActivity(){
             if(languageCode == LanguageCode.ENGLISH.code){
                 message.body = MessageContent(fieldText, "", languageCode.toString())
                 chatViewModel.saveMessage(message)
-
             }else{
                 val translator = DataRepository.toEnglishTranslator
 
                 translator?.let{
                         it.translate(fieldText).addOnSuccessListener {translatedText ->
-                        message.body = MessageContent(fieldText, translatedText, languageCode.toString())
-                        chatViewModel.saveMessage(message)
-                    }.addOnFailureListener {
-                        Log.d("TFM", "Cannot translate")
+                            message.body = MessageContent(fieldText, translatedText, languageCode.toString())
+                            chatViewModel.saveMessage(message)
+                        }.addOnFailureListener {
+                            Log.d("TFM", "Cannot translate")
                     }
                 }
             }

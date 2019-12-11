@@ -47,13 +47,13 @@
                                 android:paddingBottom="20dp"/>
                     </LinearLayout>
 
-                    <ImageView
+                    <TextView
                             android:id="@+id/chat_flag"
                             android:layout_alignParentRight="true"
-                            android:layout_width="48dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="48dp"
                             android:layout_margin="10dp"
-                            android:src="@drawable/es"/>
+                            android:textColor="@color/colorPrimaryText"/>
                 </RelativeLayout>
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>

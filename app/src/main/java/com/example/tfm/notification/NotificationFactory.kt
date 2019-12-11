@@ -21,7 +21,7 @@ object NotificationFactory {
         val channelId = context.packageName
 
         val notification =  NotificationCompat.Builder(context, channelId)
-            .setSmallIcon(R.drawable.es)
+            .setSmallIcon(R.drawable.videocall)
             .setContentTitle(userName)
             .setContentText(text)
             .setStyle(NotificationCompat.BigTextStyle().bigText(text))

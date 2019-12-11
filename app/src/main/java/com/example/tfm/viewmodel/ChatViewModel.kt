@@ -11,7 +11,6 @@ import com.example.tfm.enum.MessageType
 import com.example.tfm.model.Message
 import com.example.tfm.model.MessageContent
 import com.example.tfm.room.database.MyRoomDatabase
-import com.example.tfm.util.getDrawable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,7 +18,7 @@ import kotlinx.coroutines.launch
 class ChatViewModel : ViewModel(){
 
     private var roomDatabase: MyRoomDatabase? = null
-    private val languageFlag = MutableLiveData<Int>()
+    private val languageFlag = MutableLiveData<String>()
     private val translatedModel = MutableLiveData<String>()
     private val showEmojiKeyboard = MutableLiveData<Boolean>()
     private val chatMessages = MutableLiveData<MutableList<Message>>()
@@ -29,7 +28,7 @@ class ChatViewModel : ViewModel(){
     }
 
     fun getChatMessages(): LiveData<MutableList<Message>> = chatMessages
-    fun getLanguageFlag(): LiveData<Int> = languageFlag
+    fun getLanguageFlag(): LiveData<String> = languageFlag
     fun getTranslatedModel(): LiveData<String> = translatedModel
     fun getShowEmojiKeyboard(): LiveData<Boolean> = showEmojiKeyboard
 
@@ -46,7 +45,7 @@ class ChatViewModel : ViewModel(){
             .getString("chatLanguage", "English")
 
         translatedModel.postValue(tModel)
-        languageFlag.postValue(tModel.getDrawable())
+        languageFlag.postValue(tModel)
     }
 
     private fun clearMessages(){
@@ -83,7 +82,6 @@ class ChatViewModel : ViewModel(){
 
                     msg.body = content
                     setMessageToRead(msg)
-
                     messageList.add(msg)
                 }
 
