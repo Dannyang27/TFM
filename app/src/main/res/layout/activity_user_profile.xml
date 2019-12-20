@@ -36,6 +36,7 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     app:srcCompat="@drawable/camera_filled"
+                    android:backgroundTint="@color/colorPrimary"
                     android:layout_alignBottom="@id/user_profile"
                     android:layout_alignEnd="@id/user_profile"/>
         </RelativeLayout>

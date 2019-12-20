@@ -6,13 +6,15 @@
               android:layout_height="290dp">
     <androidx.appcompat.widget.SearchView
             android:id="@+id/gif_searchview"
-            app:queryHint="@string/search_title"
-            android:iconifiedByDefault="false"
-            android:elevation="4dp"
-            android:background="@color/colorWhite"
-            android:layout_margin="5dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite"
+            android:queryHint="@string/hint"
+            android:iconifiedByDefault="false"
+            app:iconifiedByDefault="false"
+            android:layout_gravity="center_horizontal"
+            android:queryBackground="@android:color/transparent"
+            android:elevation="4dp"/>
 
     <RelativeLayout
             android:layout_width="match_parent"
