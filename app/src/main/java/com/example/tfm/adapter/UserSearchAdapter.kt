@@ -88,7 +88,7 @@ class UserSearchAdapter (private var users: MutableList<User>): RecyclerView.Ada
 
                 val hashcode = userOneHash.toString().plus(userTwoHash.toString())
                 val conversation = Conversation(hashcode, myself.email, myself.name, myself.profilePhoto, friend.email, friend.name,friend.profilePhoto,
-                    mutableListOf(), "",System.currentTimeMillis(), mutableListOf(), true )
+                    mutableListOf(), "",System.currentTimeMillis(), true )
 
                 roomDatabase.addConversation(conversation)
                 FirebaseFirestore.getInstance().addConversation(context, conversation)

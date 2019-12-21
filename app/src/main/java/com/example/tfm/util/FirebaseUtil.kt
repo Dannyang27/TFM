@@ -41,20 +41,22 @@ object FirebaseUtil {
         roomDatabase = MyRoomDatabase.getMyRoomDatabase(context)!!
     }
 
-    fun login(context: Context, user: String, password: String) {
-        firebaseAuth?.signInWithEmailAndPassword(user, password)
+    fun login(context: Context, email: String, password: String) {
+        firebaseAuth?.signInWithEmailAndPassword(email, password)
             ?.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     prefs = PreferenceManager.getDefaultSharedPreferences(context)
-                    prefs.updateCurrentUser(user, password)
+                    prefs.updateCurrentUser(email, password)
 
                     CoroutineScope(Dispatchers.IO).launch {
                         val loginTask =
                             FirebaseFirestore.getInstance().collection(FIREBASE_USER_PATH)
-                                .document(user).get().await()
+                                .document(email).get().await()
                         DataRepository.user = loginTask.toObject(User::class.java)
-                        DataRepository.currentUserEmail = user
+                        DataRepository.currentUserEmail = email
                         LoginViewModel.isSuccessful.postValue(true)
+
+                        Log.d(LogUtil.TAG, "Email: $email | User: ${DataRepository.user?.name}")
                     }
 
                 } else {
@@ -288,7 +290,7 @@ object FirebaseUtil {
     // listen for new upcoming conversations
     fun listenForNewConversations(){
         CoroutineScope(Dispatchers.IO).launch {
-            val user = roomDatabase.userDao().getByEmail(DataRepository.currentUserEmail)
+            val user = DataRepository.user
 
             database.child(FIREBASE_PRIVATE_CHAT_PATH)
                 .addValueEventListener(object : ValueEventListener{

@@ -18,6 +18,4 @@ data class Conversation (@PrimaryKey
                     var messages: MutableList<Message> = mutableListOf(),
                     var lastMessage: String? = "",
                     var timestamp: Long = -1,
-                    @Ignore
-                    val userTyping: MutableList<User> = mutableListOf(),
                     var isPrivate: Boolean = true)
