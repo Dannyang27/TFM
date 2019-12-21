@@ -13,7 +13,6 @@ import com.example.tfm.room.dao.ConversationDAO
 import com.example.tfm.room.dao.EmojiDAO
 import com.example.tfm.room.dao.MessageDAO
 import com.example.tfm.room.dao.UserDAO
-import com.example.tfm.util.FirebaseUtil
 import com.example.tfm.util.LogUtil
 import kotlinx.coroutines.*
 
@@ -148,7 +147,7 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
             updateConversationWithTranslatedLastMessage(message, lastMessage)
         }
 
-        FirebaseUtil.addMessageFirebase(message)
+//        FirebaseUtil.addMessageFirebase(message)
     }
 
     private suspend fun updateConversationWithTranslatedLastMessage(message: Message, lastMessage: String){
@@ -156,50 +155,52 @@ abstract class MyRoomDatabase: RoomDatabase(), CoroutineScope{
         launch {
             val conversation = conversationDao().getById(message.ownerId)
 
-            if(MessageType.fromInt(message.messageType) != MessageType.MESSAGE){
-                conversation.lastMessage = lastMessage
-                conversationDao().update(conversation)
-                return@launch
-            }
-
-            if(DataRepository.languagePreferenceCode == message.body?.fieldThree?.toInt()){
-
-                withContext(Dispatchers.Main){
+            conversation?.let {
+                if(MessageType.fromInt(message.messageType) != MessageType.MESSAGE){
                     conversation.lastMessage = lastMessage
-                    conversation.timestamp = message.timestamp
+                    conversationDao().update(conversation)
+                    return@launch
                 }
 
-                conversationDao().update(conversation)
-            }else if( DataRepository.languagePreferenceCode == LanguageCode.ENGLISH.code){
+                if(DataRepository.languagePreferenceCode == message.body?.fieldThree?.toInt()){
 
-                withContext(Dispatchers.Main){
-                    conversation.lastMessage = message.body?.fieldTwo
-                    conversation.timestamp = message.timestamp
-                }
+                    withContext(Dispatchers.Main){
+                        conversation.lastMessage = lastMessage
+                        conversation.timestamp = message.timestamp
+                    }
 
-                conversationDao().update(conversation)
-            }else{
-                // Translation
-                val translator = DataRepository.fromEnglishTranslator
-                translator?.let {
-                    withContext(Dispatchers.Main) {
-                        it.translate(lastMessage).addOnSuccessListener { lastMessageTranslated ->
-                            conversation.lastMessage = lastMessageTranslated
-                            conversation.timestamp = message.timestamp
+                    conversationDao().update(conversation)
+                }else if( DataRepository.languagePreferenceCode == LanguageCode.ENGLISH.code){
 
-                            CoroutineScope(Dispatchers.IO).launch {
-                                conversationDao().update(conversation)
+                    withContext(Dispatchers.Main){
+                        conversation.lastMessage = message.body?.fieldTwo
+                        conversation.timestamp = message.timestamp
+                    }
+
+                    conversationDao().update(conversation)
+                }else{
+                    // Translation
+                    val translator = DataRepository.fromEnglishTranslator
+                    translator?.let {
+                        withContext(Dispatchers.Main) {
+                            it.translate(lastMessage).addOnSuccessListener { lastMessageTranslated ->
+                                conversation.lastMessage = lastMessageTranslated
+                                conversation.timestamp = message.timestamp
+
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    conversationDao().update(conversation)
+                                }
+
+                            }.addOnFailureListener {
+                                conversation.lastMessage = lastMessage
+                                conversation.timestamp = message.timestamp
+
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    conversationDao().update(conversation)
+                                }
                             }
 
-                        }.addOnFailureListener {
-                            conversation.lastMessage = lastMessage
-                            conversation.timestamp = message.timestamp
-
-                            CoroutineScope(Dispatchers.IO).launch {
-                                conversationDao().update(conversation)
-                            }
                         }
-
                     }
                 }
             }

@@ -46,7 +46,7 @@ class SignupActivity : AppCompatActivity() {
         signupViewModel.getIsJoinSuccessful().observe(this, Observer {isSuccess ->
             if(isSuccess){
                 DataRepository.currentUserEmail = eEmail.text.toString().trimBothSides()
-                launchMainActivity(false)
+                launchMainActivity()
             }else{
                 enableViews()
             }

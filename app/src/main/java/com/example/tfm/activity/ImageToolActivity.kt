@@ -29,11 +29,7 @@ import com.example.tfm.enum.MediaSource
 import com.example.tfm.enum.MessageType
 import com.example.tfm.model.Message
 import com.example.tfm.model.MessageContent
-import com.example.tfm.room.database.MyRoomDatabase
-import com.example.tfm.util.rotate
-import com.example.tfm.util.start
-import com.example.tfm.util.stop
-import com.example.tfm.util.toBase64
+import com.example.tfm.util.*
 import com.example.tfm.viewmodel.ImageToolViewModel
 import com.ortiz.touchview.TouchImageView
 
@@ -131,8 +127,7 @@ class ImageToolActivity : AppCompatActivity() {
         val message = Message(timestamp, ChatActivity.conversationId, currentUserEmail,
             ChatActivity.receiverUser, typeValue, MessageContent(fieldOne = content), timestamp)
 
-        val roomDatabase = MyRoomDatabase.getMyRoomDatabase(applicationContext)
-        roomDatabase?.addMessage(message)
+        FirebaseUtil.addMessageFirebase(message)
         finish()
     }
 

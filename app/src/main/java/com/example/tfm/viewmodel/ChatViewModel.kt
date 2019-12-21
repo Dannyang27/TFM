@@ -11,6 +11,7 @@ import com.example.tfm.enum.MessageType
 import com.example.tfm.model.Message
 import com.example.tfm.model.MessageContent
 import com.example.tfm.room.database.MyRoomDatabase
+import com.example.tfm.util.FirebaseUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -38,6 +39,10 @@ class ChatViewModel : ViewModel(){
 
     fun saveMessage(message: Message){
         roomDatabase?.addMessage(message)
+    }
+
+    fun sendMessage(message: Message){
+        FirebaseUtil.addMessageFirebase(message)
     }
 
     fun initLanguageFlag(context: Context){
