@@ -337,14 +337,14 @@ class ChatActivity : AppCompatActivity(){
 
             if(languageCode == LanguageCode.ENGLISH.code){
                 message.body = MessageContent(fieldText, "", languageCode.toString())
-                chatViewModel.saveMessage(message)
+                chatViewModel.sendMessage(message)
             }else{
                 val translator = DataRepository.toEnglishTranslator
 
                 translator?.let{
-                        it.translate(fieldText).addOnSuccessListener {translatedText ->
+                        it.translate(fieldText).addOnSuccessListener { translatedText ->
                             message.body = MessageContent(fieldText, translatedText, languageCode.toString())
-                            chatViewModel.saveMessage(message)
+                            chatViewModel.sendMessage(message)
                         }.addOnFailureListener {
                             Log.d("TFM", "Cannot translate")
                     }

@@ -11,7 +11,7 @@ import com.example.tfm.data.DataRepository
 import com.example.tfm.enum.MessageType
 import com.example.tfm.model.Message
 import com.example.tfm.model.MessageContent
-import com.example.tfm.room.database.MyRoomDatabase
+import com.example.tfm.util.FirebaseUtil
 import com.google.android.gms.maps.model.LatLng
 import org.jetbrains.anko.toast
 import java.util.*
@@ -53,7 +53,6 @@ class LocationViewModel : ViewModel(){
             MessageContent(address.value?.latitude.toString(), address.value?.longitude.toString(), address.value?.getAddressLine(0).toString()),
             timestamp)
 
-        val roomDatabase = MyRoomDatabase.getMyRoomDatabase(context)
-        roomDatabase?.addMessage(message)
+        FirebaseUtil.addMessageFirebase(message)
     }
 }

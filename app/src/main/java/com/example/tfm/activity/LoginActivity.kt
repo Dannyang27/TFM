@@ -44,7 +44,7 @@ class LoginActivity : AppCompatActivity() {
         loginViewModel.getIsSuccessful().observe(this, Observer { authIsSuccess ->
             if(authIsSuccess){
                 loginViewModel.reset()
-                launchMainActivity(true)
+                launchMainActivity()
             }
         })
 

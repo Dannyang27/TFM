@@ -9,7 +9,6 @@ import com.example.tfm.activity.SignupActivity
 import com.example.tfm.data.DataRepository
 import com.example.tfm.enum.MessageType
 import com.example.tfm.model.Conversation
-import com.example.tfm.model.ConversationTuple
 import com.example.tfm.model.Message
 import com.example.tfm.model.User
 import com.example.tfm.notification.MyNotificationManager
@@ -191,9 +190,9 @@ object FirebaseUtil {
             .child(conversation.id)
             .setValue(conversation)
             .addOnSuccessListener {
-                var email: String
-                var username: String
-                var photo: String
+                val email: String
+                val username: String
+                val photo: String
 
                 if (conversation.userOneEmail == DataRepository.currentUserEmail) {
                     email = conversation.userTwoEmail
@@ -204,6 +203,9 @@ object FirebaseUtil {
                     username = conversation.userOneUsername
                     photo = conversation.userOnePhoto
                 }
+
+                launchListener(context, conversation.id)
+
                 context.launchChatActivity(conversation.id, email, username, photo, false)
             }
     }
@@ -214,7 +216,11 @@ object FirebaseUtil {
             .child(message.timestamp.toString())
             .setValue(message)
             .addOnSuccessListener {
-                updateConversation(message)
+                message.isSent = true
+                CoroutineScope(Dispatchers.IO).launch {
+                    roomDatabase.addMessage(message)
+                    updateConversation(message)
+                }
             }
             .addOnFailureListener {
                 Log.d(LogUtil.TAG, "Error while sending message")
@@ -228,16 +234,13 @@ object FirebaseUtil {
     }
 
     private fun updateConversation(message: Message) {
-        var lastMessage: String?
-        when (MessageType.fromInt(message.messageType)) {
-            MessageType.MESSAGE -> lastMessage = message.body?.fieldOne
-            MessageType.GIF -> lastMessage = "GIF"
-            MessageType.IMAGE -> lastMessage = "Image"
-            MessageType.ATTACHMENT -> lastMessage = "Attachment"
-            MessageType.LOCATION -> lastMessage = "Location"
+        val lastMessage = when (MessageType.fromInt(message.messageType)) {
+            MessageType.MESSAGE ->  message.body?.fieldOne
+            MessageType.GIF ->  "GIF"
+            MessageType.IMAGE ->  "Image"
+            MessageType.ATTACHMENT -> "Attachment"
+            MessageType.LOCATION -> "Location"
         }
-
-        message.isSent = true
 
         database.child(FIREBASE_PRIVATE_CHAT_PATH)
             .child(message.ownerId)
@@ -249,19 +252,9 @@ object FirebaseUtil {
             .child(FIREBASE_TIMESTAMP)
             .setValue(message.timestamp)
 
-        updateFirebaseMessage(message)
-
         CoroutineScope(Dispatchers.IO).launch {
             roomDatabase.messageDao().update(message)
         }
-    }
-
-    fun updateFirebaseMessage(message: Message){
-        database.child(FIREBASE_PRIVATE_CHAT_PATH)
-            .child(message.ownerId)
-            .child(FIREBASE_PRIVATE_MESSAGE_PATH)
-            .child(message.timestamp.toString())
-            .setValue(message)
     }
 
     fun startConversationListener(appContext: Context) {
@@ -270,36 +263,12 @@ object FirebaseUtil {
                 .getConvesationDataFromEmail(DataRepository.currentUserEmail)
 
             data.forEach {
-                launchListener(appContext, it)
+                launchListener(appContext, it.id)
             }
         }
     }
 
-    fun launchListener(appContext: Context, conversationTuple: ConversationTuple) {
-        database.child(FIREBASE_PRIVATE_CHAT_PATH)
-            .child(conversationTuple.id)
-            .child(FIREBASE_PRIVATE_MESSAGE_PATH)
-            .orderByChild("timestamp")
-            .startAt(conversationTuple.timestamp.toDouble() + 1)
-            .addChildEventListener(object : ChildEventListener {
-                override fun onCancelled(p0: DatabaseError) {}
-                override fun onChildMoved(p0: DataSnapshot, p1: String?) {}
-                override fun onChildChanged(p0: DataSnapshot, p1: String?) {}
-                override fun onChildRemoved(p0: DataSnapshot) {}
-
-                override fun onChildAdded(dataSnapshot: DataSnapshot, p1: String?) {
-                    val message = dataSnapshot.getValue(Message::class.java)
-                    message?.let {
-                        roomDatabase.addMessage(it)
-
-                        if(DataRepository.appIsInBackground()){
-                            MyNotificationManager.displayNotification(appContext, 1, message)
-                        }
-                    }
-                }
-            })
-    }
-
+    // listen for user updates such as Profile photo, status, username
     fun launchUserListener(){
         database.child(FIREBASE_USER_PATH)
             .addValueEventListener( object : ValueEventListener {
@@ -316,22 +285,29 @@ object FirebaseUtil {
             })
     }
 
-    fun launchConversationListener(){
+    // listen for new upcoming conversations
+    fun listenForNewConversations(){
         CoroutineScope(Dispatchers.IO).launch {
-            val email = DataRepository.currentUserEmail
-            val userConversations = roomDatabase.conversationDao()
-                .getUserConversationsId(email)
+            val user = roomDatabase.userDao().getByEmail(DataRepository.currentUserEmail)
 
             database.child(FIREBASE_PRIVATE_CHAT_PATH)
-                .addValueEventListener( object : ValueEventListener {
+                .addValueEventListener(object : ValueEventListener{
                     override fun onCancelled(p0: DatabaseError) {}
+
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        dataSnapshot.children.forEach { convSnapshot ->
-                            val conversation = convSnapshot.getValue(Conversation::class.java)
-                            userConversations.let {
-                                conversation?.let {
-                                    if( conversation.id !in userConversations && isUserConversation(it, email)){
-                                        roomDatabase.addConversation(conversation)
+                        dataSnapshot.children.forEach { conversationId ->
+                            val conversation = conversationId.getValue(Conversation::class.java)
+
+                            if(user != null && conversation != null){
+                                if(user.id in conversation.id){
+
+                                    CoroutineScope(Dispatchers.IO).launch {
+                                        val conversationExist = roomDatabase.conversationDao().getById(conversation.id)
+                                        if(conversationExist != null){
+                                            roomDatabase.conversationDao().update(conversation)
+                                        }else{
+                                            roomDatabase.conversationDao().add(conversation)
+                                        }
                                     }
                                 }
                             }
@@ -341,8 +317,40 @@ object FirebaseUtil {
         }
     }
 
-    private fun isUserConversation(conversation: Conversation, email: String): Boolean {
-        return conversation.userOneEmail == email || conversation.userTwoEmail == email
+    // listener for ChatActivity
+    private fun launchListener(appContext: Context, conversationId: String) {
+        database.child(FIREBASE_PRIVATE_CHAT_PATH)
+            .child(conversationId)
+            .child(FIREBASE_PRIVATE_MESSAGE_PATH)
+            .addChildEventListener(object : ChildEventListener {
+                override fun onCancelled(p0: DatabaseError) {}
+                override fun onChildMoved(p0: DataSnapshot, p1: String?) {}
+                override fun onChildChanged(p0: DataSnapshot, p1: String?) {}
+                override fun onChildRemoved(p0: DataSnapshot) {}
+
+                override fun onChildAdded(dataSnapshot: DataSnapshot, p1: String?) {
+                    val message = dataSnapshot.getValue(Message::class.java)
+                    message?.let {
+                        roomDatabase.addMessage(it)
+
+                        if(it.receiverName == DataRepository.currentUserEmail){
+                            removeMessageFromFirebase(it)
+                        }
+
+                        if(DataRepository.appIsInBackground()){
+                            MyNotificationManager.displayNotification(appContext, 1, message)
+                        }
+                    }
+                }
+            })
+    }
+
+    private fun removeMessageFromFirebase(message: Message){
+        database.child(FIREBASE_PRIVATE_CHAT_PATH)
+            .child(message.ownerId)
+            .child(FIREBASE_PRIVATE_MESSAGE_PATH)
+            .child(message.id.toString())
+            .removeValue()
     }
 
     private fun updateConversation( user: User){

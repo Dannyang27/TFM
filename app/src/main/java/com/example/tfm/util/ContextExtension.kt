@@ -7,9 +7,8 @@ import androidx.core.app.ActivityCompat
 import com.example.tfm.activity.ChatActivity
 import com.example.tfm.activity.MainActivity
 
-fun Context.launchMainActivity(fromLogin: Boolean){
+fun Context.launchMainActivity(){
     val intent = Intent(this, MainActivity::class.java)
-    intent.putExtra("fromLogin", fromLogin)
     startActivity(intent)
 }
 

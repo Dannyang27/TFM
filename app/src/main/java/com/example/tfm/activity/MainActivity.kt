@@ -33,6 +33,9 @@ import com.example.tfm.viewmodel.ConversationViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -41,7 +44,7 @@ class MainActivity : AppCompatActivity() {
     @BindView(R.id.conversations_recyclerview) lateinit var conversations: RecyclerView
 
     private lateinit var conversationViewModel: ConversationViewModel
-    private lateinit var firebaseService: Intent
+//    private lateinit var firebaseService: Intent
     private var conversationIds = mutableListOf<String>()
 
     private lateinit var viewManager: RecyclerView.LayoutManager
@@ -55,16 +58,16 @@ class MainActivity : AppCompatActivity() {
 
         toolbar_title.text = getString(R.string.messages)
         setSupportActionBar(my_toolbar)
-        firebaseService = Intent(applicationContext, FirebaseListenerService::class.java)
+//        firebaseService = Intent(applicationContext, FirebaseListenerService::class.java)
 
         conversationViewModel = ViewModelProviders.of(this).get(ConversationViewModel::class.java)
         conversationViewModel.getConversations().observe(this, Observer { list ->
             viewAdapter.updateList(list)
+            Log.d(LogUtil.TAG, "Updating conversation...")
             restartServiceIfChanged(list)
         })
 
         conversationViewModel.initRoomObserver(this)
-        downloadUserDataIfNew()
 
         searcher.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?) = true
@@ -80,6 +83,13 @@ class MainActivity : AppCompatActivity() {
         })
 
         initRecyclerView()
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val messages = MyRoomDatabase.getMyRoomDatabase(this@MainActivity)
+                ?.messageDao()?.getAll()
+
+            Log.d(LogUtil.TAG, "Messages size: ${messages?.size}")
+        }
     }
 
     private fun setupInitialiser(){
@@ -112,16 +122,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         if(hasListChanged){
-            stopService(firebaseService)
-            startService(firebaseService)
+            stopService(Intent(this, FirebaseListenerService::class.java))
+            startService(Intent(this, FirebaseListenerService::class.java))
             Log.d(LogUtil.TAG, "Restarting service...")
-        }
-    }
-
-    private fun downloadUserDataIfNew() {
-        val fromLoginActivity = intent.getBooleanExtra("fromLogin", false)
-        if (fromLoginActivity) {
-            conversationViewModel.initDownloadUserData()
         }
     }
 
@@ -180,13 +183,13 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         if(!isServiceRunning(this)) {
-            startService(firebaseService)
+            startService(Intent(this, FirebaseListenerService::class.java))
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        stopService(firebaseService)
+        stopService(Intent(this, FirebaseListenerService::class.java))
     }
 
     @OnClick(R.id.fab)

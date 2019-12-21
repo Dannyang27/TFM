@@ -77,7 +77,8 @@
                         android:id="@+id/chat_recyclerview"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_above="@+id/field"/>
+                        android:layout_above="@+id/field"
+                        android:paddingTop="10dp"/>
                 <LinearLayout
                         android:id="@+id/field"
                         android:layout_width="match_parent"

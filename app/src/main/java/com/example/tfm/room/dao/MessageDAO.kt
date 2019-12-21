@@ -30,7 +30,7 @@ interface MessageDAO {
     @Query("SELECT COUNT(*) FROM Message")
     fun getSize(): Int
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun add(message: Message)
 
     @Update
