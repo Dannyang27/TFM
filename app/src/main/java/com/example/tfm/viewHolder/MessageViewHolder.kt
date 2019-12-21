@@ -54,7 +54,7 @@ class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view){
         placeholder.background = context.getDrawable(R.drawable.sender_message)
         layout.setPadding(0,getDpValue(10),getDpValue(15), getDpValue(10))
         body.setTextColor(context.getColor(R.color.colorWhite))
-        body.gravity = Gravity.END
+        body.gravity = Gravity.START
         time.gravity = Gravity.END
     }
 
