@@ -55,8 +55,6 @@ object FirebaseUtil {
                         DataRepository.user = loginTask.toObject(User::class.java)
                         DataRepository.currentUserEmail = email
                         LoginViewModel.isSuccessful.postValue(true)
-
-                        Log.d(LogUtil.TAG, "Email: $email | User: ${DataRepository.user?.name}")
                     }
 
                 } else {

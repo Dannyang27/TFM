@@ -17,5 +17,4 @@ data class Conversation (@PrimaryKey
                     @Ignore @get:Exclude
                     var messages: MutableList<Message> = mutableListOf(),
                     var lastMessage: String? = "",
-                    var timestamp: Long = -1,
-                    var isPrivate: Boolean = true)
+                    var timestamp: Long = -1)
