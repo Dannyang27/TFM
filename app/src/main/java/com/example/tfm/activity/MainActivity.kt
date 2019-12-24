@@ -33,9 +33,6 @@ import com.example.tfm.viewmodel.ConversationViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -63,7 +60,6 @@ class MainActivity : AppCompatActivity() {
         conversationViewModel = ViewModelProviders.of(this).get(ConversationViewModel::class.java)
         conversationViewModel.getConversations().observe(this, Observer { list ->
             viewAdapter.updateList(list)
-            Log.d(LogUtil.TAG, "Updating conversation...")
             restartServiceIfChanged(list)
         })
 
@@ -83,13 +79,6 @@ class MainActivity : AppCompatActivity() {
         })
 
         initRecyclerView()
-
-        CoroutineScope(Dispatchers.IO).launch {
-            val messages = MyRoomDatabase.getMyRoomDatabase(this@MainActivity)
-                ?.messageDao()?.getAll()
-
-            Log.d(LogUtil.TAG, "Messages size: ${messages?.size}")
-        }
     }
 
     private fun setupInitialiser(){

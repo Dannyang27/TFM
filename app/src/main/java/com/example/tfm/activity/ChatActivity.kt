@@ -75,7 +75,7 @@ class ChatActivity : AppCompatActivity(){
     @BindView(R.id.emoji_navbar) lateinit var navbar: BottomNavigationView
 
     private lateinit var chatViewModel: ChatViewModel
-    private lateinit var viewManager: RecyclerView.LayoutManager
+    private lateinit var viewManager: LinearLayoutManager
     private lateinit var viewAdapter : ChatAdapter
     private val emojiFragment = EmojiFragment.newInstance()
     private val gifFragment = GifFragment.newInstance()
@@ -93,6 +93,8 @@ class ChatActivity : AppCompatActivity(){
     private var translateModel: String? = null
 
     private val PERMISSION_ALL = 1
+
+    private var firstLoadingCanScroll = false
 
     companion object{
         lateinit var emojiEditText: EmojiEditText
@@ -150,7 +152,7 @@ class ChatActivity : AppCompatActivity(){
 
         chatViewModel.getChatMessages().observe(this, Observer {
             viewAdapter.updateList(it)
-            scrollToBottom()
+
         })
 
         viewManager = LinearLayoutManager(this)
@@ -165,16 +167,15 @@ class ChatActivity : AppCompatActivity(){
             layoutManager = viewManager
             adapter = viewAdapter
 
-            addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
-                if(bottom < oldBottom){
-                    postDelayed({ scrollToPosition(viewAdapter.itemCount - 1) }, 0)
-                }
-            }
-
             addOnScrollListener(object: RecyclerView.OnScrollListener(){
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    if(!canScrollVertically(0)){
-                        Log.d(LogUtil.TAG, "Top reached, load more messages...")
+                    if(!canScrollVertically(-1)){
+                        if(!firstLoadingCanScroll && canScrollVertically(0)){
+                            viewManager.stackFromEnd = true
+                            firstLoadingCanScroll = true
+                        }else{
+                            Log.d(LogUtil.TAG, "Top reached, load more messages...")
+                        }
                     }
                 }
             })
